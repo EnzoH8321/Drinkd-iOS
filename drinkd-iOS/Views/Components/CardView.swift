@@ -11,8 +11,15 @@ struct CardView: View {
 	var body: some View {
 
 		GeometryReader{ geo in
-			ZStack{
-				VStack {
+			ZStack {
+				let globalWidth = geo.frame(in: .global).width
+
+				Rectangle()
+					.fill(Color.white)
+
+					.shadow(color: Color.black, radius: 3.0, x: 5.0, y: 5.0)
+
+				VStack(alignment: .leading) {
 					Text("RestaurantTitle")
 						.font(.largeTitle)
 					Text("Restaurant Detail")
@@ -22,7 +29,7 @@ struct CardView: View {
 					Image("drinkd_text")
 						.resizable()
 						.scaledToFit()
-						.frame(width: geo.frame(in: .global).width)
+						.frame(width: globalWidth)
 					Group {
 						HStack {
 							Image(systemName: "house")
@@ -44,7 +51,11 @@ struct CardView: View {
 					}
 					.background(Color.purple)
 				}
+				//For Vstack
+//				.zIndex(1.0)
 			}
+
+			
 		}
 
 	}

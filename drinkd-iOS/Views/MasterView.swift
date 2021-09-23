@@ -13,7 +13,7 @@ struct ContentView: View {
         NavigationView {
 			TabView {
 				//Put View in place of text
-				Text("HomeTab")
+				CardView()
 					.tabItem {
 						Image(systemName: "house")
 						Text("Home")
@@ -30,11 +30,6 @@ struct ContentView: View {
 					}
 			}
 			.font(.headline)
-//			.toolbar {
-//				Image("drinkd_text")
-//					.resizable()
-//					.scaledToFit()
-//			}
 
         }
     }
