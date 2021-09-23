@@ -5,19 +5,26 @@
 //  Created by Enzo Herrera on 9/22/21.
 //
 
+//245,31,32
+
 import SwiftUI
 
+enum CardPadding: CGFloat{
+	case smallPadding = 4
+}
+
 struct CardView: View {
+
 	var body: some View {
 
-		GeometryReader{ geo in
+		GeometryReader { geo in
 			ZStack {
-				let globalWidth = geo.frame(in: .global).width
+				let localWidth = geo.frame(in: .local).width
 
-				Rectangle()
+				RoundedRectangle(cornerRadius: 25)
 					.fill(Color.white)
 
-					.shadow(color: Color.black, radius: 3.0, x: 5.0, y: 5.0)
+					.shadow(radius: 10)
 
 				VStack(alignment: .leading) {
 					Text("RestaurantTitle")
@@ -29,7 +36,7 @@ struct CardView: View {
 					Image("drinkd_text")
 						.resizable()
 						.scaledToFit()
-						.frame(width: globalWidth)
+						.frame(width: localWidth - 30)
 					Group {
 						HStack {
 							Image(systemName: "house")
@@ -46,16 +53,19 @@ struct CardView: View {
 							Text("Phone number")
 						}
 					}
-					Button(action: {}) {
-						Text("Sign In")
+					HStack {
+						Spacer()
+						Button(action: {}) {
+							Text("Sign In")
+						}
+						.buttonStyle(YelpDetailButton())
+						Spacer()
 					}
-					.background(Color.purple)
-				}
-				//For Vstack
-//				.zIndex(1.0)
-			}
 
-			
+
+				}
+				.padding(.all, CardPadding.smallPadding.rawValue)
+			}
 		}
 
 	}
