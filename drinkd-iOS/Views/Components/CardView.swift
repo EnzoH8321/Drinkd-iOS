@@ -23,8 +23,7 @@ struct CardView: View {
 
 				RoundedRectangle(cornerRadius: 25)
 					.fill(Color.white)
-
-					.shadow(radius: 10)
+					.shadow(radius: AppShadow.lowShadowRadius)
 
 				VStack(alignment: .leading) {
 					Text("RestaurantTitle")
@@ -59,6 +58,7 @@ struct CardView: View {
 							Text("Sign In")
 						}
 						.buttonStyle(YelpDetailButton())
+						.shadow(radius: AppShadow.mediumShadowRadius)
 						Spacer()
 					}
 

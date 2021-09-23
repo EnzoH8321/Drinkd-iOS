@@ -18,7 +18,7 @@ struct ContentView: View {
 				NavigationView {
 					//Put View in place of text
 					CardView()
-						.frame(width: globalWidth - 30 ,height: 400)
+						.frame(width: globalWidth - 30 , height: 400)
 					//Lessens the vertical space that nav view automatically takes
 						.navigationBarTitle("")
 						.navigationBarHidden(true)
