@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//Master
 struct YelpApiBusinessDetails: Codable {
 	let id: String
 	let alias: String

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */; };
-		54F9C80B26FBB536008FA516 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* ContentView.swift */; };
+		54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* MasterView.swift */; };
 		54F9C80D26FBB537008FA516 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80C26FBB537008FA516 /* Assets.xcassets */; };
 		54F9C81026FBB537008FA516 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80F26FBB537008FA516 /* Preview Assets.xcassets */; };
 		54F9C81226FBB537008FA516 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C81126FBB537008FA516 /* Persistence.swift */; };
@@ -17,6 +17,7 @@
 		54F9C82926FBB538008FA516 /* drinkd_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C82826FBB538008FA516 /* drinkd_iOSUITests.swift */; };
 		54F9C82B26FBB538008FA516 /* drinkd_iOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C82A26FBB538008FA516 /* drinkd_iOSUITestsLaunchTests.swift */; };
 		54F9C83926FBD986008FA516 /* YelpApi-BusinessDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C83826FBD986008FA516 /* YelpApi-BusinessDetails.swift */; };
+		54F9C84026FBF8E8008FA516 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C83F26FBF8E8008FA516 /* CardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,7 +40,7 @@
 /* Begin PBXFileReference section */
 		54F9C80526FBB536008FA516 /* drinkd-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "drinkd-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSApp.swift; sourceTree = "<group>"; };
-		54F9C80A26FBB536008FA516 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		54F9C80A26FBB536008FA516 /* MasterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterView.swift; sourceTree = "<group>"; };
 		54F9C80C26FBB537008FA516 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		54F9C80F26FBB537008FA516 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		54F9C81126FBB537008FA516 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
@@ -50,6 +51,7 @@
 		54F9C82826FBB538008FA516 /* drinkd_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSUITests.swift; sourceTree = "<group>"; };
 		54F9C82A26FBB538008FA516 /* drinkd_iOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		54F9C83826FBD986008FA516 /* YelpApi-BusinessDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YelpApi-BusinessDetails.swift"; sourceTree = "<group>"; };
+		54F9C83F26FBF8E8008FA516 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,9 +102,10 @@
 		54F9C80726FBB536008FA516 /* drinkd-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				54F9C83D26FBF891008FA516 /* ViewModel */,
+				54F9C83A26FBE151008FA516 /* Views */,
 				54F9C83726FBD95B008FA516 /* Model */,
 				54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */,
-				54F9C80A26FBB536008FA516 /* ContentView.swift */,
 				54F9C80C26FBB537008FA516 /* Assets.xcassets */,
 				54F9C81126FBB537008FA516 /* Persistence.swift */,
 				54F9C81326FBB537008FA516 /* drinkd_iOS.xcdatamodeld */,
@@ -142,6 +145,30 @@
 				54F9C83826FBD986008FA516 /* YelpApi-BusinessDetails.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		54F9C83A26FBE151008FA516 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				54F9C83E26FBF8D6008FA516 /* Components */,
+				54F9C80A26FBB536008FA516 /* MasterView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		54F9C83D26FBF891008FA516 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		54F9C83E26FBF8D6008FA516 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				54F9C83F26FBF8E8008FA516 /* CardView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -276,8 +303,9 @@
 			files = (
 				54F9C81226FBB537008FA516 /* Persistence.swift in Sources */,
 				54F9C81526FBB537008FA516 /* drinkd_iOS.xcdatamodeld in Sources */,
-				54F9C80B26FBB536008FA516 /* ContentView.swift in Sources */,
+				54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */,
 				54F9C83926FBD986008FA516 /* YelpApi-BusinessDetails.swift in Sources */,
+				54F9C84026FBF8E8008FA516 /* CardView.swift in Sources */,
 				54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
