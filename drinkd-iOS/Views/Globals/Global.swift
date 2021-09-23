@@ -17,3 +17,4 @@ enum AppShadow {
 	static let mediumShadowRadius = CGFloat(10)
 	static let lowShadowRadius = CGFloat(10)
 }
+

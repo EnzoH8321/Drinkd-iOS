@@ -1,0 +1,44 @@
+//
+//  ListCardView.swift
+//  drinkd-iOS
+//
+//  Created by Enzo Herrera on 9/23/21.
+//
+
+import SwiftUI
+import Foundation
+
+struct ListCardView: View {
+
+	var body: some View {
+
+		GeometryReader { proxy in
+
+
+			let localWidth = proxy.frame(in: .local).width
+
+			ZStack {
+				HStack {
+					Image("testPicRestaurant")
+						.resizable()
+						.scaledToFit()
+						.frame(width: localWidth / 2)
+					VStack {
+						Text("Restaurant Name")
+						Text("Number of Votes")
+					}
+					
+				}
+			}
+		}
+
+
+
+	}
+}
+
+struct ListCardView_Previews: PreviewProvider {
+	static var previews: some View {
+		ListCardView()
+	}
+}

@@ -18,7 +18,9 @@ struct ContentView: View {
 				//HomeView
 				NavigationView {
 					HomeView()
-						.frame(width: globalWidth - 30 , height: 400)
+						.frame(width: globalWidth - 30 , height: 500)
+						.navigationBarTitle("")
+						.navigationBarHidden(true)
 				}
 				.tabItem {
 					Image(systemName: "house")

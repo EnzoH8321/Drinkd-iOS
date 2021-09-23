@@ -22,6 +22,7 @@
 		54F9C84626FCF403008FA516 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84526FCF403008FA516 /* Global.swift */; };
 		54F9C84826FD1A05008FA516 /* TopChoicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84726FD1A05008FA516 /* TopChoicesView.swift */; };
 		54F9C84A26FD1A59008FA516 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84926FD1A59008FA516 /* HomeView.swift */; };
+		54F9C84C26FD1ED6008FA516 /* ListCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84B26FD1ED6008FA516 /* ListCardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		54F9C84526FCF403008FA516 /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		54F9C84726FD1A05008FA516 /* TopChoicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopChoicesView.swift; sourceTree = "<group>"; };
 		54F9C84926FD1A59008FA516 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		54F9C84B26FD1ED6008FA516 /* ListCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +181,7 @@
 			children = (
 				54F9C83F26FBF8E8008FA516 /* CardView.swift */,
 				54F9C84226FCF178008FA516 /* Button.swift */,
+				54F9C84B26FD1ED6008FA516 /* ListCardView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				54F9C84626FCF403008FA516 /* Global.swift in Sources */,
 				54F9C84326FCF178008FA516 /* Button.swift in Sources */,
 				54F9C81226FBB537008FA516 /* Persistence.swift in Sources */,
+				54F9C84C26FD1ED6008FA516 /* ListCardView.swift in Sources */,
 				54F9C84A26FD1A59008FA516 /* HomeView.swift in Sources */,
 				54F9C81526FBB537008FA516 /* drinkd_iOS.xcdatamodeld in Sources */,
 				54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */,

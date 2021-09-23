@@ -10,14 +10,7 @@ import SwiftUI
 struct HomeView: View {
 	var body: some View {
 		GeometryReader{ proxy in
-
-
-
 			CardView()
-//				.frame(width: globalWidth - 30 , height: 400)
-			//Lessens the vertical space that nav view automatically takes
-				.navigationBarTitle("")
-				.navigationBarHidden(true)
 		}
 
 	}
