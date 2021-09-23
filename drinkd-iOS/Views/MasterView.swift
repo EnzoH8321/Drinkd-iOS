@@ -15,19 +15,16 @@ struct ContentView: View {
 			let globalWidth = proxy.frame(in: .global).width
 
 			TabView {
+				//HomeView
 				NavigationView {
-					//Put View in place of text
-					CardView()
+					HomeView()
 						.frame(width: globalWidth - 30 , height: 400)
-					//Lessens the vertical space that nav view automatically takes
-						.navigationBarTitle("")
-						.navigationBarHidden(true)
 				}
 				.tabItem {
 					Image(systemName: "house")
 					Text("Home")
 				}
-
+				//
 				Text("TopChoicesTab")
 					.tabItem {
 						Image(systemName: "chart.bar")

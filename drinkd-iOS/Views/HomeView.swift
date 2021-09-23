@@ -8,13 +8,23 @@
 import SwiftUI
 
 struct HomeView: View {
-    var body: some View {
-        CardView()
-    }
+	var body: some View {
+		GeometryReader{ proxy in
+
+
+
+			CardView()
+//				.frame(width: globalWidth - 30 , height: 400)
+			//Lessens the vertical space that nav view automatically takes
+				.navigationBarTitle("")
+				.navigationBarHidden(true)
+		}
+
+	}
 }
 
 struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-    }
+	static var previews: some View {
+		HomeView()
+	}
 }
