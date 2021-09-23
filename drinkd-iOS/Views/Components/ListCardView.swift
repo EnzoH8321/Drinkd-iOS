@@ -23,11 +23,12 @@ struct ListCardView: View {
 						.resizable()
 						.scaledToFit()
 						.frame(width: localWidth / 2)
-					VStack {
+					VStack(alignment: .leading ,spacing: 50) {
 						Text("Restaurant Name")
+
 						Text("Number of Votes")
 					}
-					
+					.font(.title3)
 				}
 			}
 			.frame(width: localWidth, height: localHeight, alignment: .center)
