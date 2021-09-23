@@ -14,8 +14,8 @@ struct ListCardView: View {
 
 		GeometryReader { proxy in
 
-
 			let localWidth = proxy.frame(in: .local).width
+			let localHeight = proxy.frame(in: .local).height
 
 			ZStack {
 				HStack {
@@ -30,10 +30,8 @@ struct ListCardView: View {
 					
 				}
 			}
+			.frame(width: localWidth, height: localHeight, alignment: .center)
 		}
-
-
-
 	}
 }
 
