@@ -18,3 +18,6 @@ enum AppShadow {
 	static let lowShadowRadius = CGFloat(10)
 }
 
+enum CardSpecificStyle {
+	static let cornerRadius = CGFloat(25)
+}

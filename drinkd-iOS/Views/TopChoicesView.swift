@@ -12,15 +12,17 @@ struct TopChoicesView: View {
 		GeometryReader { proxy in
 
 			let globalHeight = proxy.frame(in: .global).height
+			let globalWidth = proxy.frame(in: .global).width
 
-			List {
+			VStack(alignment: .center) {
 				Group {
 					ListCardView()
 					ListCardView()
 					ListCardView()
 				}
-				.frame(height: globalHeight / 4)
+				.frame( width: globalWidth - 20, height: globalHeight / 4)
 			}
+			.frame(width: globalWidth)
 		}
 	}
 }

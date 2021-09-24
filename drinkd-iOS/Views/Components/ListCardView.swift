@@ -8,6 +8,34 @@
 import SwiftUI
 import Foundation
 
+//Allows you to sepcify which corner will have the radius
+struct CornerRadiusStyle: ViewModifier {
+	var radius: CGFloat
+	var corners: UIRectCorner
+
+	struct CornerRadiusShape: Shape {
+
+		var radius = CGFloat.infinity
+		var corners = UIRectCorner.allCorners
+
+		func path(in rect: CGRect) -> Path {
+			let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+			return Path(path.cgPath)
+		}
+	}
+
+	func body(content: Content) -> some View {
+		content
+			.clipShape(CornerRadiusShape(radius: radius, corners: corners))
+	}
+}
+//Extends the custom struct to the View
+extension View {
+	func cornerRadius(radius: CGFloat, corners: UIRectCorner) -> some View {
+		ModifiedContent(content: self, modifier: CornerRadiusStyle(radius: radius, corners: corners))
+	}
+}
+//
 struct ListCardView: View {
 
 	var body: some View {
@@ -18,18 +46,21 @@ struct ListCardView: View {
 			let localHeight = proxy.frame(in: .local).height
 
 			ZStack {
-				HStack {
+				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
+					.fill(Color.white)
+					.shadow(radius: AppShadow.lowShadowRadius)
+				VStack {
 					Image("testPicRestaurant")
 						.resizable()
-						.scaledToFit()
-						.frame(width: localWidth / 2)
-					VStack(alignment: .leading ,spacing: 50) {
-						Text("Restaurant Name")
+//						.scaledToFit()
+						.frame(width: localWidth )
+						.cornerRadius(radius: CardSpecificStyle.cornerRadius, corners: [.topLeft, .topRight])
 
-						Text("Number of Votes")
-					}
-					.font(.title3)
+					Text("Restaurant Name")
+
+					Text("Number of Votes")
 				}
+
 			}
 			.frame(width: localWidth, height: localHeight, alignment: .center)
 		}

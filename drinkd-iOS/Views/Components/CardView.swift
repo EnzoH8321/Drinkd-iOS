@@ -21,7 +21,7 @@ struct CardView: View {
 			ZStack {
 				let localWidth = geo.frame(in: .local).width
 
-				RoundedRectangle(cornerRadius: 25)
+				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 					.fill(Color.white)
 					.shadow(radius: AppShadow.lowShadowRadius)
 
