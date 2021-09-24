@@ -23,6 +23,7 @@
 		54F9C84826FD1A05008FA516 /* TopChoicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84726FD1A05008FA516 /* TopChoicesView.swift */; };
 		54F9C84A26FD1A59008FA516 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84926FD1A59008FA516 /* HomeView.swift */; };
 		54F9C84C26FD1ED6008FA516 /* ListCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84B26FD1ED6008FA516 /* ListCardView.swift */; };
+		54F9C84E26FD5D6F008FA516 /* PartyViewMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84D26FD5D6F008FA516 /* PartyViewMain.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		54F9C84726FD1A05008FA516 /* TopChoicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopChoicesView.swift; sourceTree = "<group>"; };
 		54F9C84926FD1A59008FA516 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		54F9C84B26FD1ED6008FA516 /* ListCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCardView.swift; sourceTree = "<group>"; };
+		54F9C84D26FD5D6F008FA516 /* PartyViewMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyViewMain.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 				54F9C80A26FBB536008FA516 /* MasterView.swift */,
 				54F9C84726FD1A05008FA516 /* TopChoicesView.swift */,
 				54F9C84926FD1A59008FA516 /* HomeView.swift */,
+				54F9C84D26FD5D6F008FA516 /* PartyViewMain.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -333,6 +336,7 @@
 				54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */,
 				54F9C83926FBD986008FA516 /* YelpApi-BusinessDetails.swift in Sources */,
 				54F9C84826FD1A05008FA516 /* TopChoicesView.swift in Sources */,
+				54F9C84E26FD5D6F008FA516 /* PartyViewMain.swift in Sources */,
 				54F9C84026FBF8E8008FA516 /* CardView.swift in Sources */,
 				54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */,
 			);

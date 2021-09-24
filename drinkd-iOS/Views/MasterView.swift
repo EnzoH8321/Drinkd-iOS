@@ -26,12 +26,15 @@ struct ContentView: View {
 					Image(systemName: "house")
 					Text("Home")
 				}
+				//Top Choices View
+				NavigationView {
+					TopChoicesView()
+				}
+				.tabItem {
+					Image(systemName: "chart.bar")
+					Text("TopChoices")
+				}
 				//
-				Text("TopChoicesTab")
-					.tabItem {
-						Image(systemName: "chart.bar")
-						Text("TopChoices")
-					}
 
 				Text("PartyTab")
 					.tabItem {

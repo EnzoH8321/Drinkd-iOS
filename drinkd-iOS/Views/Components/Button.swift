@@ -16,11 +16,24 @@ struct YelpDetailButton: ButtonStyle {
 	}
 }
 
+
+
+struct JoinOrCreatePartyButton: ButtonStyle {
+	func makeBody(configuration: Configuration) -> some View {
+		configuration.label
+			.frame(width: 150)
+			.padding()
+			.background(AppColors.primaryColor)
+			.clipShape(Capsule())
+
+	}
+}
+
 struct Button_Previews: PreviewProvider {
 	static var previews: some View {
 		Button("Test") {
 			print("Test")
 		}
-		.buttonStyle(YelpDetailButton())
+		.buttonStyle(JoinOrCreatePartyButton())
 	}
 }

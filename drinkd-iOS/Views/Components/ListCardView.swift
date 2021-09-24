@@ -42,27 +42,37 @@ struct ListCardView: View {
 
 		GeometryReader { proxy in
 
-			let localWidth = proxy.frame(in: .local).width
-			let localHeight = proxy.frame(in: .local).height
+			let globalWidth = proxy.frame(in: .global).width
+			let globalHeight = proxy.frame(in: .global).height
 
 			ZStack {
 				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 					.fill(Color.white)
 					.shadow(radius: AppShadow.lowShadowRadius)
 				VStack {
+
 					Image("testPicRestaurant")
 						.resizable()
-//						.scaledToFit()
-						.frame(width: localWidth )
+						.frame(width: globalWidth )
 						.cornerRadius(radius: CardSpecificStyle.cornerRadius, corners: [.topLeft, .topRight])
 
-					Text("Restaurant Name")
+					HStack {
+						Image(systemName: "1.circle")
+							.resizable()
+							.scaledToFit()
+							.frame(width: 25)
+						Spacer()
+						VStack{
+							Text("Restaurant Name")
+							Text("Number of Votes")
+						}
+					}
+					.padding([.leading, .trailing], globalWidth / 4)
 
-					Text("Number of Votes")
 				}
 
 			}
-			.frame(width: localWidth, height: localHeight, alignment: .center)
+			.frame(width: globalWidth, height: globalHeight, alignment: .center)
 		}
 	}
 }
