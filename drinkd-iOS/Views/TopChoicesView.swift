@@ -15,12 +15,17 @@ struct TopChoicesView: View {
 			let globalWidth = proxy.frame(in: .global).width
 
 			VStack(alignment: .center) {
-				Group {
-					ListCardView()
-					ListCardView()
-					ListCardView()
-				}
-				.frame(width: globalWidth - 20, height: globalHeight / 4)
+
+				ListCardView()
+					.frame(width: globalWidth - 20, height: globalHeight / 4)
+				Spacer()
+				ListCardView()
+					.frame(width: globalWidth - 20, height: globalHeight / 4)
+				Spacer()
+				ListCardView()
+					.frame(width: globalWidth - 20, height: globalHeight / 4)
+					.padding([.bottom], 10)
+
 			}
 			.frame(width: globalWidth, height: globalHeight)
 
