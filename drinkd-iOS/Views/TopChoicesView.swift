@@ -20,10 +20,12 @@ struct TopChoicesView: View {
 					ListCardView()
 					ListCardView()
 				}
-				.frame( width: globalWidth - 20, height: globalHeight / 4)
+				.frame(width: globalWidth - 20, height: globalHeight / 4)
 			}
-			.frame(width: globalWidth)
+			.frame(width: globalWidth, height: globalHeight)
+
 		}
+
 	}
 }
 
