@@ -30,6 +30,7 @@ struct PartyView_Create: View {
 			}
 			.border(Color(UIColor.separator))
 			.textFieldStyle(.roundedBorder)
+
 			JoinOrCreatePartyButton(buttonName: "Create Party")
 		}
 	}
