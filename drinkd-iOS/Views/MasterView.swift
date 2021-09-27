@@ -29,6 +29,8 @@ struct ContentView: View {
 				//Top Choices View
 				NavigationView {
 					TopChoicesView()
+						.navigationBarTitle("")
+						.navigationBarHidden(true)
 				}
 				.tabItem {
 					Image(systemName: "chart.bar")

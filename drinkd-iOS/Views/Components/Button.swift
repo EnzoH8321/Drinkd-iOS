@@ -16,24 +16,29 @@ struct YelpDetailButton: ButtonStyle {
 	}
 }
 
+//Used in the PartyViewMain
+struct JoinOrCreatePartyButton: View {
 
+	let buttonName: String
 
-struct JoinOrCreatePartyButton: ButtonStyle {
-	func makeBody(configuration: Configuration) -> some View {
-		configuration.label
-			.frame(width: 150)
-			.padding()
-			.background(AppColors.primaryColor)
-			.clipShape(Capsule())
-
+	var body: some View {
+		Button {
+			print("Button pressed")
+		} label: {
+			Text("\(buttonName)")
+				.padding(20)
+		}
+		.frame(height: 20)
+		.padding()
+		.background(AppColors.primaryColor)
+		.clipShape(Capsule())
 	}
 }
 
+
+
 struct Button_Previews: PreviewProvider {
 	static var previews: some View {
-		Button("Test") {
-			print("Test")
-		}
-		.buttonStyle(JoinOrCreatePartyButton())
+		JoinOrCreatePartyButton(buttonName: "Join Party")
 	}
 }

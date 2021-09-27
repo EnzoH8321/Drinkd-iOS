@@ -11,14 +11,10 @@ struct PartyView: View {
 	var body: some View {
 		VStack( spacing: 100) {
 			Group{
-				Button("Join Party", action: {})
-					.buttonStyle(JoinOrCreatePartyButton())
-					.shadow(radius: AppShadow.lowShadowRadius)
-
-				Button("Create Party", action: {})
-					.buttonStyle(JoinOrCreatePartyButton())
-					.shadow(radius: AppShadow.lowShadowRadius)
+				JoinOrCreatePartyButton(buttonName: "Join Party")
+				JoinOrCreatePartyButton(buttonName: "Create Party")
 			}
+
 
 		}
 	}

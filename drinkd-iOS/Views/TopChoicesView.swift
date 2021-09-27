@@ -17,7 +17,7 @@ struct TopChoicesView: View {
 			VStack(alignment: .center) {
 
 				ListCardView()
-					.frame(width: globalWidth - 20, height: globalHeight / 3.5 )
+					.frame(width: globalWidth - 20, height: globalHeight / 3.5)
 				Spacer()
 				ListCardView()
 					.frame(width: globalWidth - 20, height: globalHeight / 3.5)
