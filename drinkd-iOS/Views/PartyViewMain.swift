@@ -12,10 +12,8 @@ struct PartyView: View {
 		VStack( spacing: 100) {
 			Group{
 				JoinOrCreatePartyButton(buttonName: "Join Party")
-					
 				JoinOrCreatePartyButton(buttonName: "Create Party")
 			}
-
 
 		}
 	}

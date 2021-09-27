@@ -6,7 +6,34 @@
 //
 
 import SwiftUI
-//Master
+
+//Main Query
+struct YelpApiBusinessSearch: Codable {
+	let business: [YelpApiBusinessSearchProperties]
+}
+
+//Business Search
+struct YelpApiBusinessSearchProperties: Codable {
+	let id: String
+	let alias: String
+	let name: String
+	let image_url: String
+	let is_closed: Bool
+	let url: String
+	let review_count: Int
+	let categories: [YelpApiBusinessDetails_Categories]
+	let rating: Double
+	let coordinates: YelpApiBusinessDetails_Coordinates
+	let transactions: [String]
+	let price: String
+	let location: YelpApiBusinessDetails_Location
+	let phone: String
+	let display_phone: String
+	let distance: Double
+}
+
+
+//Business Details
 struct YelpApiBusinessDetails: Codable {
 	let id: String
 	let alias: String

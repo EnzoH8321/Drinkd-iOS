@@ -26,6 +26,7 @@
 		54F9C84E26FD5D6F008FA516 /* PartyViewMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84D26FD5D6F008FA516 /* PartyViewMain.swift */; };
 		54F9C850270223DD008FA516 /* PartyView-Join.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84F270223DC008FA516 /* PartyView-Join.swift */; };
 		54F9C8522702283B008FA516 /* PartyView-Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C8512702283B008FA516 /* PartyView-Create.swift */; };
+		54F9C855270244B9008FA516 /* NetworkingYelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C854270244B9008FA516 /* NetworkingYelp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		54F9C84D26FD5D6F008FA516 /* PartyViewMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyViewMain.swift; sourceTree = "<group>"; };
 		54F9C84F270223DC008FA516 /* PartyView-Join.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PartyView-Join.swift"; sourceTree = "<group>"; };
 		54F9C8512702283B008FA516 /* PartyView-Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PartyView-Create.swift"; sourceTree = "<group>"; };
+		54F9C854270244B9008FA516 /* NetworkingYelp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingYelp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 		54F9C80726FBB536008FA516 /* drinkd-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				54F9C85327023C32008FA516 /* API */,
 				54F9C83D26FBF891008FA516 /* ViewModel */,
 				54F9C83A26FBE151008FA516 /* Views */,
 				54F9C83726FBD95B008FA516 /* Model */,
@@ -158,7 +161,6 @@
 		54F9C83726FBD95B008FA516 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				54F9C83826FBD986008FA516 /* YelpApi-BusinessDetails.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -201,6 +203,15 @@
 				54F9C84526FCF403008FA516 /* Global.swift */,
 			);
 			path = Globals;
+			sourceTree = "<group>";
+		};
+		54F9C85327023C32008FA516 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				54F9C83826FBD986008FA516 /* YelpApi-BusinessDetails.swift */,
+				54F9C854270244B9008FA516 /* NetworkingYelp.swift */,
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -333,6 +344,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54F9C855270244B9008FA516 /* NetworkingYelp.swift in Sources */,
 				54F9C84626FCF403008FA516 /* Global.swift in Sources */,
 				54F9C84326FCF178008FA516 /* Button.swift in Sources */,
 				54F9C81226FBB537008FA516 /* Persistence.swift in Sources */,
@@ -509,6 +521,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"drinkd-iOS/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location is needed to use the App";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -538,6 +551,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"drinkd-iOS/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location is needed to use the App";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
