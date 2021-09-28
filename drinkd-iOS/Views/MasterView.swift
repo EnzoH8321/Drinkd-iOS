@@ -55,7 +55,7 @@ struct ContentView: View {
 			}
 		}
 		.onAppear {
-//			self.viewModel.fetchNearbyPlaces()
+			self.viewModel.fetchLocalRestaurants()
 		}
 	}
 

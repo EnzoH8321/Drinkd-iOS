@@ -17,7 +17,7 @@ class drinkdViewModel: ObservableObject {
 	@Published var model = drinkdModel()
 	var removeSplashScreen = false
 
-	init() {
+	func fetchLocalRestaurants() {
 			//1.Creating the URL we want to read.
 			//2.Wrapping that in a URLRequest, which allows us to configure how the URL should be accessed.
 			//3.Create and start a networking task from that URL request.
