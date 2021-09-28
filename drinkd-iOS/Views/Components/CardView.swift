@@ -15,6 +15,8 @@ enum CardPadding: CGFloat{
 
 struct CardView: View {
 
+	@ObservedObject var viewModel = drinkdViewModel()
+
 	var body: some View {
 
 		GeometryReader { geo in

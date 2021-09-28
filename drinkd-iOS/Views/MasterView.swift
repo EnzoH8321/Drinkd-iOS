@@ -9,12 +9,11 @@ import SwiftUI
 
 struct ContentView: View {
 	@ObservedObject var viewModel = drinkdViewModel()
-	@State var isActive: Bool = false
 
 	var body: some View {
 
 		VStack {
-			if isActive {
+			if viewModel.removeSplashScreen {
 				GeometryReader { proxy in
 
 					let globalWidth = proxy.frame(in: .global).width

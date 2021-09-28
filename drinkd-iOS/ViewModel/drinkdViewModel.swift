@@ -8,9 +8,14 @@
 import Foundation
 import SwiftUI
 
+enum QueryError: Error {
+	case businessArrayNotFound
+}
+
 class drinkdViewModel: ObservableObject {
-	@State var removeSplashScreen = false
+
 	@Published var model = drinkdModel()
+	var removeSplashScreen = false
 
 	init() {
 			//1.Creating the URL we want to read.
@@ -25,6 +30,7 @@ class drinkdViewModel: ObservableObject {
 			var latitude: Double = 0.0
 			let locationFetcher = LocationFetcher()
 
+			//Asks user for their location
 			locationFetcher.start()
 
 			if let location = locationFetcher.lastKnownLocation {
@@ -41,24 +47,36 @@ class drinkdViewModel: ObservableObject {
 			request.httpMethod = "GET"
 			request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 
+			//URLSession
 			URLSession.shared.dataTask(with: request) { data, response, error in
 
-				//Closure
-				guard let verifiedData = data else {
+				//If URLSession returns data, below code block will execute
+				if let verifiedData = data {
+					do {
+						let JSONDecoderValue = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
+
+						if let JSONArray = JSONDecoderValue.businesses {
+							DispatchQueue.main.async {
+								self.objectWillChange.send()
+								self.model.setLocalRestaurants(in: JSONArray)
+								self.removeSplashScreen = true
+							}
+						} else {
+							throw QueryError.businessArrayNotFound
+						}
+
+					} catch(QueryError.businessArrayNotFound) {
+						print("Did not correctly retrieve the Business Array from the Business Search Endpoint")
+
+					} catch {
+						print(error)
+					}
 					return
 				}
-
-				do {
-					let JSONDecoderValue = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
-					self.model.localRestaurants = JSONDecoderValue
-					print(JSONDecoderValue)
-
-				} catch {
-					print(error )
-				}
+				//If you are here, URLSession returned error instead of data
+				print("\(error?.localizedDescription ?? "Unknown error")")
 
 			}.resume()
-
 		}
 	}
 

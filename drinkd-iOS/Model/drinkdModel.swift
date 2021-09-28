@@ -7,19 +7,16 @@
 
 import SwiftUI
 
+
+
 struct drinkdModel {
 
-	var localRestaurants: YelpApiBusinessSearch? = nil
-	private(set) var removeSplashScreen = false
+	private(set) var localRestaurants: [YelpApiBusinessSearchProperties] = []
 
-	
 
+	mutating func setLocalRestaurants(in restaurants: [YelpApiBusinessSearchProperties]) {
+		localRestaurants = restaurants
+		print(localRestaurants)
+	}
 }
-
-
-
-
-
-
-
 
