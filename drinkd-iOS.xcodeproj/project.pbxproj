@@ -27,6 +27,8 @@
 		54F9C850270223DD008FA516 /* PartyView-Join.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84F270223DC008FA516 /* PartyView-Join.swift */; };
 		54F9C8522702283B008FA516 /* PartyView-Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C8512702283B008FA516 /* PartyView-Create.swift */; };
 		54F9C855270244B9008FA516 /* NetworkingYelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C854270244B9008FA516 /* NetworkingYelp.swift */; };
+		54F9C8572702494E008FA516 /* drinkdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C8562702494E008FA516 /* drinkdViewModel.swift */; };
+		54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C858270257E1008FA516 /* SplashScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +72,8 @@
 		54F9C84F270223DC008FA516 /* PartyView-Join.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PartyView-Join.swift"; sourceTree = "<group>"; };
 		54F9C8512702283B008FA516 /* PartyView-Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PartyView-Create.swift"; sourceTree = "<group>"; };
 		54F9C854270244B9008FA516 /* NetworkingYelp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingYelp.swift; sourceTree = "<group>"; };
+		54F9C8562702494E008FA516 /* drinkdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkdViewModel.swift; sourceTree = "<group>"; };
+		54F9C858270257E1008FA516 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +180,7 @@
 				54F9C84D26FD5D6F008FA516 /* PartyViewMain.swift */,
 				54F9C84F270223DC008FA516 /* PartyView-Join.swift */,
 				54F9C8512702283B008FA516 /* PartyView-Create.swift */,
+				54F9C858270257E1008FA516 /* SplashScreen.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -183,6 +188,7 @@
 		54F9C83D26FBF891008FA516 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				54F9C8562702494E008FA516 /* drinkdViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -352,6 +358,8 @@
 				54F9C84A26FD1A59008FA516 /* HomeView.swift in Sources */,
 				54F9C81526FBB537008FA516 /* drinkd_iOS.xcdatamodeld in Sources */,
 				54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */,
+				54F9C8572702494E008FA516 /* drinkdViewModel.swift in Sources */,
+				54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */,
 				54F9C83926FBD986008FA516 /* YelpApi-BusinessDetails.swift in Sources */,
 				54F9C84826FD1A05008FA516 /* TopChoicesView.swift in Sources */,
 				54F9C84E26FD5D6F008FA516 /* PartyViewMain.swift in Sources */,
