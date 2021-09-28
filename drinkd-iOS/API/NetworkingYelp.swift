@@ -52,18 +52,16 @@ func fetchNearbyPlaces(setLatitude latitude: Double, setLongitude longitude: Dou
 			return
 		}
 
-		if let decodedResponse = try? JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData) {
-				// we have good data – go back to the main thread
-				DispatchQueue.main.async {
-					// update our UI
-					print(decodedResponse)
-				}
-				// everything is good, so we can exit
-				return
+		do {
+			let JSONDecoder = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
+			DispatchQueue.main.async {
+				// update our UI
+				print(JSONDecoder)
 			}
 
-		// if we're still here it means there was a problem
-		print("Fetch failed: \(error?.localizedDescription ?? "Unknown error")")
+		} catch {
+			print(error )
+		}
 
 	}.resume()
 }

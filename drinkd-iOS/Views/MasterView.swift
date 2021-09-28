@@ -63,7 +63,7 @@ struct ContentView: View {
 			//Because location fetcher can take a while, you must look at its return value asynchrously
 			DispatchQueue.main.async {
 				if let location = locationFetcher.lastKnownLocation {
-//					fetchNearbyPlaces(setLatitude: location.latitude, setLongitude: location.longitude)
+					fetchNearbyPlaces(setLatitude: location.latitude, setLongitude: location.longitude)
 					self.isActive = true
 				} else {
 					print("you location is unknown")
