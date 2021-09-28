@@ -9,7 +9,7 @@ import SwiftUI
 
 //Main Query
 struct YelpApiBusinessSearch: Codable {
-	let business: [YelpApiBusinessSearchProperties]
+	let businesses: [YelpApiBusinessSearchProperties]?
 }
 
 //Business Search
@@ -26,7 +26,7 @@ struct YelpApiBusinessSearchProperties: Codable {
 	let coordinates: YelpApiBusinessDetails_Coordinates
 	let transactions: [String]
 	let price: String
-	let location: YelpApiBusinessDetails_Location
+	let location: YelpApiBusinessDetails_Location?
 	let phone: String
 	let display_phone: String
 	let distance: Double
@@ -62,15 +62,15 @@ struct YelpApiBusinessDetails_Categories: Codable {
 }
 
 struct YelpApiBusinessDetails_Location: Codable {
-	let address1: String
-	let address2: String
-	let address3: String
+	let address1: String?
+	let address2: String?
+	let address3: String?
 	let city: String
 	let zip_code: String
 	let country: String
 	let state: String
 	let display_address: [String]
-	let cross_streets: String
+	let cross_streets: String?
 }
 
 struct YelpApiBusinessDetails_Coordinates: Codable {
