@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
-
+	@ObservedObject var viewModel = drinkdViewModel()
 	@State var isActive: Bool = false
 
 	var body: some View {
 
 		VStack {
-			if self.isActive {
+			if isActive {
 				GeometryReader { proxy in
 
 					let globalWidth = proxy.frame(in: .global).width
@@ -56,21 +56,8 @@ struct ContentView: View {
 			}
 		}
 		.onAppear {
-			let locationFetcher = LocationFetcher()
-
-			locationFetcher.start()
-
-			//Because location fetcher can take a while, you must look at its return value asynchrously
-			DispatchQueue.main.async {
-				if let location = locationFetcher.lastKnownLocation {
-					fetchNearbyPlaces(setLatitude: location.latitude, setLongitude: location.longitude)
-					self.isActive = true
-				} else {
-					print("you location is unknown")
-				}
-			}
+//			self.viewModel.fetchNearbyPlaces()
 		}
-
 	}
 
 }

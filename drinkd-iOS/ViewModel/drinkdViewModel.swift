@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import SwiftUI
 
-class drinkdViewModel {
-
+class drinkdViewModel: ObservableObject {
+	@State var removeSplashScreen = false
+	@Published var model = drinkdModel()
 
 
 }

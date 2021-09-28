@@ -29,6 +29,7 @@
 		54F9C855270244B9008FA516 /* NetworkingYelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C854270244B9008FA516 /* NetworkingYelp.swift */; };
 		54F9C8572702494E008FA516 /* drinkdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C8562702494E008FA516 /* drinkdViewModel.swift */; };
 		54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C858270257E1008FA516 /* SplashScreen.swift */; };
+		54F9C85B27037F2F008FA516 /* drinkdModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C85A27037F2F008FA516 /* drinkdModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		54F9C854270244B9008FA516 /* NetworkingYelp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingYelp.swift; sourceTree = "<group>"; };
 		54F9C8562702494E008FA516 /* drinkdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkdViewModel.swift; sourceTree = "<group>"; };
 		54F9C858270257E1008FA516 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
+		54F9C85A27037F2F008FA516 /* drinkdModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkdModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 		54F9C83726FBD95B008FA516 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				54F9C85A27037F2F008FA516 /* drinkdModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -359,6 +362,7 @@
 				54F9C81526FBB537008FA516 /* drinkd_iOS.xcdatamodeld in Sources */,
 				54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */,
 				54F9C8572702494E008FA516 /* drinkdViewModel.swift in Sources */,
+				54F9C85B27037F2F008FA516 /* drinkdModel.swift in Sources */,
 				54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */,
 				54F9C83926FBD986008FA516 /* YelpApi-BusinessDetails.swift in Sources */,
 				54F9C84826FD1A05008FA516 /* TopChoicesView.swift in Sources */,
