@@ -15,6 +15,7 @@ struct CardView: View {
 
 	private enum CardPadding: CGFloat{
 		case smallPadding = 4
+		case mediumPadding = 12
 	}
 
 	var restaurantTitle: String
@@ -28,13 +29,15 @@ struct CardView: View {
 	var restaurantPhoneNumber: String
 	var restaurantZipCode: String
 	var restaurantState: String
+	var restaurantURL: String
+	var restaurantPurchaseOptions: [String] 
 
 
 	//We use optionals because the API can return null for some properties
 	init(in restaurantDetails: YelpApiBusinessSearchProperties) {
 		self.restaurantTitle = restaurantDetails.name ?? "Name not found"
 		self.restaurantCategories = restaurantDetails.categories?[0].title ?? "None"
-		self.restaurantScore = restaurantDetails.review_count ?? 0
+		self.restaurantScore = Int(restaurantDetails.rating ?? 0)
 		self.restaurantPrice = restaurantDetails.price ?? "Not Found"
 		self.restaurantImage = restaurantDetails.image_url ?? "Not Found"
 		self.restaurantCity = restaurantDetails.location?.city ?? "Not Found"
@@ -43,6 +46,8 @@ struct CardView: View {
 		self.restaurantPhoneNumber  = restaurantDetails.phone ?? ""
 		self.restaurantZipCode = restaurantDetails.location?.zip_code ?? ""
 		self.restaurantState = restaurantDetails.location?.state ?? ""
+		self.restaurantURL = restaurantDetails.url ?? ""
+		self.restaurantPurchaseOptions = restaurantDetails.transactions ?? [""]
 	}
 
 	var body: some View {
@@ -50,6 +55,7 @@ struct CardView: View {
 		GeometryReader { geo in
 			ZStack {
 				let localWidth = geo.frame(in: .local).width
+				let localHeight = geo.frame(in: .local).height
 
 				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 					.fill(Color.white)
@@ -63,8 +69,8 @@ struct CardView: View {
 					Text("\(restaurantScore) / \(restaurantPrice)")
 						.font(.title3)
 					RemoteImageLoader(url: "\(restaurantImage)")
-						.scaledToFit()
-						.frame(width: localWidth)
+//						.scaledToFit()
+//						.frame(width: localWidth, alignment: .center)
 					Group {
 						HStack {
 							Image(systemName: "house")
@@ -84,15 +90,12 @@ struct CardView: View {
 					}
 					HStack {
 						Spacer()
-						Button(action: {}) {
-							Text("Sign In")
-						}
-						.buttonStyle(YelpDetailButton())
-						.shadow(radius: AppShadow.mediumShadowRadius)
+						YelpDetailButton(buttonName: "Get More Info", yelpURL: "\(restaurantURL)")
 						Spacer()
 					}
+					.padding(CardPadding.mediumPadding.rawValue)
 				}
-				.padding(.all, CardPadding.smallPadding.rawValue)
+				.padding(.all, CardPadding.mediumPadding.rawValue)
 			}
 		}
 
@@ -102,6 +105,6 @@ struct CardView: View {
 struct CardView_Previews: PreviewProvider {
 
 	static var previews: some View {
-		CardView(in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "bellas", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "macberyy")], rating: 56, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["none"], price: "454", location: YelpApiBusinessDetails_Location(address1: "4545", address2: "4545", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "test", display_phone: "test", distance: 6565.56))
+		CardView(in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 56, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["none"], price: "454", location: YelpApiBusinessDetails_Location(address1: "4545", address2: "4545", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "test", display_phone: "test", distance: 6565.56))
 	}
 }

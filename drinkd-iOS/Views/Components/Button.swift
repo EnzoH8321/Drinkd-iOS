@@ -7,12 +7,25 @@
 
 import SwiftUI
 
-struct YelpDetailButton: ButtonStyle {
-	func makeBody(configuration: Configuration) -> some View {
-		configuration.label
-			.padding()
-			.background(AppColors.primaryColor)
-			.clipShape(Capsule())
+struct YelpDetailButton: View {
+	@Environment(\.openURL) var openURL
+	let buttonName: String
+	let yelpURL: String
+
+	var body: some View {
+		Button {
+			guard let url = URL(string: "\(yelpURL)") else {
+				return print("BAD URL")
+			}
+			openURL(url)
+		} label: {
+			Text("\(buttonName)")
+				.padding(20)
+		}
+		.frame(height: 20)
+		.padding()
+		.background(AppColors.primaryColor)
+		.clipShape(Capsule())
 	}
 }
 

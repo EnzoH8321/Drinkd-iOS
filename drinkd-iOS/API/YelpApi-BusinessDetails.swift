@@ -14,7 +14,6 @@ struct YelpApiBusinessSearch: Codable {
 
 //Business Search
 struct YelpApiBusinessSearchProperties: Codable, Hashable {
-	
 	let id: String?
 	let alias: String?
 	let name: String?
