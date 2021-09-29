@@ -13,8 +13,10 @@ struct HomeView: View {
 
 	var body: some View {
 		GeometryReader{ proxy in
-			ForEach(viewModel.restaurantList, id: \.self) { element in
-				CardView(in: element)
+			ZStack {
+				ForEach(viewModel.restaurantList, id: \.self) { element in
+					CardView(in: element)
+				}
 			}
 		}
 
