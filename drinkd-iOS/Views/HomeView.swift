@@ -8,16 +8,23 @@
 import SwiftUI
 
 struct HomeView: View {
+
+	@EnvironmentObject var viewModel: drinkdViewModel
+
 	var body: some View {
 		GeometryReader{ proxy in
-			CardView()
+			ForEach(viewModel.restaurantList, id: \.self) { element in
+				CardView(in: element)
+			}
 		}
 
 	}
 }
 
 struct HomeView_Previews: PreviewProvider {
+	static let myEnvObject = drinkdViewModel()
+
 	static var previews: some View {
-		HomeView()
+		HomeView().environmentObject(myEnvObject)
 	}
 }

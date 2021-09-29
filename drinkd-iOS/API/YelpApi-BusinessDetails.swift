@@ -13,7 +13,8 @@ struct YelpApiBusinessSearch: Codable {
 }
 
 //Business Search
-struct YelpApiBusinessSearchProperties: Codable {
+struct YelpApiBusinessSearchProperties: Codable, Hashable {
+	
 	let id: String?
 	let alias: String?
 	let name: String?
@@ -56,12 +57,12 @@ struct YelpApiBusinessDetails: Codable {
 	let special_hours: [YelpApiBusinessDetails_SpecialHours]?
 }
 
-struct YelpApiBusinessDetails_Categories: Codable {
+struct YelpApiBusinessDetails_Categories: Codable, Hashable {
 	let alias: String?
 	let title: String?
 }
 
-struct YelpApiBusinessDetails_Location: Codable {
+struct YelpApiBusinessDetails_Location: Codable, Hashable {
 	let address1: String?
 	let address2: String?
 	let address3: String?
@@ -73,7 +74,7 @@ struct YelpApiBusinessDetails_Location: Codable {
 	let cross_streets: String?
 }
 
-struct YelpApiBusinessDetails_Coordinates: Codable {
+struct YelpApiBusinessDetails_Coordinates: Codable, Hashable {
 	let latitude: Double?
 	let longitude: Double?
 }

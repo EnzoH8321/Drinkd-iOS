@@ -16,7 +16,6 @@ struct drinkdModel {
 
 	mutating func setLocalRestaurants(in restaurants: [YelpApiBusinessSearchProperties]) {
 		localRestaurants = restaurants
-		print(localRestaurants[0])
 	}
 }
 

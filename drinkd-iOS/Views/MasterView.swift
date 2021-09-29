@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MasterView: View {
-	@ObservedObject var viewModel = drinkdViewModel()
+	@StateObject var viewModel = drinkdViewModel()
 
 	var body: some View {
 
@@ -47,7 +47,6 @@ struct MasterView: View {
 								Image(systemName: "person.3")
 								Text("Party")
 							}
-
 					}
 				}
 			} else {
@@ -57,16 +56,14 @@ struct MasterView: View {
 		.onAppear {
 			self.viewModel.fetchLocalRestaurants()
 		}
+		.environmentObject(viewModel)
 	}
 
 }
 
 
-
-
 struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
-		//        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 		MasterView()
 	}
 }
