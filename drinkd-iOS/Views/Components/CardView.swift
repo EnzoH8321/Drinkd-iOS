@@ -9,13 +9,30 @@
 
 import SwiftUI
 
-enum CardPadding: CGFloat{
-	case smallPadding = 4
-}
+
 
 struct CardView: View {
+	private enum CardPadding: CGFloat{
+		case smallPadding = 4
+	}
 
 	@ObservedObject var viewModel = drinkdViewModel()
+
+	var restaurantTitle: String = ""
+	var restaurantCategories: String = ""
+	var restaurantScore: Double = 0.0
+	var restaurantPrice: String = ""
+	var restaurantImage: String = ""
+	var restaurantCity: String = ""
+	var restaurantAddress1: String = ""
+	var restaurantAddress2: String? = ""
+	var restaurantPhoneNumber: String = ""
+	var restaurantZipCode: String = ""
+	var restaurantState: String = ""
+
+	init() {
+
+	}
 
 	var body: some View {
 
@@ -28,14 +45,14 @@ struct CardView: View {
 					.shadow(radius: AppShadow.lowShadowRadius)
 
 				VStack(alignment: .leading) {
-					Text("RestaurantTitle")
+					Text("\(restaurantTitle)")
 						.font(.largeTitle)
-					Text("Restaurant Detail")
+					Text("\(restaurantCategories)")
 						.font(.title2)
-					Text("Score / Money")
+					Text("\(restaurantScore) / \(restaurantPrice)")
 						.font(.title3)
-					Image("drinkd_text")
-						.resizable()
+					RemoteImageLoader(url: "\(restaurantImage)")
+					//						.resizable()
 						.scaledToFit()
 						.frame(width: localWidth - 30)
 					Group {
@@ -44,14 +61,17 @@ struct CardView: View {
 								.resizable()
 								.scaledToFit()
 								.frame(width: 40)
-							Text("Address")
+							Text("""
+\(restaurantAddress1)
+\(restaurantCity)
+""")
 						}
 						HStack {
 							Image(systemName: "phone")
 								.resizable()
 								.scaledToFit()
 								.frame(width: 40)
-							Text("Phone number")
+							Text("\(restaurantPhoneNumber)")
 						}
 					}
 					HStack {

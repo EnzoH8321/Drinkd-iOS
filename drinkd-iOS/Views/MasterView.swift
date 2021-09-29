@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct MasterView: View {
 	@ObservedObject var viewModel = drinkdViewModel()
 
 	var body: some View {
@@ -67,6 +67,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
 		//        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-		ContentView()
+		MasterView()
 	}
 }
