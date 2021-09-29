@@ -22,7 +22,6 @@ struct CardView: View {
 		case pickup
 		case delivery
 		case restaurant_reservation
-
 	}
 
 	var restaurantTitle: String

@@ -14,8 +14,9 @@ struct HomeView: View {
 	var body: some View {
 		GeometryReader{ proxy in
 			ZStack {
-				ForEach(viewModel.restaurantList, id: \.self) { element in
-					CardView(in: element)
+				ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
+					CardView(in: viewModel.restaurantList[element])
+						.stacked(at: element, in: viewModel.restaurantList.count)
 				}
 			}
 		}
@@ -27,6 +28,15 @@ struct HomeView_Previews: PreviewProvider {
 	static let myEnvObject = drinkdViewModel()
 
 	static var previews: some View {
-		HomeView().environmentObject(myEnvObject)
+		HomeView()
+			.environmentObject(drinkdViewModel())
+	}
+}
+
+//For stacked styling
+extension View {
+	func stacked(at position: Int, in total: Int) -> some View {
+		let offset = CGFloat(total - position)
+		return self.offset(CGSize(width: 0, height: offset * 2))
 	}
 }
