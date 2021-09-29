@@ -62,8 +62,8 @@ class drinkdViewModel: ObservableObject {
 					if let JSONArray = JSONDecoderValue.businesses {
 						DispatchQueue.main.async {
 							self.objectWillChange.send()
-							self.model.setLocalRestaurants(in: JSONArray)
-							self.restaurantList = self.model.localRestaurants
+							self.model.modifyElements(in: JSONArray)
+							self.restaurantList = self.model.getLocalRestaurants()
 							self.removeSplashScreen = true
 						}
 					} else {

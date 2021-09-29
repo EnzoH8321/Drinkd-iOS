@@ -18,12 +18,6 @@ struct CardView: View {
 		case mediumPadding = 12
 	}
 
-	private enum TransactionTypes: String {
-		case pickup
-		case delivery
-		case restaurant_reservation
-	}
-
 	var restaurantTitle: String
 	var restaurantCategories: String
 	var restaurantScore: Int
@@ -56,23 +50,10 @@ struct CardView: View {
 		self.restaurantState = restaurantDetails.location?.state ?? ""
 		self.restaurantURL = restaurantDetails.url ?? ""
 
-		let restaurantArray = restaurantDetails.transactions ?? [""]
-
-		for element in restaurantArray {
-			switch(element) {
-			case TransactionTypes.pickup.rawValue:
-				optionsPickup = true
-
-			case TransactionTypes.delivery.rawValue:
-				optionsDelivery = true
-
-			case TransactionTypes.restaurant_reservation.rawValue:
-				optionsReservations = true
-
-			default:
-				print("Nothing Found")
-			}
-		}
+		self.optionsDelivery = restaurantDetails.deliveryAvailable ?? false
+		self.optionsReservations = restaurantDetails.reservationAvailable ?? false
+		self.optionsPickup = restaurantDetails.pickUpAvailable ?? false
+		
 
 	}
 

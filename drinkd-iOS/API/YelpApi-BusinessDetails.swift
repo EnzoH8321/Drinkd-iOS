@@ -30,6 +30,10 @@ struct YelpApiBusinessSearchProperties: Codable, Hashable {
 	let phone: String?
 	let display_phone: String?
 	let distance: Double?
+	//Custom Properties, not from API
+	var pickUpAvailable: Bool?
+	var deliveryAvailable: Bool?
+	var reservationAvailable: Bool?
 }
 
 
