@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct HomeView: View {
-
 	@EnvironmentObject var viewModel: drinkdViewModel
+
+	
 
 	var body: some View {
 		GeometryReader{ proxy in

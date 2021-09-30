@@ -18,6 +18,8 @@ struct CardView: View {
 		case mediumPadding = 12
 	}
 
+	@State private var offset = CGSize.zero
+
 	var restaurantTitle: String
 	var restaurantCategories: String
 	var restaurantScore: Int
@@ -54,7 +56,6 @@ struct CardView: View {
 		self.optionsReservations = restaurantDetails.reservationAvailable ?? false
 		self.optionsPickup = restaurantDetails.pickUpAvailable ?? false
 		
-
 	}
 
 	var body: some View {
@@ -133,6 +134,23 @@ struct CardView: View {
 				}
 				.padding(.all, CardPadding.mediumPadding.rawValue)
 			}
+			.rotationEffect(.degrees(Double(offset.width / 5 )))
+			.offset(x: offset.width * 5, y: 0)
+			.opacity(2 - Double(abs(offset.width / 50)))
+			.gesture(
+				DragGesture()
+					.onChanged { gesture in
+						self.offset = gesture.translation
+					}
+
+					.onEnded { _ in
+						if abs(self.offset.width) > 100 {
+							// remove the card
+						} else {
+							self.offset = .zero
+						}
+					}
+			)
 		}
 
 	}

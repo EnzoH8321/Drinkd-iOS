@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MasterView: View {
 	@StateObject var viewModel = drinkdViewModel()
-
+	
 	var body: some View {
 
 		VStack {
