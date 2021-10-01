@@ -83,6 +83,12 @@ class drinkdViewModel: ObservableObject {
 
 		}.resume()
 	}
+
+	func updateRestaurantList() {
+		objectWillChange.send()
+		model.updateArray()
+		self.restaurantList = model.getLocalRestaurants()
+	}
 }
 
 

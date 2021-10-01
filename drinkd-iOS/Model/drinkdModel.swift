@@ -15,9 +15,9 @@ struct drinkdModel {
 		case delivery
 		case restaurant_reservation
 	}
-
+	//
 	private(set) var localRestaurants: [YelpApiBusinessSearchProperties] = []
-
+	//
 	mutating func getLocalRestaurants() -> [YelpApiBusinessSearchProperties] {
 		return localRestaurants
 	}
@@ -41,6 +41,18 @@ struct drinkdModel {
 
 			localRestaurants.append(element)
 		}
+	}
+
+	mutating func updateArray()  {
+
+		guard let topCard = localRestaurants.last else { return print("Array Empty") }
+
+//		localRestaurants.remove(at: localRestaurants.count - 1)
+		localRestaurants.insert(topCard, at: 0)
+		localRestaurants.remove(at: localRestaurants.count - 1)
+//		localRestaurants.insert(topCard, at: 1)
+
+		print(localRestaurants.count)
 	}
 
 }

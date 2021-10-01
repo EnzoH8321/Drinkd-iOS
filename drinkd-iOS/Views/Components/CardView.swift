@@ -20,6 +20,9 @@ struct CardView: View {
 
 	@State private var offset = CGSize.zero
 
+	@ObservedObject var viewModel: drinkdViewModel
+
+
 	var restaurantTitle: String
 	var restaurantCategories: String
 	var restaurantScore: Int
@@ -38,7 +41,7 @@ struct CardView: View {
 
 
 	//We use optionals because the API can return null for some properties
-	init(in restaurantDetails: YelpApiBusinessSearchProperties) {
+	init(in restaurantDetails: YelpApiBusinessSearchProperties, forView viewModel: drinkdViewModel) {
 		self.restaurantTitle = restaurantDetails.name ?? "Name not found"
 		self.restaurantCategories = restaurantDetails.categories?[0].title ?? "None"
 		self.restaurantScore = Int(restaurantDetails.rating ?? 0)
@@ -55,7 +58,8 @@ struct CardView: View {
 		self.optionsDelivery = restaurantDetails.deliveryAvailable ?? false
 		self.optionsReservations = restaurantDetails.reservationAvailable ?? false
 		self.optionsPickup = restaurantDetails.pickUpAvailable ?? false
-		
+
+		self.viewModel = viewModel
 	}
 
 	var body: some View {
@@ -146,6 +150,7 @@ struct CardView: View {
 					.onEnded { _ in
 						if abs(self.offset.width) > 100 {
 							// remove the card
+								viewModel.updateRestaurantList()
 						} else {
 							self.offset = .zero
 						}
@@ -159,6 +164,6 @@ struct CardView: View {
 struct CardView_Previews: PreviewProvider {
 
 	static var previews: some View {
-		CardView(in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 56, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "454", location: YelpApiBusinessDetails_Location(address1: "4545", address2: "4545", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "test", display_phone: "test", distance: 6565.56))
+		CardView(in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 56, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "454", location: YelpApiBusinessDetails_Location(address1: "4545", address2: "4545", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "test", display_phone: "test", distance: 6565.56), forView: drinkdViewModel())
 	}
 }

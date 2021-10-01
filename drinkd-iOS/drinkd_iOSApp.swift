@@ -11,9 +11,11 @@ import SwiftUI
 struct drinkd_iOSApp: App {
     let persistenceController = PersistenceController.shared
 
+	var viewModel = drinkdViewModel()
+
     var body: some Scene {
         WindowGroup {
-            MasterView()
+			MasterView(viewModel: self.viewModel)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

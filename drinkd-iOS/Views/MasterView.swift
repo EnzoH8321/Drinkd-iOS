@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct MasterView: View {
-	@StateObject var viewModel = drinkdViewModel()
+
+	@ObservedObject	var viewModel: drinkdViewModel
 	
 	var body: some View {
 
@@ -21,7 +22,7 @@ struct MasterView: View {
 					TabView {
 						//HomeView
 						NavigationView {
-							HomeView()
+							HomeView(viewModel: self.viewModel)
 								.frame(width: globalWidth - 30 , height: 650)
 								.navigationBarTitle("")
 								.navigationBarHidden(true)
@@ -56,7 +57,7 @@ struct MasterView: View {
 		.onAppear {
 			self.viewModel.fetchLocalRestaurants()
 		}
-		.environmentObject(viewModel)
+
 	}
 
 }
@@ -64,6 +65,6 @@ struct MasterView: View {
 
 struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
-		MasterView()
+		MasterView(viewModel: drinkdViewModel())
 	}
 }
