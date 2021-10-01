@@ -18,9 +18,14 @@ struct drinkdModel {
 	//
 	private(set) var localRestaurants: [YelpApiBusinessSearchProperties] = []
 	//
+	private var localRestaurantsDefault:
+		[YelpApiBusinessSearchProperties] = []
+	//
 	mutating func getLocalRestaurants() -> [YelpApiBusinessSearchProperties] {
 		return localRestaurants
 	}
+
+	var counter: Int = 10
 
 	//Checks to see if the transaction array exists. if it does, parse it and fill the needed transaction properties
 	mutating func modifyElements(in restaurants: [YelpApiBusinessSearchProperties]) {
@@ -40,19 +45,23 @@ struct drinkdModel {
 			}
 
 			localRestaurants.append(element)
+			localRestaurantsDefault.append(element)
 		}
 	}
 
 	mutating func updateArray()  {
 
-		guard let topCard = localRestaurants.last else { return print("Array Empty") }
+		self.counter -= 1
 
-//		localRestaurants.remove(at: localRestaurants.count - 1)
-		localRestaurants.insert(topCard, at: 0)
-		localRestaurants.remove(at: localRestaurants.count - 1)
-//		localRestaurants.insert(topCard, at: 1)
+		print(counter)
 
-		print(localRestaurants.count)
+		if (counter == 0) {
+			for element in 0..<localRestaurantsDefault.count {
+				localRestaurants.append(localRestaurantsDefault[element])
+			}
+			counter = 10
+		}
+
 	}
 
 }
