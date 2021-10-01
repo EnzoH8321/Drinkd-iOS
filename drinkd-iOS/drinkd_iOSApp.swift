@@ -6,9 +6,17 @@
 //
 
 import SwiftUI
+import UIKit
+import Firebase
 
 @main
 struct drinkd_iOSApp: App {
+
+	init() {
+		//Initializes firebase
+		FirebaseApp.configure()
+	}
+
     let persistenceController = PersistenceController.shared
 
 	var viewModel = drinkdViewModel()
@@ -20,3 +28,5 @@ struct drinkd_iOSApp: App {
         }
     }
 }
+
+

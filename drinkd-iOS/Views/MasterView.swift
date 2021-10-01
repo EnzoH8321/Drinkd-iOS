@@ -18,12 +18,13 @@ struct MasterView: View {
 				GeometryReader { proxy in
 
 					let globalWidth = proxy.frame(in: .global).width
+					let globalHeight = proxy.frame(in: .global).height
 
 					TabView {
 						//HomeView
 						NavigationView {
 							HomeView(viewModel: self.viewModel)
-								.frame(width: globalWidth - 30 , height: 650)
+								.frame(width: globalWidth - 30 , height: globalHeight / 1.20)
 								.navigationBarTitle("")
 								.navigationBarHidden(true)
 						}
