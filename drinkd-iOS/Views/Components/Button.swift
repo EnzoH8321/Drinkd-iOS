@@ -30,26 +30,27 @@ struct YelpDetailButton: View {
 }
 
 //Used in the PartyViewMain
+@available(iOS 15.0, *)
 struct JoinOrCreatePartyButton: View {
 
 	let buttonName: String
 
 	var body: some View {
-		Button {
-			print("Button pressed")
-		} label: {
-			Text("\(buttonName)")
-				.padding(20)
-		}
-		.frame(height: 20)
-		.padding()
-		.background(AppColors.primaryColor)
-		.clipShape(Capsule())
+
+		Text("\(buttonName)")
+			.padding(20)
+			.frame(height: 20)
+			.padding()
+			.background(AppColors.primaryColor)
+			.clipShape(Capsule())
+
 	}
 }
 
 
 
+
+@available(iOS 15.0, *)
 struct Button_Previews: PreviewProvider {
 	static var previews: some View {
 		JoinOrCreatePartyButton(buttonName: "Join Party")

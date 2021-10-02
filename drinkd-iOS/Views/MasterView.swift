@@ -6,10 +6,15 @@
 //
 
 import SwiftUI
+import Firebase
 
+@available(iOS 15.0, *)
 struct MasterView: View {
 
 	@ObservedObject	var viewModel: drinkdViewModel
+
+	//Firebase
+	var ref = Database.database().reference()
 	
 	var body: some View {
 
@@ -42,13 +47,17 @@ struct MasterView: View {
 							Image(systemName: "chart.bar")
 							Text("TopChoices")
 						}
-						//
-
-						Text("PartyTab")
-							.tabItem {
-								Image(systemName: "person.3")
-								Text("Party")
-							}
+						//Party View
+						NavigationView {
+							PartyView()
+								.frame(width: globalWidth, height: globalHeight)
+								.navigationBarTitle("")
+								.navigationBarHidden(true)
+						}
+						.tabItem {
+							Image(systemName: "person.3")
+							Text("Party")
+						}
 					}
 				}
 			} else {
@@ -64,7 +73,10 @@ struct MasterView: View {
 }
 
 
+@available(iOS 15.0, *)
 struct ContentView_Previews: PreviewProvider {
+
+
 	static var previews: some View {
 		MasterView(viewModel: drinkdViewModel())
 	}

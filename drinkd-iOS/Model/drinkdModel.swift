@@ -15,17 +15,24 @@ struct drinkdModel {
 		case delivery
 		case restaurant_reservation
 	}
+
+	private var counter: Int = 10
+	private(set) var partyID: String?
+	private(set) var partyMaxVotes: String?
+	private(set) var partyName: String?
+	private(set) var partyTimestamp: Int?
+	private(set) var partyURL: String?
+	
 	//
 	private(set) var localRestaurants: [YelpApiBusinessSearchProperties] = []
 	//
-	private var localRestaurantsDefault:
-		[YelpApiBusinessSearchProperties] = []
+	private(set) var localRestaurantsDefault:
+	[YelpApiBusinessSearchProperties] = []
 	//
 	mutating func getLocalRestaurants() -> [YelpApiBusinessSearchProperties] {
 		return localRestaurants
 	}
 
-	var counter: Int = 10
 
 	//Checks to see if the transaction array exists. if it does, parse it and fill the needed transaction properties
 	mutating func modifyElements(in restaurants: [YelpApiBusinessSearchProperties]) {
@@ -53,8 +60,6 @@ struct drinkdModel {
 
 		self.counter -= 1
 
-		print(counter)
-
 		if (counter == 0) {
 			for element in 0..<localRestaurantsDefault.count {
 				localRestaurants.append(localRestaurantsDefault[element])
@@ -62,6 +67,14 @@ struct drinkdModel {
 			counter = 10
 		}
 
+	}
+
+	mutating func setPartyProperties(setID partyID: String? = nil, setVotes partyVotes: String? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
+		self.partyID = partyID
+		self.partyMaxVotes = partyVotes
+		self.partyName = partyName
+		self.partyTimestamp = Int(Date().timeIntervalSince1970 * 1000)
+		self.partyURL = partyURL
 	}
 
 }

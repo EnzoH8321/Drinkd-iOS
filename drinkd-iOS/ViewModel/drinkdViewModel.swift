@@ -19,7 +19,9 @@ class drinkdViewModel: ObservableObject {
 	@Published var model = drinkdModel()
 	var removeSplashScreen = false
 	var restaurantList: [YelpApiBusinessSearchProperties] = []
-
+	var partyID: String?
+	var partyMaxVotes: String?
+	var partyName: String?
 
 	func fetchLocalRestaurants() {
 		//1.Creating the URL we want to read.
@@ -89,6 +91,16 @@ class drinkdViewModel: ObservableObject {
 		model.updateArray()
 		self.restaurantList = model.getLocalRestaurants()
 	}
+
+	func setPartyProperties(setID partyID: String? = nil, setVotes partyVotes: String? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
+		objectWillChange.send()
+		model.setPartyProperties(setID: partyID, setVotes: partyVotes, setName: partyName, setURL: partyURL)
+		self.partyID = model.partyID
+		self.partyMaxVotes = model.partyMaxVotes
+		self.partyName = model.partyName
+	}
+
+
 }
 
 

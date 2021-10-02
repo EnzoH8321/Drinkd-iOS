@@ -20,10 +20,19 @@ struct PartyView_Create: View {
 		VStack {
 			Text("Create Your Party")
 				.font(.title)
-			TextField("Party Name", text: $partyName, prompt: Text("Party Name Here"))
-				.border(Color(UIColor.separator))
-				.textFieldStyle(.roundedBorder)
-			TextField("Set you vote amount", text: $winningVoteAmount) { isEditing in
+
+			TextField("Choose a Party Name", text: $partyName ) { isEditing in
+//				self.partyName = isEditing
+				print(partyName)
+			} onCommit: {
+
+			}
+			
+			.border(Color(UIColor.separator))
+			.textFieldStyle(.roundedBorder)
+
+			TextField("Set You Vote Amount", text: $winningVoteAmount) { isEditing in
+
 				
 			} onCommit: {
 
@@ -31,7 +40,10 @@ struct PartyView_Create: View {
 			.border(Color(UIColor.separator))
 			.textFieldStyle(.roundedBorder)
 
-			JoinOrCreatePartyButton(buttonName: "Create Party")
+			JoinOrCreatePartyButton(buttonName: "Create")
+	
+
+			Spacer()
 		}
 	}
 }
