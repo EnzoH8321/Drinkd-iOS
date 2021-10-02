@@ -89,7 +89,7 @@ class drinkdViewModel: ObservableObject {
 
 	func updateRestaurantList() {
 		objectWillChange.send()
-		model.updateArray()
+		model.appendCardsToDecklist()
 		self.restaurantList = model.getLocalRestaurants()
 	}
 
@@ -100,8 +100,6 @@ class drinkdViewModel: ObservableObject {
 		self.partyMaxVotes = model.partyMaxVotes
 		self.partyName = model.partyName
 	}
-
-
 }
 
 

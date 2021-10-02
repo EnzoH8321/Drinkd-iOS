@@ -56,8 +56,7 @@ struct drinkdModel {
 		}
 	}
 
-	mutating func updateArray()  {
-
+	mutating func appendCardsToDecklist()  {
 		self.counter -= 1
 
 		if (counter == 0) {
@@ -77,6 +76,10 @@ struct drinkdModel {
 
 		if (partyURL != nil) {
 			self.partyURL = partyURL
+		}
+
+		if (partyID != nil && partyMaxVotes != nil && partyName != nil && partyTimestamp != nil && partyURL != nil) {
+			
 		}
 
 		print(self.partyID)

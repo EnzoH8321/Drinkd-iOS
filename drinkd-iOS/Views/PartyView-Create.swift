@@ -49,10 +49,10 @@ struct PartyView_Create: View {
 
 	private struct CreatePartyButton: View {
 		@EnvironmentObject var viewModel: drinkdViewModel
+		@State private var showAlert: Bool = false
 
 		var votes: String
 		var name: String
-		@State private var verifyVoteType: Bool = false
 
 		init(name: String, votes: String) {
 			self.name = name
@@ -64,18 +64,18 @@ struct PartyView_Create: View {
 			Button("Create Party") {
 
 				let filteredVotes = votes.filter { "0123456789".contains($0) }
+				let nameLength = name.count
 
-				if (filteredVotes.count == 0 || name.count > 8 || name.count == 0) {
-					verifyVoteType = true
+				if (filteredVotes.count == 0 || nameLength > 8 || nameLength == 0) {
+					showAlert = true
 
 				} else {
 					viewModel.setPartyProperties(setVotes: self.votes, setName: self.name)
-					verifyVoteType = false
+					showAlert = false
 				}
 
 			}
-
-			.alert(isPresented: $verifyVoteType) {
+			.alert(isPresented: $showAlert) {
 				Alert(title: Text("Error"), message: Text("Check for Valid Name or Vote amount"))
 			}
 			.padding(20)
