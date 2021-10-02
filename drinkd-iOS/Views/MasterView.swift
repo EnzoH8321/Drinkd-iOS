@@ -11,7 +11,7 @@ import Firebase
 @available(iOS 15.0, *)
 struct MasterView: View {
 
-	@ObservedObject	var viewModel: drinkdViewModel
+	@EnvironmentObject var viewModel: drinkdViewModel
 
 	//Firebase
 	var ref = Database.database().reference()
@@ -78,6 +78,7 @@ struct ContentView_Previews: PreviewProvider {
 
 
 	static var previews: some View {
-		MasterView(viewModel: drinkdViewModel())
+		MasterView()
+			.environmentObject(drinkdViewModel())
 	}
 }

@@ -27,6 +27,7 @@ struct PartyView_Join: View {
 	}
 }
 
+
 @available(iOS 15.0, *)
 struct PartyView_Join_Previews: PreviewProvider {
 	static var previews: some View {

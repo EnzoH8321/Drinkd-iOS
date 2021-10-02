@@ -69,12 +69,21 @@ struct drinkdModel {
 
 	}
 
-	mutating func setPartyProperties(setID partyID: String? = nil, setVotes partyVotes: String? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
-		self.partyID = partyID
+	mutating func createParty(setVotes partyVotes: String? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
+		self.partyID = String(Int.random(in: 5000...20000))
 		self.partyMaxVotes = partyVotes
 		self.partyName = partyName
 		self.partyTimestamp = Int(Date().timeIntervalSince1970 * 1000)
-		self.partyURL = partyURL
+
+		if (partyURL != nil) {
+			self.partyURL = partyURL
+		}
+
+		print(self.partyID)
+		print(self.partyMaxVotes)
+		print(self.partyName)
+		print(self.partyTimestamp)
+		print(self.partyURL)
 	}
 
 }

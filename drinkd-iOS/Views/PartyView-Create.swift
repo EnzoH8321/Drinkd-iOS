@@ -12,6 +12,8 @@ struct PartyView_Create: View {
 	@State var partyName: String = ""
 	@State var winningVoteAmount: String = ""
 
+
+
 	func formatStringtoInt(in textValue: String) -> Int {
 		return Int(textValue) ?? 0
 	}
@@ -20,36 +22,82 @@ struct PartyView_Create: View {
 		VStack {
 			Text("Create Your Party")
 				.font(.title)
+			//
+			TextField("Choose a Party Name(Max 8 Characters)", text: $partyName ) { isEditing in
 
-			TextField("Choose a Party Name", text: $partyName ) { isEditing in
-//				self.partyName = isEditing
-				print(partyName)
 			} onCommit: {
 
 			}
-			
 			.border(Color(UIColor.separator))
 			.textFieldStyle(.roundedBorder)
-
+			//
 			TextField("Set You Vote Amount", text: $winningVoteAmount) { isEditing in
-
 				
 			} onCommit: {
 
 			}
 			.border(Color(UIColor.separator))
 			.textFieldStyle(.roundedBorder)
+			.keyboardType(.numberPad)
+			//
+			CreatePartyButton(name: partyName, votes: winningVoteAmount)
 
-			JoinOrCreatePartyButton(buttonName: "Create")
-	
-
+			//
 			Spacer()
 		}
 	}
+
+	private struct CreatePartyButton: View {
+		@EnvironmentObject var viewModel: drinkdViewModel
+
+		var votes: String
+		var name: String
+		@State private var verifyVoteType: Bool = false
+
+		init(name: String, votes: String) {
+			self.name = name
+			self.votes = votes
+		}
+
+		var body: some View {
+
+			Button("Create Party") {
+
+				let filteredVotes = votes.filter { "0123456789".contains($0) }
+
+				if (filteredVotes.count == 0 || name.count > 8 || name.count == 0) {
+					verifyVoteType = true
+
+				} else {
+					viewModel.setPartyProperties(setVotes: self.votes, setName: self.name)
+					verifyVoteType = false
+				}
+
+			}
+
+			.alert(isPresented: $verifyVoteType) {
+				Alert(title: Text("Error"), message: Text("Check for Valid Name or Vote amount"))
+			}
+			.padding(20)
+			.frame(height: 20)
+			.padding()
+			.background(AppColors.primaryColor)
+			.clipShape(Capsule())
+		}
+	}
+
+
 }
+
+
+
+
+
+
 @available(iOS 15.0, *)
 struct PartyView_Create_Previews: PreviewProvider {
 	static var previews: some View {
 		PartyView_Create()
+
 	}
 }

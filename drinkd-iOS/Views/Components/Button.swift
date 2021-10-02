@@ -29,7 +29,7 @@ struct YelpDetailButton: View {
 	}
 }
 
-//Used in the PartyViewMain
+//Used in the PartyView. Not a button to fit in with the navigation view requirements
 @available(iOS 15.0, *)
 struct JoinOrCreatePartyButton: View {
 
@@ -43,12 +43,8 @@ struct JoinOrCreatePartyButton: View {
 			.padding()
 			.background(AppColors.primaryColor)
 			.clipShape(Capsule())
-
 	}
 }
-
-
-
 
 @available(iOS 15.0, *)
 struct Button_Previews: PreviewProvider {

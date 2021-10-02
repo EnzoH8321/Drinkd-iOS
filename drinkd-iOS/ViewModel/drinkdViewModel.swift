@@ -65,6 +65,7 @@ class drinkdViewModel: ObservableObject {
 						DispatchQueue.main.async {
 							self.objectWillChange.send()
 							self.model.modifyElements(in: JSONArray)
+							self.model.createParty(setURL: url.absoluteString)
 							self.restaurantList = self.model.getLocalRestaurants()
 							self.removeSplashScreen = true
 						}
@@ -92,9 +93,9 @@ class drinkdViewModel: ObservableObject {
 		self.restaurantList = model.getLocalRestaurants()
 	}
 
-	func setPartyProperties(setID partyID: String? = nil, setVotes partyVotes: String? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
+	func setPartyProperties(setVotes partyVotes: String? = nil, setName partyName: String? = nil) {
 		objectWillChange.send()
-		model.setPartyProperties(setID: partyID, setVotes: partyVotes, setName: partyName, setURL: partyURL)
+		model.createParty(setVotes: partyVotes, setName: partyName)
 		self.partyID = model.partyID
 		self.partyMaxVotes = model.partyMaxVotes
 		self.partyName = model.partyName

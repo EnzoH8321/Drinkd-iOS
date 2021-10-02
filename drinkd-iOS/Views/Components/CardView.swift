@@ -20,7 +20,7 @@ struct CardView: View {
 
 	@State private var offset = CGSize.zero
 
-	@ObservedObject var viewModel: drinkdViewModel
+	@EnvironmentObject var viewModel: drinkdViewModel
 
 
 	var restaurantTitle: String
@@ -59,7 +59,7 @@ struct CardView: View {
 		self.optionsReservations = restaurantDetails.reservationAvailable ?? false
 		self.optionsPickup = restaurantDetails.pickUpAvailable ?? false
 
-		self.viewModel = viewModel
+//		self.viewModel = viewModel
 	}
 
 	var body: some View {

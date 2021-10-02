@@ -21,16 +21,16 @@ struct drinkd_iOSApp: App {
 
 	let persistenceController = PersistenceController.shared
 
-	var viewModel = drinkdViewModel()
+	@StateObject var viewModel = drinkdViewModel()
 
 	//Firebase
 	var ref: DatabaseReference!
 
 	var body: some Scene {
 		WindowGroup {
-			MasterView(viewModel: self.viewModel)
+			MasterView()
 				.environment(\.managedObjectContext, persistenceController.container.viewContext)
-
+				.environmentObject(viewModel)
 		}
 	}
 }

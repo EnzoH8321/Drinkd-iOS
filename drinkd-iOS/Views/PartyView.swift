@@ -14,13 +14,12 @@ struct PartyView: View {
 			VStack {
 				NavigationLink(destination: PartyView_Join()) {
 					JoinOrCreatePartyButton(buttonName: "Join Party")
-
 				}
+
 				NavigationLink(destination: PartyView_Create()) {
 					JoinOrCreatePartyButton(buttonName: "Create Party")
-						
 				}
-			
+
 			}
 		}
 	}
