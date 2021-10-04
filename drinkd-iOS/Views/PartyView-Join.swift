@@ -20,11 +20,42 @@ struct PartyView_Join: View {
 			TextField("Party Code", text: $partyCode, prompt: Text("Party Code Here"))
 				.border(Color(UIColor.separator))
 				.textFieldStyle(.roundedBorder)
+			
+			JoinPartyButton(code: partyCode)
+
 			Spacer()
 		}
-
-
 	}
+
+	private struct JoinPartyButton: View {
+		@EnvironmentObject var viewModel: drinkdViewModel
+		@State private var showAlert: Bool = false
+
+		var partyCode: String
+
+
+		init(code: String) {
+			self.partyCode = code
+		}
+
+		var body: some View {
+
+			Button("Join Party") {
+			
+				viewModel.getParty(getCode: self.partyCode)
+				self.showAlert = viewModel.queryPartyError
+			}
+			.alert(isPresented: $showAlert) {
+				Alert(title: Text("Error"), message: Text("Party Does no exists"))
+			}
+			.padding(20)
+			.frame(height: 20)
+			.padding()
+			.background(AppColors.primaryColor)
+			.clipShape(Capsule())
+		}
+	}
+
 }
 
 

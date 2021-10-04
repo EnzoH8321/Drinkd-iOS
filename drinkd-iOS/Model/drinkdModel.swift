@@ -17,6 +17,8 @@ struct drinkdModel {
 	}
 
 	private var counter: Int = 10
+	private(set) var showPartyDetailScreen = false
+	private(set) var queryPartyError = false
 	private(set) var partyID: String?
 	private(set) var partyMaxVotes: String?
 	private(set) var partyName: String?
@@ -77,7 +79,7 @@ struct drinkdModel {
 		self.partyMaxVotes = partyVotes
 		self.partyName = partyName
 		self.partyTimestamp = Int(Date().timeIntervalSince1970 * 1000)
-
+		self.showPartyDetailScreen = true
 
 		if let url = partyURL {
 			self.partyURL = url
@@ -103,14 +105,39 @@ struct drinkdModel {
 			return
 		}
 
+
+
 		self.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL])
+//
 
-		print(self.partyID)
-		print(self.partyMaxVotes)
-		print(self.partyName)
-		print(self.partyTimestamp)
-		print(self.partyURL)
 
+	}
+
+
+	mutating func getParty(getCode partyCode: String? = nil, getVotes votes: String? = nil, getName name: String? = nil, getURL url: String? = nil) {
+
+		if let partyID = partyCode {
+			self.partyID = partyID
+		}
+
+		if let partyVotes = votes {
+			self.partyMaxVotes = partyVotes
+		}
+
+		if let partyName = name {
+			self.partyName = partyName
+		}
+
+		if let siteURL = url {
+			self.partyURL = siteURL
+		}
+
+		
+
+	}
+
+	mutating func setPartyDoesNotExist() {
+		self.queryPartyError = true
 	}
 
 }

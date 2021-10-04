@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-
+import Firebase
 
 
 class drinkdViewModel: ObservableObject {
@@ -18,10 +18,15 @@ class drinkdViewModel: ObservableObject {
 
 	@Published var model = drinkdModel()
 	var removeSplashScreen = false
+	var showPartyDetailScreen:Bool = false
+	var queryPartyError = false
 	var restaurantList: [YelpApiBusinessSearchProperties] = []
 	var partyID: String?
 	var partyMaxVotes: String?
 	var partyName: String?
+
+
+	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
 
 	func fetchLocalRestaurants() {
 		//1.Creating the URL we want to read.
@@ -99,9 +104,61 @@ class drinkdViewModel: ObservableObject {
 		self.partyID = model.partyID
 		self.partyMaxVotes = model.partyMaxVotes
 		self.partyName = model.partyName
+		self.showPartyDetailScreen = model.showPartyDetailScreen
+	}
+
+	func getParty(getCode partyCode: String) {
+
+		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyCode)")
+
+		//Reads data at a path and listens for changes
+		localReference.observe(DataEventType.value, with: { [self] snapshot in
+
+			if(!snapshot.exists()) {
+				print("party does not exist")
+				self.model.setPartyDoesNotExist()
+			} else {
+
+
+				//Organizes values into a usable swift object
+				guard let value = snapshot.value as? [String: FirebaseParties] else {
+//					self.model.setPartyDoesNotExist()
+//					self.queryPartyError = self.model.queryPartyError
+					print("Object not able to be used")
+					return
+				}
+
+				for (key, valueProperty) in value {
+
+					switch key {
+					case "partyID":
+						self.model.getParty(getCode: valueProperty.partyID)
+					case "partyMaxVotes":
+						self.model.getParty(getVotes: valueProperty.partyMaxVotes)
+					case "partyName":
+						self.model.getParty(getName: valueProperty.partyName)
+					case "partyURL":
+						self.model.getParty(getURL: valueProperty.partyURL)
+					default:
+						continue
+					}
+
+				}
+
+				self.partyID = self.model.partyID
+				self.partyMaxVotes = self.model.partyMaxVotes
+				self.partyName = model.partyName
+				self.queryPartyError = self.model.queryPartyError
+
+				print(self.partyID)
+				print(self.partyMaxVotes)
+				print(self.partyName)
+			}
+
+		})
+
 	}
 }
-
 
 
 struct drinkdViewModel_Previews: PreviewProvider {
