@@ -64,9 +64,10 @@ struct PartyView_Create: View {
 			Button("Create Party") {
 
 				let filteredVotes = votes.filter { "0123456789".contains($0) }
+				let filteredName = name.filter { "0123456789".contains($0) }
 				let nameLength = name.count
 
-				if (filteredVotes.count == 0 || nameLength > 8 || nameLength == 0) {
+				if (filteredVotes.count == 0 || filteredName.count == 0 || nameLength > 8 || nameLength == 0) {
 					showAlert = true
 
 				} else {

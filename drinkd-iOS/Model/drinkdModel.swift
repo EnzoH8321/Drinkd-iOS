@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import Firebase
 
 
 struct drinkdModel {
@@ -22,7 +22,10 @@ struct drinkdModel {
 	private(set) var partyName: String?
 	private(set) var partyTimestamp: Int?
 	private(set) var partyURL: String?
-	
+
+	//Database ref
+	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
+
 	//
 	private(set) var localRestaurants: [YelpApiBusinessSearchProperties] = []
 	//
@@ -69,24 +72,45 @@ struct drinkdModel {
 	}
 
 	mutating func createParty(setVotes partyVotes: String? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
-		self.partyID = String(Int.random(in: 5000...20000))
+
+		self.partyID = String(Int.random(in: 100...20000))
 		self.partyMaxVotes = partyVotes
 		self.partyName = partyName
 		self.partyTimestamp = Int(Date().timeIntervalSince1970 * 1000)
 
-		if (partyURL != nil) {
-			self.partyURL = partyURL
+
+		if let url = partyURL {
+			self.partyURL = url
 		}
 
-		if (partyID != nil && partyMaxVotes != nil && partyName != nil && partyTimestamp != nil && partyURL != nil) {
-			
+		guard let partyID = self.partyID else {
+			return
 		}
+
+		guard let partyMaxVotes = self.partyMaxVotes else {
+			return
+		}
+
+		guard let partyName = self.partyName else {
+			return
+		}
+
+		guard let partyTimestamp = self.partyTimestamp else {
+			return
+		}
+
+		guard let partyURL = self.partyURL else {
+			return
+		}
+
+		self.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL])
 
 		print(self.partyID)
 		print(self.partyMaxVotes)
 		print(self.partyName)
 		print(self.partyTimestamp)
 		print(self.partyURL)
+
 	}
 
 }
