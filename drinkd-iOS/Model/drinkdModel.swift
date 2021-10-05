@@ -16,8 +16,8 @@ struct drinkdModel {
 		case restaurant_reservation
 	}
 
-	private var counter: Int = 10
-	private(set) var showPartyDetailScreen = false
+	private(set) var counter: Int = 10
+	private(set) var currentlyInParty = false
 	private(set) var queryPartyError = false
 	private(set) var partyID: String?
 	private(set) var partyMaxVotes: String?
@@ -26,8 +26,7 @@ struct drinkdModel {
 	private(set) var partyURL: String?
 
 	//Database ref
-	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
-
+	private(set) var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
 	//
 	private(set) var localRestaurants: [YelpApiBusinessSearchProperties] = []
 	//
@@ -79,7 +78,7 @@ struct drinkdModel {
 		self.partyMaxVotes = partyVotes
 		self.partyName = partyName
 		self.partyTimestamp = Int(Date().timeIntervalSince1970 * 1000)
-		self.showPartyDetailScreen = true
+		self.currentlyInParty = true
 
 		if let url = partyURL {
 			self.partyURL = url
@@ -108,8 +107,6 @@ struct drinkdModel {
 
 
 		self.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL])
-//
-
 
 	}
 
@@ -132,12 +129,20 @@ struct drinkdModel {
 			self.partyURL = siteURL
 		}
 
-		
+	}
+
+
+	mutating func setPartyDoesNotExist(in value: Bool) {
+		if (value) {
+			self.queryPartyError = true
+		} else {
+			self.queryPartyError = false
+		}
 
 	}
 
-	mutating func setPartyDoesNotExist() {
-		self.queryPartyError = true
+	mutating func setCurrentToPartyTrue() {
+		self.currentlyInParty = true
 	}
 
 }

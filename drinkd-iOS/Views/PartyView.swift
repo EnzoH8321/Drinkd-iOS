@@ -14,7 +14,7 @@ struct PartyView: View {
 
 	var body: some View {
 		NavigationView {
-			if (!viewModel.showPartyDetailScreen) {
+			if (!viewModel.currentlyInParty) {
 				VStack {
 					NavigationLink(destination: PartyView_Join()) {
 						JoinOrCreatePartyButton(buttonName: "Join Party")
@@ -26,12 +26,14 @@ struct PartyView: View {
 
 				}
 			} else {
-				Text("Party ID: \(viewModel.partyMaxVotes ?? "Party not found") ")
-					.font(.title)
-				Text("Partyname: \(viewModel.partyName ?? "Party Name not Found")")
-					.font(.title)
-				Text("Votes to Win: \(viewModel.partyMaxVotes ?? "Party not found") ")
-					.font(.title)
+				VStack{
+					Text("Party ID: \(viewModel.partyMaxVotes ?? "Party not found") ")
+						.font(.title)
+					Text("Partyname: \(viewModel.partyName ?? "Party Name not Found")")
+						.font(.title)
+					Text("Votes to Win: \(viewModel.partyMaxVotes ?? "Party not found") ")
+						.font(.title)
+				}
 			}
 		}
 	}

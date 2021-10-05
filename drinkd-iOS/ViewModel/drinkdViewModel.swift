@@ -16,9 +16,13 @@ class drinkdViewModel: ObservableObject {
 		case businessArrayNotFound
 	}
 
+	private enum FireBasePartyProps: String {
+		case partyID, partyMaxVotes, partyName, partyTimestamp, partyURL
+	}
+
 	@Published var model = drinkdModel()
 	var removeSplashScreen = false
-	var showPartyDetailScreen:Bool = false
+	var currentlyInParty:Bool = false
 	var queryPartyError = false
 	var restaurantList: [YelpApiBusinessSearchProperties] = []
 	var partyID: String?
@@ -101,13 +105,11 @@ class drinkdViewModel: ObservableObject {
 	func setPartyProperties(setVotes partyVotes: String? = nil, setName partyName: String? = nil) {
 		objectWillChange.send()
 		model.createParty(setVotes: partyVotes, setName: partyName)
-		self.partyID = model.partyID
-		self.partyMaxVotes = model.partyMaxVotes
-		self.partyName = model.partyName
-		self.showPartyDetailScreen = model.showPartyDetailScreen
+		syncVMPropswithModelProps(getID: self.model.partyID, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty)
 	}
 
 	func getParty(getCode partyCode: String) {
+		objectWillChange.send()
 
 		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyCode)")
 
@@ -116,46 +118,68 @@ class drinkdViewModel: ObservableObject {
 
 			if(!snapshot.exists()) {
 				print("party does not exist")
-				self.model.setPartyDoesNotExist()
+				self.model.setPartyDoesNotExist(in: true)
+				syncVMPropswithModelProps(queryPartyError: self.model.queryPartyError)
 			} else {
-
-
 				//Organizes values into a usable swift object
-				guard let value = snapshot.value as? [String: FirebaseParties] else {
-//					self.model.setPartyDoesNotExist()
-//					self.queryPartyError = self.model.queryPartyError
-					print("Object not able to be used")
+				guard let value = snapshot.value as? [String: AnyObject] else {
+					print("Value cannot be unwrapped to a Swift readable format ")
+					self.model.setPartyDoesNotExist(in: true)
+					syncVMPropswithModelProps(queryPartyError: self.model.queryPartyError)
 					return
 				}
 
 				for (key, valueProperty) in value {
-
 					switch key {
-					case "partyID":
-						self.model.getParty(getCode: valueProperty.partyID)
-					case "partyMaxVotes":
-						self.model.getParty(getVotes: valueProperty.partyMaxVotes)
-					case "partyName":
-						self.model.getParty(getName: valueProperty.partyName)
-					case "partyURL":
-						self.model.getParty(getURL: valueProperty.partyURL)
+					case FireBasePartyProps.partyID.rawValue:
+						self.model.getParty(getCode: valueProperty as? String)
+					case FireBasePartyProps.partyMaxVotes.rawValue:
+						self.model.getParty(getVotes: valueProperty as? String)
+					case FireBasePartyProps.partyName.rawValue:
+						self.model.getParty(getName: valueProperty as? String)
+					case FireBasePartyProps.partyURL.rawValue:
+						self.model.getParty(getURL: valueProperty as? String)
 					default:
 						continue
 					}
 
 				}
 
-				self.partyID = self.model.partyID
-				self.partyMaxVotes = self.model.partyMaxVotes
-				self.partyName = model.partyName
-				self.queryPartyError = self.model.queryPartyError
-
-				print(self.partyID)
-				print(self.partyMaxVotes)
-				print(self.partyName)
+				self.model.setCurrentToPartyTrue()
+				self.model.setPartyDoesNotExist(in: false)
+				syncVMPropswithModelProps(getID: self.model.partyID, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty)
+//
+//				print(self.partyID)
+//				print(self.partyMaxVotes)
+//				print(self.partyName)
 			}
 
 		})
+
+	}
+
+	//Helper function that lets the VM props update with whats in the Model
+	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, queryPartyError partyError: Bool? = nil, inParty currentlyInParty: Bool? = nil) {
+
+		if let partyID = partyID {
+			self.partyID = partyID
+		}
+
+		if let partyVotes = votes {
+			self.partyMaxVotes = partyVotes
+		}
+
+		if let partyName = partyName {
+			self.partyName = partyName
+		}
+
+		if let partyError = partyError {
+			self.queryPartyError = partyError
+		}
+
+		if let currentlyInParty = currentlyInParty {
+			self.currentlyInParty = currentlyInParty
+		}
 
 	}
 }

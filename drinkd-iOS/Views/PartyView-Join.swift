@@ -41,9 +41,10 @@ struct PartyView_Join: View {
 		var body: some View {
 
 			Button("Join Party") {
-			
 				viewModel.getParty(getCode: self.partyCode)
 				self.showAlert = viewModel.queryPartyError
+				print(viewModel.queryPartyError)
+				print(showAlert)
 			}
 			.alert(isPresented: $showAlert) {
 				Alert(title: Text("Error"), message: Text("Party Does no exists"))
