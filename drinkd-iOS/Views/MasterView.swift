@@ -64,9 +64,7 @@ struct MasterView: View {
 				SplashScreen()
 			}
 		}
-		.onAppear {
-			self.viewModel.fetchLocalRestaurants()
-		}
+		
 
 	}
 

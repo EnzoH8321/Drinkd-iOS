@@ -22,15 +22,18 @@ class drinkdViewModel: ObservableObject {
 
 	@Published var model = drinkdModel()
 	var removeSplashScreen = false
-	var currentlyInParty:Bool = false
+	var currentlyInParty = false
 	var queryPartyError = false
 	var restaurantList: [YelpApiBusinessSearchProperties] = []
 	var partyID: String?
 	var partyMaxVotes: String?
 	var partyName: String?
-
+	var partyURL: String?
 
 	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
+
+	//DELETE FOR RELEASE!
+	let token = "nX9W-jXWsXSB_gW3t2Y89iwQ-M7SR9-HVBHDAqf1Zy0fo8LTs3Q1VbIVpdeyFu7PehJlkLDULQulnJ3l6q6loIET5JHmcs9i3tJqYEO02f39qKgSCi4DAEVIlgPPX3Yx"
 
 	func fetchLocalRestaurants() {
 		//1.Creating the URL we want to read.
@@ -38,8 +41,7 @@ class drinkdViewModel: ObservableObject {
 		//3.Create and start a networking task from that URL request.
 		//4.Handle the result of that networking task.
 
-		//DELETE FOR RELEASE!
-		let token = "nX9W-jXWsXSB_gW3t2Y89iwQ-M7SR9-HVBHDAqf1Zy0fo8LTs3Q1VbIVpdeyFu7PehJlkLDULQulnJ3l6q6loIET5JHmcs9i3tJqYEO02f39qKgSCi4DAEVIlgPPX3Yx"
+
 
 		var longitude: Double = 0.0
 		var latitude: Double = 0.0
@@ -51,14 +53,68 @@ class drinkdViewModel: ObservableObject {
 		if let location = locationFetcher.lastKnownLocation {
 			latitude = location.latitude
 			longitude = location.longitude
+
+			guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
+				print("Invalid URL")
+				return
+			}
+
+			var request = URLRequest(url: url)
+			request.httpMethod = "GET"
+			request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+			//URLSession
+			URLSession.shared.dataTask(with: request) { data, response, error in
+
+				//If URLSession returns data, below code block will execute
+				if let verifiedData = data {
+					do {
+						let JSONDecoderValue = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
+
+						if let JSONArray = JSONDecoderValue.businesses {
+							DispatchQueue.main.async {
+								self.objectWillChange.send()
+								self.model.modifyElements(in: JSONArray)
+								self.model.createParty(setURL: url.absoluteString)
+								self.restaurantList = self.model.getLocalRestaurants()
+								self.removeSplashScreen = true
+							}
+						} else {
+							throw QueryError.businessArrayNotFound
+						}
+
+					} catch(QueryError.businessArrayNotFound) {
+						print("Did not correctly retrieve the Business Array from the Business Search Endpoint")
+
+					} catch {
+						print(error)
+					}
+					return
+				}
+				//If you are here, URLSession returned error instead of data
+				print("\(error?.localizedDescription ?? "Unknown error")")
+
+			}.resume()
+
+		} else {
+			print("location unknown")
 		}
 
-		guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
-			print("Invalid URL")
+
+	}
+
+	func fetchNewRestaurants() {
+
+		guard let verifiedPartyURL = self.partyURL else {
+			return print("NO URL FOUND")
+		}
+
+		guard let verifiedURL = URL(string: verifiedPartyURL) else {
+			print("INVALID URL")
 			return
 		}
 
-		var request = URLRequest(url: url)
+		var request = URLRequest(url: verifiedURL)
 		request.httpMethod = "GET"
 		request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 
@@ -73,10 +129,11 @@ class drinkdViewModel: ObservableObject {
 					if let JSONArray = JSONDecoderValue.businesses {
 						DispatchQueue.main.async {
 							self.objectWillChange.send()
+							self.model.clearAllRestaurants()
 							self.model.modifyElements(in: JSONArray)
-							self.model.createParty(setURL: url.absoluteString)
+							self.model.createParty(setURL: verifiedURL.absoluteString)
 							self.restaurantList = self.model.getLocalRestaurants()
-							self.removeSplashScreen = true
+							//							self.removeSplashScreen = true
 						}
 					} else {
 						throw QueryError.businessArrayNotFound
@@ -94,7 +151,10 @@ class drinkdViewModel: ObservableObject {
 			print("\(error?.localizedDescription ?? "Unknown error")")
 
 		}.resume()
+
 	}
+
+
 
 	func updateRestaurantList() {
 		objectWillChange.send()
@@ -118,14 +178,12 @@ class drinkdViewModel: ObservableObject {
 
 			if(!snapshot.exists()) {
 				print("party does not exist")
-				self.model.setPartyDoesNotExist(in: true)
-				syncVMPropswithModelProps(queryPartyError: self.model.queryPartyError)
+				self.queryPartyError = true
 			} else {
 				//Organizes values into a usable swift object
 				guard let value = snapshot.value as? [String: AnyObject] else {
 					print("Value cannot be unwrapped to a Swift readable format ")
-					self.model.setPartyDoesNotExist(in: true)
-					syncVMPropswithModelProps(queryPartyError: self.model.queryPartyError)
+					self.queryPartyError = false
 					return
 				}
 
@@ -146,12 +204,12 @@ class drinkdViewModel: ObservableObject {
 				}
 
 				self.model.setCurrentToPartyTrue()
-				self.model.setPartyDoesNotExist(in: false)
-				syncVMPropswithModelProps(getID: self.model.partyID, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty)
-//
-//				print(self.partyID)
-//				print(self.partyMaxVotes)
-//				print(self.partyName)
+				self.queryPartyError = true
+				syncVMPropswithModelProps(getID: self.model.partyID, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty, getURL: self.model.partyURL)
+				//
+				//				print(self.partyID)
+				//				print(self.partyMaxVotes)
+				//				print(self.partyName)
 			}
 
 		})
@@ -159,7 +217,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	//Helper function that lets the VM props update with whats in the Model
-	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, queryPartyError partyError: Bool? = nil, inParty currentlyInParty: Bool? = nil) {
+	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, inParty currentlyInParty: Bool? = nil, getURL partyURL: String? = nil) {
 
 		if let partyID = partyID {
 			self.partyID = partyID
@@ -173,15 +231,19 @@ class drinkdViewModel: ObservableObject {
 			self.partyName = partyName
 		}
 
-		if let partyError = partyError {
-			self.queryPartyError = partyError
-		}
 
 		if let currentlyInParty = currentlyInParty {
 			self.currentlyInParty = currentlyInParty
 		}
 
+		if let partyURL = partyURL {
+			self.partyURL = partyURL
+		}
+
 	}
+
+
+
 }
 
 

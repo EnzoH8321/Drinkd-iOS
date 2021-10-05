@@ -18,7 +18,6 @@ struct drinkdModel {
 
 	private(set) var counter: Int = 10
 	private(set) var currentlyInParty = false
-	private(set) var queryPartyError = false
 	private(set) var partyID: String?
 	private(set) var partyMaxVotes: String?
 	private(set) var partyName: String?
@@ -27,16 +26,20 @@ struct drinkdModel {
 
 	//Database ref
 	private(set) var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
-	//
+	//Represents Deck
 	private(set) var localRestaurants: [YelpApiBusinessSearchProperties] = []
 	//
-	private(set) var localRestaurantsDefault:
-	[YelpApiBusinessSearchProperties] = []
+	private(set) var localRestaurantsDefault: [YelpApiBusinessSearchProperties] = []
+
 	//
 	mutating func getLocalRestaurants() -> [YelpApiBusinessSearchProperties] {
 		return localRestaurants
 	}
-
+	//Used when a party is joined
+	mutating func clearAllRestaurants() {
+		self.localRestaurants.removeAll()
+		self.localRestaurantsDefault.removeAll()
+	}
 
 	//Checks to see if the transaction array exists. if it does, parse it and fill the needed transaction properties
 	mutating func modifyElements(in restaurants: [YelpApiBusinessSearchProperties]) {
@@ -129,20 +132,16 @@ struct drinkdModel {
 			self.partyURL = siteURL
 		}
 
-	}
-
-
-	mutating func setPartyDoesNotExist(in value: Bool) {
-		if (value) {
-			self.queryPartyError = true
-		} else {
-			self.queryPartyError = false
-		}
+		print(self.partyURL)
 
 	}
 
 	mutating func setCurrentToPartyTrue() {
 		self.currentlyInParty = true
+	}
+
+	mutating func getNewRestaurantList() {
+		
 	}
 
 }
