@@ -16,16 +16,11 @@ struct drinkd_iOSApp: App {
 	init() {
 		//Initializes firebase
 		FirebaseApp.configure()
-
-//		ref = Database.database().reference()
 	}
 
 	let persistenceController = PersistenceController.shared
 
 	@StateObject var viewModel = drinkdViewModel()
-
-//	//Firebase
-//	var ref: DatabaseReference!
 
 	var body: some Scene {
 		WindowGroup {

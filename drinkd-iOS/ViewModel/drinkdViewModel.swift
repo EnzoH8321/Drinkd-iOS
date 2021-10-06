@@ -29,11 +29,17 @@ class drinkdViewModel: ObservableObject {
 	var partyMaxVotes: String?
 	var partyName: String?
 	var partyURL: String?
+	var locationFetcher: LocationFetcher
 
 	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
 
 	//DELETE FOR RELEASE!
 	let token = "nX9W-jXWsXSB_gW3t2Y89iwQ-M7SR9-HVBHDAqf1Zy0fo8LTs3Q1VbIVpdeyFu7PehJlkLDULQulnJ3l6q6loIET5JHmcs9i3tJqYEO02f39qKgSCi4DAEVIlgPPX3Yx"
+
+	init() {
+		locationFetcher = LocationFetcher()
+		locationFetcher.start()
+	}
 
 	func fetchLocalRestaurants() {
 		//1.Creating the URL we want to read.
@@ -45,11 +51,8 @@ class drinkdViewModel: ObservableObject {
 
 		var longitude: Double = 0.0
 		var latitude: Double = 0.0
-		let locationFetcher = LocationFetcher()
 
-		//Asks user for their location
-		locationFetcher.start()
-
+		//If user location was found, continue
 		if let location = locationFetcher.lastKnownLocation {
 			latitude = location.latitude
 			longitude = location.longitude
@@ -58,6 +61,7 @@ class drinkdViewModel: ObservableObject {
 				print("Invalid URL")
 				return
 			}
+
 
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
@@ -183,7 +187,6 @@ class drinkdViewModel: ObservableObject {
 				//Organizes values into a usable swift object
 				guard let value = snapshot.value as? [String: AnyObject] else {
 					print("Value cannot be unwrapped to a Swift readable format ")
-					self.queryPartyError = false
 					return
 				}
 
@@ -204,7 +207,7 @@ class drinkdViewModel: ObservableObject {
 				}
 
 				self.model.setCurrentToPartyTrue()
-				self.queryPartyError = true
+				self.queryPartyError = false
 				syncVMPropswithModelProps(getID: self.model.partyID, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty, getURL: self.model.partyURL)
 				//
 				//				print(self.partyID)

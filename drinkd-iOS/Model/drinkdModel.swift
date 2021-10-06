@@ -52,7 +52,6 @@ struct drinkdModel {
 			}
 			if (transactionArray.contains(TransactionTypes.delivery.rawValue)) {
 				element.deliveryAvailable = true
-
 			}
 			if (transactionArray.contains(TransactionTypes.restaurant_reservation.rawValue)) {
 				element.reservationAvailable = true
@@ -131,9 +130,6 @@ struct drinkdModel {
 		if let siteURL = url {
 			self.partyURL = siteURL
 		}
-
-		print(self.partyURL)
-
 	}
 
 	mutating func setCurrentToPartyTrue() {
