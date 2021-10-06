@@ -10,10 +10,14 @@ import SwiftUI
 struct HomeView: View {
 	@EnvironmentObject var viewModel: drinkdViewModel
 
-	@State var currentScore = 0
+	//	@State var currentScore = 0
 
 	var body: some View {
 		GeometryReader{ proxy in
+
+			let globalWidth = proxy.frame(in: .global).width
+			let globalHeight = proxy.frame(in: .global).height
+
 			VStack {
 				ZStack {
 					ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
@@ -27,21 +31,39 @@ struct HomeView: View {
 					Spacer()
 					HStack {
 						Group {
-							Image(systemName: "star")
-							Image(systemName: "star")
-							Image(systemName: "star")
-							Image(systemName: "star")
-							Image(systemName: "star")
+							Star( starValue: 1)
+							Star( starValue: 2)
+							Star( starValue: 3)
+							Star( starValue: 4)
+							Star( starValue: 5)
 						}
-
+						.scaledToFit()
+						.frame(height: 50)
+						.padding([.top], globalHeight / 25)
 					}
+					SubmitButton()
+						.onTapGesture {
+							print(viewModel.topBarList)
+						}
 				}
 
 			}
-
 		}
 
 	}
+
+	private struct SubmitButton: View {
+		
+		var body: some View {
+			Text("Submit")
+				.padding(20)
+				.frame(height: 20)
+				.padding()
+				.background(AppColors.primaryColor)
+				.clipShape(Capsule())
+		}
+	}
+
 }
 
 struct HomeView_Previews: PreviewProvider {

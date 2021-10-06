@@ -67,8 +67,6 @@ struct CardView: View {
 
 		GeometryReader { geo in
 			ZStack {
-				//				let localWidth = geo.frame(in: .local).width
-				//				let localHeight = geo.frame(in: .local).height
 
 				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 					.fill(Color.white)

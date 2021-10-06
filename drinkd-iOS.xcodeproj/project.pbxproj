@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		29A297E19621DAB9F1DAFA59 /* Pods_drinkd_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0518C33CD46AF1962B7D4967 /* Pods_drinkd_iOSTests.framework */; };
 		2D70F92BB0F83718D7527F93 /* Pods_drinkd_iOS_drinkd_iOSUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7521CC00531F7506D07C31E0 /* Pods_drinkd_iOS_drinkd_iOSUITests.framework */; };
+		54B3E537270E140E0004ECC5 /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B3E536270E140C0004ECC5 /* Star.swift */; };
 		54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */; };
 		54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* MasterView.swift */; };
 		54F9C80D26FBB537008FA516 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80C26FBB537008FA516 /* Assets.xcassets */; };
@@ -60,6 +61,7 @@
 		17AEFECF76D7E3E518B758D2 /* Pods-drinkd-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-drinkd-iOS.release.xcconfig"; path = "Target Support Files/Pods-drinkd-iOS/Pods-drinkd-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		213F29F19ECDA014D0EC18A0 /* Pods-drinkd-iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-drinkd-iOSTests.debug.xcconfig"; path = "Target Support Files/Pods-drinkd-iOSTests/Pods-drinkd-iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4ED8FEF36E3296FD12845484 /* Pods-drinkd-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-drinkd-iOS.debug.xcconfig"; path = "Target Support Files/Pods-drinkd-iOS/Pods-drinkd-iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		54B3E536270E140C0004ECC5 /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
 		54F9C80526FBB536008FA516 /* drinkd-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "drinkd-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSApp.swift; sourceTree = "<group>"; };
 		54F9C80A26FBB536008FA516 /* MasterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterView.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 				54F9C83F26FBF8E8008FA516 /* CardView.swift */,
 				54F9C84226FCF178008FA516 /* Button.swift */,
 				54F9C84B26FD1ED6008FA516 /* ListCardView.swift */,
+				54B3E536270E140C0004ECC5 /* Star.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -519,6 +522,7 @@
 				54F9C855270244B9008FA516 /* NetworkingYelp.swift in Sources */,
 				54F9C84626FCF403008FA516 /* Global.swift in Sources */,
 				54F9C84326FCF178008FA516 /* Button.swift in Sources */,
+				54B3E537270E140E0004ECC5 /* Star.swift in Sources */,
 				54F9C81226FBB537008FA516 /* Persistence.swift in Sources */,
 				54F9C84C26FD1ED6008FA516 /* ListCardView.swift in Sources */,
 				54F9C84A26FD1A59008FA516 /* HomeView.swift in Sources */,

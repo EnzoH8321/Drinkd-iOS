@@ -9,7 +9,13 @@ import SwiftUI
 import Firebase
 
 
+struct restaurantScoreInfo {
+	var name: String
+	var	score: Int
+}
+
 struct drinkdModel {
+
 	private enum TransactionTypes: String {
 		case pickup
 		case delivery
@@ -24,7 +30,7 @@ struct drinkdModel {
 	private(set) var partyName: String?
 	private(set) var partyTimestamp: Int?
 	private(set) var partyURL: String?
-	
+	private(set) var topBarList: [String: restaurantScoreInfo] = [:]
 	//Database ref
 	private(set) var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
 	//Represents Deck
@@ -147,6 +153,16 @@ struct drinkdModel {
 		}
 		
 		print(currentCardIndex)
+	}
+
+	mutating func addScoreToCard(points: Int) {
+		topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points)
+		print(topBarList)
+	}
+
+	mutating func minusScoreFromCard() {
+		topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: 0)
+		print(topBarList)
 	}
 	
 }

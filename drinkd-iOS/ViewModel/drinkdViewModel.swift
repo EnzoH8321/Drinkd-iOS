@@ -12,7 +12,7 @@ import Firebase
 
 class drinkdViewModel: ObservableObject {
 
-	private enum QueryError: Error {
+	private enum ErrorHanding: Error {
 		case businessArrayNotFound
 	}
 
@@ -21,8 +21,8 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	@Published var model = drinkdModel()
-	var removeSplashScreen = false
-	var currentlyInParty = false
+	var removeSplashScreen = true
+	var currentlyInParty = true
 	var queryPartyError = false
 	var restaurantList: [YelpApiBusinessSearchProperties] = []
 	var partyID: String?
@@ -31,6 +31,7 @@ class drinkdViewModel: ObservableObject {
 	var partyURL: String?
 	var locationFetcher: LocationFetcher
 	var currentCardIndex: Int = 9
+	var topBarList: [String: restaurantScoreInfo] = [:]
 
 	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
 
@@ -57,6 +58,7 @@ class drinkdViewModel: ObservableObject {
 		if let location = locationFetcher.lastKnownLocation {
 			latitude = location.latitude
 			longitude = location.longitude
+		}
 
 			guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
 				print("Invalid URL")
@@ -85,10 +87,10 @@ class drinkdViewModel: ObservableObject {
 								self.removeSplashScreen = true
 							}
 						} else {
-							throw QueryError.businessArrayNotFound
+							throw ErrorHanding.businessArrayNotFound
 						}
 
-					} catch(QueryError.businessArrayNotFound) {
+					} catch(ErrorHanding.businessArrayNotFound) {
 						print("Did not correctly retrieve the Business Array from the Business Search Endpoint")
 
 					} catch {
@@ -101,9 +103,9 @@ class drinkdViewModel: ObservableObject {
 
 			}.resume()
 
-		} else {
-			print("location unknown")
-		}
+//		} else {
+//			print("location unknown")
+//		}
 
 
 	}
@@ -141,10 +143,10 @@ class drinkdViewModel: ObservableObject {
 							//							self.removeSplashScreen = true
 						}
 					} else {
-						throw QueryError.businessArrayNotFound
+						throw ErrorHanding.businessArrayNotFound
 					}
 
-				} catch(QueryError.businessArrayNotFound) {
+				} catch(ErrorHanding.businessArrayNotFound) {
 					print("Did not correctly retrieve the Business Array from the Business Search Endpoint")
 
 				} catch {
@@ -218,7 +220,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	//Helper function that lets the VM props update with whats in the Model
-	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, inParty currentlyInParty: Bool? = nil, getURL partyURL: String? = nil) {
+	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, inParty currentlyInParty: Bool? = nil, getURL partyURL: String? = nil, getCardIndex cardIndex: Int? = nil) {
 
 		if let partyID = partyID {
 			self.partyID = partyID
@@ -241,12 +243,25 @@ class drinkdViewModel: ObservableObject {
 			self.partyURL = partyURL
 		}
 
+		if let cardIndex = cardIndex {
+			self.currentCardIndex = cardIndex
+		}
+
 	}
 
 	func removeCardfromDeck() {
 		self.model.removeCardFromDeck()
-		self.currentCardIndex = self.model.currentCardIndex
-		
+		syncVMPropswithModelProps(getCardIndex: self.model.currentCardIndex)
+	}
+
+	func addPoints(getPoints: Int) {
+		model.addScoreToCard(points: getPoints)
+		self.topBarList = self.model.topBarList
+	}
+
+	func minusPoints() {
+		model.minusScoreFromCard()
+		self.topBarList = self.model.topBarList
 	}
 
 }

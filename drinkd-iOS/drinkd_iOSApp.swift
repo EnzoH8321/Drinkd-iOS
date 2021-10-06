@@ -27,9 +27,9 @@ struct drinkd_iOSApp: App {
 			MasterView()
 				.environment(\.managedObjectContext, persistenceController.container.viewContext)
 				.environmentObject(viewModel)
-				.onAppear {
-					self.viewModel.fetchLocalRestaurants()
-				}
+//				.onAppear {
+//					self.viewModel.fetchLocalRestaurants()
+//				}
 		}
 		
 	}

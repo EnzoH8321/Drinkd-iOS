@@ -29,7 +29,7 @@ struct MasterView: View {
 						//HomeView
 						NavigationView {
 							HomeView()
-								.frame(width: globalWidth - 30 , height: globalHeight / 1.20)
+								.frame(width: globalWidth - 30 , height: globalHeight / 1.10)
 								.navigationBarTitle("")
 								.navigationBarHidden(true)
 						}
@@ -64,8 +64,9 @@ struct MasterView: View {
 				SplashScreen()
 			}
 		}
-		
-
+		.onAppear {
+			self.viewModel.fetchLocalRestaurants()
+		}
 	}
 
 }
@@ -76,5 +77,6 @@ struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
 		MasterView()
 			.environmentObject(drinkdViewModel())
+
 	}
 }
