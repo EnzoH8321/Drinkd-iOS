@@ -8,16 +8,37 @@
 import SwiftUI
 
 struct HomeView: View {
-	@ObservedObject var viewModel: drinkdViewModel
+	@EnvironmentObject var viewModel: drinkdViewModel
+
+	@State var currentScore = 0
 
 	var body: some View {
 		GeometryReader{ proxy in
-			ZStack {
-				ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
-					CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
-						.stacked(at: element, in: viewModel.restaurantList.count)
+			VStack {
+				ZStack {
+					ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
+						CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
+							.stacked(at: element, in: viewModel.restaurantList.count)
+					}
+
 				}
+
+				if (viewModel.currentlyInParty) {
+					Spacer()
+					HStack {
+						Group {
+							Image(systemName: "star")
+							Image(systemName: "star")
+							Image(systemName: "star")
+							Image(systemName: "star")
+							Image(systemName: "star")
+						}
+
+					}
+				}
+
 			}
+
 		}
 
 	}
@@ -27,7 +48,7 @@ struct HomeView_Previews: PreviewProvider {
 	static let myEnvObject = drinkdViewModel()
 
 	static var previews: some View {
-		HomeView(viewModel: drinkdViewModel())
+		HomeView()
 			.environmentObject(drinkdViewModel())
 	}
 }

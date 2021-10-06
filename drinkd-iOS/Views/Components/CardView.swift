@@ -40,6 +40,7 @@ struct CardView: View {
 	var optionsReservations: Bool = false
 
 
+
 	//We use optionals because the API can return null for some properties
 	init(in restaurantDetails: YelpApiBusinessSearchProperties, forView viewModel: drinkdViewModel) {
 		self.restaurantTitle = restaurantDetails.name ?? "Name not found"
@@ -59,15 +60,15 @@ struct CardView: View {
 		self.optionsReservations = restaurantDetails.reservationAvailable ?? false
 		self.optionsPickup = restaurantDetails.pickUpAvailable ?? false
 
-//		self.viewModel = viewModel
+		//		self.viewModel = viewModel
 	}
 
 	var body: some View {
 
 		GeometryReader { geo in
 			ZStack {
-//				let localWidth = geo.frame(in: .local).width
-//				let localHeight = geo.frame(in: .local).height
+				//				let localWidth = geo.frame(in: .local).width
+				//				let localHeight = geo.frame(in: .local).height
 
 				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 					.fill(Color.white)
@@ -149,8 +150,13 @@ struct CardView: View {
 
 					.onEnded { _ in
 						if abs(self.offset.width) > 100 {
+
+
 							// remove the card
 							viewModel.updateRestaurantList()
+							viewModel.removeCardfromDeck()
+
+
 						} else {
 							self.offset = .zero
 						}

@@ -30,6 +30,7 @@ class drinkdViewModel: ObservableObject {
 	var partyName: String?
 	var partyURL: String?
 	var locationFetcher: LocationFetcher
+	var currentCardIndex: Int = 9
 
 	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
 
@@ -209,10 +210,7 @@ class drinkdViewModel: ObservableObject {
 				self.model.setCurrentToPartyTrue()
 				self.queryPartyError = false
 				syncVMPropswithModelProps(getID: self.model.partyID, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty, getURL: self.model.partyURL)
-				//
-				//				print(self.partyID)
-				//				print(self.partyMaxVotes)
-				//				print(self.partyName)
+	
 			}
 
 		})
@@ -245,7 +243,11 @@ class drinkdViewModel: ObservableObject {
 
 	}
 
-
+	func removeCardfromDeck() {
+		self.model.removeCardFromDeck()
+		self.currentCardIndex = self.model.currentCardIndex
+		
+	}
 
 }
 

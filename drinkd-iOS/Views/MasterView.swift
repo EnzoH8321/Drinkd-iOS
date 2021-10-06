@@ -28,7 +28,7 @@ struct MasterView: View {
 					TabView {
 						//HomeView
 						NavigationView {
-							HomeView(viewModel: self.viewModel)
+							HomeView()
 								.frame(width: globalWidth - 30 , height: globalHeight / 1.20)
 								.navigationBarTitle("")
 								.navigationBarHidden(true)
@@ -73,8 +73,6 @@ struct MasterView: View {
 
 @available(iOS 15.0, *)
 struct ContentView_Previews: PreviewProvider {
-
-
 	static var previews: some View {
 		MasterView()
 			.environmentObject(drinkdViewModel())
