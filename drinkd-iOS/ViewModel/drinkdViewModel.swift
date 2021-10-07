@@ -159,7 +159,7 @@ class drinkdViewModel: ObservableObject {
 
 	}
 
-	func sendFBRestaurantScores() {
+	func sendFirebaseRestaurantScores() {
 		objectWillChange.send()
 
 		if topBarList.isEmpty {
@@ -177,12 +177,13 @@ class drinkdViewModel: ObservableObject {
 
 		let score: String = String(barList.score)
 		let name: String = barList.name
+		let currentURLOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].url ?? "NO URL FOUND"
 
 		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyID)")
 
 
-		localReference.child("topBars").child(self.partyID ?? "NOID").child(name).setValue(["score": score])
-		print(self.topBarList)
+		localReference.child("topBars").child(self.partyID ?? "NOID").child(name).setValue(["score": score, "url": currentURLOfTopCard])
+
 	}
 
 

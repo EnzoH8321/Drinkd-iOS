@@ -12,6 +12,7 @@ import Firebase
 struct restaurantScoreInfo {
 	var name: String
 	var	score: Int
+	var url: String
 }
 
 struct drinkdModel {
@@ -152,7 +153,6 @@ struct drinkdModel {
 			self.currentCardIndex = 9
 		}
 		
-		print(currentCardIndex)
 	}
 
 	mutating func addScoreToCard(points: Int) {
@@ -162,7 +162,8 @@ struct drinkdModel {
 		}
 
 		self.currentScoreOfTopCard = points
-		topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points)
+		
+		topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points, url: self.partyURL ?? "URL NOT FOUND")
 	}
 
 	mutating func setCurrentTopCardScoreToZero() {
