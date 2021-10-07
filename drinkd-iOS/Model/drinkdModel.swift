@@ -168,4 +168,8 @@ struct drinkdModel {
 	mutating func setCurrentTopCardScoreToZero() {
 		self.currentScoreOfTopCard = 0
 	}
+
+	mutating func setListEmpty() {
+		self.topBarList.removeAll()
+	}
 }

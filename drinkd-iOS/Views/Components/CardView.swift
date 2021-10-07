@@ -148,12 +148,11 @@ struct CardView: View {
 
 					.onEnded { _ in
 						if abs(self.offset.width) > 100 {
-
-
 							// remove the card
 							viewModel.updateRestaurantList()
 							viewModel.removeCardfromDeck()
 							viewModel.setCurrentTopCardScoreToZero()
+							viewModel.setListEmpty()
 
 						} else {
 							self.offset = .zero

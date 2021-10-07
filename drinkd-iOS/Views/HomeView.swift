@@ -42,7 +42,7 @@ struct HomeView: View {
 					}
 					SubmitButton()
 						.onTapGesture {
-							print(viewModel.topBarList)
+							viewModel.sendFBRestaurantScores()
 						}
 				}
 

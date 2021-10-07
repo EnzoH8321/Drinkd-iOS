@@ -22,7 +22,7 @@ class drinkdViewModel: ObservableObject {
 
 	@Published var model = drinkdModel()
 	var removeSplashScreen = true
-	var currentlyInParty = true
+	var currentlyInParty = false
 	var queryPartyError = false
 	var restaurantList: [YelpApiBusinessSearchProperties] = []
 	var partyID: String?
@@ -159,6 +159,33 @@ class drinkdViewModel: ObservableObject {
 
 	}
 
+	func sendFBRestaurantScores() {
+		objectWillChange.send()
+
+		if topBarList.isEmpty {
+			return
+		}
+
+		guard let partyID = self.partyID else {
+			return print("ID NOT FOUND")
+		}
+
+		guard let barList = topBarList["\(currentCardIndex)"] else {
+			return print("No restaurant with this key")
+		}
+
+
+		let score: String = String(barList.score)
+		let name: String = barList.name
+
+		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyID)")
+
+
+		localReference.child("topBars").child(self.partyID ?? "NOID").child(name).setValue(["score": score])
+		print(self.topBarList)
+	}
+
+
 	func updateRestaurantList() {
 		objectWillChange.send()
 		model.appendCardsToDecklist()
@@ -259,7 +286,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	func addPoints(getPoints: Int) {
-		model.addScoreToCard(points: getPoints)
+		self.model.addScoreToCard(points: getPoints)
 		syncVMPropswithModelProps(topBar: self.model.topBarList, topCardScore: self.model.currentScoreOfTopCard)
 	}
 
@@ -267,6 +294,12 @@ class drinkdViewModel: ObservableObject {
 		self.model.setCurrentTopCardScoreToZero()
 		syncVMPropswithModelProps(topCardScore: self.model.currentScoreOfTopCard)
 	}
+
+	func setListEmpty() {
+		self.model.setListEmpty()
+		syncVMPropswithModelProps(topBar: self.model.topBarList)
+	}
+
 }
 
 
