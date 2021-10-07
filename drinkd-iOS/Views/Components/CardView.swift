@@ -153,7 +153,7 @@ struct CardView: View {
 							// remove the card
 							viewModel.updateRestaurantList()
 							viewModel.removeCardfromDeck()
-
+							viewModel.setCurrentTopCardScoreToZero()
 
 						} else {
 							self.offset = .zero

@@ -31,6 +31,7 @@ struct drinkdModel {
 	private(set) var partyTimestamp: Int?
 	private(set) var partyURL: String?
 	private(set) var topBarList: [String: restaurantScoreInfo] = [:]
+	private(set) var currentScoreOfTopCard: Int = 0
 	//Database ref
 	private(set) var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
 	//Represents Deck
@@ -119,8 +120,7 @@ struct drinkdModel {
 		self.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL])
 		
 	}
-	
-	
+
 	mutating func getParty(getCode partyCode: String? = nil, getVotes votes: String? = nil, getName name: String? = nil, getURL url: String? = nil) {
 		
 		if let partyID = partyCode {
@@ -156,13 +156,16 @@ struct drinkdModel {
 	}
 
 	mutating func addScoreToCard(points: Int) {
+
+		if (points == currentScoreOfTopCard) {
+			return
+		}
+
+		self.currentScoreOfTopCard = points
 		topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points)
-		print(topBarList)
 	}
 
-	mutating func minusScoreFromCard() {
-		topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: 0)
-		print(topBarList)
+	mutating func setCurrentTopCardScoreToZero() {
+		self.currentScoreOfTopCard = 0
 	}
-	
 }

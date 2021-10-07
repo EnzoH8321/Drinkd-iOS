@@ -9,25 +9,18 @@ import SwiftUI
 
 struct Star: View {
 	@EnvironmentObject var viewModel: drinkdViewModel
-	@State var hasBeenTapped = false
-	@State var score = 0
+
 	let starValue: Int
-	
+
+
 
     var body: some View {
-		Image(systemName: "star")
+		Image(systemName: viewModel.currentScoreOfTopCard < 0 || starValue > viewModel.currentScoreOfTopCard ? "star" : "star.fill")
 			.resizable()
 			.onTapGesture {
-				self.hasBeenTapped.toggle()
-
-				if (hasBeenTapped) {
-					score += starValue
-					viewModel.addPoints(getPoints: score)
-				} else {
-					score = 0
-					viewModel.minusPoints()
-				}
+					viewModel.addPoints(getPoints: starValue)
 			}
+
     }
 }
 

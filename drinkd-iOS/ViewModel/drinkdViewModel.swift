@@ -32,6 +32,7 @@ class drinkdViewModel: ObservableObject {
 	var locationFetcher: LocationFetcher
 	var currentCardIndex: Int = 9
 	var topBarList: [String: restaurantScoreInfo] = [:]
+	var currentScoreOfTopCard: Int = 0
 
 	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
 
@@ -48,9 +49,6 @@ class drinkdViewModel: ObservableObject {
 		//2.Wrapping that in a URLRequest, which allows us to configure how the URL should be accessed.
 		//3.Create and start a networking task from that URL request.
 		//4.Handle the result of that networking task.
-
-
-
 		var longitude: Double = 0.0
 		var latitude: Double = 0.0
 
@@ -60,52 +58,52 @@ class drinkdViewModel: ObservableObject {
 			longitude = location.longitude
 		}
 
-			guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
-				print("Invalid URL")
+		guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
+			print("Invalid URL")
+			return
+		}
+
+
+		var request = URLRequest(url: url)
+		request.httpMethod = "GET"
+		request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+		//URLSession
+		URLSession.shared.dataTask(with: request) { data, response, error in
+
+			//If URLSession returns data, below code block will execute
+			if let verifiedData = data {
+				do {
+					let JSONDecoderValue = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
+
+					if let JSONArray = JSONDecoderValue.businesses {
+						DispatchQueue.main.async {
+							self.objectWillChange.send()
+							self.model.modifyElements(in: JSONArray)
+							self.model.createParty(setURL: url.absoluteString)
+							self.restaurantList = self.model.getLocalRestaurants()
+							self.removeSplashScreen = true
+						}
+					} else {
+						throw ErrorHanding.businessArrayNotFound
+					}
+
+				} catch(ErrorHanding.businessArrayNotFound) {
+					print("Did not correctly retrieve the Business Array from the Business Search Endpoint")
+
+				} catch {
+					print(error)
+				}
 				return
 			}
+			//If you are here, URLSession returned error instead of data
+			print("\(error?.localizedDescription ?? "Unknown error")")
 
+		}.resume()
 
-			var request = URLRequest(url: url)
-			request.httpMethod = "GET"
-			request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
-			//URLSession
-			URLSession.shared.dataTask(with: request) { data, response, error in
-
-				//If URLSession returns data, below code block will execute
-				if let verifiedData = data {
-					do {
-						let JSONDecoderValue = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
-
-						if let JSONArray = JSONDecoderValue.businesses {
-							DispatchQueue.main.async {
-								self.objectWillChange.send()
-								self.model.modifyElements(in: JSONArray)
-								self.model.createParty(setURL: url.absoluteString)
-								self.restaurantList = self.model.getLocalRestaurants()
-								self.removeSplashScreen = true
-							}
-						} else {
-							throw ErrorHanding.businessArrayNotFound
-						}
-
-					} catch(ErrorHanding.businessArrayNotFound) {
-						print("Did not correctly retrieve the Business Array from the Business Search Endpoint")
-
-					} catch {
-						print(error)
-					}
-					return
-				}
-				//If you are here, URLSession returned error instead of data
-				print("\(error?.localizedDescription ?? "Unknown error")")
-
-			}.resume()
-
-//		} else {
-//			print("location unknown")
-//		}
+		//		} else {
+		//			print("location unknown")
+		//		}
 
 
 	}
@@ -161,8 +159,6 @@ class drinkdViewModel: ObservableObject {
 
 	}
 
-
-
 	func updateRestaurantList() {
 		objectWillChange.send()
 		model.appendCardsToDecklist()
@@ -212,7 +208,7 @@ class drinkdViewModel: ObservableObject {
 				self.model.setCurrentToPartyTrue()
 				self.queryPartyError = false
 				syncVMPropswithModelProps(getID: self.model.partyID, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty, getURL: self.model.partyURL)
-	
+
 			}
 
 		})
@@ -220,7 +216,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	//Helper function that lets the VM props update with whats in the Model
-	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, inParty currentlyInParty: Bool? = nil, getURL partyURL: String? = nil, getCardIndex cardIndex: Int? = nil) {
+	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, inParty currentlyInParty: Bool? = nil, getURL partyURL: String? = nil, getCardIndex cardIndex: Int? = nil, topBar topBarList: [String: restaurantScoreInfo]? = nil, topCardScore currentTopCard: Int? = nil ) {
 
 		if let partyID = partyID {
 			self.partyID = partyID
@@ -247,6 +243,14 @@ class drinkdViewModel: ObservableObject {
 			self.currentCardIndex = cardIndex
 		}
 
+		if let topBarList = topBarList {
+			self.topBarList = topBarList
+		}
+
+		if let currentTopCardScore = currentTopCard {
+			self.currentScoreOfTopCard = currentTopCardScore
+		}
+
 	}
 
 	func removeCardfromDeck() {
@@ -256,14 +260,13 @@ class drinkdViewModel: ObservableObject {
 
 	func addPoints(getPoints: Int) {
 		model.addScoreToCard(points: getPoints)
-		self.topBarList = self.model.topBarList
+		syncVMPropswithModelProps(topBar: self.model.topBarList, topCardScore: self.model.currentScoreOfTopCard)
 	}
 
-	func minusPoints() {
-		model.minusScoreFromCard()
-		self.topBarList = self.model.topBarList
+	func setCurrentTopCardScoreToZero() {
+		self.model.setCurrentTopCardScoreToZero()
+		syncVMPropswithModelProps(topCardScore: self.model.currentScoreOfTopCard)
 	}
-
 }
 
 

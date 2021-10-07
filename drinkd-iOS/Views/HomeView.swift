@@ -15,7 +15,6 @@ struct HomeView: View {
 	var body: some View {
 		GeometryReader{ proxy in
 
-			let globalWidth = proxy.frame(in: .global).width
 			let globalHeight = proxy.frame(in: .global).height
 
 			VStack {

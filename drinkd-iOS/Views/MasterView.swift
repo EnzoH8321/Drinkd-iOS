@@ -32,7 +32,7 @@ struct MasterView: View {
 								.frame(width: globalWidth - 30 , height: globalHeight / 1.10)
 								.navigationBarTitle("")
 								.navigationBarHidden(true)
-						}
+						}.navigationViewStyle(StackNavigationViewStyle())
 						.tabItem {
 							Image(systemName: "house")
 							Text("Home")
@@ -42,7 +42,7 @@ struct MasterView: View {
 							TopChoicesView()
 								.navigationBarTitle("")
 								.navigationBarHidden(true)
-						}
+						}.navigationViewStyle(StackNavigationViewStyle())
 						.tabItem {
 							Image(systemName: "chart.bar")
 							Text("TopChoices")
@@ -53,7 +53,7 @@ struct MasterView: View {
 								.frame(width: globalWidth, height: globalHeight)
 								.navigationBarTitle("")
 								.navigationBarHidden(true)
-						}
+						}.navigationViewStyle(StackNavigationViewStyle())
 						.tabItem {
 							Image(systemName: "person.3")
 							Text("Party")
