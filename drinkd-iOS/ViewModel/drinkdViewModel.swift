@@ -215,6 +215,7 @@ class drinkdViewModel: ObservableObject {
 					var restaurantArray: [[String: Any]] = []
 					var verifiedRestaurantArray: [FirebaseRestaurantInfo] = []
 					var nonDuplicateArray: [FirebaseRestaurantInfo] = []
+					var finalizedArray: [FirebaseRestaurantInfo] = []
 
 					guard let value = snapshot.value as? [String: [String: [String: Any]]] else {
 						print("could not convert to swift type")
@@ -227,7 +228,7 @@ class drinkdViewModel: ObservableObject {
 						}
 					}
 
-					//
+					//Iterate through non verified array (array not decoded properly)
 					for element in 0..<restaurantArray.count {
 						let currentDict = restaurantArray[element]
 
@@ -276,13 +277,13 @@ class drinkdViewModel: ObservableObject {
 
 					for element in verifiedRestaurantArray {
 						let currentRestaurant = element
-
+						//Check to see if element in verifiedrestaurantarray is a duplicate
 						let filtered = verifiedRestaurantArray.filter { value in
 							value.name == currentRestaurant.name
 						}
 
 
-
+						//iterate through duplicate array
 						if (filtered.count > 1) {
 
 							var name: String = ""
@@ -297,7 +298,7 @@ class drinkdViewModel: ObservableObject {
 
 							}
 
-							for restaurant in 1..<filtered.count {
+							for restaurant in 0..<filtered.count {
 								let currentRestaurant = filtered[restaurant]
 								guard let lastIndex = verifiedRestaurantArray.lastIndex(of: currentRestaurant) else {
 									print("last index not found")
@@ -309,16 +310,26 @@ class drinkdViewModel: ObservableObject {
 
 							let restaurant = FirebaseRestaurantInfo(name: name, score: score, url: url)
 							nonDuplicateArray.append(restaurant)
-
 						}
-//						else {
-//							nonDuplicateArray.append(currentRestaurant)
-//						}
-
 					}
 
-					print(nonDuplicateArray)
-					print(verifiedRestaurantArray)
+					//append nonDuplicate to final array
+					for element in nonDuplicateArray {
+						finalizedArray.append(element)
+					}
+
+					for element in verifiedRestaurantArray {
+						finalizedArray.append(element)
+					}
+
+					//sort so that highest scores are at the start
+					let sortedArray = finalizedArray.sorted {
+						$0.score > $1.score
+					}
+
+					self.model.appendTopThreeRestaurants(in: sortedArray)
+
+					print(sortedArray)
 				}
 			})
 		}

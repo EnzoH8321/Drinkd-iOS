@@ -33,6 +33,7 @@ struct drinkdModel {
 	private(set) var partyURL: String?
 	private(set) var topBarList: [String: restaurantScoreInfo] = [:]
 	private(set) var currentScoreOfTopCard: Int = 0
+	private(set) var topThreeRestaurantArray: [FirebaseRestaurantInfo] = []
 	//Database ref
 	private(set) var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
 	//Represents Deck
@@ -177,5 +178,12 @@ struct drinkdModel {
 
 	mutating func setListEmpty() {
 		self.topBarList.removeAll()
+	}
+
+	mutating func appendTopThreeRestaurants(in array: [FirebaseRestaurantInfo]) {
+
+		for element in 0...2 {
+			topThreeRestaurantArray.append(array[element])
+		}
 	}
 }
