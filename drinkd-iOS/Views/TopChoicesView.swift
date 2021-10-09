@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct TopChoicesView: View {
+
+	@EnvironmentObject var viewModel: drinkdViewModel
+
 	var body: some View {
 		GeometryReader { proxy in
 
@@ -30,8 +33,12 @@ struct TopChoicesView: View {
 			.frame(width: globalWidth, height: globalHeight)
 
 		}
+		.onAppear {
+			viewModel.getTopThreeChoices()
+		}
 
 	}
+
 }
 
 struct TopChoicesView_Previews: PreviewProvider {

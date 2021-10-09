@@ -39,7 +39,8 @@ struct drinkdModel {
 	private(set) var localRestaurants: [YelpApiBusinessSearchProperties] = []
 	//
 	private(set) var localRestaurantsDefault: [YelpApiBusinessSearchProperties] = []
-	
+	//
+	private(set) var topThreeChoicesObject: ThreeTopChoices?
 	//
 	mutating func getLocalRestaurants() -> [YelpApiBusinessSearchProperties] {
 		return localRestaurants
@@ -139,6 +140,10 @@ struct drinkdModel {
 		if let siteURL = url {
 			self.partyURL = siteURL
 		}
+	}
+
+	mutating func getTopThreeChoices() {
+
 	}
 	
 	mutating func setCurrentToPartyTrue() {

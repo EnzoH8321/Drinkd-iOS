@@ -27,7 +27,7 @@ struct PartyView: View {
 				}
 			} else {
 				VStack{
-					Text("Party ID: \(viewModel.partyMaxVotes ?? "Party not found") ")
+					Text("Party ID: \(viewModel.partyID ?? "Party not found") ")
 						.font(.title)
 					Text("Partyname: \(viewModel.partyName ?? "Party Name not Found")")
 						.font(.title)

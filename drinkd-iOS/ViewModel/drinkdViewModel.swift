@@ -17,7 +17,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	private enum FireBasePartyProps: String {
-		case partyID, partyMaxVotes, partyName, partyTimestamp, partyURL
+		case partyId, partyMaxVotes, partyName, partyTimestamp, partyURL
 	}
 
 	@Published var model = drinkdModel()
@@ -175,7 +175,7 @@ class drinkdViewModel: ObservableObject {
 		}
 
 
-		let score: String = String(barList.score)
+		let score: Int = barList.score
 		let name: String = barList.name
 		let currentURLOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].url ?? "NO URL FOUND"
 
@@ -199,6 +199,114 @@ class drinkdViewModel: ObservableObject {
 		syncVMPropswithModelProps(getID: self.model.partyID, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty)
 	}
 
+	func getTopThreeChoices() {
+		objectWillChange.send()
+
+		if let verifiedPartyID = self.partyID {
+			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(verifiedPartyID)").child("topBars")
+
+			localReference.observe(DataEventType.value, with: { snapshot in
+
+				if (!snapshot.exists()) {
+					print("party does not exist")
+				} else {
+
+					var currentRestaurantName = ""
+					var restaurantArray: [[String: Any]] = []
+					var verifiedRestaurantArray: [FirebaseRestaurantInfo] = []
+					var nonDuplicateArray: [FirebaseRestaurantInfo] = []
+
+					guard let value = snapshot.value as? [String: [String: [String: Any]]] else {
+						print("could not convert to swift type")
+						return
+					}
+					//Appends to a temporary array
+					for (key, val) in value {
+						for (key2, val2) in val {
+							restaurantArray.append([key2: val2])
+						}
+					}
+
+					//
+					for element in 0..<restaurantArray.count {
+						let currentDict = restaurantArray[element]
+
+						var currentName: String = ""
+						var currentScore: Int = 0
+						var currentURL: String = ""
+
+						var restaurant = FirebaseRestaurantInfo(name: currentName, score: currentScore, url: currentURL)
+
+						for (key, value) in currentDict {
+							currentName = key
+
+							restaurant.name = key
+
+							let valueToDict = value as! [String: Any]
+
+							for (keyForDetail, valueForDetail) in valueToDict {
+
+								if let detailAsString = valueForDetail as? String {
+
+									switch (keyForDetail) {
+									case "url":
+										restaurant.url = valueForDetail as! String
+									default:
+										print("default")
+									}
+
+								} else {
+									let detailAsNumber = valueForDetail as! Int
+
+									switch (keyForDetail) {
+									case "score":
+										currentScore = valueForDetail as! Int
+										restaurant.score = valueForDetail as! Int
+									default:
+										print("default")
+									}
+								}
+							}
+						}
+
+							verifiedRestaurantArray.append(restaurant)
+					}
+
+					for element in 0..<verifiedRestaurantArray.count {
+						let currentRestaurant = verifiedRestaurantArray[element]
+
+						let filtered = verifiedRestaurantArray.filter { value in
+							value.name == currentRestaurant.name
+						}
+
+
+
+
+						if (filtered.count > 1) {
+
+							var name: String = ""
+							var score: Int = 0
+							var url: String = ""
+
+							for element in filtered {
+								name = element.name
+								score += element.score
+								url = element.url
+							}
+
+							let restaurant = FirebaseRestaurantInfo(name: name, score: score, url: url)
+							nonDuplicateArray.append(restaurant)
+						}
+
+					}
+
+					print(nonDuplicateArray)
+				}
+			})
+		}
+	}
+
+
 	func getParty(getCode partyCode: String) {
 		objectWillChange.send()
 
@@ -219,7 +327,7 @@ class drinkdViewModel: ObservableObject {
 
 				for (key, valueProperty) in value {
 					switch key {
-					case FireBasePartyProps.partyID.rawValue:
+					case FireBasePartyProps.partyId.rawValue:
 						self.model.getParty(getCode: valueProperty as? String)
 					case FireBasePartyProps.partyMaxVotes.rawValue:
 						self.model.getParty(getVotes: valueProperty as? String)
@@ -280,6 +388,8 @@ class drinkdViewModel: ObservableObject {
 		}
 
 	}
+
+
 
 	func removeCardfromDeck() {
 		self.model.removeCardFromDeck()
