@@ -274,17 +274,13 @@ class drinkdViewModel: ObservableObject {
 
 
 
-					for element in 0..<verifiedRestaurantArray.count {
-						let currentRestaurant = verifiedRestaurantArray[element]
+					for element in verifiedRestaurantArray {
+						let currentRestaurant = element
 
 						let filtered = verifiedRestaurantArray.filter { value in
 							value.name == currentRestaurant.name
 						}
 
-						if (currentRestaurant.name == skipName) {
-							print("skipped")
-							continue
-						}
 
 
 						if (filtered.count > 1) {
@@ -298,21 +294,31 @@ class drinkdViewModel: ObservableObject {
 								name = element.name
 								score += element.score
 								url = element.url
-								skipName = element.name
+
 							}
 
+							for restaurant in 1..<filtered.count {
+								let currentRestaurant = filtered[restaurant]
+								guard let lastIndex = verifiedRestaurantArray.lastIndex(of: currentRestaurant) else {
+									print("last index not found")
+									return
+								}
+								verifiedRestaurantArray.remove(at: lastIndex)
 
-						
+							}
+
 							let restaurant = FirebaseRestaurantInfo(name: name, score: score, url: url)
 							nonDuplicateArray.append(restaurant)
-						}
 
-//						print(currentRestaurant.name)
-//						print(skipName)
+						}
+//						else {
+//							nonDuplicateArray.append(currentRestaurant)
+//						}
 
 					}
 
 					print(nonDuplicateArray)
+					print(verifiedRestaurantArray)
 				}
 			})
 		}
