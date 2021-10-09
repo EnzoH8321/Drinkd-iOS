@@ -65,7 +65,7 @@ struct MasterView: View {
 			}
 		}
 		.onAppear {
-			self.viewModel.fetchLocalRestaurants()
+			self.viewModel.fetchRestaurantsOnStartUp()
 		}
 	}
 

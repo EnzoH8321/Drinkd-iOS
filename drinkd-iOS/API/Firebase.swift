@@ -32,4 +32,5 @@ struct FirebaseRestaurantInfo: Equatable {
 	var name: String
 	var score: Int
 	var url: String
+	var id: String
 }

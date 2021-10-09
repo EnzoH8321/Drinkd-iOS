@@ -17,7 +17,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	private enum FireBasePartyProps: String {
-		case partyId, partyMaxVotes, partyName, partyTimestamp, partyURL
+		case partyID, partyMaxVotes, partyName, partyTimestamp, partyURL
 	}
 
 	@Published var model = drinkdModel()
@@ -44,7 +44,7 @@ class drinkdViewModel: ObservableObject {
 		locationFetcher.start()
 	}
 
-	func fetchLocalRestaurants() {
+	func fetchRestaurantsOnStartUp() {
 		//1.Creating the URL we want to read.
 		//2.Wrapping that in a URLRequest, which allows us to configure how the URL should be accessed.
 		//3.Create and start a networking task from that URL request.
@@ -108,7 +108,7 @@ class drinkdViewModel: ObservableObject {
 
 	}
 
-	func fetchNewRestaurants() {
+	func fetchRestaurantsAfterJoiningParty() {
 
 		guard let verifiedPartyURL = self.partyURL else {
 			return print("NO URL FOUND")
@@ -139,6 +139,7 @@ class drinkdViewModel: ObservableObject {
 							self.model.createParty(setURL: verifiedURL.absoluteString)
 							self.restaurantList = self.model.getLocalRestaurants()
 							//							self.removeSplashScreen = true
+
 						}
 					} else {
 						throw ErrorHanding.businessArrayNotFound
@@ -159,7 +160,7 @@ class drinkdViewModel: ObservableObject {
 
 	}
 
-	func sendFirebaseRestaurantScores() {
+	func submitRestaurantScore() {
 		objectWillChange.send()
 
 		if topBarList.isEmpty {
@@ -178,11 +179,13 @@ class drinkdViewModel: ObservableObject {
 		let score: Int = barList.score
 		let name: String = barList.name
 		let currentURLOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].url ?? "NO URL FOUND"
+		//Adds id of card for
+		let currentIDOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].id ?? "NO ID FOUND"
 
 		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyID)")
 
 
-		localReference.child("topBars").child(self.partyID ?? "NOID").child(name).setValue(["score": score, "url": currentURLOfTopCard])
+		localReference.child("topBars").child(self.partyID ?? "NO ID").child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard])
 
 	}
 
@@ -193,13 +196,13 @@ class drinkdViewModel: ObservableObject {
 		self.restaurantList = model.getLocalRestaurants()
 	}
 
-	func setPartyProperties(setVotes partyVotes: String? = nil, setName partyName: String? = nil) {
+	func createNewParty(setVotes partyVotes: String? = nil, setName partyName: String? = nil) {
 		objectWillChange.send()
 		model.createParty(setVotes: partyVotes, setName: partyName)
 		syncVMPropswithModelProps(getID: self.model.partyID, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty)
 	}
 
-	func getTopThreeChoices() {
+	func calculateTopThreeRestaurants() {
 		objectWillChange.send()
 
 		if let verifiedPartyID = self.partyID {
@@ -211,7 +214,6 @@ class drinkdViewModel: ObservableObject {
 					print("party does not exist")
 				} else {
 
-					var currentRestaurantName = ""
 					var restaurantArray: [[String: Any]] = []
 					var verifiedRestaurantArray: [FirebaseRestaurantInfo] = []
 					var nonDuplicateArray: [FirebaseRestaurantInfo] = []
@@ -222,7 +224,7 @@ class drinkdViewModel: ObservableObject {
 						return
 					}
 					//Appends to a temporary array
-					for (key, val) in value {
+					for (_, val) in value {
 						for (key2, val2) in val {
 							restaurantArray.append([key2: val2])
 						}
@@ -234,9 +236,10 @@ class drinkdViewModel: ObservableObject {
 
 						var currentName: String = ""
 						var currentScore: Int = 0
-						var currentURL: String = ""
+						let currentURL: String = ""
+						let currentID: String = ""
 
-						var restaurant = FirebaseRestaurantInfo(name: currentName, score: currentScore, url: currentURL)
+						var restaurant = FirebaseRestaurantInfo(name: currentName, score: currentScore, url: currentURL, id: currentID)
 
 						for (key, value) in currentDict {
 							currentName = key
@@ -289,7 +292,7 @@ class drinkdViewModel: ObservableObject {
 							var name: String = ""
 							var score: Int = 0
 							var url: String = ""
-
+							var id: String = ""
 
 							for element in filtered {
 								name = element.name
@@ -308,7 +311,7 @@ class drinkdViewModel: ObservableObject {
 
 							}
 
-							let restaurant = FirebaseRestaurantInfo(name: name, score: score, url: url)
+							let restaurant = FirebaseRestaurantInfo(name: name, score: score, url: url, id: id)
 							nonDuplicateArray.append(restaurant)
 						}
 					}
@@ -356,7 +359,7 @@ class drinkdViewModel: ObservableObject {
 
 				for (key, valueProperty) in value {
 					switch key {
-					case FireBasePartyProps.partyId.rawValue:
+					case FireBasePartyProps.partyID.rawValue:
 						self.model.getParty(getCode: valueProperty as? String)
 					case FireBasePartyProps.partyMaxVotes.rawValue:
 						self.model.getParty(getVotes: valueProperty as? String)

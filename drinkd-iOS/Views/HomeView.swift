@@ -42,7 +42,7 @@ struct HomeView: View {
 					}
 					SubmitButton()
 						.onTapGesture {
-							viewModel.sendFirebaseRestaurantScores()
+							viewModel.submitRestaurantScore()
 						}
 				}
 

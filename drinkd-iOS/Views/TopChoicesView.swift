@@ -34,7 +34,7 @@ struct TopChoicesView: View {
 
 		}
 		.onAppear {
-			viewModel.getTopThreeChoices()
+			viewModel.calculateTopThreeRestaurants()
 		}
 
 	}

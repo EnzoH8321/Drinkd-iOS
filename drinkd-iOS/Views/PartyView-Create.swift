@@ -72,7 +72,7 @@ struct PartyView_Create: View {
 					showAlert = true
 
 				} else {
-					viewModel.setPartyProperties(setVotes: self.votes, setName: self.name)
+					viewModel.createNewParty(setVotes: self.votes, setName: self.name)
 					showAlert = false
 				}
 

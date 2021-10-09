@@ -13,6 +13,7 @@ struct restaurantScoreInfo {
 	var name: String
 	var	score: Int
 	var url: String
+	var id: String?
 }
 
 struct drinkdModel {
@@ -143,10 +144,6 @@ struct drinkdModel {
 		}
 	}
 
-	mutating func getTopThreeChoices() {
-
-	}
-	
 	mutating func setCurrentToPartyTrue() {
 		self.currentlyInParty = true
 	}
@@ -182,7 +179,7 @@ struct drinkdModel {
 
 	mutating func appendTopThreeRestaurants(in array: [FirebaseRestaurantInfo]) {
 
-		for element in 0...2 {
+		for element in 0..<array.count {
 			topThreeRestaurantArray.append(array[element])
 		}
 	}
