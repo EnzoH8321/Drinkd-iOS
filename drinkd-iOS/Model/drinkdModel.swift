@@ -42,7 +42,7 @@ struct drinkdModel {
 	//
 	private(set) var localRestaurantsDefault: [YelpApiBusinessSearchProperties] = []
 	//For top choices view
-	private(set) var topThreeChoicesObject: ThreeTopChoices?
+	private(set) var topThreeChoicesObject = ThreeTopChoices()
 	//
 	mutating func getLocalRestaurants() -> [YelpApiBusinessSearchProperties] {
 		return localRestaurants
@@ -177,9 +177,19 @@ struct drinkdModel {
 
 		for element in 0..<array.count {
 			topThreeRestaurantArray.append(array[element])
+
+			switch (element) {
+			case 0:
+				topThreeChoicesObject.first = topThreeRestaurantArray[0]
+			case 1:
+				topThreeChoicesObject.second = topThreeRestaurantArray[1]
+			case 2:
+				topThreeChoicesObject.third = topThreeRestaurantArray[2]
+			default:
+				break
+			}
+
 		}
-		topThreeChoicesObject?.first = topThreeRestaurantArray[0]
-		topThreeChoicesObject?.second = topThreeRestaurantArray[1]
-		topThreeChoicesObject?.third = topThreeRestaurantArray[2]
+
 	}
 }

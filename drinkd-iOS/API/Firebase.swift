@@ -8,25 +8,14 @@
 import SwiftUI
 
 struct ThreeTopChoices {
-	var first: FirebaseRestaurantInfo
-	var second: FirebaseRestaurantInfo
-	var third: FirebaseRestaurantInfo
+	var first: FirebaseRestaurantInfo?
+	var second: FirebaseRestaurantInfo?
+	var third: FirebaseRestaurantInfo?
 }
 
-
-
-//struct FirebaseTopBars: Codable {
-//	var name: [String: FirebaseList]
-//}
-//
-//
-//struct FirebaseList: Codable {
-//	var name: [String: FirebaseRestaurantInfo]
-//}
-
 struct FirebaseRestaurantInfo: Equatable {
-	var name: String
-	var score: Int
-	var url: String
-	var image_url: String
+	var name: String = ""
+	var score: Int = 0
+	var url: String = ""
+	var image_url: String = ""
 }

@@ -38,7 +38,16 @@ extension View {
 //
 struct ListCardView: View {
 
+	@EnvironmentObject var viewModel: drinkdViewModel
+
 	var restaurantInfo: FirebaseRestaurantInfo
+	var imageURL: String
+
+	init(restaurantInfo: FirebaseRestaurantInfo) {
+		self.restaurantInfo = restaurantInfo
+		self.imageURL = restaurantInfo.image_url
+		print(imageURL)
+	}
 
 	var body: some View {
 
@@ -53,8 +62,8 @@ struct ListCardView: View {
 					.shadow(radius: AppShadow.lowShadowRadius)
 				VStack {
 
-					Image("testPicRestaurant")
-						.resizable()
+					RemoteImageLoader(url: "\(imageURL)")
+//						.resizable()
 						.frame(width: globalWidth )
 						.cornerRadius(radius: CardSpecificStyle.cornerRadius, corners: [.topLeft, .topRight])
 
@@ -65,8 +74,8 @@ struct ListCardView: View {
 							.frame(width: 25)
 						Spacer()
 						VStack{
-							Text("Restaurant Name")
-							Text("Number of Votes")
+							Text("\(restaurantInfo.name)")
+							Text("Votes: \(restaurantInfo.score)")
 						}
 					}
 					.padding([.leading, .trailing], globalWidth / 4)
@@ -76,6 +85,7 @@ struct ListCardView: View {
 			}
 			.frame(width: globalWidth, height: globalHeight, alignment: .center)
 		}
+	
 	}
 }
 

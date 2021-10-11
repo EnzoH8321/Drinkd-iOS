@@ -34,9 +34,9 @@ class drinkdViewModel: ObservableObject {
 	var topBarList: [String: restaurantScoreInfo] = [:]
 	var currentScoreOfTopCard: Int = 0
 
-	var firstPlace: FirebaseRestaurantInfo?
-	var secondPlace: FirebaseRestaurantInfo?
-	var thirdPlace: FirebaseRestaurantInfo?
+	var firstPlace: FirebaseRestaurantInfo = FirebaseRestaurantInfo()
+	var secondPlace: FirebaseRestaurantInfo = FirebaseRestaurantInfo()
+	var thirdPlace: FirebaseRestaurantInfo = FirebaseRestaurantInfo()
 
 	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
 
@@ -66,7 +66,6 @@ class drinkdViewModel: ObservableObject {
 			print("Invalid URL")
 			return
 		}
-
 
 		var request = URLRequest(url: url)
 		request.httpMethod = "GET"
@@ -107,6 +106,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	func fetchRestaurantsAfterJoiningParty() {
+		objectWillChange.send()
 
 		guard let verifiedPartyURL = self.partyURL else {
 			return print("NO URL FOUND")
@@ -178,12 +178,13 @@ class drinkdViewModel: ObservableObject {
 		let name: String = barList.name
 		let currentURLOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].url ?? "NO URL FOUND"
 		//Adds id of card for
-		let currentIDOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].image_url ?? "NO ID FOUND"
+		let currentIDOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].id ?? "NO ID FOUND"
+		let currentImageURLTopCard: String = model.localRestaurantsDefault[currentCardIndex].image_url ?? "NO IMAGE URL FOUND"
 
 		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyID)")
 
 
-		localReference.child("topBars").child(self.partyID ?? "NO ID").child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard])
+		localReference.child("topBars").child(self.partyID ?? "NO ID").child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
 
 	}
 
@@ -253,8 +254,10 @@ class drinkdViewModel: ObservableObject {
 									switch (keyForDetail) {
 									case "url":
 										restaurant.url = valueForDetail as! String
+									case "image_url":
+										restaurant.image_url = valueForDetail as! String
 									default:
-										print("default")
+										break
 									}
 
 								} else {
@@ -265,7 +268,7 @@ class drinkdViewModel: ObservableObject {
 										currentScore = valueForDetail as! Int
 										restaurant.score = valueForDetail as! Int
 									default:
-										print("default")
+										break
 									}
 								}
 							}
@@ -286,12 +289,13 @@ class drinkdViewModel: ObservableObject {
 							var name: String = ""
 							var score: Int = 0
 							var url: String = ""
-							let imageURL: String = ""
+							var imageURL: String = ""
 
 							for element in filtered {
 								name = element.name
 								score += element.score
 								url = element.url
+								imageURL = element.image_url
 
 							}
 
@@ -323,10 +327,11 @@ class drinkdViewModel: ObservableObject {
 					let sortedArray = finalizedArray.sorted {
 						$0.score > $1.score
 					}
-
+					//
 					self.model.appendTopThreeRestaurants(in: sortedArray)
 
-					self.syncVMPropswithModelProps(firstPlace: self.model.topThreeChoicesObject?.first, secondPlace: self.model.topThreeChoicesObject?.second, thirdPlace: self.model.topThreeChoicesObject?.third)
+					self.syncVMPropswithModelProps(firstPlace: self.model.topThreeChoicesObject.first, secondPlace: self.model.topThreeChoicesObject.second, thirdPlace: self.model.topThreeChoicesObject.third)
+
 				}
 			})
 		}

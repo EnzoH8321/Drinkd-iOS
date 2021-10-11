@@ -43,6 +43,7 @@ struct HomeView: View {
 					SubmitButton()
 						.onTapGesture {
 							viewModel.submitRestaurantScore()
+							viewModel.calculateTopThreeRestaurants()
 						}
 				}
 

@@ -28,6 +28,7 @@ struct PartyView_Join: View {
 	}
 
 	private struct JoinPartyButton: View {
+
 		@EnvironmentObject var viewModel: drinkdViewModel
 
 		var partyCode: String
@@ -39,10 +40,8 @@ struct PartyView_Join: View {
 		var body: some View {
 
 			Button("Join Party") {
-				
 				viewModel.JoinExistingParty(getCode: self.partyCode)
 				viewModel.fetchRestaurantsAfterJoiningParty()
-
 			}
 			.alert(isPresented: $viewModel.queryPartyError) {
 				Alert(title: Text("Error"), message: Text("Party Does not exists"))
