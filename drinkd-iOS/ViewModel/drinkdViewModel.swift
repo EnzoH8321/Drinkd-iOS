@@ -34,6 +34,10 @@ class drinkdViewModel: ObservableObject {
 	var topBarList: [String: restaurantScoreInfo] = [:]
 	var currentScoreOfTopCard: Int = 0
 
+	var firstPlace: FirebaseRestaurantInfo?
+	var secondPlace: FirebaseRestaurantInfo?
+	var thirdPlace: FirebaseRestaurantInfo?
+
 	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
 
 	//DELETE FOR RELEASE!
@@ -79,7 +83,7 @@ class drinkdViewModel: ObservableObject {
 					if let JSONArray = JSONDecoderValue.businesses {
 						DispatchQueue.main.async {
 							self.objectWillChange.send()
-							self.model.modifyElements(in: JSONArray)
+							self.model.appendDeliveryOptions(in: JSONArray)
 							self.model.createParty(setURL: url.absoluteString)
 							self.restaurantList = self.model.getLocalRestaurants()
 							self.removeSplashScreen = true
@@ -100,12 +104,6 @@ class drinkdViewModel: ObservableObject {
 			print("\(error?.localizedDescription ?? "Unknown error")")
 
 		}.resume()
-
-		//		} else {
-		//			print("location unknown")
-		//		}
-
-
 	}
 
 	func fetchRestaurantsAfterJoiningParty() {
@@ -135,7 +133,7 @@ class drinkdViewModel: ObservableObject {
 						DispatchQueue.main.async {
 							self.objectWillChange.send()
 							self.model.clearAllRestaurants()
-							self.model.modifyElements(in: JSONArray)
+							self.model.appendDeliveryOptions(in: JSONArray)
 							self.model.createParty(setURL: verifiedURL.absoluteString)
 							self.restaurantList = self.model.getLocalRestaurants()
 							//							self.removeSplashScreen = true
@@ -180,7 +178,7 @@ class drinkdViewModel: ObservableObject {
 		let name: String = barList.name
 		let currentURLOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].url ?? "NO URL FOUND"
 		//Adds id of card for
-		let currentIDOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].id ?? "NO ID FOUND"
+		let currentIDOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].image_url ?? "NO ID FOUND"
 
 		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyID)")
 
@@ -237,9 +235,9 @@ class drinkdViewModel: ObservableObject {
 						var currentName: String = ""
 						var currentScore: Int = 0
 						let currentURL: String = ""
-						let currentID: String = ""
+						let imageURL: String = ""
 
-						var restaurant = FirebaseRestaurantInfo(name: currentName, score: currentScore, url: currentURL, id: currentID)
+						var restaurant = FirebaseRestaurantInfo(name: currentName, score: currentScore, url: currentURL, image_url: imageURL)
 
 						for (key, value) in currentDict {
 							currentName = key
@@ -276,23 +274,19 @@ class drinkdViewModel: ObservableObject {
 							verifiedRestaurantArray.append(restaurant)
 					}
 
-
-
 					for element in verifiedRestaurantArray {
 						let currentRestaurant = element
 						//Check to see if element in verifiedrestaurantarray is a duplicate
 						let filtered = verifiedRestaurantArray.filter { value in
 							value.name == currentRestaurant.name
 						}
-
-
 						//iterate through duplicate array
 						if (filtered.count > 1) {
 
 							var name: String = ""
 							var score: Int = 0
 							var url: String = ""
-							var id: String = ""
+							let imageURL: String = ""
 
 							for element in filtered {
 								name = element.name
@@ -311,7 +305,7 @@ class drinkdViewModel: ObservableObject {
 
 							}
 
-							let restaurant = FirebaseRestaurantInfo(name: name, score: score, url: url, id: id)
+							let restaurant = FirebaseRestaurantInfo(name: name, score: score, url: url, image_url: imageURL)
 							nonDuplicateArray.append(restaurant)
 						}
 					}
@@ -332,14 +326,14 @@ class drinkdViewModel: ObservableObject {
 
 					self.model.appendTopThreeRestaurants(in: sortedArray)
 
-					print(sortedArray)
+					self.syncVMPropswithModelProps(firstPlace: self.model.topThreeChoicesObject?.first, secondPlace: self.model.topThreeChoicesObject?.second, thirdPlace: self.model.topThreeChoicesObject?.third)
 				}
 			})
 		}
 	}
 
 
-	func getParty(getCode partyCode: String) {
+	func JoinExistingParty(getCode partyCode: String) {
 		objectWillChange.send()
 
 		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyCode)")
@@ -384,7 +378,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	//Helper function that lets the VM props update with whats in the Model
-	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, inParty currentlyInParty: Bool? = nil, getURL partyURL: String? = nil, getCardIndex cardIndex: Int? = nil, topBar topBarList: [String: restaurantScoreInfo]? = nil, topCardScore currentTopCard: Int? = nil ) {
+	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, inParty currentlyInParty: Bool? = nil, getURL partyURL: String? = nil, getCardIndex cardIndex: Int? = nil, topBar topBarList: [String: restaurantScoreInfo]? = nil, topCardScore currentTopCard: Int? = nil, firstPlace: FirebaseRestaurantInfo? = nil, secondPlace: FirebaseRestaurantInfo? = nil, thirdPlace: FirebaseRestaurantInfo? = nil ) {
 
 		if let partyID = partyID {
 			self.partyID = partyID
@@ -419,16 +413,28 @@ class drinkdViewModel: ObservableObject {
 			self.currentScoreOfTopCard = currentTopCardScore
 		}
 
+		if let firstPlaceRestaurant = firstPlace {
+			self.firstPlace = firstPlaceRestaurant
+		}
+
+		if let secondPlaceRestaurant = secondPlace {
+			self.secondPlace = secondPlaceRestaurant
+		}
+
+		if let thirdPlaceRestaurant = thirdPlace {
+			self.thirdPlace = thirdPlaceRestaurant
+		}
+
 	}
 
 
 
-	func removeCardfromDeck() {
+	func whenCardIsDraggedFromView() {
 		self.model.removeCardFromDeck()
 		syncVMPropswithModelProps(getCardIndex: self.model.currentCardIndex)
 	}
 
-	func addPoints(getPoints: Int) {
+	func whenStarIsTapped(getPoints: Int) {
 		self.model.addScoreToCard(points: getPoints)
 		syncVMPropswithModelProps(topBar: self.model.topBarList, topCardScore: self.model.currentScoreOfTopCard)
 	}
@@ -438,8 +444,8 @@ class drinkdViewModel: ObservableObject {
 		syncVMPropswithModelProps(topCardScore: self.model.currentScoreOfTopCard)
 	}
 
-	func setListEmpty() {
-		self.model.setListEmpty()
+	func emptyTopBarList() {
+		self.model.emptyTheTopBarList()
 		syncVMPropswithModelProps(topBar: self.model.topBarList)
 	}
 

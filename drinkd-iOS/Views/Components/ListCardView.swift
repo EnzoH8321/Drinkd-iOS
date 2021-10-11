@@ -38,6 +38,8 @@ extension View {
 //
 struct ListCardView: View {
 
+	var restaurantInfo: FirebaseRestaurantInfo
+
 	var body: some View {
 
 		GeometryReader { proxy in
@@ -79,6 +81,6 @@ struct ListCardView: View {
 
 struct ListCardView_Previews: PreviewProvider {
 	static var previews: some View {
-		ListCardView()
+		ListCardView(restaurantInfo: FirebaseRestaurantInfo(name: "TEST", score: 10, url: "https://www.yelp.com/biz/gary-danko-san-francisco?adjust_creative=wpr6gw4FnptTrk1CeT8POg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_lookup&utm_source=wpr6gw4FnptTrk1CeT8POg", image_url: "WavvLdfdP6g8aZTtbBQHTw"))
 	}
 }

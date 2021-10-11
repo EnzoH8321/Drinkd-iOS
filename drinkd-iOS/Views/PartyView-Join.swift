@@ -40,7 +40,7 @@ struct PartyView_Join: View {
 
 			Button("Join Party") {
 				
-				viewModel.getParty(getCode: self.partyCode)
+				viewModel.JoinExistingParty(getCode: self.partyCode)
 				viewModel.fetchRestaurantsAfterJoiningParty()
 
 			}

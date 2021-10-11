@@ -18,7 +18,7 @@ struct Star: View {
 		Image(systemName: viewModel.currentScoreOfTopCard < 0 || starValue > viewModel.currentScoreOfTopCard ? "star" : "star.fill")
 			.resizable()
 			.onTapGesture {
-					viewModel.addPoints(getPoints: starValue)
+					viewModel.whenStarIsTapped(getPoints: starValue)
 			}
 
     }

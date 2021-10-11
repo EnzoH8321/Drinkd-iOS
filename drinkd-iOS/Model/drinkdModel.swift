@@ -41,7 +41,7 @@ struct drinkdModel {
 	private(set) var localRestaurants: [YelpApiBusinessSearchProperties] = []
 	//
 	private(set) var localRestaurantsDefault: [YelpApiBusinessSearchProperties] = []
-	//
+	//For top choices view
 	private(set) var topThreeChoicesObject: ThreeTopChoices?
 	//
 	mutating func getLocalRestaurants() -> [YelpApiBusinessSearchProperties] {
@@ -54,7 +54,7 @@ struct drinkdModel {
 	}
 	
 	//Checks to see if the transaction array exists. if it does, parse it and fill the needed transaction properties
-	mutating func modifyElements(in restaurants: [YelpApiBusinessSearchProperties]) {
+	mutating func appendDeliveryOptions(in restaurants: [YelpApiBusinessSearchProperties]) {
 		
 		for var element in restaurants {
 			let transactionArray = element.transactions ?? [""]
@@ -83,8 +83,6 @@ struct drinkdModel {
 			}
 			counter = 10
 		}
-		
-		
 	}
 	
 	mutating func createParty(setVotes partyVotes: String? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
@@ -119,8 +117,6 @@ struct drinkdModel {
 			return
 		}
 		
-		
-		
 		self.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL])
 		
 	}
@@ -151,7 +147,7 @@ struct drinkdModel {
 	mutating func removeCardFromDeck() {
 		
 		self.currentCardIndex -= 1
-		
+
 		if (self.currentCardIndex < 0) {
 			self.currentCardIndex = 9
 		}
@@ -173,7 +169,7 @@ struct drinkdModel {
 		self.currentScoreOfTopCard = 0
 	}
 
-	mutating func setListEmpty() {
+	mutating func emptyTheTopBarList() {
 		self.topBarList.removeAll()
 	}
 
@@ -182,5 +178,8 @@ struct drinkdModel {
 		for element in 0..<array.count {
 			topThreeRestaurantArray.append(array[element])
 		}
+		topThreeChoicesObject?.first = topThreeRestaurantArray[0]
+		topThreeChoicesObject?.second = topThreeRestaurantArray[1]
+		topThreeChoicesObject?.third = topThreeRestaurantArray[2]
 	}
 }

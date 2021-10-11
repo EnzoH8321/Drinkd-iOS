@@ -150,9 +150,9 @@ struct CardView: View {
 						if abs(self.offset.width) > 100 {
 							// remove the card
 							viewModel.updateRestaurantList()
-							viewModel.removeCardfromDeck()
+							viewModel.whenCardIsDraggedFromView()
 							viewModel.setCurrentTopCardScoreToZero()
-							viewModel.setListEmpty()
+							viewModel.emptyTopBarList()
 
 						} else {
 							self.offset = .zero
