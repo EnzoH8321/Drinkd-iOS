@@ -39,13 +39,6 @@ extension View {
 struct ListCardView: View {
 
 	var restaurantInfo: FirebaseRestaurantInfo
-	var imageURL: String
-
-	init(restaurantInfo: FirebaseRestaurantInfo) {
-		self.restaurantInfo = restaurantInfo
-		self.imageURL = restaurantInfo.image_url
-		print(restaurantInfo.image_url)
-	}
 
 	var body: some View {
 
@@ -62,6 +55,7 @@ struct ListCardView: View {
 
 					RemoteImageLoader(url: "\(restaurantInfo.image_url)")
 //						.resizable()
+						
 						.frame(width: globalWidth )
 						.cornerRadius(radius: CardSpecificStyle.cornerRadius, corners: [.topLeft, .topRight])
 

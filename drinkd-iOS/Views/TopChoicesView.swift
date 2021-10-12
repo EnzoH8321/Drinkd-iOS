@@ -19,7 +19,7 @@ struct TopChoicesView: View {
 
 			VStack(alignment: .center) {
 
-				if (viewModel.currentlyInParty) {
+				if (viewModel.currentlyInParty && viewModel.firstPlace.image_url != "") {
 					ListCardView(restaurantInfo: self.viewModel.firstPlace)
 						.frame(width: abs(globalWidth - 20), height: globalHeight / 3.5)
 					Spacer()
