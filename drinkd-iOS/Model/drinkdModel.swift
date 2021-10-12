@@ -176,6 +176,7 @@ struct drinkdModel {
 	mutating func appendTopThreeRestaurants(in array: [FirebaseRestaurantInfo]) {
 
 		for element in 0..<array.count {
+
 			topThreeRestaurantArray.append(array[element])
 
 			switch (element) {
@@ -188,8 +189,6 @@ struct drinkdModel {
 			default:
 				break
 			}
-
 		}
-
 	}
 }

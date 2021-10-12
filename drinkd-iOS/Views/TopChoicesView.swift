@@ -36,11 +36,8 @@ struct TopChoicesView: View {
 
 			}
 			.frame(width: globalWidth, height: globalHeight)
+		}
 
-		}
-		.onAppear {
-			viewModel.calculateTopThreeRestaurants()
-		}
 
 	}
 

@@ -136,8 +136,6 @@ class drinkdViewModel: ObservableObject {
 							self.model.appendDeliveryOptions(in: JSONArray)
 							self.model.createParty(setURL: verifiedURL.absoluteString)
 							self.restaurantList = self.model.getLocalRestaurants()
-							//							self.removeSplashScreen = true
-
 						}
 					} else {
 						throw ErrorHanding.businessArrayNotFound
@@ -202,7 +200,6 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	func calculateTopThreeRestaurants() {
-		objectWillChange.send()
 
 		if let verifiedPartyID = self.partyID {
 			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(verifiedPartyID)").child("topBars")
@@ -210,130 +207,136 @@ class drinkdViewModel: ObservableObject {
 			localReference.observe(DataEventType.value, with: { snapshot in
 
 				if (!snapshot.exists()) {
-					print("party does not exist")
+					print("No one has scored restaurant yet")
 				} else {
 
-					var restaurantArray: [[String: Any]] = []
-					var verifiedRestaurantArray: [FirebaseRestaurantInfo] = []
-					var nonDuplicateArray: [FirebaseRestaurantInfo] = []
-					var finalizedArray: [FirebaseRestaurantInfo] = []
+					DispatchQueue.main.async {
+						self.objectWillChange.send()
+						var restaurantArray: [[String: Any]] = []
+						var verifiedRestaurantArray: [FirebaseRestaurantInfo] = []
+						var nonDuplicateArray: [FirebaseRestaurantInfo] = []
+						var finalizedArray: [FirebaseRestaurantInfo] = []
 
-					guard let value = snapshot.value as? [String: [String: [String: Any]]] else {
-						print("could not convert to swift type")
-						return
-					}
-					//Appends to a temporary array
-					for (_, val) in value {
-						for (key2, val2) in val {
-							restaurantArray.append([key2: val2])
+						guard let value = snapshot.value as? [String: [String: [String: Any]]] else {
+							print("could not convert to swift type")
+							return
 						}
-					}
+						//Appends to a temporary array
+						for (_, val) in value {
+							for (key2, val2) in val {
+								restaurantArray.append([key2: val2])
+							}
+						}
 
-					//Iterate through non verified array (array not decoded properly)
-					for element in 0..<restaurantArray.count {
-						let currentDict = restaurantArray[element]
+						//Iterate through non verified array (array not decoded properly)
+						for element in 0..<restaurantArray.count {
+							let currentDict = restaurantArray[element]
 
-						var currentName: String = ""
-						var currentScore: Int = 0
-						let currentURL: String = ""
-						let imageURL: String = ""
+							var currentName: String = ""
+							var currentScore: Int = 0
+							let currentURL: String = ""
+							let imageURL: String = ""
 
-						var restaurant = FirebaseRestaurantInfo(name: currentName, score: currentScore, url: currentURL, image_url: imageURL)
+							var restaurant = FirebaseRestaurantInfo(name: currentName, score: currentScore, url: currentURL, image_url: imageURL)
 
-						for (key, value) in currentDict {
-							currentName = key
+							for (key, value) in currentDict {
+								currentName = key
 
-							restaurant.name = key
+								restaurant.name = key
 
-							let valueToDict = value as! [String: Any]
+								let valueToDict = value as! [String: Any]
 
-							for (keyForDetail, valueForDetail) in valueToDict {
+								for (keyForDetail, valueForDetail) in valueToDict {
 
-								if let detailAsString = valueForDetail as? String {
+									if let detailAsString = valueForDetail as? String {
 
-									switch (keyForDetail) {
-									case "url":
-										restaurant.url = valueForDetail as! String
-									case "image_url":
-										restaurant.image_url = valueForDetail as! String
-									default:
-										break
-									}
+										switch (keyForDetail) {
+										case "url":
+											restaurant.url = valueForDetail as! String
+										case "image_url":
+											restaurant.image_url = valueForDetail as! String
+										default:
+											break
+										}
 
-								} else {
-									let detailAsNumber = valueForDetail as! Int
+									} else {
+										let detailAsNumber = valueForDetail as! Int
 
-									switch (keyForDetail) {
-									case "score":
-										currentScore = valueForDetail as! Int
-										restaurant.score = valueForDetail as! Int
-									default:
-										break
+										switch (keyForDetail) {
+										case "score":
+											currentScore = valueForDetail as! Int
+											restaurant.score = valueForDetail as! Int
+										default:
+											break
+										}
 									}
 								}
 							}
+
+								verifiedRestaurantArray.append(restaurant)
 						}
 
-							verifiedRestaurantArray.append(restaurant)
-					}
-
-					for element in verifiedRestaurantArray {
-						let currentRestaurant = element
-						//Check to see if element in verifiedrestaurantarray is a duplicate
-						let filtered = verifiedRestaurantArray.filter { value in
-							value.name == currentRestaurant.name
-						}
-						//iterate through duplicate array
-						if (filtered.count > 1) {
-
-							var name: String = ""
-							var score: Int = 0
-							var url: String = ""
-							var imageURL: String = ""
-
-							for element in filtered {
-								name = element.name
-								score += element.score
-								url = element.url
-								imageURL = element.image_url
-
+						for element in verifiedRestaurantArray {
+							let currentRestaurant = element
+							//Check to see if element in verifiedrestaurantarray is a duplicate
+							let filtered = verifiedRestaurantArray.filter { value in
+								value.name == currentRestaurant.name
 							}
+							//iterate through duplicate array
+							if (filtered.count > 1) {
 
-							for restaurant in 0..<filtered.count {
-								let currentRestaurant = filtered[restaurant]
-								guard let lastIndex = verifiedRestaurantArray.lastIndex(of: currentRestaurant) else {
-									print("last index not found")
-									return
+								var name: String = ""
+								var score: Int = 0
+								var url: String = ""
+								var imageURL: String = ""
+
+								for element in filtered {
+									name = element.name
+									score += element.score
+									url = element.url
+									imageURL = element.image_url
+
 								}
-								verifiedRestaurantArray.remove(at: lastIndex)
 
+								for restaurant in 0..<filtered.count {
+									let currentRestaurant = filtered[restaurant]
+									guard let lastIndex = verifiedRestaurantArray.lastIndex(of: currentRestaurant) else {
+										print("last index not found")
+										return
+									}
+									verifiedRestaurantArray.remove(at: lastIndex)
+
+								}
+
+								let restaurant = FirebaseRestaurantInfo(name: name, score: score, url: url, image_url: imageURL)
+								nonDuplicateArray.append(restaurant)
 							}
-
-							let restaurant = FirebaseRestaurantInfo(name: name, score: score, url: url, image_url: imageURL)
-							nonDuplicateArray.append(restaurant)
 						}
+
+						//append nonDuplicate to final array
+						for element in nonDuplicateArray {
+							finalizedArray.append(element)
+						}
+
+						for element in verifiedRestaurantArray {
+							finalizedArray.append(element)
+						}
+
+						//sort so that highest scores are at the start
+						let sortedArray = finalizedArray.sorted {
+							$0.score > $1.score
+						}
+						//
+						self.model.appendTopThreeRestaurants(in: sortedArray)
+
+						self.syncVMPropswithModelProps(firstPlace: self.model.topThreeChoicesObject.first, secondPlace: self.model.topThreeChoicesObject.second, thirdPlace: self.model.topThreeChoicesObject.third)
 					}
 
-					//append nonDuplicate to final array
-					for element in nonDuplicateArray {
-						finalizedArray.append(element)
-					}
-
-					for element in verifiedRestaurantArray {
-						finalizedArray.append(element)
-					}
-
-					//sort so that highest scores are at the start
-					let sortedArray = finalizedArray.sorted {
-						$0.score > $1.score
-					}
-					//
-					self.model.appendTopThreeRestaurants(in: sortedArray)
-
-					self.syncVMPropswithModelProps(firstPlace: self.model.topThreeChoicesObject.first, secondPlace: self.model.topThreeChoicesObject.second, thirdPlace: self.model.topThreeChoicesObject.third)
 
 				}
 			})
+		} else {
+			print("Top bars does not exist yet")
 		}
 	}
 

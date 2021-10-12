@@ -13,6 +13,7 @@ struct MasterView: View {
 
 	@EnvironmentObject var viewModel: drinkdViewModel
 
+	@State var selectedTab: Int = 1
 	//Firebase
 	var ref = Database.database().reference()
 	
@@ -25,7 +26,7 @@ struct MasterView: View {
 					let globalWidth = proxy.frame(in: .global).width
 					let globalHeight = proxy.frame(in: .global).height
 
-					TabView {
+					TabView(selection: $selectedTab) {
 						//HomeView
 						NavigationView {
 							HomeView()
@@ -33,10 +34,12 @@ struct MasterView: View {
 								.navigationBarTitle("")
 								.navigationBarHidden(true)
 						}.navigationViewStyle(StackNavigationViewStyle())
+
 						.tabItem {
 							Image(systemName: "house")
 							Text("Home")
-						}
+						}.tag(1)
+
 						//Top Choices View
 						NavigationView {
 							TopChoicesView()
@@ -46,7 +49,7 @@ struct MasterView: View {
 						.tabItem {
 							Image(systemName: "chart.bar")
 							Text("TopChoices")
-						}
+						}.tag(2)
 						//Party View
 						NavigationView {
 							PartyView()
@@ -57,6 +60,14 @@ struct MasterView: View {
 						.tabItem {
 							Image(systemName: "person.3")
 							Text("Party")
+						}.tag(3)
+					}
+					.onChange(of: selectedTab) {tabVal in
+						switch (tabVal) {
+						case 2 :
+							viewModel.calculateTopThreeRestaurants()
+						default:
+							break
 						}
 					}
 				}
