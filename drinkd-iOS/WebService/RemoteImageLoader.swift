@@ -54,14 +54,11 @@ struct RemoteImageLoader: View {
 	private func selectImage() -> Image {
 		switch loader.state {
 		case .loading:
-			print("Image is Loading")
 			return loading
 		case .failure:
-			print("Image has failed")
 			return failure
 		default:
 			if let image = UIImage(data: loader.data) {
-				print("Image has finished")
 				return Image(uiImage: image)
 			} else {
 				return failure

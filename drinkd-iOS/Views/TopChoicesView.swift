@@ -20,15 +20,20 @@ struct TopChoicesView: View {
 			VStack(alignment: .center) {
 
 				if (viewModel.currentlyInParty && viewModel.firstPlace.image_url != "") {
-					ListCardView(restaurantInfo: self.viewModel.firstPlace)
-						.frame(width: abs(globalWidth - 20), height: globalHeight / 3.5)
-					Spacer()
-					ListCardView(restaurantInfo: self.viewModel.secondPlace)
-						.frame(width: globalWidth - 20, height: globalHeight / 3.5)
-					Spacer()
-					ListCardView(restaurantInfo: self.viewModel.thirdPlace)
-						.frame(width: globalWidth - 20, height: globalHeight / 3.5)
-						.padding([.bottom], 10)
+					ListCardView(restaurantInfo: self.viewModel.firstPlace, placementImage: 1)
+						.frame(width: abs(globalWidth - 20))
+
+					if (viewModel.currentlyInParty && viewModel.secondPlace.image_url != "") {
+						ListCardView(restaurantInfo: self.viewModel.secondPlace, placementImage: 2)
+							.frame(width: globalWidth - 20)
+						if (viewModel.currentlyInParty && viewModel.thirdPlace.image_url != "") {
+
+							ListCardView(restaurantInfo: self.viewModel.thirdPlace, placementImage: 3)
+								.frame(width: globalWidth - 20)
+								.padding([.bottom], 10)
+						}
+					}
+
 				} else {
 					Text("Join or Create your own party to see your top choices")
 						.font(.largeTitle)

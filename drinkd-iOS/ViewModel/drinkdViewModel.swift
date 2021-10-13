@@ -25,14 +25,17 @@ class drinkdViewModel: ObservableObject {
 	var currentlyInParty = false
 	var queryPartyError = false
 	var restaurantList: [YelpApiBusinessSearchProperties] = []
-	var partyID: String?
+	var partyCreatorId: String?
 	var partyMaxVotes: String?
 	var partyName: String?
 	var partyURL: String?
+	var isPartyLeader: Bool?
 	var locationFetcher: LocationFetcher
 	var currentCardIndex: Int = 9
 	var topBarList: [String: restaurantScoreInfo] = [:]
 	var currentScoreOfTopCard: Int = 0
+	//Id for someone elses party
+	var memberId: String?
 
 	var firstPlace: FirebaseRestaurantInfo = FirebaseRestaurantInfo()
 	var secondPlace: FirebaseRestaurantInfo = FirebaseRestaurantInfo()
@@ -163,12 +166,16 @@ class drinkdViewModel: ObservableObject {
 			return
 		}
 
-		guard let partyID = self.partyID else {
+		guard let partyID = self.partyCreatorId else {
 			return print("ID NOT FOUND")
 		}
 
 		guard let barList = topBarList["\(currentCardIndex)"] else {
 			return print("No restaurant with this key")
+		}
+
+		guard let partyLeader = self.isPartyLeader else {
+			return print("NO PARTY LEADER FOUND")
 		}
 
 
@@ -178,12 +185,26 @@ class drinkdViewModel: ObservableObject {
 		//Adds id of card for
 		let currentIDOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].id ?? "NO ID FOUND"
 		let currentImageURLTopCard: String = model.localRestaurantsDefault[currentCardIndex].image_url ?? "NO IMAGE URL FOUND"
+		var localReference: DatabaseReference
 
-		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyID)")
+		if (partyLeader) {
+
+			localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyID)")
+			localReference.child("topBars").child(self.partyCreatorId ?? "NO ID").child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
+			
+		} else if (!partyLeader) {
+
+			guard let partyCode = self.memberId else {
+				return print("NO Party code available")
+			}
+
+			localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyID)")
+			localReference.child("topBars").child(self.model.memberId ?? "NO ID").child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
+		}
 
 
-		localReference.child("topBars").child(self.partyID ?? "NO ID").child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
-
+		print(self.partyCreatorId)
+		print(self.memberId)
 	}
 
 
@@ -195,13 +216,14 @@ class drinkdViewModel: ObservableObject {
 
 	func createNewParty(setVotes partyVotes: String? = nil, setName partyName: String? = nil) {
 		objectWillChange.send()
-		model.createParty(setVotes: partyVotes, setName: partyName)
-		syncVMPropswithModelProps(getID: self.model.partyID, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty)
+		self.model.createParty(setVotes: partyVotes, setName: partyName)
+		self.model.setCurrentToPartyTrue()
+		syncVMPropswithModelProps(getID: self.model.partyCreatorId, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty, partyLeader: self.model.isPartyLeader)
 	}
 
 	func calculateTopThreeRestaurants() {
 
-		if let verifiedPartyID = self.partyID {
+		if let verifiedPartyID = self.partyCreatorId {
 			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(verifiedPartyID)").child("topBars")
 
 			localReference.observe(DataEventType.value, with: { snapshot in
@@ -273,7 +295,7 @@ class drinkdViewModel: ObservableObject {
 								}
 							}
 
-								verifiedRestaurantArray.append(restaurant)
+							verifiedRestaurantArray.append(restaurant)
 						}
 
 						for element in verifiedRestaurantArray {
@@ -362,13 +384,13 @@ class drinkdViewModel: ObservableObject {
 				for (key, valueProperty) in value {
 					switch key {
 					case FireBasePartyProps.partyID.rawValue:
-						self.model.getParty(getCode: valueProperty as? String)
+						self.model.joinParty(getID: valueProperty as? String)
 					case FireBasePartyProps.partyMaxVotes.rawValue:
-						self.model.getParty(getVotes: valueProperty as? String)
+						self.model.joinParty(getVotes: valueProperty as? String)
 					case FireBasePartyProps.partyName.rawValue:
-						self.model.getParty(getName: valueProperty as? String)
+						self.model.joinParty(getName: valueProperty as? String)
 					case FireBasePartyProps.partyURL.rawValue:
-						self.model.getParty(getURL: valueProperty as? String)
+						self.model.joinParty(getURL: valueProperty as? String)
 					default:
 						continue
 					}
@@ -376,8 +398,9 @@ class drinkdViewModel: ObservableObject {
 				}
 
 				self.model.setCurrentToPartyTrue()
+				//				self.model.setPartyCode(partyCode: partyCode)
 				self.queryPartyError = false
-				syncVMPropswithModelProps(getID: self.model.partyID, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty, getURL: self.model.partyURL)
+				syncVMPropswithModelProps(getID: self.model.partyCreatorId, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty, getURL: self.model.partyURL, partyLeader: self.model.isPartyLeader, partyCode: self.model.memberId)
 
 			}
 
@@ -386,10 +409,10 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	//Helper function that lets the VM props update with whats in the Model
-	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, inParty currentlyInParty: Bool? = nil, getURL partyURL: String? = nil, getCardIndex cardIndex: Int? = nil, topBar topBarList: [String: restaurantScoreInfo]? = nil, topCardScore currentTopCard: Int? = nil, firstPlace: FirebaseRestaurantInfo? = nil, secondPlace: FirebaseRestaurantInfo? = nil, thirdPlace: FirebaseRestaurantInfo? = nil ) {
+	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, inParty currentlyInParty: Bool? = nil, getURL partyURL: String? = nil, getCardIndex cardIndex: Int? = nil, topBar topBarList: [String: restaurantScoreInfo]? = nil, topCardScore currentTopCard: Int? = nil, firstPlace: FirebaseRestaurantInfo? = nil, secondPlace: FirebaseRestaurantInfo? = nil, thirdPlace: FirebaseRestaurantInfo? = nil, partyLeader: Bool? = nil, partyCode: String? = nil ) {
 
 		if let partyID = partyID {
-			self.partyID = partyID
+			self.partyCreatorId = partyID
 		}
 
 		if let partyVotes = votes {
@@ -433,6 +456,14 @@ class drinkdViewModel: ObservableObject {
 			self.thirdPlace = thirdPlaceRestaurant
 		}
 
+		if let partyLeader = partyLeader {
+			self.isPartyLeader = partyLeader
+		}
+
+		if let partyCode = partyCode {
+			self.memberId = partyCode
+		}
+
 	}
 
 
@@ -455,6 +486,36 @@ class drinkdViewModel: ObservableObject {
 	func emptyTopBarList() {
 		self.model.emptyTheTopBarList()
 		syncVMPropswithModelProps(topBar: self.model.topBarList)
+	}
+
+	func leaveParty() {
+
+		guard let partyLeader = self.isPartyLeader else {
+			return print("You are not in a party")
+		}
+
+		guard let verifiedPartyID = self.partyCreatorId else {
+			return print("No Party ID Found")
+		}
+
+		if (partyLeader) {
+			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(verifiedPartyID)")
+			localReference.removeValue()
+
+		} else if (!partyLeader) {
+
+			//			//You only have a party code if you joined a party
+			//			guard let verifiedPartyCode = self.partyCode else {
+			//				return print("No Party Code found")
+			//			}
+
+			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.memberId)").child("topBars").child("\(verifiedPartyID)")
+			print(localReference)
+			localReference.removeValue()
+		}
+
+		self.model.leaveParty()
+		syncVMPropswithModelProps(inParty: self.model.currentlyInParty,  partyLeader: self.model.isPartyLeader)
 	}
 
 }

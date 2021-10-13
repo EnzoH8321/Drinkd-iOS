@@ -9,6 +9,11 @@ import SwiftUI
 import Firebase
 
 
+enum userLevel: String {
+	case creator
+	case member
+}
+
 struct restaurantScoreInfo {
 	var name: String
 	var	score: Int
@@ -27,11 +32,14 @@ struct drinkdModel {
 	private(set) var counter: Int = 10
 	private(set) var currentCardIndex: Int = 9
 	private(set) var currentlyInParty = false
-	private(set) var partyID: String?
+	private(set) var partyCreatorId: String?
 	private(set) var partyMaxVotes: String?
 	private(set) var partyName: String?
 	private(set) var partyTimestamp: Int?
 	private(set) var partyURL: String?
+	//Id for someone elses party
+	private(set) var memberId: String?
+	private(set) var isPartyLeader: Bool?
 	private(set) var topBarList: [String: restaurantScoreInfo] = [:]
 	private(set) var currentScoreOfTopCard: Int = 0
 	private(set) var topThreeRestaurantArray: [FirebaseRestaurantInfo] = []
@@ -87,7 +95,7 @@ struct drinkdModel {
 	
 	mutating func createParty(setVotes partyVotes: String? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
 		
-		self.partyID = String(Int.random(in: 100...20000))
+		self.partyCreatorId = String(Int.random(in: 100...20000))
 		self.partyMaxVotes = partyVotes
 		self.partyName = partyName
 		self.partyTimestamp = Int(Date().timeIntervalSince1970 * 1000)
@@ -97,7 +105,7 @@ struct drinkdModel {
 			self.partyURL = url
 		}
 		
-		guard let partyID = self.partyID else {
+		guard let partyID = self.partyCreatorId else {
 			return
 		}
 		
@@ -118,13 +126,14 @@ struct drinkdModel {
 		}
 		
 		self.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL])
+		self.setUserLevel(level: .creator)
 		
 	}
 
-	mutating func getParty(getCode partyCode: String? = nil, getVotes votes: String? = nil, getName name: String? = nil, getURL url: String? = nil) {
+	mutating func joinParty(getID partyCode: String? = nil, getVotes votes: String? = nil, getName name: String? = nil, getURL url: String? = nil) {
 		
-		if let partyID = partyCode {
-			self.partyID = partyID
+		if let partyCode = partyCode {
+			self.partyCreatorId = partyCode
 		}
 		
 		if let partyVotes = votes {
@@ -138,6 +147,12 @@ struct drinkdModel {
 		if let siteURL = url {
 			self.partyURL = siteURL
 		}
+
+		if (self.memberId == nil) {
+			self.memberId = String(Int.random(in: 100...20000))
+		}
+
+		self.setUserLevel(level: .member)
 	}
 
 	mutating func setCurrentToPartyTrue() {
@@ -190,5 +205,22 @@ struct drinkdModel {
 				break
 			}
 		}
+	}
+
+	mutating func setUserLevel(level: userLevel) {
+		switch (level) {
+		case .member:
+			self.isPartyLeader = false
+		case .creator:
+			self.isPartyLeader = true
+		}
+	}
+
+//	mutating func setPartyCode(partyCode: String) {
+//		self.partyCode = partyCode
+//	}
+
+	mutating func leaveParty() {
+		self.currentlyInParty = false
 	}
 }

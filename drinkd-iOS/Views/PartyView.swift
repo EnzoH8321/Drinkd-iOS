@@ -27,12 +27,20 @@ struct PartyView: View {
 				}
 			} else {
 				VStack{
-					Text("Party ID: \(viewModel.partyID ?? "Party not found") ")
+					Text("Party ID: \(viewModel.partyCreatorId ?? "Party not found") ")
 						.font(.title)
 					Text("Partyname: \(viewModel.partyName ?? "Party Name not Found")")
 						.font(.title)
 					Text("Votes to Win: \(viewModel.partyMaxVotes ?? "Party not found") ")
 						.font(.title)
+					Button("Leave Party") {
+						self.viewModel.leaveParty()
+					}
+					.padding(20)
+					.frame(height: 20)
+					.padding()
+					.background(AppColors.primaryColor)
+					.clipShape(Capsule())
 				}
 			}
 		}
