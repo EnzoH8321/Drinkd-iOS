@@ -54,7 +54,7 @@ struct ListCardView: View {
 		default:
 			self.placementImage = "xmark.octagon"
 		}
-
+		
 	}
 
 	var body: some View {

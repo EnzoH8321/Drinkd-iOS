@@ -178,9 +178,14 @@ class drinkdViewModel: ObservableObject {
 			return print("NO PARTY LEADER FOUND")
 		}
 
+		//Verifies name in case it contains illegal characters
+
+
+		let unverifiedName = barList.name
 
 		let score: Int = barList.score
-		let name: String = barList.name
+		let name: String = unverifiedName.replacingOccurrences(of: "[\\[\\].#$]", with: "", options: .regularExpression, range: nil)
+		print(name)
 		let currentURLOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].url ?? "NO URL FOUND"
 		//Adds id of card for
 		let currentIDOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].id ?? "NO ID FOUND"
@@ -201,10 +206,6 @@ class drinkdViewModel: ObservableObject {
 			localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyID)")
 			localReference.child("topBars").child(self.model.memberId ?? "NO ID").child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
 		}
-
-
-		print(self.partyCreatorId)
-		print(self.memberId)
 	}
 
 
@@ -298,6 +299,8 @@ class drinkdViewModel: ObservableObject {
 							verifiedRestaurantArray.append(restaurant)
 						}
 
+//						print("Verified Restaurant Array -> \(verifiedRestaurantArray)")
+
 						for element in verifiedRestaurantArray {
 							let currentRestaurant = element
 							//Check to see if element in verifiedrestaurantarray is a duplicate
@@ -344,10 +347,14 @@ class drinkdViewModel: ObservableObject {
 							finalizedArray.append(element)
 						}
 
+//						print("nonDUplicate -> \(nonDuplicateArray)")
+//						print("verified restaurant -> \(verifiedRestaurantArray) ")
+
 						//sort so that highest scores are at the start
 						let sortedArray = finalizedArray.sorted {
 							$0.score > $1.score
 						}
+//						print("SORTED ARRAY -> \(sortedArray)")
 						//
 						self.model.appendTopThreeRestaurants(in: sortedArray)
 
@@ -504,13 +511,11 @@ class drinkdViewModel: ObservableObject {
 
 		} else if (!partyLeader) {
 
-			//			//You only have a party code if you joined a party
-			//			guard let verifiedPartyCode = self.partyCode else {
-			//				return print("No Party Code found")
-			//			}
+			guard let verifiedMemberId = self.memberId else {
+				return print("No Party Code Found")
+			}
 
-			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.memberId)").child("topBars").child("\(verifiedPartyID)")
-			print(localReference)
+			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(verifiedPartyID)").child("topBars").child("\(verifiedMemberId)")
 			localReference.removeValue()
 		}
 

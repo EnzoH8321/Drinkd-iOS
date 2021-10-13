@@ -190,17 +190,26 @@ struct drinkdModel {
 
 	mutating func appendTopThreeRestaurants(in array: [FirebaseRestaurantInfo]) {
 
+		//Clears array before adding elements.
+		topThreeRestaurantArray.removeAll()
+
+		for element in array {
+			topThreeRestaurantArray.append(element)
+		}
+
 		for element in 0..<array.count {
 
-			topThreeRestaurantArray.append(array[element])
 
 			switch (element) {
 			case 0:
-				topThreeChoicesObject.first = topThreeRestaurantArray[0]
+				let indexZero = topThreeRestaurantArray[0]
+				topThreeChoicesObject.first = FirebaseRestaurantInfo(name: indexZero.name, score: indexZero.score, url: indexZero.url, image_url: indexZero.image_url)
 			case 1:
-				topThreeChoicesObject.second = topThreeRestaurantArray[1]
+				let indexOne = topThreeRestaurantArray[1]
+				topThreeChoicesObject.second = FirebaseRestaurantInfo(name: indexOne.name, score: indexOne.score, url: indexOne.url, image_url: indexOne.image_url)
 			case 2:
-				topThreeChoicesObject.third = topThreeRestaurantArray[2]
+				let indexTwo = topThreeRestaurantArray[2]
+				topThreeChoicesObject.third = FirebaseRestaurantInfo(name: indexTwo.name, score: indexTwo.score, url: indexTwo.url, image_url: indexTwo.image_url)
 			default:
 				break
 			}
