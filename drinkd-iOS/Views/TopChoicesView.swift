@@ -22,6 +22,7 @@ struct TopChoicesView: View {
 				if (viewModel.currentlyInParty && viewModel.firstPlace.image_url != "") {
 					ListCardView(restaurantInfo: self.viewModel.firstPlace, placementImage: 1)
 						.frame(width: abs(globalWidth - 20))
+						.frame(idealWidth: globalWidth - 20, maxHeight: globalHeight / 2)
 
 					if (viewModel.currentlyInParty && viewModel.secondPlace.image_url != "") {
 						ListCardView(restaurantInfo: self.viewModel.secondPlace, placementImage: 2)
@@ -38,12 +39,9 @@ struct TopChoicesView: View {
 					Text("Join or Create your own party to see your top choices")
 						.font(.largeTitle)
 				}
-
 			}
-			.frame(width: globalWidth, height: globalHeight)
+			.frame(width: globalWidth)
 		}
-
-
 	}
 
 }

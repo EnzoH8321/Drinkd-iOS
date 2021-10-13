@@ -71,7 +71,7 @@ struct ListCardView: View {
 				VStack {
 
 					RemoteImageLoader(url: "\(restaurantInfo.image_url)")
-						.frame(width: globalWidth )
+						.frame(width: globalWidth)
 						.cornerRadius(radius: CardSpecificStyle.cornerRadius, corners: [.topLeft, .topRight])
 
 					HStack {
@@ -80,15 +80,14 @@ struct ListCardView: View {
 							.scaledToFit()
 							.frame(width: 25)
 						Spacer()
-						VStack{
+						VStack(alignment: .leading) {
 							Text("\(restaurantInfo.name)")
 							Text("Votes: \(restaurantInfo.score)")
 						}
+//						.frame(maxWidth: globalWidth / 2)
 					}
 					.padding([.leading, .trailing], globalWidth / 4)
-
 				}
-
 			}
 			.frame(width: globalWidth, height: globalHeight, alignment: .center)
 		}
