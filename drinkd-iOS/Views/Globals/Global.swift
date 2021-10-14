@@ -21,3 +21,13 @@ enum AppShadow {
 enum CardSpecificStyle {
 	static let cornerRadius = CGFloat(25)
 }
+
+enum ButtonSyling {
+	static let frameHeight = CGFloat(20)
+	static let clipShape = Capsule()
+	static let buttonShadowColor = Color.black
+	static let buttonShadowRadius = CGFloat(4)
+	static let buttonShadowX = CGFloat(2)
+	static let buttonShadowY = CGFloat(1)
+	static let buttonTextColor = Color.black
+}

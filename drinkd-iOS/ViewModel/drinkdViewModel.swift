@@ -22,7 +22,7 @@ class drinkdViewModel: ObservableObject {
 
 	@Published var model = drinkdModel()
 	var removeSplashScreen = true
-	var currentlyInParty = false
+	var currentlyInParty = true
 	var queryPartyError = false
 	var restaurantList: [YelpApiBusinessSearchProperties] = []
 	var partyCreatorId: String?

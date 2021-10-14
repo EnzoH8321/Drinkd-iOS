@@ -36,13 +36,15 @@ struct TopChoicesView: View {
 					}
 
 				} else {
+					Spacer()
 					Text("Join or Create your own party to see your top choices")
 						.font(.largeTitle)
+					Spacer()
 				}
 			}
 			.frame(width: globalWidth)
 		}
-		//Sets image url for each card to an empty string. Have to do this because views appear before image can load.
+		//Sets image url for each card to an empty string. 
 		.onDisappear(perform: {
 			viewModel.removeImageUrl()
 		})

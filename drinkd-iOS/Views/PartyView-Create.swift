@@ -41,6 +41,13 @@ struct PartyView_Create: View {
 			.keyboardType(.numberPad)
 			//
 			CreatePartyButton(name: partyName, votes: winningVoteAmount)
+				.padding(20)
+				.frame(height: ButtonSyling.frameHeight)
+				.padding()
+				.background(AppColors.primaryColor)
+				.clipShape(ButtonSyling.clipShape)
+				.shadow(color: ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y: ButtonSyling.buttonShadowY)
+				.padding(20)
 
 			
 			//
@@ -49,6 +56,7 @@ struct PartyView_Create: View {
 	}
 
 	private struct CreatePartyButton: View {
+
 		@EnvironmentObject var viewModel: drinkdViewModel
 		@State private var showAlert: Bool = false
 
@@ -80,11 +88,12 @@ struct PartyView_Create: View {
 			.alert(isPresented: $showAlert) {
 				Alert(title: Text("Error"), message: Text("Check for Valid Name or Vote amount"))
 			}
+			.foregroundColor(ButtonSyling.buttonTextColor)
 			.padding(20)
-			.frame(height: 20)
+			.frame(height: ButtonSyling.frameHeight)
 			.padding()
 			.background(AppColors.primaryColor)
-			.clipShape(Capsule())
+			.clipShape(ButtonSyling.clipShape)
 		}
 	}
 
@@ -100,6 +109,5 @@ struct PartyView_Create: View {
 struct PartyView_Create_Previews: PreviewProvider {
 	static var previews: some View {
 		PartyView_Create()
-
 	}
 }

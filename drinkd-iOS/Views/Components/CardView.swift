@@ -88,6 +88,7 @@ struct CardView: View {
 								.scaledToFit()
 								.frame(width: 40)
 							Text("\(restaurantAddress1)  \n\(restaurantCity)")
+								.padding([.leading], 10)
 
 						}
 						HStack {
@@ -96,6 +97,7 @@ struct CardView: View {
 								.scaledToFit()
 								.frame(width: 40)
 							Text("\(restaurantPhoneNumber)")
+								.padding([.leading], 10)
 						}
 						//
 						if (optionsPickup) {
@@ -105,6 +107,7 @@ struct CardView: View {
 									.scaledToFit()
 									.frame(width: 40)
 								Text("Pickup Available")
+									.padding([.leading], 10)
 							}
 						}
 						if (optionsDelivery) {
@@ -114,6 +117,7 @@ struct CardView: View {
 									.scaledToFit()
 									.frame(width: 40)
 								Text("Delivery Available")
+									.padding([.leading], 10)
 							}
 						}
 						if (optionsReservations) {
@@ -123,6 +127,7 @@ struct CardView: View {
 									.scaledToFit()
 									.frame(width: 40)
 								Text("Reservations Available")
+									.padding([.leading], 10)
 							}
 						}
 						//
@@ -162,6 +167,31 @@ struct CardView: View {
 
 	}
 }
+
+struct YelpDetailButton: View {
+	@Environment(\.openURL) var openURL
+	let buttonName: String
+	let yelpURL: String
+
+	var body: some View {
+		Button {
+			guard let url = URL(string: "\(yelpURL)") else {
+				return print("BAD URL")
+			}
+			openURL(url)
+		} label: {
+			Text("\(buttonName)")
+				.padding(20)
+				.foregroundColor(ButtonSyling.buttonTextColor)
+		}
+		.frame(height: ButtonSyling.frameHeight )
+		.padding()
+		.background(AppColors.primaryColor)
+		.clipShape(ButtonSyling.clipShape)
+		.shadow(color: ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y: ButtonSyling.buttonShadowY)
+	}
+}
+
 
 struct CardView_Previews: PreviewProvider {
 

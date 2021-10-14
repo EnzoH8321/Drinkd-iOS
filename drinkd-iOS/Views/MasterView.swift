@@ -66,9 +66,6 @@ struct MasterView: View {
 						switch (tabVal) {
 						case 2 :
 							print("tab 2 selected")
-//							print(viewModel.firstPlace)
-//							print(viewModel.secondPlace)
-//							print(viewModel.thirdPlace)
 							viewModel.calculateTopThreeRestaurants()
 						default:
 							break

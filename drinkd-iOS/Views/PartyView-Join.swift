@@ -46,11 +46,15 @@ struct PartyView_Join: View {
 			.alert(isPresented: $viewModel.queryPartyError) {
 				Alert(title: Text("Error"), message: Text("Party Does not exists"))
 			}
+			.foregroundColor(ButtonSyling.buttonTextColor)
 			.padding(20)
-			.frame(height: 20)
+			.frame(height: ButtonSyling.frameHeight)
 			.padding()
 			.background(AppColors.primaryColor)
-			.clipShape(Capsule())
+			.clipShape(ButtonSyling.clipShape)
+			.shadow(color: ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y: ButtonSyling.buttonShadowY)
+			.padding(20)
+
 		}
 	}
 
@@ -61,5 +65,6 @@ struct PartyView_Join: View {
 struct PartyView_Join_Previews: PreviewProvider {
 	static var previews: some View {
 		PartyView_Join()
+			.environmentObject(drinkdViewModel())
 	}
 }

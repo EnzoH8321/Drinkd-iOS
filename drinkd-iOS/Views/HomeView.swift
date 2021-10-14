@@ -61,6 +61,7 @@ struct HomeView: View {
 				.padding()
 				.background(AppColors.primaryColor)
 				.clipShape(Capsule())
+				.shadow(color: ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y: ButtonSyling.buttonShadowY)
 		}
 	}
 
