@@ -9,23 +9,37 @@ import SwiftUI
 
 struct Star: View {
 	@EnvironmentObject var viewModel: drinkdViewModel
+	@State private var hasBeenTapped = false
+	@State private var rotationAmount = 0.0
 
 	let starValue: Int
 
-    var body: some View {
+	var body: some View {
 		Image(systemName: viewModel.currentScoreOfTopCard < 0 || starValue > viewModel.currentScoreOfTopCard ? "star" : "star.fill")
 			.resizable()
-			.foregroundColor(AppColors.primaryColor)
+			.foregroundColor(AppColors.secondColor)
+			.rotationEffect(.degrees(rotationAmount), anchor: .center)
+			.animation(.default)
 			.onTapGesture {
-					viewModel.whenStarIsTapped(getPoints: starValue)
+
+				if (hasBeenTapped) {
+					rotationAmount = 0.0
+					hasBeenTapped = false
+
+				} else {
+				 rotationAmount = 360.0
+				 hasBeenTapped = true
+				}
+
+				viewModel.whenStarIsTapped(getPoints: starValue)
 			}
 
-    }
+	}
 }
 
 struct Star_Previews: PreviewProvider {
-    static var previews: some View {
+	static var previews: some View {
 		Star(starValue: 5)
 			.environmentObject(drinkdViewModel())
-    }
+	}
 }

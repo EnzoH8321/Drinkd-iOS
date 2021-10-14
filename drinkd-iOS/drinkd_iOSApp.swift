@@ -28,9 +28,6 @@ struct drinkd_iOSApp: App {
 			MasterView()
 				.environment(\.managedObjectContext, persistenceController.container.viewContext)
 				.environmentObject(viewModel)
-//				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-//					print("app has started")
-//				}
 		}
 
 		

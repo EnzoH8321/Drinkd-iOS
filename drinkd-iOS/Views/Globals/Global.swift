@@ -11,6 +11,7 @@ import SwiftUI
 enum AppColors {
 	//use fractions to make it over 1
 	static let primaryColor: Color = Color(red: 233 / 255, green: 29 / 255, blue: 27 / 255)
+	static let secondColor: Color = Color(red: 255 / 255, green: 204 / 255, blue: 0 / 255)
 }
 
 enum AppShadow {

@@ -10,8 +10,6 @@ import SwiftUI
 struct HomeView: View {
 	@EnvironmentObject var viewModel: drinkdViewModel
 
-	//	@State var currentScore = 0
-
 	var body: some View {
 		GeometryReader{ proxy in
 
@@ -43,7 +41,6 @@ struct HomeView: View {
 					SubmitButton()
 						.onTapGesture {
 							viewModel.submitRestaurantScore()
-							
 						}
 				}
 

@@ -22,7 +22,7 @@ class drinkdViewModel: ObservableObject {
 
 	@Published var model = drinkdModel()
 	var removeSplashScreen = true
-	var currentlyInParty = true
+	var currentlyInParty = false
 	var queryPartyError = false
 	var restaurantList: [YelpApiBusinessSearchProperties] = []
 	var partyCreatorId: String?
@@ -185,7 +185,7 @@ class drinkdViewModel: ObservableObject {
 
 		let score: Int = barList.score
 		let name: String = unverifiedName.replacingOccurrences(of: "[\\[\\].#$]", with: "", options: .regularExpression, range: nil)
-		print(name)
+
 		let currentURLOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].url ?? "NO URL FOUND"
 		//Adds id of card for
 		let currentIDOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].id ?? "NO ID FOUND"
@@ -299,8 +299,6 @@ class drinkdViewModel: ObservableObject {
 							verifiedRestaurantArray.append(restaurant)
 						}
 
-//						print("Verified Restaurant Array -> \(verifiedRestaurantArray)")
-
 						for element in verifiedRestaurantArray {
 							let currentRestaurant = element
 							//Check to see if element in verifiedrestaurantarray is a duplicate
@@ -347,14 +345,11 @@ class drinkdViewModel: ObservableObject {
 							finalizedArray.append(element)
 						}
 
-//						print("nonDUplicate -> \(nonDuplicateArray)")
-//						print("verified restaurant -> \(verifiedRestaurantArray) ")
-
 						//sort so that highest scores are at the start
 						let sortedArray = finalizedArray.sorted {
 							$0.score > $1.score
 						}
-//						print("SORTED ARRAY -> \(sortedArray)")
+
 						//
 						self.model.appendTopThreeRestaurants(in: sortedArray)
 

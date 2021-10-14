@@ -37,6 +37,7 @@ struct PartyView: View {
 					Button("Leave Party") {
 						self.viewModel.leaveParty()
 					}
+					.foregroundColor(ButtonSyling.buttonTextColor)
 					.padding(20)
 					.frame(height: ButtonSyling.frameHeight)
 					.padding()
