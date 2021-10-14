@@ -13,7 +13,15 @@ struct ThreeTopChoices {
 	var third: FirebaseRestaurantInfo?
 }
 
-struct FirebaseRestaurantInfo: Equatable {
+struct FirebaseRestaurantInfo: Equatable, Comparable {
+	static func < (lhs: FirebaseRestaurantInfo, rhs: FirebaseRestaurantInfo) -> Bool {
+		if (lhs.score == rhs.score) {
+			return	lhs.name > rhs.name
+		} else {
+		return	lhs.score > rhs.score
+		}
+	}
+
 	var name: String = ""
 	var score: Int = 0
 	var url: String = ""

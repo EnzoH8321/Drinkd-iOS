@@ -79,12 +79,13 @@ struct ListCardView: View {
 							.resizable()
 							.scaledToFit()
 							.frame(width: 25)
-						Spacer()
+
 						VStack(alignment: .leading) {
 							Text("\(restaurantInfo.name)")
 							Text("Votes: \(restaurantInfo.score)")
 						}
-//						.frame(maxWidth: globalWidth / 2)
+						.padding([.leading, .trailing], 25)
+
 					}
 					.padding([.leading, .trailing], globalWidth / 4)
 				}

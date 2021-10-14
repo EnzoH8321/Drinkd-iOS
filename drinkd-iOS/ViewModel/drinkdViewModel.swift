@@ -523,6 +523,11 @@ class drinkdViewModel: ObservableObject {
 		syncVMPropswithModelProps(inParty: self.model.currentlyInParty,  partyLeader: self.model.isPartyLeader)
 	}
 
+	func removeImageUrl() {
+		self.firstPlace.image_url = ""
+		self.secondPlace.image_url = ""
+		self.thirdPlace.image_url = ""
+	}
 }
 
 

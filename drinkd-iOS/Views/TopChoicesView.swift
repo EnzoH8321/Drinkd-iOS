@@ -42,6 +42,10 @@ struct TopChoicesView: View {
 			}
 			.frame(width: globalWidth)
 		}
+		//Sets image url for each card to an empty string. Have to do this because views appear before image can load.
+		.onDisappear(perform: {
+			viewModel.removeImageUrl()
+		})
 	}
 
 }

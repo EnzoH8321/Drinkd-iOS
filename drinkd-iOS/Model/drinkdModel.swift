@@ -195,7 +195,10 @@ struct drinkdModel {
 
 		for element in array {
 			topThreeRestaurantArray.append(element)
+
 		}
+		//Sorts tie-breaker. If two cards have the same score, then the one with the earlier name goes first
+		topThreeRestaurantArray.sort()
 
 		for element in 0..<array.count {
 
@@ -224,10 +227,6 @@ struct drinkdModel {
 			self.isPartyLeader = true
 		}
 	}
-
-//	mutating func setPartyCode(partyCode: String) {
-//		self.partyCode = partyCode
-//	}
 
 	mutating func leaveParty() {
 		self.currentlyInParty = false
