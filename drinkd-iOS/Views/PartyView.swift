@@ -20,10 +20,13 @@ struct PartyView: View {
 						JoinOrCreatePartyButton(buttonName: "Join Party")
 					}
 					.padding(.bottom, 55)
+					.buttonStyle(DefaultAppButton())
 
 					NavigationLink(destination: PartyView_Create()) {
 						JoinOrCreatePartyButton(buttonName: "Create Party")
+
 					}
+					.buttonStyle(DefaultAppButton())
 
 				}
 			} else {
@@ -37,14 +40,7 @@ struct PartyView: View {
 					Button("Leave Party") {
 						self.viewModel.leaveParty()
 					}
-					.foregroundColor(ButtonSyling.buttonTextColor)
-					.padding(20)
-					.frame(height: ButtonSyling.frameHeight)
-					.padding()
-					.background(AppColors.primaryColor)
-					.clipShape(ButtonSyling.clipShape)
-					.shadow(color: ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y: ButtonSyling.buttonShadowY)
-					.padding(20)
+					.buttonStyle(DefaultAppButton())
 				}
 			}
 		}
@@ -60,13 +56,6 @@ struct JoinOrCreatePartyButton: View {
 	var body: some View {
 
 		Text("\(buttonName)")
-			.foregroundColor(ButtonSyling.buttonTextColor)
-			.padding(20)
-			.frame(height: ButtonSyling.frameHeight)
-			.padding()
-			.background(AppColors.primaryColor)
-			.clipShape(ButtonSyling.clipShape)
-			.shadow(color: ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y: ButtonSyling.buttonShadowY)
 	}
 }
 

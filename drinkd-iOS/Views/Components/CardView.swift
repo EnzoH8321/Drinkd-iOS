@@ -181,14 +181,8 @@ struct YelpDetailButton: View {
 			openURL(url)
 		} label: {
 			Text("\(buttonName)")
-				.padding(20)
-				.foregroundColor(ButtonSyling.buttonTextColor)
 		}
-		.frame(height: ButtonSyling.frameHeight )
-		.padding()
-		.background(AppColors.primaryColor)
-		.clipShape(ButtonSyling.clipShape)
-		.shadow(color: ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y: ButtonSyling.buttonShadowY)
+		.buttonStyle(DefaultAppButton())
 	}
 }
 

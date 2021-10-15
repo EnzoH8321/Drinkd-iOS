@@ -41,15 +41,6 @@ struct PartyView_Create: View {
 			.keyboardType(.numberPad)
 			//
 			CreatePartyButton(name: partyName, votes: winningVoteAmount)
-				.padding(20)
-				.frame(height: ButtonSyling.frameHeight)
-				.padding()
-				.background(AppColors.primaryColor)
-				.clipShape(ButtonSyling.clipShape)
-				.shadow(color: ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y: ButtonSyling.buttonShadowY)
-				.padding(20)
-
-			
 			//
 			Spacer()
 		}
@@ -88,12 +79,7 @@ struct PartyView_Create: View {
 			.alert(isPresented: $showAlert) {
 				Alert(title: Text("Error"), message: Text("Check for Valid Name or Vote amount"))
 			}
-			.foregroundColor(ButtonSyling.buttonTextColor)
-			.padding(20)
-			.frame(height: ButtonSyling.frameHeight)
-			.padding()
-			.background(AppColors.primaryColor)
-			.clipShape(ButtonSyling.clipShape)
+			.buttonStyle(DefaultAppButton())
 		}
 	}
 

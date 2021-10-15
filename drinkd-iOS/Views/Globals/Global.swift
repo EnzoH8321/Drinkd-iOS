@@ -23,6 +23,7 @@ enum CardSpecificStyle {
 	static let cornerRadius = CGFloat(25)
 }
 
+//Button
 enum ButtonSyling {
 	static let frameHeight = CGFloat(20)
 	static let clipShape = Capsule()
@@ -31,4 +32,20 @@ enum ButtonSyling {
 	static let buttonShadowX = CGFloat(2)
 	static let buttonShadowY = CGFloat(1)
 	static let buttonTextColor = Color.black
+}
+
+struct DefaultAppButton: ButtonStyle {
+	func makeBody(configuration: Configuration) -> some View {
+		configuration
+			.label
+			.foregroundColor(ButtonSyling.buttonTextColor)
+			.padding(20)
+			.frame(height: ButtonSyling.frameHeight)
+			.padding()
+			.background(AppColors.primaryColor)
+			.clipShape(ButtonSyling.clipShape)
+			.shadow(color: configuration.isPressed ? Color.gray : ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y:  ButtonSyling.buttonShadowY)
+			.opacity(configuration.isPressed ? 0.5 : 1)
+			.padding(20)
+	}
 }
