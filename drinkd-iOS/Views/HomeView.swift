@@ -39,9 +39,7 @@ struct HomeView: View {
 						.padding([.top], globalHeight / 25)
 					}
 					SubmitButton()
-						.onTapGesture {
-							viewModel.submitRestaurantScore()
-						}
+						.buttonStyle(CardInfoButton())
 				}
 
 			}
@@ -50,15 +48,11 @@ struct HomeView: View {
 	}
 
 	private struct SubmitButton: View {
+
+		@EnvironmentObject var viewModel: drinkdViewModel
 		
 		var body: some View {
-			Text("Submit")
-				.padding(20)
-				.frame(height: 20)
-				.padding()
-				.background(AppColors.primaryColor)
-				.clipShape(Capsule())
-				.shadow(color: ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y: ButtonSyling.buttonShadowY)
+			Button("Submit", action: {	viewModel.submitRestaurantScore()})
 		}
 	}
 

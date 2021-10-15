@@ -182,7 +182,7 @@ struct YelpDetailButton: View {
 		} label: {
 			Text("\(buttonName)")
 		}
-		.buttonStyle(DefaultAppButton())
+		.buttonStyle(CardInfoButton())
 	}
 }
 

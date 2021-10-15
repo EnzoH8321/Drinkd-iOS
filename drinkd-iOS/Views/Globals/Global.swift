@@ -49,3 +49,19 @@ struct DefaultAppButton: ButtonStyle {
 			.padding(20)
 	}
 }
+
+struct CardInfoButton: ButtonStyle {
+	func makeBody(configuration: Configuration) -> some View {
+		configuration
+			.label
+			.foregroundColor(ButtonSyling.buttonTextColor)
+			.padding(20)
+			.frame(height: ButtonSyling.frameHeight)
+			.padding()
+			.background(AppColors.primaryColor)
+			.clipShape(ButtonSyling.clipShape)
+			.shadow(color: configuration.isPressed ? Color.gray : ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y:  ButtonSyling.buttonShadowY)
+			.opacity(configuration.isPressed ? 0.5 : 1)
+	
+	}
+}
