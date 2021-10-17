@@ -9,8 +9,8 @@ import SwiftUI
 
 @available(iOS 15.0, *)
 struct PartyView_Create: View {
-	@State var partyName: String = ""
-	@State var winningVoteAmount: String = ""
+	@State private var partyName: String = ""
+	@State private var winningVoteAmount: String = ""
 
 
 

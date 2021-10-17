@@ -10,7 +10,7 @@ import SwiftUI
 @available(iOS 15.0, *)
 struct PartyView_Join: View {
 
-	@State var partyCode: String = ""
+	@State private var partyCode: String = ""
 
 	var body: some View {
 

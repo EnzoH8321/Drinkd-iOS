@@ -13,7 +13,7 @@ struct MasterView: View {
 
 	@EnvironmentObject var viewModel: drinkdViewModel
 
-	@State var selectedTab: Int = 1
+	@State private var selectedTab: Int = 1
 	//Firebase
 	var ref = Database.database().reference()
 	

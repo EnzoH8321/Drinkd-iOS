@@ -9,10 +9,7 @@ import SwiftUI
 import Firebase
 
 
-enum userLevel: String {
-	case creator
-	case member
-}
+
 
 struct restaurantScoreInfo {
 	var name: String
@@ -27,6 +24,11 @@ struct drinkdModel {
 		case pickup
 		case delivery
 		case restaurant_reservation
+	}
+
+	private enum userLevel: String {
+		case creator
+		case member
 	}
 	
 	private(set) var counter: Int = 10
@@ -219,7 +221,7 @@ struct drinkdModel {
 		}
 	}
 
-	mutating func setUserLevel(level: userLevel) {
+	private mutating func setUserLevel(level: userLevel) {
 		switch (level) {
 		case .member:
 			self.isPartyLeader = false
