@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 import Firebase
-
+import FirebaseMessaging
 
 class drinkdViewModel: ObservableObject {
 
@@ -50,6 +50,8 @@ class drinkdViewModel: ObservableObject {
 		locationFetcher = LocationFetcher()
 		locationFetcher.start()
 	}
+
+
 
 	func fetchRestaurantsOnStartUp() {
 		//1.Creating the URL we want to read.

@@ -20,7 +20,7 @@ struct RemoteImageLoader: View {
 			guard let parsedURL = URL(string: url) else {
 				return 
 			}
-			print(parsedURL)
+			
 			URLSession.shared.dataTask(with: parsedURL) { data, response, error in
 				if let data = data, data.count > 0 {
 					self.data = data

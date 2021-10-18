@@ -65,7 +65,7 @@ struct MasterView: View {
 					.onChange(of: selectedTab) {tabVal in
 						switch (tabVal) {
 						case 2 :
-							print("tab 2 selected")
+							
 							viewModel.calculateTopThreeRestaurants()
 						default:
 							break
