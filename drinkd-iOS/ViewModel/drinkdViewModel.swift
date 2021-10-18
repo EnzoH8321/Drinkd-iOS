@@ -410,8 +410,7 @@ class drinkdViewModel: ObservableObject {
 			}
 
 		})
-
-	}
+		}
 
 	//Helper function that lets the VM props update with whats in the Model
 	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, inParty currentlyInParty: Bool? = nil, getURL partyURL: String? = nil, getCardIndex cardIndex: Int? = nil, topBar topBarList: [String: restaurantScoreInfo]? = nil, topCardScore currentTopCard: Int? = nil, firstPlace: FirebaseRestaurantInfo? = nil, secondPlace: FirebaseRestaurantInfo? = nil, thirdPlace: FirebaseRestaurantInfo? = nil, partyLeader: Bool? = nil, partyCode: String? = nil ) {
@@ -494,6 +493,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	func leaveParty() {
+		objectWillChange.send()
 
 		guard let partyLeader = self.isPartyLeader else {
 			return print("You are not in a party")

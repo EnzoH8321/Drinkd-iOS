@@ -67,7 +67,7 @@ struct PartyView_Create: View {
 				let filteredName = name.filter { "abcdefghijklmnopqrstuvwxyz".contains($0) }
 				let nameLength = name.count
 
-				if (filteredVotes.count == 0 || filteredName.count == 0 || nameLength > 8 || nameLength == 0) {
+				if ( nameLength > 8 || nameLength == 0) {
 					showAlert = true
 
 				} else {
@@ -77,7 +77,7 @@ struct PartyView_Create: View {
 
 			}
 			.alert(isPresented: $showAlert) {
-				Alert(title: Text("Error"), message: Text("Check for Valid Name or Vote amount"))
+				Alert(title: Text("Error"), message: Text("Check for Valid Name or Vote Amount"))
 			}
 			.buttonStyle(DefaultAppButton())
 		}
