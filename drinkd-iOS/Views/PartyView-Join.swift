@@ -42,6 +42,7 @@ struct PartyView_Join: View {
 			Button("Join Party") {
 				viewModel.JoinExistingParty(getCode: self.partyCode)
 				viewModel.fetchRestaurantsAfterJoiningParty()
+				print(viewModel.queryPartyError)
 			}
 			.alert(isPresented: $viewModel.queryPartyError) {
 				Alert(title: Text("Error"), message: Text("Party Does not exists"))

@@ -37,7 +37,7 @@ struct TopChoicesView: View {
 
 				} else {
 					Spacer()
-					Text("Join or Create your own party to see your top choices")
+					Text("There are currently no Top Choices!")
 						.font(.largeTitle)
 					Spacer()
 				}

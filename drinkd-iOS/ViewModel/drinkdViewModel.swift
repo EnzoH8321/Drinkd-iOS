@@ -378,6 +378,7 @@ class drinkdViewModel: ObservableObject {
 			if(!snapshot.exists()) {
 				print("party does not exist")
 				self.queryPartyError = true
+				return
 			} else {
 				//Organizes values into a usable swift object
 				guard let value = snapshot.value as? [String: AnyObject] else {

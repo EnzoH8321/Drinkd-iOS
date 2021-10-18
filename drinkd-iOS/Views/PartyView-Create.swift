@@ -30,15 +30,15 @@ struct PartyView_Create: View {
 			}
 			.border(Color(UIColor.separator))
 			.textFieldStyle(.roundedBorder)
-			//
-			TextField("Set You Vote Amount", text: $winningVoteAmount) { isEditing in
-				
-			} onCommit: {
-
-			}
-			.border(Color(UIColor.separator))
-			.textFieldStyle(.roundedBorder)
-			.keyboardType(.numberPad)
+			//Removed Vote amount for now
+//			TextField("Set You Vote Amount", text: $winningVoteAmount) { isEditing in
+//
+//			} onCommit: {
+//
+//			}
+//			.border(Color(UIColor.separator))
+//			.textFieldStyle(.roundedBorder)
+//			.keyboardType(.numberPad)
 			//
 			CreatePartyButton(name: partyName, votes: winningVoteAmount)
 			//

@@ -22,33 +22,31 @@ struct PartyCardView: View {
 					RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 						.fill(Color.white)
 						.shadow(radius: AppShadow.lowShadowRadius)
+						.frame(width: globalWidth - 30, alignment: .center)
 
 					VStack (alignment: .leading) {
 						Text("Party ID:")
 							.font(.largeTitle)
 
-						Text("\(viewModel.partyCreatorId ?? "Party not found")")
+						Text("\(viewModel.partyCreatorId ?? "Party ID not found")")
 							.font(.title)
 
 						Text("Partyname:")
 							.font(.largeTitle)
 						Text("\(viewModel.partyName ?? "Party Name not Found")")
 							.font(.title)
-						
-						Text("Votes to Win:")
-							.font(.largeTitle)
-						Text("\(viewModel.partyMaxVotes ?? "Party not found") ")
-							.font(.title)
-
+						//Will implement in the future
+//						Text("Votes to Win:")
+//							.font(.largeTitle)
+//						Text("\(viewModel.partyMaxVotes ?? "Party not found") ")
+//							.font(.title)
 						Button("Leave Party") {
 							self.viewModel.leaveParty()
 						}
 						.buttonStyle(DefaultAppButton())
 					}
-					
 				}
-				.frame(height: globalHeight / 1.5)
-				
+				.frame(width: globalWidth, height: globalHeight / 1.5)
 				Spacer()
 			}
 		}
