@@ -1,0 +1,6 @@
+framework module Pods_drinkd_iOS {
+  umbrella header "Pods-drinkd-iOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

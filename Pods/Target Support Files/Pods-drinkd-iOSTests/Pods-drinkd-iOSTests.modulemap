@@ -1,0 +1,6 @@
+framework module Pods_drinkd_iOSTests {
+  umbrella header "Pods-drinkd-iOSTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
