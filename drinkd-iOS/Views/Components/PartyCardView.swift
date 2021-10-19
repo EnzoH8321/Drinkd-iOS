@@ -23,14 +23,15 @@ struct PartyCardView: View {
 					RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 						.fill(Color.white)
 						.shadow(radius: AppShadow.lowShadowRadius)
-						.frame(width: globalWidth - 50, alignment: .center)
+						.frame(width: abs(globalWidth - 50), alignment: .center)
 
-					VStack (alignment: .leading) {
+					VStack (alignment: .center) {
 						Text("Party ID:")
 							.font(.largeTitle)
 
 						Text("\(viewModel.partyCreatorId ?? "Party ID not found")")
 							.font(.title)
+							.padding(.bottom, 25)
 
 						Text("Partyname:")
 							.font(.largeTitle)
