@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@available(iOS 15.0, *)
+
 struct PartyView_Join: View {
 
 	@State private var partyCode: String = ""
@@ -17,10 +17,10 @@ struct PartyView_Join: View {
 		VStack {
 			Text("Enter a Party Code Below")
 				.font(.title)
-			TextField("Party Code", text: $partyCode, prompt: Text("Party Code Here"))
+			TextField("Party Code Here", text: $partyCode)
 				.border(Color(UIColor.separator))
 				.textFieldStyle(.roundedBorder)
-			
+
 			JoinPartyButton(code: partyCode)
 
 			Spacer()

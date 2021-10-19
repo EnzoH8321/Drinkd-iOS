@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@available(iOS 15.0, *)
+
 struct PartyView: View {
 
 	@EnvironmentObject var viewModel: drinkdViewModel
@@ -24,7 +24,6 @@ struct PartyView: View {
 
 					NavigationLink(destination: PartyView_Create()) {
 						JoinOrCreatePartyButton(buttonName: "Create Party")
-
 					}
 					.buttonStyle(DefaultAppButton())
 
@@ -39,18 +38,16 @@ struct PartyView: View {
 }
 
 //Used in the PartyView. Not a button to fit in with the navigation view requirements
-@available(iOS 15.0, *)
 struct JoinOrCreatePartyButton: View {
 
 	let buttonName: String
 
 	var body: some View {
-
 		Text("\(buttonName)")
 	}
 }
 
-@available(iOS 15.0, *)
+
 struct PartyView_Previews: PreviewProvider {
 	static var previews: some View {
 		PartyView()
