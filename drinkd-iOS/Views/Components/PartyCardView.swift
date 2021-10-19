@@ -16,13 +16,14 @@ struct PartyCardView: View {
 
 			let globalWidth = proxy.frame(in: .global).width
 			let globalHeight = proxy.frame(in: .global).height
+			
 			VStack {
 				Spacer()
 				ZStack {
 					RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 						.fill(Color.white)
 						.shadow(radius: AppShadow.lowShadowRadius)
-						.frame(width: globalWidth - 30, alignment: .center)
+						.frame(width: globalWidth - 50, alignment: .center)
 
 					VStack (alignment: .leading) {
 						Text("Party ID:")
@@ -46,7 +47,7 @@ struct PartyCardView: View {
 						.buttonStyle(DefaultAppButton())
 					}
 				}
-				.frame(width: globalWidth, height: globalHeight / 1.5)
+				.frame(width: globalWidth, height: globalHeight / 1.25)
 				Spacer()
 			}
 		}

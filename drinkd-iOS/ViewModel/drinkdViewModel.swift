@@ -22,7 +22,7 @@ class drinkdViewModel: ObservableObject {
 
 	@Published var model = drinkdModel()
 	var removeSplashScreen = true
-	var currentlyInParty = false
+	var currentlyInParty = true
 	var queryPartyError = false
 	var restaurantList: [YelpApiBusinessSearchProperties] = []
 	var partyCreatorId: String?
@@ -273,7 +273,7 @@ class drinkdViewModel: ObservableObject {
 
 								for (keyForDetail, valueForDetail) in valueToDict {
 
-									if let detailAsString = valueForDetail as? String {
+									if valueForDetail is String {
 
 										switch (keyForDetail) {
 										case "url":
@@ -285,7 +285,7 @@ class drinkdViewModel: ObservableObject {
 										}
 
 									} else {
-										let detailAsNumber = valueForDetail as! Int
+										_ = valueForDetail as! Int
 
 										switch (keyForDetail) {
 										case "score":

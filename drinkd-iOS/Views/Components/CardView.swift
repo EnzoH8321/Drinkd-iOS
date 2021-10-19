@@ -65,6 +65,10 @@ struct CardView: View {
 	var body: some View {
 
 		GeometryReader { geo in
+
+			let globalWidth = proxy.frame(in: .global).width
+			let globalHeight = proxy.frame(in: .global).height
+
 			ZStack {
 
 				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
@@ -79,8 +83,7 @@ struct CardView: View {
 					Text("\(restaurantScore) / \(restaurantPrice)")
 						.font(.title3)
 					RemoteImageLoader(url: "\(restaurantImage)")
-					//						.scaledToFit()
-					//						.frame(width: localWidth, alignment: .center)
+
 					Group {
 						HStack {
 							Image(systemName: "house")

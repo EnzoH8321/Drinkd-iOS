@@ -23,7 +23,7 @@ struct PartyView_Create: View {
 			Text("Create Your Party")
 				.font(.title)
 			//
-			TextField("Choose a Party Name(Max 8 Characters)", text: $partyName ) { isEditing in
+			TextField("Choose a Party Name(Max 8 Characters, No Numbers)", text: $partyName ) { isEditing in
 
 			} onCommit: {
 
@@ -63,13 +63,12 @@ struct PartyView_Create: View {
 
 			Button("Create Party") {
 
-				let filteredVotes = votes.filter { "0123456789".contains($0) }
-				let filteredName = name.filter { "abcdefghijklmnopqrstuvwxyz".contains($0) }
+				let filteredName = name.filter { "0123456789".contains($0) }
 				let nameLength = name.count
 
-				if ( nameLength > 8 || nameLength == 0) {
+				if ( nameLength > 8 || nameLength == 0 || filteredName.count > 0) {
 					showAlert = true
-
+					return
 				} else {
 					viewModel.createNewParty(setVotes: self.votes, setName: self.name)
 					showAlert = false
@@ -82,7 +81,6 @@ struct PartyView_Create: View {
 			.buttonStyle(DefaultAppButton())
 		}
 	}
-
 
 }
 
