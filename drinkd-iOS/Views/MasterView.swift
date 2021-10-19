@@ -30,7 +30,7 @@ struct MasterView: View {
 						//HomeView
 						NavigationView {
 							HomeView()
-								.frame(width: globalWidth - 30 , height: globalHeight / 1.15)
+								.frame(width: globalWidth - 30 , height: globalHeight / 1.20)
 								.navigationBarTitle("")
 								.navigationBarHidden(true)
 						}.navigationViewStyle(StackNavigationViewStyle())

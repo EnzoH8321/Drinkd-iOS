@@ -23,38 +23,12 @@ struct HomeView: View {
 					}
 
 				}
-
-				if (viewModel.currentlyInParty) {
-					Spacer()
-					HStack {
-						Group {
-							Star( starValue: 1)
-							Star( starValue: 2)
-							Star( starValue: 3)
-							Star( starValue: 4)
-							Star( starValue: 5)
-						}
-						.scaledToFit()
-						.frame(height: 50)
-						.padding([.top], globalHeight / 25)
-					}
-					SubmitButton()
-						.buttonStyle(CardInfoButton())
-				}
-
 			}
 		}
 
 	}
 
-	private struct SubmitButton: View {
-
-		@EnvironmentObject var viewModel: drinkdViewModel
-		
-		var body: some View {
-			Button("Submit", action: {	viewModel.submitRestaurantScore()})
-		}
-	}
+	
 
 }
 

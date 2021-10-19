@@ -22,7 +22,7 @@ struct TopChoicesView: View {
 				if (viewModel.currentlyInParty && viewModel.firstPlace.image_url != "") {
 					ListCardView(restaurantInfo: self.viewModel.firstPlace, placementImage: 1)
 						.frame(width: abs(globalWidth - 20))
-						.frame(idealWidth: globalWidth - 20, maxHeight: globalHeight / 2)
+						.frame(maxHeight: globalHeight / 2)
 
 					if (viewModel.currentlyInParty && viewModel.secondPlace.image_url != "") {
 						ListCardView(restaurantInfo: self.viewModel.secondPlace, placementImage: 2)

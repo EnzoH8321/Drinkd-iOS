@@ -78,7 +78,7 @@ struct ListCardView: View {
 						Image(systemName: self.placementImage)
 							.resizable()
 							.scaledToFit()
-							.frame(width: 25)
+							.frame(width: 35)
 
 						VStack(alignment: .leading) {
 							Text("\(restaurantInfo.name)")
