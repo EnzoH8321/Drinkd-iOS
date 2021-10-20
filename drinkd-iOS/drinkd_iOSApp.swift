@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 import Firebase
-import FirebaseMessaging
+
 
 @available(iOS 15.0, *)
 @main

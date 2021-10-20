@@ -26,11 +26,11 @@ struct TopChoicesView: View {
 
 					if (viewModel.currentlyInParty && viewModel.secondPlace.image_url != "") {
 						ListCardView(restaurantInfo: self.viewModel.secondPlace, placementImage: 2)
-							.frame(width: globalWidth - 20)
+							.frame(width: abs(globalWidth - 20))
 						if (viewModel.currentlyInParty && viewModel.thirdPlace.image_url != "") {
 
 							ListCardView(restaurantInfo: self.viewModel.thirdPlace, placementImage: 3)
-								.frame(width: globalWidth - 20)
+								.frame(width: abs(globalWidth - 20))
 								.padding([.bottom], 10)
 						}
 					}

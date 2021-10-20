@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 import Firebase
-import FirebaseMessaging
 
 class drinkdViewModel: ObservableObject {
 

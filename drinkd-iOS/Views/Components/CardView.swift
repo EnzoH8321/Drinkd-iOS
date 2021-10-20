@@ -103,34 +103,36 @@ struct CardView: View {
 								.padding([.leading], 10)
 						}
 						//
-						if (optionsPickup) {
-							HStack {
-								Image(systemName: "figure.walk")
-									.resizable()
-									.scaledToFit()
-									.frame(width: 40)
-								Text("Pickup Available")
-									.padding([.leading], 10)
+						if (!viewModel.currentlyInParty) {
+							if (optionsPickup) {
+								HStack {
+									Image(systemName: "figure.walk")
+										.resizable()
+										.scaledToFit()
+										.frame(width: 40)
+									Text("Pickup Available")
+										.padding([.leading], 10)
+								}
 							}
-						}
-						if (optionsDelivery) {
-							HStack {
-								Image(systemName: "bicycle")
-									.resizable()
-									.scaledToFit()
-									.frame(width: 40)
-								Text("Delivery Available")
-									.padding([.leading], 10)
+							if (optionsDelivery) {
+								HStack {
+									Image(systemName: "bicycle")
+										.resizable()
+										.scaledToFit()
+										.frame(width: 40)
+									Text("Delivery Available")
+										.padding([.leading], 10)
+								}
 							}
-						}
-						if (optionsReservations) {
-							HStack {
-								Image(systemName: "square.and.pencil")
-									.resizable()
-									.scaledToFit()
-									.frame(width: 40)
-								Text("Reservations Available")
-									.padding([.leading], 10)
+							if (optionsReservations) {
+								HStack {
+									Image(systemName: "square.and.pencil")
+										.resizable()
+										.scaledToFit()
+										.frame(width: 40)
+									Text("Reservations Available")
+										.padding([.leading], 10)
+								}
 							}
 						}
 						//
