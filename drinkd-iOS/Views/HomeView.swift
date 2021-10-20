@@ -17,11 +17,17 @@ struct HomeView: View {
 
 			VStack {
 				ZStack {
-					ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
-						CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
-							.stacked(at: element, in: viewModel.restaurantList.count)
+					if (UIDevice.current.userInterfaceIdiom == .phone) {
+						ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
+							CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
+								.stacked(at: element, in: viewModel.restaurantList.count)
+						}
+					} else if (UIDevice.current.userInterfaceIdiom == .pad) {
+						ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
+							CardViewIpad(in: viewModel.restaurantList[element], forView: self.viewModel)
+								.stacked(at: element, in: viewModel.restaurantList.count)
+						}
 					}
-
 				}
 			}
 		}

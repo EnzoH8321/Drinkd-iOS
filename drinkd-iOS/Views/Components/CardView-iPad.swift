@@ -11,7 +11,7 @@ import SwiftUI
 
 
 
-struct CardView: View {
+struct CardViewIpad: View {
 
 	private enum CardPadding: CGFloat{
 		case smallPadding = 4
@@ -42,19 +42,18 @@ struct CardView: View {
 
 	//We use optionals because the API can return null for some properties
 	init(in restaurantDetails: YelpApiBusinessSearchProperties, forView viewModel: drinkdViewModel) {
-		self.restaurantTitle = restaurantDetails.name ?? "Name not found"
-		self.restaurantCategories = restaurantDetails.categories?[0].title ?? "None"
+		self.restaurantTitle = restaurantDetails.name ?? ""
+		self.restaurantCategories = restaurantDetails.categories?[0].title ?? ""
 		self.restaurantScore = Int(restaurantDetails.rating ?? 0)
-		self.restaurantPrice = restaurantDetails.price ?? "Not Found"
-		self.restaurantImage = restaurantDetails.image_url ?? "Not Found"
-		self.restaurantCity = restaurantDetails.location?.city ?? "Not Found"
-		self.restaurantAddress1 = restaurantDetails.location?.address1 ?? "Not Found"
+		self.restaurantPrice = restaurantDetails.price ?? ""
+		self.restaurantImage = restaurantDetails.image_url ?? ""
+		self.restaurantCity = restaurantDetails.location?.city ?? ""
+		self.restaurantAddress1 = restaurantDetails.location?.address1 ?? ""
 		self.restaurantAddress2 = restaurantDetails.location?.address2 ?? ""
 		self.restaurantPhoneNumber  = restaurantDetails.phone ?? ""
 		self.restaurantZipCode = restaurantDetails.location?.zip_code ?? ""
 		self.restaurantState = restaurantDetails.location?.state ?? ""
 		self.restaurantURL = restaurantDetails.url ?? ""
-
 		self.optionsDelivery = restaurantDetails.deliveryAvailable ?? false
 		self.optionsReservations = restaurantDetails.reservationAvailable ?? false
 		self.optionsPickup = restaurantDetails.pickUpAvailable ?? false
@@ -78,29 +77,31 @@ struct CardView: View {
 					Text("\(restaurantTitle)")
 						.font(.largeTitle)
 					Text("\(restaurantCategories)")
-						.font(.title2)
+						.font(.largeTitle)
 					Text("\(restaurantScore) / \(restaurantPrice)")
-						.font(.title3)
+						.font(.largeTitle)
 					RemoteImageLoader(url: "\(restaurantImage)")
-//						.frame(maxHeight: 300)
+
 
 					Group {
 						HStack {
 							Image(systemName: "house")
 								.resizable()
 								.scaledToFit()
-								.frame(width: 40)
+								.frame(width: 50)
 							Text("\(restaurantAddress1)  \n\(restaurantCity)")
 								.padding([.leading], 10)
+								.font(.title2)
 
 						}
 						HStack {
 							Image(systemName: "phone")
 								.resizable()
 								.scaledToFit()
-								.frame(width: 40)
+								.frame(width: 50)
 							Text("\(restaurantPhoneNumber)")
 								.padding([.leading], 10)
+								.font(.title2)
 						}
 						//
 						if (optionsPickup) {
@@ -108,9 +109,10 @@ struct CardView: View {
 								Image(systemName: "figure.walk")
 									.resizable()
 									.scaledToFit()
-									.frame(width: 40)
+									.frame(width: 50)
 								Text("Pickup Available")
 									.padding([.leading], 10)
+									.font(.title2)
 							}
 						}
 						if (optionsDelivery) {
@@ -118,9 +120,10 @@ struct CardView: View {
 								Image(systemName: "bicycle")
 									.resizable()
 									.scaledToFit()
-									.frame(width: 40)
+									.frame(width: 50)
 								Text("Delivery Available")
 									.padding([.leading], 10)
+									.font(.title2)
 							}
 						}
 						if (optionsReservations) {
@@ -128,9 +131,10 @@ struct CardView: View {
 								Image(systemName: "square.and.pencil")
 									.resizable()
 									.scaledToFit()
-									.frame(width: 40)
+									.frame(width: 50)
 								Text("Reservations Available")
 									.padding([.leading], 10)
+									.font(.title2)
 							}
 						}
 						//
@@ -143,20 +147,19 @@ struct CardView: View {
 							YelpDetailButton(buttonName: "Get More Info", yelpURL: "\(restaurantURL)")
 							Spacer()
 						}
-
-							HStack {
-								Spacer()
-								Group {
-									Star( starValue: 1)
-									Star( starValue: 2)
-									Star( starValue: 3)
-									Star( starValue: 4)
-									Star( starValue: 5)
-								}
-								.scaledToFit()
-								.frame(height: 50, alignment: .center)
-								Spacer()
+						HStack {
+							Spacer()
+							Group {
+								Star( starValue: 1)
+								Star( starValue: 2)
+								Star( starValue: 3)
+								Star( starValue: 4)
+								Star( starValue: 5)
 							}
+							.scaledToFit()
+							.frame(height: 90 , alignment: .center)
+							Spacer()
+						}
 
 					}
 
@@ -171,7 +174,6 @@ struct CardView: View {
 					.onChanged { gesture in
 						self.offset = gesture.translation
 					}
-
 					.onEnded { _ in
 						if abs(self.offset.width) > 100 {
 							// remove the card
@@ -198,31 +200,31 @@ struct CardView: View {
 		}
 	}
 
-}
+	private struct YelpDetailButton: View {
+		@Environment(\.openURL) var openURL
+		let deviceIsPhone = UIDevice.current.userInterfaceIdiom == .phone
+		let buttonName: String
+		let yelpURL: String
 
-struct YelpDetailButton: View {
-	@Environment(\.openURL) var openURL
-
-	let deviceIsPhone = UIDevice.current.userInterfaceIdiom == .phone
-	let buttonName: String
-	let yelpURL: String
-	
-
-	var body: some View {
-		Button {
-			guard let url = URL(string: "\(yelpURL)") else {
-				return print("BAD URL")
+		var body: some View {
+			Button {
+				guard let url = URL(string: "\(yelpURL)") else {
+					return print("BAD URL")
+				}
+				openURL(url)
+			} label: {
+				Text("\(buttonName)")
 			}
-			openURL(url)
-		} label: {
-			Text("\(buttonName)")
+			.buttonStyle(deviceIsPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
 		}
-		.buttonStyle(deviceIsPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
 	}
+
 }
 
 
-struct CardView_Previews: PreviewProvider {
+
+
+struct CardViewIpad_Previews: PreviewProvider {
 
 	static var previews: some View {
 		CardView(in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 56, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "454", location: YelpApiBusinessDetails_Location(address1: "4545", address2: "4545", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "test", display_phone: "test", distance: 6565.56), forView: drinkdViewModel())

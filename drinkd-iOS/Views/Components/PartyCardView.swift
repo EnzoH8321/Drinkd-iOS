@@ -10,6 +10,7 @@ import SwiftUI
 struct PartyCardView: View {
 
 	@EnvironmentObject var viewModel: drinkdViewModel
+	let deviceIsPhone = UIDevice.current.userInterfaceIdiom == .phone
 
 	var body: some View {
 		GeometryReader { proxy in
@@ -45,7 +46,7 @@ struct PartyCardView: View {
 						Button("Leave Party") {
 							self.viewModel.leaveParty()
 						}
-						.buttonStyle(DefaultAppButton())
+						.buttonStyle(deviceIsPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 					}
 				}
 				.frame(width: globalWidth, height: globalHeight / 1.25)

@@ -23,6 +23,11 @@ enum CardSpecificStyle {
 	static let cornerRadius = CGFloat(25)
 }
 
+enum DeviceType: String {
+	case phone
+	case ipad
+}
+
 //Button
 enum ButtonSyling {
 	static let frameHeight = CGFloat(20)
@@ -34,13 +39,19 @@ enum ButtonSyling {
 	static let buttonTextColor = Color.black
 }
 
+
+
 struct DefaultAppButton: ButtonStyle {
+
+	let deviceType: DeviceType
+
 	func makeBody(configuration: Configuration) -> some View {
 		configuration
 			.label
+			.font(deviceType == .phone ? .body : .title2)
 			.foregroundColor(ButtonSyling.buttonTextColor)
-			.padding(20)
-			.frame(height: ButtonSyling.frameHeight)
+			.padding(deviceType == .phone ? 20 : 50)
+			.frame(height: deviceType == .phone ? ButtonSyling.frameHeight : ButtonSyling.frameHeight + CGFloat(30))
 			.padding()
 			.background(AppColors.primaryColor)
 			.clipShape(ButtonSyling.clipShape)
@@ -51,12 +62,16 @@ struct DefaultAppButton: ButtonStyle {
 }
 
 struct CardInfoButton: ButtonStyle {
+
+	let deviceType: DeviceType
+
 	func makeBody(configuration: Configuration) -> some View {
 		configuration
 			.label
+			.font(deviceType == .phone ? .body : .title2)
 			.foregroundColor(ButtonSyling.buttonTextColor)
-			.padding(20)
-			.frame(height: ButtonSyling.frameHeight)
+			.padding(deviceType == .phone ? 20 : 35)
+			.frame(height: deviceType == .phone ? ButtonSyling.frameHeight : ButtonSyling.frameHeight + CGFloat(10))
 			.padding()
 			.background(AppColors.primaryColor)
 			.clipShape(ButtonSyling.clipShape)
