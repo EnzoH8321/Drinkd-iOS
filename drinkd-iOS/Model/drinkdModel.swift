@@ -8,9 +8,6 @@
 import SwiftUI
 import Firebase
 
-
-
-
 struct restaurantScoreInfo {
 	var name: String
 	var	score: Int

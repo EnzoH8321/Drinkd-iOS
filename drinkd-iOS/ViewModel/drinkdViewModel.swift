@@ -51,7 +51,6 @@ class drinkdViewModel: ObservableObject {
 	}
 
 
-
 	func fetchRestaurantsOnStartUp() {
 		//1.Creating the URL we want to read.
 		//2.Wrapping that in a URLRequest, which allows us to configure how the URL should be accessed.
