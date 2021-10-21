@@ -20,6 +20,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	@Published var model = drinkdModel()
+	var isPhone: Bool = true
 	var removeSplashScreen = true
 	var currentlyInParty = false
 	var queryPartyError = false
@@ -48,6 +49,7 @@ class drinkdViewModel: ObservableObject {
 	init() {
 		locationFetcher = LocationFetcher()
 		locationFetcher.start()
+		self.setDeviceType()
 	}
 
 
@@ -179,8 +181,6 @@ class drinkdViewModel: ObservableObject {
 		}
 
 		//Verifies name in case it contains illegal characters
-
-
 		let unverifiedName = barList.name
 
 		let score: Int = barList.score
@@ -401,17 +401,16 @@ class drinkdViewModel: ObservableObject {
 				}
 
 				self.model.setCurrentToPartyTrue()
-				//				self.model.setPartyCode(partyCode: partyCode)
 				self.queryPartyError = false
 				syncVMPropswithModelProps(getID: self.model.partyCreatorId, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty, getURL: self.model.partyURL, partyLeader: self.model.isPartyLeader, partyCode: self.model.memberId)
 
 			}
 
 		})
-		}
+	}
 
 	//Helper function that lets the VM props update with whats in the Model
-	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, inParty currentlyInParty: Bool? = nil, getURL partyURL: String? = nil, getCardIndex cardIndex: Int? = nil, topBar topBarList: [String: restaurantScoreInfo]? = nil, topCardScore currentTopCard: Int? = nil, firstPlace: FirebaseRestaurantInfo? = nil, secondPlace: FirebaseRestaurantInfo? = nil, thirdPlace: FirebaseRestaurantInfo? = nil, partyLeader: Bool? = nil, partyCode: String? = nil ) {
+	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, inParty currentlyInParty: Bool? = nil, getURL partyURL: String? = nil, getCardIndex cardIndex: Int? = nil, topBar topBarList: [String: restaurantScoreInfo]? = nil, topCardScore currentTopCard: Int? = nil, firstPlace: FirebaseRestaurantInfo? = nil, secondPlace: FirebaseRestaurantInfo? = nil, thirdPlace: FirebaseRestaurantInfo? = nil, partyLeader: Bool? = nil, partyCode: String? = nil, deviceType: Bool? = nil ) {
 
 		if let partyID = partyID {
 			self.partyCreatorId = partyID
@@ -466,6 +465,10 @@ class drinkdViewModel: ObservableObject {
 			self.memberId = partyCode
 		}
 
+		if let deviceType = deviceType {
+			self.isPhone = deviceType
+		}
+
 	}
 
 
@@ -500,6 +503,13 @@ class drinkdViewModel: ObservableObject {
 		guard let verifiedPartyID = self.partyCreatorId else {
 			return print("No Party ID Found")
 		}
+		//Does not delete the test app
+		if (verifiedPartyID == "11727") {
+			print("You cannot remove the ")
+			self.model.leaveParty()
+			syncVMPropswithModelProps(inParty: self.model.currentlyInParty,  partyLeader: self.model.isPartyLeader)
+			return
+		}
 
 		if (partyLeader) {
 			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(verifiedPartyID)")
@@ -524,6 +534,21 @@ class drinkdViewModel: ObservableObject {
 		self.secondPlace.image_url = ""
 		self.thirdPlace.image_url = ""
 	}
+
+	func setDeviceType() {
+		let isPhone =  UIDevice.current.userInterfaceIdiom == .phone
+
+		if (isPhone) {
+			self.model.findDeviceType(device: .phone)
+		} else {
+			self.model.findDeviceType(device: .ipad)
+		}
+
+		self.syncVMPropswithModelProps(deviceType: self.model.isPhone)
+
+	}
+
+
 }
 
 

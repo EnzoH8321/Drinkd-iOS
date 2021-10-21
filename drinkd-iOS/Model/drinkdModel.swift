@@ -27,7 +27,8 @@ struct drinkdModel {
 		case creator
 		case member
 	}
-	
+
+	private(set) var isPhone: Bool = true
 	private(set) var counter: Int = 10
 	private(set) var currentCardIndex: Int = 9
 	private(set) var currentlyInParty = false
@@ -229,5 +230,16 @@ struct drinkdModel {
 
 	mutating func leaveParty() {
 		self.currentlyInParty = false
+	}
+
+	mutating func findDeviceType(device: DeviceType) {
+
+		switch (device) {
+		case .phone:
+			self.isPhone = true
+		case .ipad:
+			self.isPhone = false
+		}
+
 	}
 }

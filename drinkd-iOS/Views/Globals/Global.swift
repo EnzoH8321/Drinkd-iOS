@@ -22,7 +22,7 @@ enum AppShadow {
 enum CardSpecificStyle {
 	static let cornerRadius = CGFloat(25)
 }
-
+//For Device Type
 enum DeviceType: String {
 	case phone
 	case ipad
@@ -38,8 +38,6 @@ enum ButtonSyling {
 	static let buttonShadowY = CGFloat(1)
 	static let buttonTextColor = Color.black
 }
-
-
 
 struct DefaultAppButton: ButtonStyle {
 

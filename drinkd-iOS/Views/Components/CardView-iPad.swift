@@ -20,7 +20,7 @@ struct CardViewIpad: View {
 
 	@State private var offset = CGSize.zero
 	@EnvironmentObject var viewModel: drinkdViewModel
-	let deviceIsPhone = UIDevice.current.userInterfaceIdiom == .phone
+
 
 	var restaurantTitle: String
 	var restaurantCategories: String
@@ -143,8 +143,8 @@ struct CardViewIpad: View {
 						HStack {
 							Spacer()
 							SubmitButton()
-								.buttonStyle(deviceIsPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
-							YelpDetailButton(buttonName: "Get More Info", yelpURL: "\(restaurantURL)")
+								.buttonStyle(viewModel.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
+							YelpDetailButton(buttonName: "More Info", yelpURL: "\(restaurantURL)")
 							Spacer()
 						}
 						HStack {

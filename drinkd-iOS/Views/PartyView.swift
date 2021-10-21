@@ -11,7 +11,6 @@ import SwiftUI
 struct PartyView: View {
 
 	@EnvironmentObject var viewModel: drinkdViewModel
-	let deviceIsPhone = UIDevice.current.userInterfaceIdiom == .phone
 
 	var body: some View {
 		NavigationView {
@@ -21,12 +20,12 @@ struct PartyView: View {
 						JoinOrCreatePartyButton(buttonName: "Join Party")
 					}
 					.padding(.bottom, 55)
-					.buttonStyle(deviceIsPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+					.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 
 					NavigationLink(destination: PartyView_Create()) {
 						JoinOrCreatePartyButton(buttonName: "Create Party")
 					}
-					.buttonStyle(deviceIsPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+					.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 
 				}
 			} else {

@@ -75,7 +75,6 @@ struct ListCardView: View {
 						.cornerRadius(radius: CardSpecificStyle.cornerRadius, corners: [.topLeft, .topRight])
 
 					HStack {
-						Spacer()
 						Image(systemName: self.placementImage)
 							.resizable()
 							.scaledToFit()
@@ -85,10 +84,10 @@ struct ListCardView: View {
 							Text("\(restaurantInfo.name)")
 							Text("Votes: \(restaurantInfo.score)")
 						}
-						.padding([.leading, .trailing], 25)
-						Spacer()
+						.padding(.leading, 15)
+						.frame(width: 150)
 					}
-					.padding([.leading, .trailing], globalWidth / 4)
+
 				}
 			}
 			.frame(width: globalWidth, height: globalHeight, alignment: .center)

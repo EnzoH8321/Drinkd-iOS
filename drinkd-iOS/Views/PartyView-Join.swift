@@ -30,7 +30,6 @@ struct PartyView_Join: View {
 	private struct JoinPartyButton: View {
 
 		@EnvironmentObject var viewModel: drinkdViewModel
-		let deviceIsPhone = UIDevice.current.userInterfaceIdiom == .phone
 		var partyCode: String
 
 		init(code: String) {
@@ -47,7 +46,7 @@ struct PartyView_Join: View {
 			.alert(isPresented: $viewModel.queryPartyError) {
 				Alert(title: Text("Error"), message: Text("Party Does not exists"))
 			}
-			.buttonStyle(deviceIsPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+			.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 		}
 	}
 

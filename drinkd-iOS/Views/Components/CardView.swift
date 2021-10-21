@@ -142,7 +142,7 @@ struct CardView: View {
 							Spacer()
 							SubmitButton()
 								.buttonStyle(deviceIsPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
-							YelpDetailButton(buttonName: "Get More Info", yelpURL: "\(restaurantURL)")
+							YelpDetailButton(buttonName: "More Info", yelpURL: "\(restaurantURL)")
 							Spacer()
 						}
 

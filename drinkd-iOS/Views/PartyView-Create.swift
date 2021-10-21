@@ -50,7 +50,7 @@ struct PartyView_Create: View {
 
 		@EnvironmentObject var viewModel: drinkdViewModel
 		@State private var showAlert: Bool = false
-		let deviceIsPhone = UIDevice.current.userInterfaceIdiom == .phone
+
 		var votes: String
 		var name: String
 
@@ -78,7 +78,7 @@ struct PartyView_Create: View {
 			.alert(isPresented: $showAlert) {
 				Alert(title: Text("Error"), message: Text("Check for Valid Name or Vote Amount"))
 			}
-			.buttonStyle(deviceIsPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+			.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 		}
 	}
 
