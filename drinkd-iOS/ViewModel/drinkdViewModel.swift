@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import Firebase
 
+
 class drinkdViewModel: ObservableObject {
 
 	private enum ErrorHanding: Error {
