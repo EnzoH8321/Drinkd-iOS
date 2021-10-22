@@ -13,8 +13,6 @@ struct HomeView: View {
 	var body: some View {
 		GeometryReader{ proxy in
 
-			let globalHeight = proxy.frame(in: .global).height
-
 			VStack {
 				ZStack {
 					if (viewModel.isPhone) {

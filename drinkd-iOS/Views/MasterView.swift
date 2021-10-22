@@ -65,7 +65,6 @@ struct MasterView: View {
 					.onChange(of: selectedTab) {tabVal in
 						switch (tabVal) {
 						case 2 :
-							
 							viewModel.calculateTopThreeRestaurants()
 						default:
 							break
@@ -76,9 +75,9 @@ struct MasterView: View {
 				SplashScreen()
 			}
 		}
-		.onAppear {
-			self.viewModel.fetchRestaurantsOnStartUp()
-		}
+//		.onAppear {
+//			self.viewModel.fetchRestaurantsOnStartUp()
+//		}
 		
 	}
 	

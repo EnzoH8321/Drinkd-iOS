@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 import Firebase
-
+import AppTrackingTransparency
 
 @available(iOS 15.0, *)
 @main
@@ -19,7 +19,7 @@ struct drinkd_iOSApp: App {
 		FirebaseApp.configure()
 	}
 
-//	@UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+	//	@UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
 	let persistenceController = PersistenceController.shared
 
@@ -30,9 +30,34 @@ struct drinkd_iOSApp: App {
 			MasterView()
 				.environment(\.managedObjectContext, persistenceController.container.viewContext)
 				.environmentObject(viewModel)
+				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+					if #available(iOS 14, *) {
+						ATTrackingManager.requestTrackingAuthorization { status in
+							switch (status) {
+							case .authorized:
+								viewModel.fetchRestaurantsOnStartUp()
+								print("authorized")
+							case .notDetermined:
+								print("no determined")
+							case .restricted:
+								print("restricted")
+							case .denied:
+								print("denied")
+							@unknown default:
+								print("unknown")
+							}
+						}
+					} else {
+						viewModel.fetchRestaurantsOnStartUp()
+					}
+
+				}
+
 		}
 	}
 }
+
+
 
 //class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 //

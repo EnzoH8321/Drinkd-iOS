@@ -230,6 +230,12 @@ struct drinkdModel {
 
 	mutating func leaveParty() {
 		self.currentlyInParty = false
+		topThreeChoicesObject.first = FirebaseRestaurantInfo()
+		topThreeChoicesObject.second = FirebaseRestaurantInfo()
+		topThreeChoicesObject.third = FirebaseRestaurantInfo()
+		self.topThreeChoicesObject = ThreeTopChoices()
+		self.partyCreatorId = ""
+		print(self.topThreeChoicesObject)
 	}
 
 	mutating func findDeviceType(device: DeviceType) {

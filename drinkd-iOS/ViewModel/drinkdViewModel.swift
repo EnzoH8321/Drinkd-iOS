@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 import Firebase
-
+import AppTrackingTransparency
 
 class drinkdViewModel: ObservableObject {
 
@@ -43,18 +43,20 @@ class drinkdViewModel: ObservableObject {
 	var thirdPlace: FirebaseRestaurantInfo = FirebaseRestaurantInfo()
 
 	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
-
 	//DELETE FOR RELEASE!
 	let token = "nX9W-jXWsXSB_gW3t2Y89iwQ-M7SR9-HVBHDAqf1Zy0fo8LTs3Q1VbIVpdeyFu7PehJlkLDULQulnJ3l6q6loIET5JHmcs9i3tJqYEO02f39qKgSCi4DAEVIlgPPX3Yx"
 
 	init() {
 		locationFetcher = LocationFetcher()
 		locationFetcher.start()
-		self.setDeviceType()
 	}
 
 
+
 	func fetchRestaurantsOnStartUp() {
+
+		self.setDeviceType()
+
 		//1.Creating the URL we want to read.
 		//2.Wrapping that in a URLRequest, which allows us to configure how the URL should be accessed.
 		//3.Create and start a networking task from that URL request.
@@ -66,6 +68,11 @@ class drinkdViewModel: ObservableObject {
 		if let location = locationFetcher.lastKnownLocation {
 			latitude = location.latitude
 			longitude = location.longitude
+		}
+		//If defaults are used, then the user location could not be found
+		if (longitude == 0.0 || latitude == 0.0) {
+			print("could not fetch user location")
+			return
 		}
 
 		guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
@@ -84,7 +91,6 @@ class drinkdViewModel: ObservableObject {
 			if let verifiedData = data {
 				do {
 					let JSONDecoderValue = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
-
 					if let JSONArray = JSONDecoderValue.businesses {
 						DispatchQueue.main.async {
 							self.objectWillChange.send()
@@ -235,7 +241,7 @@ class drinkdViewModel: ObservableObject {
 				} else {
 
 					DispatchQueue.main.async {
-						self.objectWillChange.send()
+//						self.objectWillChange.send()
 						var restaurantArray: [[String: Any]] = []
 						var verifiedRestaurantArray: [FirebaseRestaurantInfo] = []
 						var nonDuplicateArray: [FirebaseRestaurantInfo] = []
@@ -357,7 +363,10 @@ class drinkdViewModel: ObservableObject {
 						self.syncVMPropswithModelProps(firstPlace: self.model.topThreeChoicesObject.first, secondPlace: self.model.topThreeChoicesObject.second, thirdPlace: self.model.topThreeChoicesObject.third)
 					}
 
-
+//					print("first place -> \(self.firstPlace)")
+//					print("second place -> \(self.secondPlace)")
+//					print("third place -> \(self.thirdPlace)")
+//					print(self.partyCreatorId)
 				}
 			})
 		} else {
@@ -527,7 +536,10 @@ class drinkdViewModel: ObservableObject {
 		}
 
 		self.model.leaveParty()
-		syncVMPropswithModelProps(inParty: self.model.currentlyInParty,  partyLeader: self.model.isPartyLeader)
+		syncVMPropswithModelProps(getID: self.model.partyCreatorId,inParty: self.model.currentlyInParty, firstPlace: self.model.topThreeChoicesObject.first, secondPlace: self.model.topThreeChoicesObject.second, thirdPlace: self.model.topThreeChoicesObject.third, partyLeader: self.model.isPartyLeader )
+		print(self.firstPlace)
+		print(self.secondPlace)
+		print(self.thirdPlace)
 	}
 
 	func removeImageUrl() {
