@@ -64,8 +64,8 @@ struct CardViewIpad: View {
 
 		GeometryReader { geo in
 
-			let globalWidth = geo.frame(in: .global).width
-			let globalHeight = geo.frame(in: .global).height
+//			let globalWidth = geo.frame(in: .global).width
+//			let globalHeight = geo.frame(in: .global).height
 
 			ZStack {
 
