@@ -44,8 +44,8 @@ class drinkdViewModel: ObservableObject {
 	var thirdPlace: FirebaseRestaurantInfo = FirebaseRestaurantInfo()
 
 	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
-	//DELETE FOR RELEASE!
-	let token = "nX9W-jXWsXSB_gW3t2Y89iwQ-M7SR9-HVBHDAqf1Zy0fo8LTs3Q1VbIVpdeyFu7PehJlkLDULQulnJ3l6q6loIET5JHmcs9i3tJqYEO02f39qKgSCi4DAEVIlgPPX3Yx"
+	//Hidden API KEY
+	let token = (Bundle.main.infoDictionary?["API_KEY"] as? String)!
 
 	init() {
 		locationFetcher = LocationFetcher()
