@@ -67,6 +67,7 @@
 		5407FD73271DE924008BC496 /* drinkd-iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "drinkd-iOS.entitlements"; sourceTree = "<group>"; };
 		5407FD74271DE9F3008BC496 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5407FD75271F7F28008BC496 /* CardView-iPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CardView-iPad.swift"; sourceTree = "<group>"; };
+		544D154927271B3C00AB8557 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		54B3E536270E140C0004ECC5 /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
 		54B3E538270F687F0004ECC5 /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
 		54F9C80526FBB536008FA516 /* drinkd-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "drinkd-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,6 +169,7 @@
 				54F9C81126FBB537008FA516 /* Persistence.swift */,
 				54F9C81326FBB537008FA516 /* drinkd_iOS.xcdatamodeld */,
 				54F9C80E26FBB537008FA516 /* Preview Content */,
+				544D154927271B3C00AB8557 /* Config.xcconfig */,
 			);
 			path = "drinkd-iOS";
 			sourceTree = "<group>";
@@ -589,6 +591,7 @@
 /* Begin XCBuildConfiguration section */
 		54F9C82C26FBB538008FA516 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 544D154927271B3C00AB8557 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -650,6 +653,7 @@
 		};
 		54F9C82D26FBB538008FA516 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 544D154927271B3C00AB8557 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
