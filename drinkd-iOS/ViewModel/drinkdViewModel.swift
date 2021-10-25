@@ -21,6 +21,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	@Published var model = drinkdModel()
+	var userTrackingError = false
 	var isPhone: Bool = true
 	var removeSplashScreen = true
 	var currentlyInParty = false
@@ -51,8 +52,6 @@ class drinkdViewModel: ObservableObject {
 		locationFetcher.start()
 	}
 
-
-
 	func fetchRestaurantsOnStartUp() {
 
 		self.setDeviceType()
@@ -71,6 +70,7 @@ class drinkdViewModel: ObservableObject {
 		}
 		//If defaults are used, then the user location could not be found
 		if (longitude == 0.0 || latitude == 0.0) {
+			self.setUserTracking(type: .userDeniedTracking)
 			print("could not fetch user location")
 			return
 		}
@@ -241,7 +241,7 @@ class drinkdViewModel: ObservableObject {
 				} else {
 
 					DispatchQueue.main.async {
-//						self.objectWillChange.send()
+						//						self.objectWillChange.send()
 						var restaurantArray: [[String: Any]] = []
 						var verifiedRestaurantArray: [FirebaseRestaurantInfo] = []
 						var nonDuplicateArray: [FirebaseRestaurantInfo] = []
@@ -363,10 +363,10 @@ class drinkdViewModel: ObservableObject {
 						self.syncVMPropswithModelProps(firstPlace: self.model.topThreeChoicesObject.first, secondPlace: self.model.topThreeChoicesObject.second, thirdPlace: self.model.topThreeChoicesObject.third)
 					}
 
-//					print("first place -> \(self.firstPlace)")
-//					print("second place -> \(self.secondPlace)")
-//					print("third place -> \(self.thirdPlace)")
-//					print(self.partyCreatorId)
+					//					print("first place -> \(self.firstPlace)")
+					//					print("second place -> \(self.secondPlace)")
+					//					print("third place -> \(self.thirdPlace)")
+					//					print(self.partyCreatorId)
 				}
 			})
 		} else {
@@ -561,8 +561,21 @@ class drinkdViewModel: ObservableObject {
 
 	}
 
+	func setUserTracking(type: UserPrivacyChoice) {
+		objectWillChange.send()
+		switch type {
+		case .userApprovedTracking:
+			self.userTrackingError = false
+		case .userDeniedTracking:
+			self.userTrackingError = true
+		}
 
+	}
 }
+
+
+
+
 
 
 struct drinkdViewModel_Previews: PreviewProvider {

@@ -75,6 +75,10 @@ struct MasterView: View {
 				SplashScreen()
 			}
 		}
+		.alert(isPresented: $viewModel.userTrackingError) {
+			print(viewModel.userTrackingError)
+			return Alert(title: Text("Error"), message: Text("Please enable tracking services"))
+		}
 //		.onAppear {
 //			self.viewModel.fetchRestaurantsOnStartUp()
 //		}
