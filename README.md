@@ -1,6 +1,6 @@
  
  <p align="center"> 
- <img src="/assets/splash_icon_app.png" height="300">
+ <img src="https://github.com/EnzoH8321/DRINKD/blob/master/assets/splash_icon_app.png" height="300">
  </p>
 
 # DRINKD
