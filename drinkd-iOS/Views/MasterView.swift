@@ -29,17 +29,12 @@ struct MasterView: View {
 					TabView(selection: $selectedTab) {
 						//HomeView
 						NavigationView {
-							if (!viewModel.userTrackingError) {
+							if (!viewModel.userLocationError) {
 								HomeView()
 									.frame(width: globalWidth - 30 , height: globalHeight / 1.20)
 									.navigationBarTitle("")
 									.navigationBarHidden(true)
 							} else {
-//								NavigationLink(destination: {CustomLocationView()}) {
-//									Text("Use Custom Location")
-//
-//								}
-//								.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 								CustomLocationView()
 									.navigationBarTitle("")
 									.navigationBarHidden(true)
@@ -75,8 +70,6 @@ struct MasterView: View {
 					}
 					.onChange(of: selectedTab) {tabVal in
 						switch (tabVal) {
-						case 1 :
-							print("user tracking \(viewModel.userTrackingError)")
 						case 2 :
 							viewModel.calculateTopThreeRestaurants()
 						default:
@@ -88,10 +81,8 @@ struct MasterView: View {
 				SplashScreen()
 			}
 		}
-//		.alert(isPresented: $viewModel.userTrackingError) {
-//			print("user tracking alert \(viewModel.userTrackingError)")
-//			return Alert(title: Text("Error"), message: Text("You have disabled tracking services. Please provide custom coordinates for the App to use."))
-		}
+	}
+
 	}
 
 

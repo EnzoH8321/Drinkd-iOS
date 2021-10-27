@@ -16,7 +16,7 @@ struct CustomLocationView: View {
 
 	var body: some View {
 		VStack {
-			Text("You have disabled tracking services. Please provide custom coordinates for Drinkd to use by entering a latitude and longitude below. For a more streamlined experience, please enable location services.")
+			Text("You have disabled location services. Please provide custom coordinates for Drinkd to use by entering a latitude and longitude below. For a more streamlined experience, please enable location services.")
 				.font(.title3)
 			Text("Please enter the Latitude below")
 				.padding(.top, 10)

@@ -35,7 +35,6 @@ struct drinkd_iOSApp: App {
 						ATTrackingManager.requestTrackingAuthorization { status in
 							switch (status) {
 							case .authorized:
-								viewModel.setUserTracking(type: .userApprovedTracking)
 								viewModel.fetchRestaurantsOnStartUp()
 								print("authorized")
 							case .notDetermined:
@@ -44,7 +43,7 @@ struct drinkd_iOSApp: App {
 								print("restricted")
 							case .denied:
 								print("denied")
-								viewModel.setUserTracking(type: .userDeniedTracking)
+								viewModel.fetchRestaurantsOnStartUp()
 							@unknown default:
 								print("unknown")
 							}

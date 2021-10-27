@@ -21,7 +21,8 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	@Published var model = drinkdModel()
-	var userTrackingError = false
+	var userLocationError = false
+
 	var isPhone: Bool = true
 	var removeSplashScreen = true
 	var currentlyInParty = false
@@ -80,7 +81,7 @@ class drinkdViewModel: ObservableObject {
 							self.model.createParty(setURL: url.absoluteString)
 							self.restaurantList = self.model.getLocalRestaurants()
 							self.removeSplashScreen = true
-							self.userTrackingError = false
+							self.userLocationError = false
 						}
 					} else {
 						throw ErrorHanding.businessArrayNotFound
@@ -102,8 +103,13 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	func fetchRestaurantsOnStartUp() {
+		//Checks to see if the function already ran to prevent duplicate calls
+		if (self.restaurantList.count > 0) {
+			return
+		}
 
 		self.setDeviceType()
+
 
 		//1.Creating the URL we want to read.
 		//2.Wrapping that in a URLRequest, which allows us to configure how the URL should be accessed.
@@ -119,6 +125,7 @@ class drinkdViewModel: ObservableObject {
 		}
 		//If defaults are used, then the user location could not be found
 		if (longitude == 0.0 || latitude == 0.0) {
+			self.userLocationError = true
 			print("could not fetch user location")
 			return
 		}
@@ -148,7 +155,7 @@ class drinkdViewModel: ObservableObject {
 							self.model.createParty(setURL: url.absoluteString)
 							self.restaurantList = self.model.getLocalRestaurants()
 							self.removeSplashScreen = true
-							self.userTrackingError = false
+							self.userLocationError = false
 						}
 					} else {
 						throw ErrorHanding.businessArrayNotFound
@@ -604,16 +611,16 @@ class drinkdViewModel: ObservableObject {
 
 	}
 
-	func setUserTracking(type: UserPrivacyChoice) {
-		objectWillChange.send()
-		switch type {
-		case .userApprovedTracking:
-			self.userTrackingError = false
-		case .userDeniedTracking:
-			self.userTrackingError = true
-		}
-
-	}
+//	func setUserTracking(type: UserPrivacyChoice) {
+//		objectWillChange.send()
+//		switch type {
+//		case .userApprovedTracking:
+//			self.userTrackingError = false
+//		case .userDeniedTracking:
+//			self.userTrackingError = true
+//		}
+//
+//	}
 }
 
 
