@@ -52,6 +52,55 @@ class drinkdViewModel: ObservableObject {
 		locationFetcher.start()
 	}
 
+	func fetchUsingCustomLocation(longitude: Double, latitude: Double) {
+
+		guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
+			print("Invalid URL")
+			return
+		}
+
+		var request = URLRequest(url: url)
+		request.httpMethod = "GET"
+		request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+
+
+		//URLSession
+		URLSession.shared.dataTask(with: request) { data, response, error in
+
+			//If URLSession returns data, below code block will execute
+			if let verifiedData = data {
+
+				do {
+					let JSONDecoderValue = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
+					if let JSONArray = JSONDecoderValue.businesses {
+						DispatchQueue.main.async {
+							self.objectWillChange.send()
+							print(JSONArray)
+							self.model.appendDeliveryOptions(in: JSONArray)
+							self.model.createParty(setURL: url.absoluteString)
+							self.restaurantList = self.model.getLocalRestaurants()
+							self.removeSplashScreen = true
+						}
+					} else {
+						throw ErrorHanding.businessArrayNotFound
+					}
+
+				} catch(ErrorHanding.businessArrayNotFound) {
+					print("Did not correctly retrieve the Business Array from the Business Search Endpoint")
+
+				} catch {
+					print(error)
+				}
+				return
+			}
+			//If you are here, URLSession returned error instead of data
+			print("\(error?.localizedDescription ?? "Unknown error")")
+
+		}.resume()
+
+	}
+
 	func fetchRestaurantsOnStartUp() {
 
 		self.setDeviceType()

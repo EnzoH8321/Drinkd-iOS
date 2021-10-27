@@ -27,6 +27,8 @@ struct PartyView: View {
 					}
 					.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 
+					
+
 				}
 			} else {
 				VStack{
@@ -48,6 +50,8 @@ struct JoinOrCreatePartyButton: View {
 		Text("\(buttonName)")
 	}
 }
+
+
 
 
 struct PartyView_Previews: PreviewProvider {

@@ -29,10 +29,19 @@ struct MasterView: View {
 					TabView(selection: $selectedTab) {
 						//HomeView
 						NavigationView {
-							HomeView()
-								.frame(width: globalWidth - 30 , height: globalHeight / 1.20)
-								.navigationBarTitle("")
-								.navigationBarHidden(true)
+							if (!viewModel.userTrackingError) {
+								HomeView()
+									.frame(width: globalWidth - 30 , height: globalHeight / 1.20)
+									.navigationBarTitle("")
+									.navigationBarHidden(true)
+							} else {
+								NavigationLink(destination: {CustomLocationView()}) {
+									Text("Set Custom Location")
+
+								}
+								.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+							}
+
 						}.navigationViewStyle(StackNavigationViewStyle())
 
 						.tabItem {
