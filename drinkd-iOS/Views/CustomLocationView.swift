@@ -18,17 +18,16 @@ struct CustomLocationView: View {
 		VStack {
 			Text("To provide a custom location, please enter a latitude and longitude below.")
 				.font(.title3)
-			Text("Latitude")
+			Text("Please enter the Latitude below")
+				.padding(.top, 10)
 			TextField("Latitude", text: $latitude)
 				.border(Color(UIColor.separator))
 				.textFieldStyle(.roundedBorder)
 
-			Text("Longitude")
+			Text("Please enter the Longitude below")
 			TextField("Longitude", text: $longitude)
 				.border(Color(UIColor.separator))
 				.textFieldStyle(.roundedBorder)
-
-
 
 			Button("Submit Custom Location") {
 				//If 0.0 they are nil

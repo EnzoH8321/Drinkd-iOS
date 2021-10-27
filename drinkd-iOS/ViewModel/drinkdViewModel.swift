@@ -76,7 +76,6 @@ class drinkdViewModel: ObservableObject {
 					if let JSONArray = JSONDecoderValue.businesses {
 						DispatchQueue.main.async {
 							self.objectWillChange.send()
-							print(JSONArray)
 							self.model.appendDeliveryOptions(in: JSONArray)
 							self.model.createParty(setURL: url.absoluteString)
 							self.restaurantList = self.model.getLocalRestaurants()
@@ -119,7 +118,6 @@ class drinkdViewModel: ObservableObject {
 		}
 		//If defaults are used, then the user location could not be found
 		if (longitude == 0.0 || latitude == 0.0) {
-			self.setUserTracking(type: .userDeniedTracking)
 			print("could not fetch user location")
 			return
 		}
@@ -133,6 +131,7 @@ class drinkdViewModel: ObservableObject {
 		request.httpMethod = "GET"
 		request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 
+
 		//URLSession
 		URLSession.shared.dataTask(with: request) { data, response, error in
 
@@ -141,12 +140,14 @@ class drinkdViewModel: ObservableObject {
 				do {
 					let JSONDecoderValue = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
 					if let JSONArray = JSONDecoderValue.businesses {
+
 						DispatchQueue.main.async {
 							self.objectWillChange.send()
 							self.model.appendDeliveryOptions(in: JSONArray)
 							self.model.createParty(setURL: url.absoluteString)
 							self.restaurantList = self.model.getLocalRestaurants()
 							self.removeSplashScreen = true
+							self.userTrackingError = false
 						}
 					} else {
 						throw ErrorHanding.businessArrayNotFound

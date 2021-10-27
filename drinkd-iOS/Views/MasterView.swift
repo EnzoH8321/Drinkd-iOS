@@ -36,7 +36,9 @@ struct MasterView: View {
 									.navigationBarHidden(true)
 							} else {
 								NavigationLink(destination: {CustomLocationView()}) {
-									Text("Set Custom Location")
+									Text("Use Custom Location")
+										.navigationBarTitle("")
+										.navigationBarHidden(true)
 
 								}
 								.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
@@ -88,9 +90,7 @@ struct MasterView: View {
 			print(viewModel.userTrackingError)
 			return Alert(title: Text("Error"), message: Text("Please enable tracking services"))
 		}
-//		.onAppear {
-//			self.viewModel.fetchRestaurantsOnStartUp()
-//		}
+
 		
 	}
 	
