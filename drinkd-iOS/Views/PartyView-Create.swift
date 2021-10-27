@@ -12,8 +12,6 @@ struct PartyView_Create: View {
 	@State private var partyName: String = ""
 	@State private var winningVoteAmount: String = ""
 
-
-
 	func formatStringtoInt(in textValue: String) -> Int {
 		return Int(textValue) ?? 0
 	}

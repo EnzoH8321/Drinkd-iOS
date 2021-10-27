@@ -80,6 +80,7 @@ class drinkdViewModel: ObservableObject {
 							self.model.createParty(setURL: url.absoluteString)
 							self.restaurantList = self.model.getLocalRestaurants()
 							self.removeSplashScreen = true
+							self.userTrackingError = false
 						}
 					} else {
 						throw ErrorHanding.businessArrayNotFound
@@ -412,11 +413,6 @@ class drinkdViewModel: ObservableObject {
 
 						self.syncVMPropswithModelProps(firstPlace: self.model.topThreeChoicesObject.first, secondPlace: self.model.topThreeChoicesObject.second, thirdPlace: self.model.topThreeChoicesObject.third)
 					}
-
-					//					print("first place -> \(self.firstPlace)")
-					//					print("second place -> \(self.secondPlace)")
-					//					print("third place -> \(self.thirdPlace)")
-					//					print(self.partyCreatorId)
 				}
 			})
 		} else {
@@ -587,9 +583,6 @@ class drinkdViewModel: ObservableObject {
 
 		self.model.leaveParty()
 		syncVMPropswithModelProps(getID: self.model.partyCreatorId,inParty: self.model.currentlyInParty, firstPlace: self.model.topThreeChoicesObject.first, secondPlace: self.model.topThreeChoicesObject.second, thirdPlace: self.model.topThreeChoicesObject.third, partyLeader: self.model.isPartyLeader )
-		print(self.firstPlace)
-		print(self.secondPlace)
-		print(self.thirdPlace)
 	}
 
 	func removeImageUrl() {

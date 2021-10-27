@@ -16,7 +16,7 @@ struct CustomLocationView: View {
 
 	var body: some View {
 		VStack {
-			Text("To provide a custom location, please enter a latitude and longitude below.")
+			Text("You have disabled tracking services. Please provide custom coordinates for Drinkd to use by entering a latitude and longitude below. For a more streamlined experience, please enable location services.")
 				.font(.title3)
 			Text("Please enter the Latitude below")
 				.padding(.top, 10)
@@ -38,11 +38,9 @@ struct CustomLocationView: View {
 					print("values are wrong")
 					return
 				}
-
 				viewModel.fetchUsingCustomLocation(longitude: longitude, latitude: latitude)
 			}
 			.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
-
 			Spacer()
 		}
 	}

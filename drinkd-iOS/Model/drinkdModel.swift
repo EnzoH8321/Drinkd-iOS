@@ -235,7 +235,6 @@ struct drinkdModel {
 		topThreeChoicesObject.third = FirebaseRestaurantInfo()
 		self.topThreeChoicesObject = ThreeTopChoices()
 		self.partyCreatorId = ""
-		print(self.topThreeChoicesObject)
 	}
 
 	mutating func findDeviceType(device: DeviceType) {

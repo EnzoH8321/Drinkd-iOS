@@ -35,17 +35,17 @@ struct MasterView: View {
 									.navigationBarTitle("")
 									.navigationBarHidden(true)
 							} else {
-								NavigationLink(destination: {CustomLocationView()}) {
-									Text("Use Custom Location")
-										.navigationBarTitle("")
-										.navigationBarHidden(true)
-
-								}
-								.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+//								NavigationLink(destination: {CustomLocationView()}) {
+//									Text("Use Custom Location")
+//
+//								}
+//								.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+								CustomLocationView()
+									.navigationBarTitle("")
+									.navigationBarHidden(true)
 							}
 
 						}.navigationViewStyle(StackNavigationViewStyle())
-
 						.tabItem {
 							Image(systemName: "house")
 							Text("Home")
@@ -75,6 +75,8 @@ struct MasterView: View {
 					}
 					.onChange(of: selectedTab) {tabVal in
 						switch (tabVal) {
+						case 1 :
+							print("user tracking \(viewModel.userTrackingError)")
 						case 2 :
 							viewModel.calculateTopThreeRestaurants()
 						default:
@@ -86,15 +88,12 @@ struct MasterView: View {
 				SplashScreen()
 			}
 		}
-		.alert(isPresented: $viewModel.userTrackingError) {
-			print(viewModel.userTrackingError)
-			return Alert(title: Text("Error"), message: Text("Please enable tracking services"))
+//		.alert(isPresented: $viewModel.userTrackingError) {
+//			print("user tracking alert \(viewModel.userTrackingError)")
+//			return Alert(title: Text("Error"), message: Text("You have disabled tracking services. Please provide custom coordinates for the App to use."))
 		}
-
-		
 	}
-	
-}
+
 
 
 @available(iOS 15.0, *)
