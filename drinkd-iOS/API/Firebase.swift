@@ -18,7 +18,7 @@ struct FirebaseRestaurantInfo: Equatable, Comparable {
 		if (lhs.score == rhs.score) {
 			return	lhs.name > rhs.name
 		} else {
-		return	lhs.score > rhs.score
+			return	lhs.score > rhs.score
 		}
 	}
 
@@ -26,4 +26,109 @@ struct FirebaseRestaurantInfo: Equatable, Comparable {
 	var score: Int = 0
 	var url: String = ""
 	var image_url: String = ""
+}
+
+struct FireBaseMaster: Codable {
+	var models: [String: FireBaseTopChoicesArray]
+
+	private struct RestaurantNameKey : CodingKey {
+		var stringValue: String
+		init?(stringValue: String) {
+			self.stringValue = stringValue
+		}
+		//We know value will not be an int so we can just return safely
+		var intValue: Int?
+		init?(intValue: Int) { return nil }
+	}
+//
+//	//  Init
+//	init(_ models: [FireBaseTopChoicesArray]) {
+//		self.models = models
+//	}
+//
+	//  Decode
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: RestaurantNameKey.self)
+
+		var models: [String: FireBaseTopChoicesArray] = [:]
+		for key in container.allKeys {
+			if let key = RestaurantNameKey(stringValue: key.stringValue) {
+				let model = try container.decode(FireBaseTopChoicesArray.self, forKey: key)
+				models[key.stringValue] = model
+			}
+		}
+		self.models = models
+	}
+}
+
+
+
+struct FireBaseTopChoice: Codable {
+	let id: String
+	let image_url: String
+	let score: Int
+	let url: String
+	let key: String
+
+	private enum CodingKeys: CodingKey {
+		case id
+		case image_url
+		case score
+		case url
+	}
+	//init
+	init(id: String, image_url: String, score: Int, url: String, key: String) {
+		self.id = id
+		self.image_url = image_url
+		self.score = score
+		self.url = url
+		self.key = key
+	}
+	//decode
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+
+		guard let key = container.codingPath.first?.stringValue else {
+			throw NSError(domain: "Key not found", code: 0, userInfo: nil)
+		}
+
+		self.id = try container.decode(String.self, forKey: .id)
+		self.image_url = try container.decode(String.self, forKey: .image_url)
+		self.score = try container.decode(Int.self, forKey: .score)
+		self.url = try container.decode(String.self, forKey: .url)
+		self.key = key
+	}
+}
+
+struct FireBaseTopChoicesArray: Codable {
+	var models = [FireBaseTopChoice]()
+
+	private struct RestaurantNameKey : CodingKey {
+		var stringValue: String
+		init?(stringValue: String) {
+			self.stringValue = stringValue
+		}
+		//We know value will not be an int so we can just return safely
+		var intValue: Int?
+		init?(intValue: Int) { return nil }
+	}
+
+	//  Init
+	init(_ models: [FireBaseTopChoice]) {
+		self.models = models
+	}
+
+	//  Decode
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: RestaurantNameKey.self)
+
+		var models: [FireBaseTopChoice] = []
+		for key in container.allKeys {
+			if let key = RestaurantNameKey(stringValue: key.stringValue) {
+				let model = try container.decode(FireBaseTopChoice.self, forKey: key)
+				models.append(model)
+			}
+		}
+		self.models = models
+	}
 }

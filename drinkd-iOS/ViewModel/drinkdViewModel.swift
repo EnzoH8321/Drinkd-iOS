@@ -305,16 +305,34 @@ class drinkdViewModel: ObservableObject {
 						var nonDuplicateArray: [FirebaseRestaurantInfo] = []
 						var finalizedArray: [FirebaseRestaurantInfo] = []
 
-						guard let value = snapshot.value as? [String: [String: [String: Any]]] else {
-							print("could not convert to swift type")
-							return
+//						guard let value = snapshot.value as? [String: Any] else {
+//							print("could not convert to swift type")
+//							return
+//						}
+
+
+
+						guard let codableData = try? JSONSerialization.data(withJSONObject: snapshot.value) else {
+							return print("unable to serialize")
 						}
-						//Appends to a temporary array
-						for (_, val) in value {
-							for (key2, val2) in val {
-								restaurantArray.append([key2: val2])
-							}
+
+						print("codable data - \(codableData)")
+
+						do {
+							let decoder = JSONDecoder()
+							let data = try decoder.decode(FireBaseMaster.self, from: codableData)
+							print(data.models)
+						} catch {
+							print("error - \(error)")
 						}
+
+
+//						//Appends to a temporary array
+//						for (_, val) in value {
+//							for (key2, val2) in val {
+//								restaurantArray.append([key2: val2])
+//							}
+//						}
 
 						//Iterate through non verified array (array not decoded properly)
 						for element in 0..<restaurantArray.count {
