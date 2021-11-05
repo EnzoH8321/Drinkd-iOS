@@ -300,7 +300,7 @@ class drinkdViewModel: ObservableObject {
 
 					DispatchQueue.main.async {
 						//						self.objectWillChange.send()
-						var restaurantArray: [[String: Any]] = []
+						let restaurantArray: [[String: Any]] = []
 						var verifiedRestaurantArray: [FirebaseRestaurantInfo] = []
 						var nonDuplicateArray: [FirebaseRestaurantInfo] = []
 						var finalizedArray: [FirebaseRestaurantInfo] = []

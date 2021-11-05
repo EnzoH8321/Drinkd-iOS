@@ -64,7 +64,7 @@ struct CardView: View {
 
 		GeometryReader { geo in
 
-			let globalWidth = geo.frame(in: .global).width
+			
 
 			ZStack {
 				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
