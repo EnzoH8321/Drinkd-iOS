@@ -2,7 +2,7 @@
  <p align="center"> 
  <img src="https://github.com/EnzoH8321/DRINKD/blob/master/assets/splash_icon_app.png" height="300">
  </p>
-# Download it on the App Store!
+## Download it on the App Store!
 https://apps.apple.com/us/app/drinkd/id1590966772
 
 # DRINKD
