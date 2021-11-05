@@ -68,7 +68,7 @@
 		5407FD73271DE924008BC496 /* drinkd-iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "drinkd-iOS.entitlements"; sourceTree = "<group>"; };
 		5407FD74271DE9F3008BC496 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5407FD75271F7F28008BC496 /* CardView-iPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CardView-iPad.swift"; sourceTree = "<group>"; };
-		544D154927271B3C00AB8557 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		5478EAFC2734D8560071A0B2 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		549BFC462728CFBA00F96F48 /* CustomLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLocationView.swift; sourceTree = "<group>"; };
 		54B3E536270E140C0004ECC5 /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
 		54B3E538270F687F0004ECC5 /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
@@ -171,7 +171,7 @@
 				54F9C81126FBB537008FA516 /* Persistence.swift */,
 				54F9C81326FBB537008FA516 /* drinkd_iOS.xcdatamodeld */,
 				54F9C80E26FBB537008FA516 /* Preview Content */,
-				544D154927271B3C00AB8557 /* Config.xcconfig */,
+				5478EAFC2734D8560071A0B2 /* Config.xcconfig */,
 			);
 			path = "drinkd-iOS";
 			sourceTree = "<group>";
@@ -595,7 +595,7 @@
 /* Begin XCBuildConfiguration section */
 		54F9C82C26FBB538008FA516 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 544D154927271B3C00AB8557 /* Config.xcconfig */;
+			baseConfigurationReference = 5478EAFC2734D8560071A0B2 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -657,7 +657,7 @@
 		};
 		54F9C82D26FBB538008FA516 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 544D154927271B3C00AB8557 /* Config.xcconfig */;
+			baseConfigurationReference = 5478EAFC2734D8560071A0B2 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -719,8 +719,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "drinkd-iOS/drinkd-iOS.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"drinkd-iOS/Preview Content\"";
 				DEVELOPMENT_TEAM = 9537WHKZZD;
@@ -744,7 +744,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "me.herrera.enzo.drinkd-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = DRINKDDistributionProfile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -759,8 +759,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "drinkd-iOS/drinkd-iOS.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"drinkd-iOS/Preview Content\"";
 				DEVELOPMENT_TEAM = 9537WHKZZD;
@@ -784,7 +784,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "me.herrera.enzo.drinkd-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = DRINKDDistributionProfile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
