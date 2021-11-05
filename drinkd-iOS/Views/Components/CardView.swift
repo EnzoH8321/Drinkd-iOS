@@ -65,11 +65,7 @@ struct CardView: View {
 
 		GeometryReader { geo in
 
-//			let globalWidth = geo.frame(in: .global).width
-//			let globalHeight = geo.frame(in: .global).height
-
 			ZStack {
-
 				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 					.fill(Color.white)
 					.shadow(radius: AppShadow.lowShadowRadius)
@@ -82,61 +78,66 @@ struct CardView: View {
 					Text("\(restaurantScore) / \(restaurantPrice)")
 						.font(.title3)
 					RemoteImageLoader(url: "\(restaurantImage)")
-//						.frame(maxHeight: 300)
+					//						.frame(maxHeight: 300)
+					HStack {
+						VStack(alignment: .leading) {
+							HStack {
+								Image(systemName: "house")
+									.resizable()
+									.scaledToFit()
+									.frame(width: 40)
+								Text("\(restaurantAddress1)  \n\(restaurantCity)")
+									.padding([.leading], 10)
 
-					Group {
-						HStack {
-							Image(systemName: "house")
-								.resizable()
-								.scaledToFit()
-								.frame(width: 40)
-							Text("\(restaurantAddress1)  \n\(restaurantCity)")
-								.padding([.leading], 10)
-
+							}
+							HStack {
+								Image(systemName: "phone")
+									.resizable()
+									.scaledToFit()
+									.frame(width: 40)
+								Text("\(restaurantPhoneNumber)")
+									.padding([.leading], 10)
+							}
+							//
+							if (!viewModel.currentlyInParty) {
+								if (optionsPickup) {
+									HStack {
+										Image(systemName: "figure.walk")
+											.resizable()
+											.scaledToFit()
+											.frame(width: 40)
+										Text("Pickup Available")
+											.padding([.leading], 10)
+									}
+								}
+								if (optionsDelivery) {
+									HStack {
+										Image(systemName: "bicycle")
+											.resizable()
+											.scaledToFit()
+											.frame(width: 40)
+										Text("Delivery Available")
+											.padding([.leading], 10)
+									}
+								}
+								if (optionsReservations) {
+									HStack {
+										Image(systemName: "square.and.pencil")
+											.resizable()
+											.scaledToFit()
+											.frame(width: 40)
+										Text("Reservations Available")
+											.padding([.leading], 10)
+									}
+								}
+							}
 						}
-						HStack {
-							Image(systemName: "phone")
-								.resizable()
-								.scaledToFit()
-								.frame(width: 40)
-							Text("\(restaurantPhoneNumber)")
-								.padding([.leading], 10)
-						}
-						//
 						if (!viewModel.currentlyInParty) {
-							if (optionsPickup) {
-								HStack {
-									Image(systemName: "figure.walk")
-										.resizable()
-										.scaledToFit()
-										.frame(width: 40)
-									Text("Pickup Available")
-										.padding([.leading], 10)
-								}
-							}
-							if (optionsDelivery) {
-								HStack {
-									Image(systemName: "bicycle")
-										.resizable()
-										.scaledToFit()
-										.frame(width: 40)
-									Text("Delivery Available")
-										.padding([.leading], 10)
-								}
-							}
-							if (optionsReservations) {
-								HStack {
-									Image(systemName: "square.and.pencil")
-										.resizable()
-										.scaledToFit()
-										.frame(width: 40)
-									Text("Reservations Available")
-										.padding([.leading], 10)
-								}
-							}
+							YelpDetailButton(buttonName: "More Info", yelpURL: "\(restaurantURL)")
 						}
-						//
 					}
+
+
 					if (viewModel.currentlyInParty) {
 						HStack {
 							Spacer()
@@ -146,19 +147,19 @@ struct CardView: View {
 							Spacer()
 						}
 
-							HStack {
-								Spacer()
-								Group {
-									Star( starValue: 1)
-									Star( starValue: 2)
-									Star( starValue: 3)
-									Star( starValue: 4)
-									Star( starValue: 5)
-								}
-								.scaledToFit()
-								.frame(height: 50, alignment: .center)
-								Spacer()
+						HStack {
+							Spacer()
+							Group {
+								Star( starValue: 1)
+								Star( starValue: 2)
+								Star( starValue: 3)
+								Star( starValue: 4)
+								Star( starValue: 5)
 							}
+							.scaledToFit()
+							.frame(height: 50, alignment: .center)
+							Spacer()
+						}
 
 					}
 
@@ -222,7 +223,6 @@ struct YelpDetailButton: View {
 		.buttonStyle(deviceIsPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
 	}
 }
-
 
 struct CardView_Previews: PreviewProvider {
 
