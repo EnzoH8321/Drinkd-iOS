@@ -20,7 +20,7 @@ struct CardViewIpad: View {
 
 	@State private var offset = CGSize.zero
 	@EnvironmentObject var viewModel: drinkdViewModel
-
+	
 
 	var restaurantTitle: String
 	var restaurantCategories: String
@@ -68,7 +68,6 @@ struct CardViewIpad: View {
 //			let globalHeight = geo.frame(in: .global).height
 
 			ZStack {
-
 				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 					.fill(Color.white)
 					.shadow(radius: AppShadow.lowShadowRadius)
@@ -77,68 +76,69 @@ struct CardViewIpad: View {
 					Text("\(restaurantTitle)")
 						.font(.largeTitle)
 					Text("\(restaurantCategories)")
-						.font(.largeTitle)
+						.font(.title2)
 					Text("\(restaurantScore) / \(restaurantPrice)")
-						.font(.largeTitle)
+						.font(.title3)
 					RemoteImageLoader(url: "\(restaurantImage)")
+					//						.frame(maxHeight: 300)
+					HStack {
+						VStack(alignment: .leading) {
+							HStack {
+								Image(systemName: "house")
+									.resizable()
+									.scaledToFit()
+									.frame(width: 40)
+								Text("\(restaurantAddress1)  \n\(restaurantCity)")
+									.padding([.leading], 10)
 
+							}
+							HStack {
+								Image(systemName: "phone")
+									.resizable()
+									.scaledToFit()
+									.frame(width: 40)
+								Text("\(restaurantPhoneNumber)")
+									.padding([.leading], 10)
+							}
+							//
 
-					Group {
-						HStack {
-							Image(systemName: "house")
-								.resizable()
-								.scaledToFit()
-								.frame(width: 50)
-							Text("\(restaurantAddress1)  \n\(restaurantCity)")
-								.padding([.leading], 10)
-								.font(.title2)
-
-						}
-						HStack {
-							Image(systemName: "phone")
-								.resizable()
-								.scaledToFit()
-								.frame(width: 50)
-							Text("\(restaurantPhoneNumber)")
-								.padding([.leading], 10)
-								.font(.title2)
-						}
-						//
-						if (optionsPickup) {
 							HStack {
 								Image(systemName: "figure.walk")
 									.resizable()
 									.scaledToFit()
-									.frame(width: 50)
-								Text("Pickup Available")
+									.frame(width: 40)
+								Text(optionsPickup ? "Pickup Available" : "Pickup Unavailable")
 									.padding([.leading], 10)
-									.font(.title2)
 							}
-						}
-						if (optionsDelivery) {
+
+
 							HStack {
 								Image(systemName: "bicycle")
 									.resizable()
 									.scaledToFit()
-									.frame(width: 50)
-								Text("Delivery Available")
+									.frame(width: 40)
+								Text(optionsDelivery ? "Delivery Available" : "Delivery Unavailable")
 									.padding([.leading], 10)
-									.font(.title2)
 							}
-						}
-						if (optionsReservations) {
+
+
 							HStack {
 								Image(systemName: "square.and.pencil")
 									.resizable()
 									.scaledToFit()
-									.frame(width: 50)
-								Text("Reservations Available")
+									.frame(width: 40)
+								Text(optionsReservations ? "Reservations Available" : "Reservations Unavailable")
 									.padding([.leading], 10)
-									.font(.title2)
 							}
+
+
 						}
-						//
+						if (!viewModel.currentlyInParty) {
+							LargeYelpDetailButton(buttonName: "More Info", yelpURL: "\(restaurantURL)")
+								.padding(.leading, 150)
+						}
 					}
+
 					if (viewModel.currentlyInParty) {
 						HStack {
 							Spacer()
@@ -147,6 +147,7 @@ struct CardViewIpad: View {
 							YelpDetailButton(buttonName: "More Info", yelpURL: "\(restaurantURL)")
 							Spacer()
 						}
+
 						HStack {
 							Spacer()
 							Group {
@@ -157,7 +158,7 @@ struct CardViewIpad: View {
 								Star( starValue: 5)
 							}
 							.scaledToFit()
-							.frame(height: 90 , alignment: .center)
+							.frame(height: 50, alignment: .center)
 							Spacer()
 						}
 

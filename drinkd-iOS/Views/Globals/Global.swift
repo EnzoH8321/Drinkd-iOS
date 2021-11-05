@@ -83,3 +83,23 @@ struct CardInfoButton: ButtonStyle {
 	
 	}
 }
+
+struct LargeCardInfoButton: ButtonStyle {
+
+	let deviceType: DeviceType
+
+	func makeBody(configuration: Configuration) -> some View {
+		configuration
+			.label
+			.font(deviceType == .phone ? .body : .title2)
+			.foregroundColor(ButtonSyling.buttonTextColor)
+			.padding(deviceType == .phone ? 20 : 35)
+			.frame(height: deviceType == .phone ? ButtonSyling.frameHeight + 30 : ButtonSyling.frameHeight + CGFloat(40))
+			.padding()
+			.background(AppColors.primaryColor)
+			.clipShape(ButtonSyling.clipShape)
+			.shadow(color: configuration.isPressed ? Color.gray : ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y:  ButtonSyling.buttonShadowY)
+			.opacity(configuration.isPressed ? 0.5 : 1)
+
+	}
+}
