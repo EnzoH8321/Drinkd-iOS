@@ -16,7 +16,10 @@ The hardest part about going for a night out with your friends is deciding where
 
 ## TODO
 
- * Messenging Feature
+ * Notifications 
+ * Chat Feature
+ * Settings / Dark Mode
+ 
 
 ## Contact Me
 
