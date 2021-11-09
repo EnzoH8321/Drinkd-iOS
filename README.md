@@ -2,6 +2,9 @@
  <p align="center"> 
  <img src="https://github.com/EnzoH8321/DRINKD/blob/master/assets/splash_icon_app.png" height="300">
  </p>
+ 
+# Download it on the App Store!
+https://apps.apple.com/us/app/drinkd/id1590966772
 
 # DRINKD
 App that lets you and your friend's plan for a night out. 
@@ -13,7 +16,10 @@ The hardest part about going for a night out with your friends is deciding where
 
 ## TODO
 
- * Messenging Feature
+ * Notifications 
+ * Chat Feature
+ * Settings / Dark Mode
+ 
 
 ## Contact Me
 
