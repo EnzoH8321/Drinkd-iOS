@@ -36,16 +36,10 @@ struct FireBaseMaster: Codable {
 		init?(stringValue: String) {
 			self.stringValue = stringValue
 		}
-		//We know value will not be an int so we can just return safely
+		//We know value will not be an int so†an just return safely
 		var intValue: Int?
 		init?(intValue: Int) { return nil }
 	}
-//
-//	//  Init
-//	init(_ models: [FireBaseTopChoicesArray]) {
-//		self.models = models
-//	}
-//
 	//  Decode
 	init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: RestaurantNameKey.self)

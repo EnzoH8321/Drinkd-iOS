@@ -628,17 +628,6 @@ class drinkdViewModel: ObservableObject {
 		self.syncVMPropswithModelProps(deviceType: self.model.isPhone)
 
 	}
-
-//	func setUserTracking(type: UserPrivacyChoice) {
-//		objectWillChange.send()
-//		switch type {
-//		case .userApprovedTracking:
-//			self.userTrackingError = false
-//		case .userDeniedTracking:
-//			self.userTrackingError = true
-//		}
-//
-//	}
 }
 
 
