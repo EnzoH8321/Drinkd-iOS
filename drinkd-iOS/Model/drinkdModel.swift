@@ -5,7 +5,6 @@
 //  Created by Enzo Herrera on 9/28/21.
 //
 
-import SwiftUI
 import Firebase
 
 struct restaurantScoreInfo {

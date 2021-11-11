@@ -249,6 +249,7 @@
 		54F9C84426FCF33D008FA516 /* Globals */ = {
 			isa = PBXGroup;
 			children = (
+				54B3E538270F687F0004ECC5 /* Firebase.swift */,
 				54F9C84526FCF403008FA516 /* Global.swift */,
 			);
 			path = Globals;
@@ -258,7 +259,6 @@
 			isa = PBXGroup;
 			children = (
 				54F9C83826FBD986008FA516 /* YelpApi-BusinessDetails.swift */,
-				54B3E538270F687F0004ECC5 /* Firebase.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";

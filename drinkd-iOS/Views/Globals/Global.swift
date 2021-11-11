@@ -16,7 +16,7 @@ enum AppColors {
 
 enum AppShadow {
 	static let mediumShadowRadius = CGFloat(10)
-	static let lowShadowRadius = CGFloat(5)
+	static let lowShadowRadius = CGFloat(4)
 }
 
 enum CardSpecificStyle {
