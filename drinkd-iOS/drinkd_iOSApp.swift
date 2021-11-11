@@ -34,16 +34,16 @@ struct drinkd_iOSApp: App {
 							switch (status) {
 							case .authorized:
 								viewModel.fetchRestaurantsOnStartUp()
-								print("authorized")
+								print("User has Authorized Tracking")
 							case .notDetermined:
-								print("no determined")
+								print("Not Determined")
 							case .restricted:
-								print("restricted")
+								print("Restricted Tracking")
 							case .denied:
-								print("denied")
+								print("User has Denied Tracking")
 								viewModel.fetchRestaurantsOnStartUp()
 							@unknown default:
-								print("unknown")
+								print("Unknown")
 							}
 						}
 					} else {

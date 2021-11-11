@@ -21,8 +21,8 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	@Published var model = drinkdModel()
+	
 	var userLocationError = false
-
 	var isPhone: Bool = true
 	var removeSplashScreen = true
 	var currentlyInParty = false
