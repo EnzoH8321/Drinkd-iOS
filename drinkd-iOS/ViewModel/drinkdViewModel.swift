@@ -21,28 +21,60 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	@Published var model = drinkdModel()
-	
-	var userLocationError = false
-	var isPhone: Bool = true
-	var removeSplashScreen = true
-	var currentlyInParty = false
-	var queryPartyError = false
-	var restaurantList: [YelpApiBusinessSearchProperties] = []
-	var partyCreatorId: String?
-	var partyMaxVotes: String?
-	var partyName: String?
-	var partyURL: String?
-	var isPartyLeader: Bool?
-	var locationFetcher: LocationFetcher
-	var currentCardIndex: Int = 9
-	var topBarList: [String: restaurantScoreInfo] = [:]
-	var currentScoreOfTopCard: Int = 0
-	//Id for someone elses party
-	var memberId: String?
 
-	var firstPlace: FirebaseRestaurantInfo = FirebaseRestaurantInfo()
-	var secondPlace: FirebaseRestaurantInfo = FirebaseRestaurantInfo()
-	var thirdPlace: FirebaseRestaurantInfo = FirebaseRestaurantInfo()
+	var userLocationError = false
+	var isPhone: Bool {
+		return model.isPhone
+	}
+	var removeSplashScreen = true
+	var currentlyInParty: Bool {
+		return model.currentlyInParty
+	}
+	var isPartyLeader: Bool {
+		return model.isPartyLeader ?? false
+	}
+	var queryPartyError = false
+	var restaurantList: [YelpApiBusinessSearchProperties] {
+		return model.localRestaurants
+	}
+	var partyId: String {
+		return model.partyId ?? "No Party ID not Found"
+	}
+	var partyMaxVotes: String {
+		return model.partyMaxVotes ?? "No Max Votes Found"
+	}
+	var partyName: String {
+		return model.partyName ?? "No Party Name"
+	}
+	var partyURL: String? {
+		return model.partyURL
+	}
+
+	var locationFetcher: LocationFetcher
+	var currentCardIndex: Int {
+		return model.currentCardIndex
+	}
+	var currentScoreOfTopCard: Int{
+		return model.currentScoreOfTopCard
+	}
+	var topBarList: [String: restaurantScoreInfo] {
+		return model.topBarList
+	}
+
+	//Id for someone elses party
+	var friendPartyId: String {
+		return model.friendPartyId ?? "Master Party ID not Found"
+	}
+
+	var firstPlace: FirebaseRestaurantInfo {
+		return model.firstChoice
+	}
+	var secondPlace: FirebaseRestaurantInfo {
+		return model.secondChoice
+	}
+	var thirdPlace: FirebaseRestaurantInfo {
+		return model.thirdChoice
+	}
 
 	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
 	//Hidden API KEY
@@ -53,6 +85,7 @@ class drinkdViewModel: ObservableObject {
 		locationFetcher.start()
 	}
 
+	//Fetches a user defined location. Used when user disabled location services.
 	func fetchUsingCustomLocation(longitude: Double, latitude: Double) {
 
 		guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
@@ -63,8 +96,6 @@ class drinkdViewModel: ObservableObject {
 		var request = URLRequest(url: url)
 		request.httpMethod = "GET"
 		request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
-
 
 		//URLSession
 		URLSession.shared.dataTask(with: request) { data, response, error in
@@ -79,7 +110,7 @@ class drinkdViewModel: ObservableObject {
 							self.objectWillChange.send()
 							self.model.appendDeliveryOptions(in: JSONArray)
 							self.model.createParty(setURL: url.absoluteString)
-							self.restaurantList = self.model.getLocalRestaurants()
+//							self.restaurantList = self.model.getLocalRestaurants()
 							self.removeSplashScreen = true
 							self.userLocationError = false
 						}
@@ -109,7 +140,6 @@ class drinkdViewModel: ObservableObject {
 		}
 
 		self.setDeviceType()
-
 
 		//1.Creating the URL we want to read.
 		//2.Wrapping that in a URLRequest, which allows us to configure how the URL should be accessed.
@@ -153,7 +183,7 @@ class drinkdViewModel: ObservableObject {
 							self.objectWillChange.send()
 							self.model.appendDeliveryOptions(in: JSONArray)
 							self.model.createParty(setURL: url.absoluteString)
-							self.restaurantList = self.model.getLocalRestaurants()
+//							self.restaurantList = self.model.getLocalRestaurants()
 							self.removeSplashScreen = true
 							self.userLocationError = false
 						}
@@ -204,8 +234,7 @@ class drinkdViewModel: ObservableObject {
 							self.objectWillChange.send()
 							self.model.clearAllRestaurants()
 							self.model.appendDeliveryOptions(in: JSONArray)
-							self.model.createParty(setURL: verifiedURL.absoluteString)
-							self.restaurantList = self.model.getLocalRestaurants()
+
 						}
 					} else {
 						throw ErrorHanding.businessArrayNotFound
@@ -229,20 +258,8 @@ class drinkdViewModel: ObservableObject {
 	func submitRestaurantScore() {
 		objectWillChange.send()
 
-		if topBarList.isEmpty {
-			return
-		}
-
-		guard let partyID = self.partyCreatorId else {
-			return print("ID NOT FOUND")
-		}
-
 		guard let barList = topBarList["\(currentCardIndex)"] else {
 			return print("No restaurant with this key")
-		}
-
-		guard let partyLeader = self.isPartyLeader else {
-			return print("NO PARTY LEADER FOUND")
 		}
 
 		//Verifies name in case it contains illegal characters
@@ -257,363 +274,174 @@ class drinkdViewModel: ObservableObject {
 		let currentImageURLTopCard: String = model.localRestaurantsDefault[currentCardIndex].image_url ?? "NO IMAGE URL FOUND"
 		var localReference: DatabaseReference
 
-		if (partyLeader) {
+		if (self.isPartyLeader) {
 
-			localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyID)")
-			localReference.child("topBars").child(self.partyCreatorId ?? "NO ID").child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
+			localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.partyId)")
+			localReference.child("topBars").child(self.partyId ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
 			
-		} else if (!partyLeader) {
+		} else if (!self.isPartyLeader) {
 
-			guard let partyCode = self.memberId else {
-				return print("NO Party code available")
-			}
-
-			localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyID)")
-			localReference.child("topBars").child(self.model.memberId ?? "NO ID").child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
+			localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.friendPartyId)")
+			localReference.child("topBars").child(self.partyId ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
 		}
 	}
-
 
 	func updateRestaurantList() {
 		objectWillChange.send()
 		model.appendCardsToDecklist()
-		self.restaurantList = model.getLocalRestaurants()
+
 	}
 
+	//called when the create party button in the create party screen in pushed
 	func createNewParty(setVotes partyVotes: String? = nil, setName partyName: String? = nil) {
 		objectWillChange.send()
 		self.model.createParty(setVotes: partyVotes, setName: partyName)
 		self.model.setCurrentToPartyTrue()
-		syncVMPropswithModelProps(getID: self.model.partyCreatorId, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty, partyLeader: self.model.isPartyLeader)
 	}
 
 	func calculateTopThreeRestaurants() {
 
-		if let verifiedPartyID = self.partyCreatorId {
-			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(verifiedPartyID)").child("topBars")
+		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.isPartyLeader ? self.partyId : self.friendPartyId)").child("topBars")
 
-			localReference.observe(DataEventType.value, with: { snapshot in
+		localReference.observe(DataEventType.value, with: { snapshot in
 
-				if (!snapshot.exists()) {
-					print("No one has scored restaurant yet")
-				} else {
+			if (!snapshot.exists()) {
+				print("No one has scored restaurant yet")
+			} else {
 
-					DispatchQueue.main.async {
-						//						self.objectWillChange.send()
-						let restaurantArray: [[String: Any]] = []
-						var verifiedRestaurantArray: [FirebaseRestaurantInfo] = []
-						var nonDuplicateArray: [FirebaseRestaurantInfo] = []
-						var finalizedArray: [FirebaseRestaurantInfo] = []
+				DispatchQueue.main.async {
+					self.objectWillChange.send()
 
-//						guard let value = snapshot.value as? [String: Any] else {
-//							print("could not convert to swift type")
-//							return
-//						}
-
-
-
+					do {
 						guard let codableData = try? JSONSerialization.data(withJSONObject: snapshot.value) else {
 							return print("unable to serialize")
 						}
+						let decoder = JSONDecoder()
+						let data = try decoder.decode(FireBaseMaster.self, from: codableData)
+						var testArray: [String: FireBaseTopChoice] = [:]
+						for element in data.models {
+							for dictionaryElement in element.value.models {
 
-						print("codable data - \(codableData)")
-
-						do {
-							let decoder = JSONDecoder()
-							let data = try decoder.decode(FireBaseMaster.self, from: codableData)
-							print(data.models)
-						} catch {
-							print("error - \(error)")
-						}
-
-
-//						//Appends to a temporary array
-//						for (_, val) in value {
-//							for (key2, val2) in val {
-//								restaurantArray.append([key2: val2])
-//							}
-//						}
-
-						//Iterate through non verified array (array not decoded properly)
-						for element in 0..<restaurantArray.count {
-							let currentDict = restaurantArray[element]
-
-							var currentName: String = ""
-							var currentScore: Int = 0
-							let currentURL: String = ""
-							let imageURL: String = ""
-
-							var restaurant = FirebaseRestaurantInfo(name: currentName, score: currentScore, url: currentURL, image_url: imageURL)
-
-							for (key, value) in currentDict {
-								currentName = key
-
-								restaurant.name = key
-
-								let valueToDict = value as! [String: Any]
-
-								for (keyForDetail, valueForDetail) in valueToDict {
-
-									if valueForDetail is String {
-
-										switch (keyForDetail) {
-										case "url":
-											restaurant.url = valueForDetail as! String
-										case "image_url":
-											restaurant.image_url = valueForDetail as! String
-										default:
-											break
-										}
-
-									} else {
-										_ = valueForDetail as! Int
-
-										switch (keyForDetail) {
-										case "score":
-											currentScore = valueForDetail as! Int
-											restaurant.score = valueForDetail as! Int
-										default:
-											break
-										}
-									}
+								if (testArray.contains { key, value in key == dictionaryElement.key}) {
+									testArray[dictionaryElement.key]?.score += dictionaryElement.value.score
+								} else {
+									testArray[dictionaryElement.key] = dictionaryElement.value
 								}
 							}
-
-							verifiedRestaurantArray.append(restaurant)
 						}
+						let sortedDict = testArray.sorted {
 
-						for element in verifiedRestaurantArray {
-							let currentRestaurant = element
-							//Check to see if element in verifiedrestaurantarray is a duplicate
-							let filtered = verifiedRestaurantArray.filter { value in
-								value.name == currentRestaurant.name
-							}
-							//iterate through duplicate array
-							if (filtered.count > 1) {
-
-								var name: String = ""
-								var score: Int = 0
-								var url: String = ""
-								var imageURL: String = ""
-
-								for element in filtered {
-									name = element.name
-									score += element.score
-									url = element.url
-									imageURL = element.image_url
-
-								}
-
-								for restaurant in 0..<filtered.count {
-									let currentRestaurant = filtered[restaurant]
-									guard let lastIndex = verifiedRestaurantArray.lastIndex(of: currentRestaurant) else {
-										print("last index not found")
-										return
-									}
-									verifiedRestaurantArray.remove(at: lastIndex)
-
-								}
-
-								let restaurant = FirebaseRestaurantInfo(name: name, score: score, url: url, image_url: imageURL)
-								nonDuplicateArray.append(restaurant)
+							if ($0.value.score == $1.value.score) {
+								return $0.key > $1.key
+							} else {
+								return $0.value.score > $1.value.score
 							}
 						}
+						let array = Array(sortedDict)
 
-						//append nonDuplicate to final array
-						for element in nonDuplicateArray {
-							finalizedArray.append(element)
-						}
+						self.model.appendTopThreeRestaurants(in: array)
+						print("Sorted dict -> \(array)")
+						print("First Choices -> \(self.firstPlace)")
+						print("Second Choices -> \(self.secondPlace)")
+						print("Third Choice -> \(self.thirdPlace)")
 
-						for element in verifiedRestaurantArray {
-							finalizedArray.append(element)
-						}
-
-						//sort so that highest scores are at the start
-						let sortedArray = finalizedArray.sorted {
-							$0.score > $1.score
-						}
-
-						//
-						self.model.appendTopThreeRestaurants(in: sortedArray)
-
-						self.syncVMPropswithModelProps(firstPlace: self.model.topThreeChoicesObject.first, secondPlace: self.model.topThreeChoicesObject.second, thirdPlace: self.model.topThreeChoicesObject.third)
+					} catch {
+						print("error - \(error)")
 					}
-				}
-			})
-		} else {
-			print("Top bars does not exist yet")
-		}
-	}
 
+				}
+			}
+		})
+	}
 
 	func JoinExistingParty(getCode partyCode: String) {
 		objectWillChange.send()
 
-		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyCode)")
+		let topBarsReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyCode)")
 
 		//Reads data at a path and listens for changes
-		localReference.observe(DataEventType.value, with: { [self] snapshot in
+		topBarsReference.getData(completion: { error, snapshot in
 
 			if(!snapshot.exists()) {
 				print("party does not exist")
 				self.queryPartyError = true
 				return
 			} else {
+
 				//Organizes values into a usable swift object
 				guard let value = snapshot.value as? [String: AnyObject] else {
 					print("Value cannot be unwrapped to a Swift readable format ")
 					return
 				}
-
 				for (key, valueProperty) in value {
 					switch key {
 					case FireBasePartyProps.partyID.rawValue:
-						self.model.joinParty(getID: valueProperty as? String)
+						self.model.setFriendsPartyId(code: valueProperty as? String)
+
 					case FireBasePartyProps.partyMaxVotes.rawValue:
 						self.model.joinParty(getVotes: valueProperty as? String)
+
 					case FireBasePartyProps.partyName.rawValue:
-						self.model.joinParty(getName: valueProperty as? String)
+						self.model.setPartyName(name: valueProperty as? String)
+
 					case FireBasePartyProps.partyURL.rawValue:
 						self.model.joinParty(getURL: valueProperty as? String)
+
 					default:
 						continue
 					}
-
 				}
 
+				self.model.setUserLevelToMember()
+				self.model.setPartyId()
 				self.model.setCurrentToPartyTrue()
 				self.queryPartyError = false
-				syncVMPropswithModelProps(getID: self.model.partyCreatorId, getVotes: self.model.partyMaxVotes, getPartyName: self.model.partyName, inParty: self.model.currentlyInParty, getURL: self.model.partyURL, partyLeader: self.model.isPartyLeader, partyCode: self.model.memberId)
-
 			}
-
 		})
 	}
 
-	//Helper function that lets the VM props update with whats in the Model
-	func syncVMPropswithModelProps(getID partyID: String? = nil, getVotes votes: String? = nil, getPartyName partyName: String? = nil, inParty currentlyInParty: Bool? = nil, getURL partyURL: String? = nil, getCardIndex cardIndex: Int? = nil, topBar topBarList: [String: restaurantScoreInfo]? = nil, topCardScore currentTopCard: Int? = nil, firstPlace: FirebaseRestaurantInfo? = nil, secondPlace: FirebaseRestaurantInfo? = nil, thirdPlace: FirebaseRestaurantInfo? = nil, partyLeader: Bool? = nil, partyCode: String? = nil, deviceType: Bool? = nil ) {
-
-		if let partyID = partyID {
-			self.partyCreatorId = partyID
-		}
-
-		if let partyVotes = votes {
-			self.partyMaxVotes = partyVotes
-		}
-
-		if let partyName = partyName {
-			self.partyName = partyName
-		}
-
-
-		if let currentlyInParty = currentlyInParty {
-			self.currentlyInParty = currentlyInParty
-		}
-
-		if let partyURL = partyURL {
-			self.partyURL = partyURL
-		}
-
-		if let cardIndex = cardIndex {
-			self.currentCardIndex = cardIndex
-		}
-
-		if let topBarList = topBarList {
-			self.topBarList = topBarList
-		}
-
-		if let currentTopCardScore = currentTopCard {
-			self.currentScoreOfTopCard = currentTopCardScore
-		}
-
-		if let firstPlaceRestaurant = firstPlace {
-			self.firstPlace = firstPlaceRestaurant
-		}
-
-		if let secondPlaceRestaurant = secondPlace {
-			self.secondPlace = secondPlaceRestaurant
-		}
-
-		if let thirdPlaceRestaurant = thirdPlace {
-			self.thirdPlace = thirdPlaceRestaurant
-		}
-
-		if let partyLeader = partyLeader {
-			self.isPartyLeader = partyLeader
-		}
-
-		if let partyCode = partyCode {
-			self.memberId = partyCode
-		}
-
-		if let deviceType = deviceType {
-			self.isPhone = deviceType
-		}
-
-	}
-
-
-
 	func whenCardIsDraggedFromView() {
 		self.model.removeCardFromDeck()
-		syncVMPropswithModelProps(getCardIndex: self.model.currentCardIndex)
 	}
 
 	func whenStarIsTapped(getPoints: Int) {
 		self.model.addScoreToCard(points: getPoints)
-		syncVMPropswithModelProps(topBar: self.model.topBarList, topCardScore: self.model.currentScoreOfTopCard)
 	}
 
 	func setCurrentTopCardScoreToZero() {
 		self.model.setCurrentTopCardScoreToZero()
-		syncVMPropswithModelProps(topCardScore: self.model.currentScoreOfTopCard)
 	}
 
 	func emptyTopBarList() {
 		self.model.emptyTheTopBarList()
-		syncVMPropswithModelProps(topBar: self.model.topBarList)
 	}
 
 	func leaveParty() {
 		objectWillChange.send()
 
-		guard let partyLeader = self.isPartyLeader else {
-			return print("You are not in a party")
-		}
-
-		guard let verifiedPartyID = self.partyCreatorId else {
-			return print("No Party ID Found")
-		}
 		//Does not delete the test app
-		if (verifiedPartyID == "11727") {
-			print("You cannot remove the ")
+		if (self.partyId == "11727") {
 			self.model.leaveParty()
-			syncVMPropswithModelProps(inParty: self.model.currentlyInParty,  partyLeader: self.model.isPartyLeader)
+
 			return
 		}
 
-		if (partyLeader) {
-			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(verifiedPartyID)")
+		if (self.isPartyLeader) {
+			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.partyId)")
 			localReference.removeValue()
 
-		} else if (!partyLeader) {
-
-			guard let verifiedMemberId = self.memberId else {
-				return print("No Party Code Found")
-			}
-
-			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(verifiedPartyID)").child("topBars").child("\(verifiedMemberId)")
+		} else if (!self.isPartyLeader) {
+			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.partyId)").child("topBars").child("\(self.friendPartyId)")
 			localReference.removeValue()
 		}
 
 		self.model.leaveParty()
-		syncVMPropswithModelProps(getID: self.model.partyCreatorId,inParty: self.model.currentlyInParty, firstPlace: self.model.topThreeChoicesObject.first, secondPlace: self.model.topThreeChoicesObject.second, thirdPlace: self.model.topThreeChoicesObject.third, partyLeader: self.model.isPartyLeader )
+
 	}
 
 	func removeImageUrl() {
-		self.firstPlace.image_url = ""
-		self.secondPlace.image_url = ""
-		self.thirdPlace.image_url = ""
+		objectWillChange.send()
+		self.model.removeImageUrls()
 	}
 
 	func setDeviceType() {
@@ -625,15 +453,8 @@ class drinkdViewModel: ObservableObject {
 			self.model.findDeviceType(device: .ipad)
 		}
 
-		self.syncVMPropswithModelProps(deviceType: self.model.isPhone)
-
 	}
 }
-
-
-
-
-
 
 struct drinkdViewModel_Previews: PreviewProvider {
 	static var previews: some View {

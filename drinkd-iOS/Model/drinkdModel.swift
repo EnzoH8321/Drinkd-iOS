@@ -31,17 +31,17 @@ struct drinkdModel {
 	private(set) var counter: Int = 10
 	private(set) var currentCardIndex: Int = 9
 	private(set) var currentlyInParty = false
-	private(set) var partyCreatorId: String?
+	private(set) var partyId: String?
 	private(set) var partyMaxVotes: String?
 	private(set) var partyName: String?
 	private(set) var partyTimestamp: Int?
 	private(set) var partyURL: String?
 	//Id for someone elses party
-	private(set) var memberId: String?
+	private(set) var friendPartyId: String?
 	private(set) var isPartyLeader: Bool?
 	private(set) var topBarList: [String: restaurantScoreInfo] = [:]
 	private(set) var currentScoreOfTopCard: Int = 0
-	private(set) var topThreeRestaurantArray: [FirebaseRestaurantInfo] = []
+	private(set) var topThreeRestaurantArray: [[String: FireBaseTopChoice]] = []
 	//Database ref
 	private(set) var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
 	//Represents Deck
@@ -49,7 +49,11 @@ struct drinkdModel {
 	//
 	private(set) var localRestaurantsDefault: [YelpApiBusinessSearchProperties] = []
 	//For top choices view
-	private(set) var topThreeChoicesObject = ThreeTopChoices()
+
+	private(set) var firstChoice = FirebaseRestaurantInfo()
+	private(set) var secondChoice = FirebaseRestaurantInfo()
+	private(set) var thirdChoice = FirebaseRestaurantInfo()
+
 	//
 	mutating func getLocalRestaurants() -> [YelpApiBusinessSearchProperties] {
 		return localRestaurants
@@ -94,17 +98,18 @@ struct drinkdModel {
 	
 	mutating func createParty(setVotes partyVotes: String? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
 		
-		self.partyCreatorId = String(Int.random(in: 100...20000))
+		self.partyId = String(Int.random(in: 100...20000))
 		self.partyMaxVotes = partyVotes
 		self.partyName = partyName
 		self.partyTimestamp = Int(Date().timeIntervalSince1970 * 1000)
-		self.currentlyInParty = true
+		//TODO: Removed due to it being called on fetchRestaurantonstartup
+//		self.currentlyInParty = true
 		
 		if let url = partyURL {
 			self.partyURL = url
 		}
 		
-		guard let partyID = self.partyCreatorId else {
+		guard let partyID = self.partyId else {
 			return
 		}
 		
@@ -129,35 +134,41 @@ struct drinkdModel {
 		
 	}
 
-	mutating func joinParty(getID partyCode: String? = nil, getVotes votes: String? = nil, getName name: String? = nil, getURL url: String? = nil) {
-		
-		if let partyCode = partyCode {
-			self.partyCreatorId = partyCode
-		}
-		
+	mutating func joinParty( getVotes votes: String? = nil,  getURL url: String? = nil) {
+
 		if let partyVotes = votes {
 			self.partyMaxVotes = partyVotes
 		}
-		
-		if let partyName = name {
-			self.partyName = partyName
-		}
-		
+
+
 		if let siteURL = url {
 			self.partyURL = siteURL
 		}
 
-		if (self.memberId == nil) {
-			self.memberId = String(Int.random(in: 100...20000))
-		}
 
+	}
+
+	mutating func setUserLevelToMember() {
 		self.setUserLevel(level: .member)
+	}
+
+	mutating func setFriendsPartyId(code: String?) {
+		self.friendPartyId = code
+	}
+
+	mutating func setPartyName(name: String?) {
+		self.partyName = name
 	}
 
 	mutating func setCurrentToPartyTrue() {
 		self.currentlyInParty = true
 	}
-	
+
+	mutating func setPartyId() {
+		var partyIdString = String(Int.random(in: 100...20000))
+		self.partyId = partyIdString
+	}
+
 	mutating func removeCardFromDeck() {
 		
 		self.currentCardIndex -= 1
@@ -187,35 +198,38 @@ struct drinkdModel {
 		self.topBarList.removeAll()
 	}
 
-	mutating func appendTopThreeRestaurants(in array: [FirebaseRestaurantInfo]) {
+	mutating func appendTopThreeRestaurants(in array: [Dictionary<String, FireBaseTopChoice>.Element]) {
 
-		//Clears array before adding elements.
-		topThreeRestaurantArray.removeAll()
+		//Empties Elements
+		firstChoice = FirebaseRestaurantInfo()
+		secondChoice = FirebaseRestaurantInfo()
+		thirdChoice = FirebaseRestaurantInfo()
 
-		for element in array {
-			topThreeRestaurantArray.append(element)
-
-		}
-		//Sorts tie-breaker. If two cards have the same score, then the one with the earlier name goes first
-		topThreeRestaurantArray.sort()
+		
 
 		for element in 0..<array.count {
 
-
 			switch (element) {
 			case 0:
-				let indexZero = topThreeRestaurantArray[0]
-				topThreeChoicesObject.first = FirebaseRestaurantInfo(name: indexZero.name, score: indexZero.score, url: indexZero.url, image_url: indexZero.image_url)
+				let firstElementValues = array[0].value
+				let firstElementKey = array[0].key
+				firstChoice = FirebaseRestaurantInfo(name: firstElementKey, score: firstElementValues.score, url: firstElementValues.url, image_url: firstElementValues.image_url)
 			case 1:
-				let indexOne = topThreeRestaurantArray[1]
-				topThreeChoicesObject.second = FirebaseRestaurantInfo(name: indexOne.name, score: indexOne.score, url: indexOne.url, image_url: indexOne.image_url)
+				let secondElementValues = array[1].value
+				let secondIndexKey = array[1].key
+				secondChoice = FirebaseRestaurantInfo(name: secondIndexKey, score: secondElementValues.score, url: secondElementValues.url, image_url: secondElementValues.image_url)
 			case 2:
-				let indexTwo = topThreeRestaurantArray[2]
-				topThreeChoicesObject.third = FirebaseRestaurantInfo(name: indexTwo.name, score: indexTwo.score, url: indexTwo.url, image_url: indexTwo.image_url)
+				let thirdElementValues = array[2].value
+				let thirdKey = array[2].key
+				thirdChoice = FirebaseRestaurantInfo(name: thirdKey, score: thirdElementValues.score, url: thirdElementValues.url, image_url: thirdElementValues.image_url)
 			default:
 				break
 			}
 		}
+		print("Model First Choice -> \(self.firstChoice)")
+		print("Model Second Choice -> \(self.secondChoice)")
+		print("Model Third Choice -> \(self.thirdChoice)")
+		print("array size -> \(array.count)")
 	}
 
 	private mutating func setUserLevel(level: userLevel) {
@@ -229,11 +243,16 @@ struct drinkdModel {
 
 	mutating func leaveParty() {
 		self.currentlyInParty = false
-		topThreeChoicesObject.first = FirebaseRestaurantInfo()
-		topThreeChoicesObject.second = FirebaseRestaurantInfo()
-		topThreeChoicesObject.third = FirebaseRestaurantInfo()
-		self.topThreeChoicesObject = ThreeTopChoices()
-		self.partyCreatorId = ""
+		self.firstChoice = FirebaseRestaurantInfo()
+		self.secondChoice = FirebaseRestaurantInfo()
+		self.thirdChoice = FirebaseRestaurantInfo()
+		self.partyId = ""
+	}
+
+	mutating func removeImageUrls(){
+		self.firstChoice.image_url = ""
+		self.secondChoice.image_url = ""
+		self.thirdChoice.image_url = ""
 	}
 
 	mutating func findDeviceType(device: DeviceType) {

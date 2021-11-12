@@ -57,7 +57,7 @@ struct CardViewIpad: View {
 		self.optionsDelivery = restaurantDetails.deliveryAvailable ?? false
 		self.optionsReservations = restaurantDetails.reservationAvailable ?? false
 		self.optionsPickup = restaurantDetails.pickUpAvailable ?? false
-
+		print(viewModel.currentlyInParty)
 	}
 
 	var body: some View {

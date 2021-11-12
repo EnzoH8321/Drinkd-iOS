@@ -60,7 +60,7 @@ struct FireBaseMaster: Codable {
 struct FireBaseTopChoice: Codable {
 	let id: String
 	let image_url: String
-	let score: Int
+	var score: Int
 	let url: String
 	let key: String
 
@@ -95,7 +95,7 @@ struct FireBaseTopChoice: Codable {
 }
 
 struct FireBaseTopChoicesArray: Codable {
-	var models = [FireBaseTopChoice]()
+	var models = [String: FireBaseTopChoice]()
 
 	private struct RestaurantNameKey : CodingKey {
 		var stringValue: String
@@ -108,19 +108,20 @@ struct FireBaseTopChoicesArray: Codable {
 	}
 
 	//  Init
-	init(_ models: [FireBaseTopChoice]) {
+	init(_ models: [String: FireBaseTopChoice]) {
 		self.models = models
 	}
+
 
 	//  Decode
 	init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: RestaurantNameKey.self)
 
-		var models: [FireBaseTopChoice] = []
+		var models: [String: FireBaseTopChoice] = [:]
 		for key in container.allKeys {
 			if let key = RestaurantNameKey(stringValue: key.stringValue) {
 				let model = try container.decode(FireBaseTopChoice.self, forKey: key)
-				models.append(model)
+				models[key.stringValue] = model
 			}
 		}
 		self.models = models

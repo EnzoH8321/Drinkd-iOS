@@ -30,19 +30,15 @@ struct PartyCardView: View {
 						Text("Party ID:")
 							.font(.largeTitle)
 
-						Text("\(viewModel.partyCreatorId ?? "Party ID not found")")
+						Text("\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)")
 							.font(.title)
 							.padding(.bottom, 25)
 
 						Text("Partyname:")
 							.font(.largeTitle)
-						Text("\(viewModel.partyName ?? "Party Name not Found")")
+						Text("\(viewModel.partyName)")
 							.font(.title)
-						//Will implement in the future
-//						Text("Votes to Win:")
-//							.font(.largeTitle)
-//						Text("\(viewModel.partyMaxVotes ?? "Party not found") ")
-//							.font(.title)
+
 						Button("Leave Party") {
 							self.viewModel.leaveParty()
 						}
