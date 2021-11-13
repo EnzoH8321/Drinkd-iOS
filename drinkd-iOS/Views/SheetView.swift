@@ -18,8 +18,9 @@ struct SheetView: View {
 			}
 			.navigationTitle("Settings")
 			.navigationBarTitleDisplayMode(.inline)
+			
 		}
-
+		.navigationViewStyle(StackNavigationViewStyle())
 	}
 }
 

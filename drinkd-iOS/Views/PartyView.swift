@@ -27,8 +27,6 @@ struct PartyView: View {
 					}
 					.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 
-					
-
 				}
 			} else {
 				VStack{

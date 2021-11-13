@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HowToView: View {
-
+	//203,203,208
 	private enum selectionChoices {
 		case createParty, joinParty, voteForParty, topChoices
 	}
@@ -31,7 +31,8 @@ struct HowToView: View {
 				Spacer()
 				Image(systemName: "chevron.right")
 			}
-			.listRowBackground(firstButtonPressed ? Color.gray : Color.white)
+			.listRowBackground(firstButtonPressed ? Color(red: 203 / 255, green: 208 / 255, blue: 208 / 255, opacity: 0.7) : Color.white)
+			.contentShape(Rectangle())
 			.onTapGesture {
 				showModal(for: .createParty)
 				self.firstButtonPressed = true
@@ -46,7 +47,8 @@ struct HowToView: View {
 				Spacer()
 				Image(systemName: "chevron.right")
 			}
-			.listRowBackground(secondButtonPressed ? Color.gray : Color.white)
+			.listRowBackground(secondButtonPressed ? Color(red: 203 / 255, green: 208 / 255, blue: 208 / 255, opacity: 0.7) : Color.white)
+			.contentShape(Rectangle())
 			.onTapGesture {
 				showModal(for: .joinParty)
 				self.secondButtonPressed = true
@@ -60,7 +62,8 @@ struct HowToView: View {
 				Spacer()
 				Image(systemName: "chevron.right")
 			}
-			.listRowBackground(thirdButtonPressed ? Color.gray : Color.white)
+			.listRowBackground(thirdButtonPressed ? Color(red: 203 / 255, green: 208 / 255, blue: 208 / 255, opacity: 0.7) : Color.white)
+			.contentShape(Rectangle())
 			.onTapGesture {
 				showModal(for: .voteForParty)
 				self.thirdButtonPressed = true
@@ -74,7 +77,8 @@ struct HowToView: View {
 				Spacer()
 				Image(systemName: "chevron.right")
 			}
-			.listRowBackground(fourthButtonPressed ? Color.gray : Color.white)
+			.listRowBackground(fourthButtonPressed ? Color(red: 203 / 255, green: 208 / 255, blue: 208 / 255, opacity: 0.7) : Color.white)
+			.contentShape(Rectangle())
 			.onTapGesture {
 				showModal(for: .topChoices)
 				self.fourthButtonPressed = true

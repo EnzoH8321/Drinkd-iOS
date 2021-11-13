@@ -75,7 +75,6 @@ struct MasterView: View {
 						switch (tabVal) {
 						case 2 :
 							viewModel.calculateTopThreeRestaurants()
-							
 						default:
 							break
 						}
