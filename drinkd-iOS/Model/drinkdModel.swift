@@ -165,7 +165,7 @@ struct drinkdModel {
 	}
 
 	mutating func setPartyId() {
-		var partyIdString = String(Int.random(in: 100...20000))
+		let partyIdString = String(Int.random(in: 100...20000))
 		self.partyId = partyIdString
 	}
 
@@ -205,7 +205,7 @@ struct drinkdModel {
 		secondChoice = FirebaseRestaurantInfo()
 		thirdChoice = FirebaseRestaurantInfo()
 
-		
+
 
 		for element in 0..<array.count {
 
@@ -226,10 +226,6 @@ struct drinkdModel {
 				break
 			}
 		}
-		print("Model First Choice -> \(self.firstChoice)")
-		print("Model Second Choice -> \(self.secondChoice)")
-		print("Model Third Choice -> \(self.thirdChoice)")
-		print("array size -> \(array.count)")
 	}
 
 	private mutating func setUserLevel(level: userLevel) {

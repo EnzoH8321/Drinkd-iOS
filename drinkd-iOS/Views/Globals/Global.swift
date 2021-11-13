@@ -16,7 +16,7 @@ enum AppColors {
 
 enum AppShadow {
 	static let mediumShadowRadius = CGFloat(10)
-	static let lowShadowRadius = CGFloat(4)
+	static let lowShadowRadius = CGFloat(2)
 }
 
 enum CardSpecificStyle {
@@ -38,10 +38,10 @@ enum ButtonSyling {
 	static let frameHeight = CGFloat(20)
 	static let clipShape = Capsule()
 	static let buttonShadowColor = Color.black
-	static let buttonShadowRadius = CGFloat(4)
-	static let buttonShadowX = CGFloat(2)
-	static let buttonShadowY = CGFloat(1)
-	static let buttonTextColor = Color.black
+	static let buttonShadowRadius = CGFloat(2)
+	static let buttonShadowX = CGFloat(0)
+	static let buttonShadowY = CGFloat(0)
+	static let buttonTextColor = Color.white
 }
 
 struct DefaultAppButton: ButtonStyle {

@@ -77,6 +77,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
+
 	//Hidden API KEY
 	let token = (Bundle.main.infoDictionary?["API_KEY"] as? String)!
 
@@ -110,7 +111,6 @@ class drinkdViewModel: ObservableObject {
 							self.objectWillChange.send()
 							self.model.appendDeliveryOptions(in: JSONArray)
 							self.model.createParty(setURL: url.absoluteString)
-//							self.restaurantList = self.model.getLocalRestaurants()
 							self.removeSplashScreen = true
 							self.userLocationError = false
 						}
@@ -183,7 +183,6 @@ class drinkdViewModel: ObservableObject {
 							self.objectWillChange.send()
 							self.model.appendDeliveryOptions(in: JSONArray)
 							self.model.createParty(setURL: url.absoluteString)
-//							self.restaurantList = self.model.getLocalRestaurants()
 							self.removeSplashScreen = true
 							self.userLocationError = false
 						}
@@ -252,7 +251,6 @@ class drinkdViewModel: ObservableObject {
 			print("\(error?.localizedDescription ?? "Unknown error")")
 
 		}.resume()
-
 	}
 
 	func submitRestaurantScore() {
@@ -264,7 +262,6 @@ class drinkdViewModel: ObservableObject {
 
 		//Verifies name in case it contains illegal characters
 		let unverifiedName = barList.name
-
 		let score: Int = barList.score
 		let name: String = unverifiedName.replacingOccurrences(of: "[\\[\\].#$]", with: "", options: .regularExpression, range: nil)
 
@@ -288,8 +285,7 @@ class drinkdViewModel: ObservableObject {
 
 	func updateRestaurantList() {
 		objectWillChange.send()
-		model.appendCardsToDecklist()
-
+		self.model.appendCardsToDecklist()
 	}
 
 	//called when the create party button in the create party screen in pushed
@@ -340,10 +336,6 @@ class drinkdViewModel: ObservableObject {
 						let array = Array(sortedDict)
 
 						self.model.appendTopThreeRestaurants(in: array)
-						print("Sorted dict -> \(array)")
-						print("First Choices -> \(self.firstPlace)")
-						print("Second Choices -> \(self.secondPlace)")
-						print("Third Choice -> \(self.thirdPlace)")
 
 					} catch {
 						print("error - \(error)")
@@ -422,7 +414,6 @@ class drinkdViewModel: ObservableObject {
 		//Does not delete the test app
 		if (self.partyId == "11727") {
 			self.model.leaveParty()
-
 			return
 		}
 

@@ -61,10 +61,7 @@ struct CardView: View {
 	}
 
 	var body: some View {
-
 		GeometryReader { geo in
-
-			
 
 			ZStack {
 				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
@@ -187,18 +184,15 @@ struct CardView: View {
 					}
 			)
 		}
-
 	}
 
 	private struct SubmitButton: View {
-
 		@EnvironmentObject var viewModel: drinkdViewModel
 
 		var body: some View {
 			Button("Submit", action: {	viewModel.submitRestaurantScore()})
 		}
 	}
-
 }
 
 struct YelpDetailButton: View {

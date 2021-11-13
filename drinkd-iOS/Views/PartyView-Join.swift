@@ -15,9 +15,9 @@ struct PartyView_Join: View {
 	var body: some View {
 
 		VStack {
-			Text("Enter a Party Code Below")
+			Text("Enter a Party ID Below")
 				.font(.title)
-			TextField("Party Code Here", text: $partyCode)
+			TextField("Party ID Here", text: $partyCode)
 				.border(Color(UIColor.separator))
 				.textFieldStyle(.roundedBorder)
 
@@ -43,7 +43,7 @@ struct PartyView_Join: View {
 				viewModel.fetchRestaurantsAfterJoiningParty()
 			}
 			.alert(isPresented: $viewModel.queryPartyError) {
-				Alert(title: Text("Error"), message: Text("Party Does not exists"))
+				Alert(title: Text("Error"), message: Text("Party Does not exist"))
 			}
 			.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 		}
