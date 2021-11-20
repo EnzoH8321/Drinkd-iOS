@@ -35,8 +35,8 @@ enum UserPrivacyChoice {
 
 //Button
 enum ButtonSyling {
-	static let frameHeight = CGFloat(20)
-	static let clipShape = Capsule()
+	static let frameHeight = CGFloat(5)
+	static let clipShape = RoundedRectangle(cornerRadius: 10)
 	static let buttonShadowColor = Color.black
 	static let buttonShadowRadius = CGFloat(0)
 	static let buttonShadowX = CGFloat(0)
@@ -84,7 +84,7 @@ struct CardInfoButton: ButtonStyle {
 	}
 }
 
-struct LargeCardInfoButton: ButtonStyle {
+struct noPartyYelpButtonStyle: ButtonStyle {
 
 	let deviceType: DeviceType
 
@@ -93,8 +93,8 @@ struct LargeCardInfoButton: ButtonStyle {
 			.label
 			.font(deviceType == .phone ? .body : .title2)
 			.foregroundColor(ButtonSyling.buttonTextColor)
-			.padding(deviceType == .phone ? 20 : 35)
-			.frame(height: deviceType == .phone ? ButtonSyling.frameHeight + 30 : ButtonSyling.frameHeight + CGFloat(40))
+			.padding(deviceType == .phone ? 0 : 15)
+			.frame(height: deviceType == .phone ? 5 : ButtonSyling.frameHeight + CGFloat(40))
 			.padding()
 			.background(AppColors.primaryColor)
 			.clipShape(ButtonSyling.clipShape)

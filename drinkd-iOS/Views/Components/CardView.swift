@@ -124,13 +124,17 @@ struct CardView: View {
 									.frame(width: 40)
 								Text(optionsReservations ? "Reservations Available" : "Reservations Unavailable")
 									.padding([.leading], 10)
+								Spacer()
+								if (!viewModel.currentlyInParty) {
+									noPartyYelpButton(buttonName: "square.text.square", yelpURL: "\(restaurantURL)")
+										.padding(.bottom, 20)
+										.padding(.trailing, 10)
+								}
+
 							}
 
-
 						}
-						if (!viewModel.currentlyInParty) {
-							LargeYelpDetailButton(buttonName: "More Info", yelpURL: "\(restaurantURL)")
-						}
+	
 					}
 
 					if (viewModel.currentlyInParty) {
@@ -210,13 +214,14 @@ struct YelpDetailButton: View {
 			}
 			openURL(url)
 		} label: {
-			Image(systemName: "\(buttonName)")
+			Text("More Info")
+
 		}
 		.buttonStyle(deviceIsPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
 	}
 }
-
-struct LargeYelpDetailButton: View {
+//Not currently in party
+struct noPartyYelpButton: View {
 	@Environment(\.openURL) var openURL
 
 	let deviceIsPhone = UIDevice.current.userInterfaceIdiom == .phone
@@ -231,9 +236,11 @@ struct LargeYelpDetailButton: View {
 			}
 			openURL(url)
 		} label: {
-			Text("\(buttonName)")
+			Image(systemName: "\(buttonName)")
+				.resizable()
+				.frame(width: deviceIsPhone ? 20 : 40, height: deviceIsPhone ? 20 : 40)
 		}
-		.buttonStyle(deviceIsPhone ? LargeCardInfoButton(deviceType: .phone) : LargeCardInfoButton(deviceType: .ipad))
+		.buttonStyle(deviceIsPhone ? noPartyYelpButtonStyle(deviceType: .phone) : noPartyYelpButtonStyle(deviceType: .ipad))
 	}
 }
 
