@@ -127,7 +127,7 @@ struct HowToView: View {
 					.addBottomPadding()
 				Text("3. Press on the Submit button to finalize the vote. If you do not press submit, the rating will not be finalized.")
 					.addBottomPadding()
-				Text("4. After submitting a score, you can rerate by choosing a different rating and resubmitting. This will override your previous rating of the restaurant.")
+				Text("4. After submitting a rating, you can rerate by choosing a different rating and resubmitting. This will override your previous rating of the restaurant.")
 			}
 		}
 	}
