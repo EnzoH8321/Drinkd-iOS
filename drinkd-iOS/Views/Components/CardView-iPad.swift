@@ -69,7 +69,7 @@ struct CardViewIpad: View {
 			ZStack {
 				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 					.fill(Color.white)
-					.shadow(radius: AppShadow.lowShadowRadius)
+					.overlay(RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius).strokeBorder(Color(red: 221/255, green: 221/255, blue: 221/255), lineWidth: 1))
 
 				VStack(alignment: .leading) {
 					Text("\(restaurantTitle)")

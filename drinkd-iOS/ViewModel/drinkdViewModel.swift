@@ -34,6 +34,7 @@ class drinkdViewModel: ObservableObject {
 		return model.isPartyLeader ?? false
 	}
 	var queryPartyError = false
+	
 	var restaurantList: [YelpApiBusinessSearchProperties] {
 		return model.localRestaurants
 	}

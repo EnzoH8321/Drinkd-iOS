@@ -19,11 +19,13 @@ struct HomeView: View {
 						ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
 							CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
 								.stacked(at: element, in: viewModel.restaurantList.count)
+
 						}
 					} else {
 						ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
 							CardViewIpad(in: viewModel.restaurantList[element], forView: self.viewModel)
 								.stacked(at: element, in: viewModel.restaurantList.count)
+
 						}
 					}
 				}
@@ -32,14 +34,13 @@ struct HomeView: View {
 
 	}
 
-	
-
 }
 
 //For stacked styling
 extension View {
 	func stacked(at position: Int, in total: Int) -> some View {
 		let offset = CGFloat(total - position)
+
 		return self.offset(CGSize(width: 0, height: offset * 2))
 	}
 }

@@ -38,7 +38,6 @@ struct CardView: View {
 	var optionsReservations: Bool = false
 
 
-
 	//We use optionals because the API can return null for some properties
 	init(in restaurantDetails: YelpApiBusinessSearchProperties, forView viewModel: drinkdViewModel) {
 		self.restaurantTitle = restaurantDetails.name ?? "Name not found"
@@ -66,7 +65,8 @@ struct CardView: View {
 			ZStack {
 				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 					.fill(Color.white)
-					.shadow(radius: AppShadow.lowShadowRadius)
+					.overlay(RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius).strokeBorder(Color(red: 221/255, green: 221/255, blue: 221/255), lineWidth: 1))
+
 
 				VStack(alignment: .leading) {
 					Text("\(restaurantTitle)")
@@ -210,7 +210,7 @@ struct YelpDetailButton: View {
 			}
 			openURL(url)
 		} label: {
-			Text("\(buttonName)")
+			Image(systemName: "\(buttonName)")
 		}
 		.buttonStyle(deviceIsPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
 	}
