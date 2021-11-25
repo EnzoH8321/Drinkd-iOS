@@ -4,7 +4,7 @@
 # add pods for desired Firebase products
 pod 'Firebase/Database'
 pod 'Firebase/Analytics'
-
+pod 'Firebase/Messaging'
 
 target 'drinkd-iOS' do
   # Comment the next line if you don't want to use dynamic frameworks

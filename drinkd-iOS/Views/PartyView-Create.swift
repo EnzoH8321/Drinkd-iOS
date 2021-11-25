@@ -21,13 +21,12 @@ struct PartyView_Create: View {
 			Text("Create Your Party")
 				.font(.title)
 			//
-			TextField("Choose a Party Name(Max 15 Characters, No Numbers)", text: $partyName ) { isEditing in
-
-			} onCommit: {
-
-			}
-			.border(Color(UIColor.separator))
-			.textFieldStyle(.roundedBorder)
+			TextField("Choose a Party Name(Max 15 Characters, No Numbers)", text: $partyName )
+				.border(Color(UIColor.separator))
+				.textFieldStyle(.roundedBorder)
+			TextField("Set a Winning Vote Amount", text: $winningVoteAmount)
+				.border(Color(UIColor.separator))
+				.textFieldStyle(.roundedBorder)
 			CreatePartyButton(name: partyName, votes: winningVoteAmount)
 			//
 			Spacer()
@@ -39,12 +38,12 @@ struct PartyView_Create: View {
 		@EnvironmentObject var viewModel: drinkdViewModel
 		@State private var showAlert: Bool = false
 
-		var votes: String
+		var votes: Int
 		var name: String
 
 		init(name: String, votes: String) {
 			self.name = name
-			self.votes = votes
+			self.votes = Int(votes) ?? 1
 		}
 
 		var body: some View {

@@ -6,6 +6,7 @@
 //
 
 import Firebase
+import SwiftUI
 
 struct restaurantScoreInfo {
 	var name: String
@@ -27,12 +28,13 @@ struct drinkdModel {
 		case member
 	}
 
+	private(set) var fcmToken: String = ""
 	private(set) var isPhone: Bool = true
 	private(set) var counter: Int = 10
 	private(set) var currentCardIndex: Int = 9
 	private(set) var currentlyInParty = false
 	private(set) var partyId: String?
-	private(set) var partyMaxVotes: String?
+	private(set) var partyMaxVotes: Int?
 	private(set) var partyName: String?
 	private(set) var partyTimestamp: Int?
 	private(set) var partyURL: String?
@@ -53,6 +55,10 @@ struct drinkdModel {
 	private(set) var firstChoice = FirebaseRestaurantInfo()
 	private(set) var secondChoice = FirebaseRestaurantInfo()
 	private(set) var thirdChoice = FirebaseRestaurantInfo()
+
+	mutating func setToken(token: String) {
+		self.fcmToken = token
+	}
 
 	//
 	mutating func getLocalRestaurants() -> [YelpApiBusinessSearchProperties] {
@@ -96,8 +102,9 @@ struct drinkdModel {
 		}
 	}
 	
-	mutating func createParty(setVotes partyVotes: String? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
-		
+	mutating func createParty(setVotes partyVotes: Int? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
+		print("FCM TOKEN -> \(AppDelegate.fcmToken)")
+		self.fcmToken = AppDelegate.fcmToken
 		self.partyId = String(Int.random(in: 100...20000))
 		self.partyMaxVotes = partyVotes
 		self.partyName = partyName
@@ -128,24 +135,32 @@ struct drinkdModel {
 		guard let partyURL = self.partyURL else {
 			return
 		}
-		
-		self.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL])
+
+		self.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL, "tokens": [fcmToken: fcmToken]])
 		self.setUserLevel(level: .creator)
 		
 	}
 
-	mutating func joinParty( getVotes votes: String? = nil,  getURL url: String? = nil) {
+	mutating func joinParty( getVotes votes: Int? = nil,  getURL url: String? = nil) {
+
+		let uniqueID = UUID()
+
+		guard let validFriendPartyId = self.friendPartyId else {
+			return
+		}
+
+//		let reference = self.ref.child("parties").child(validFriendPartyId).child("tokens")
 
 		if let partyVotes = votes {
 			self.partyMaxVotes = partyVotes
 		}
 
-
 		if let siteURL = url {
 			self.partyURL = siteURL
 		}
 
-
+		//Adds your device id to the database for notification
+		self.ref.child("parties").child(validFriendPartyId).child("tokens").updateChildValues([fcmToken: fcmToken])
 	}
 
 	mutating func setUserLevelToMember() {
@@ -206,7 +221,6 @@ struct drinkdModel {
 		thirdChoice = FirebaseRestaurantInfo()
 
 
-
 		for element in 0..<array.count {
 
 			switch (element) {
@@ -259,6 +273,5 @@ struct drinkdModel {
 		case .ipad:
 			self.isPhone = false
 		}
-
 	}
 }

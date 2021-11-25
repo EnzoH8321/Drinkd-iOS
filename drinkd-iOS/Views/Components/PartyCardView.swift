@@ -32,11 +32,15 @@ struct PartyCardView: View {
 
 						Text("\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)")
 							.font(.title)
-							.padding(.bottom, 25)
 
 						Text("Partyname:")
 							.font(.largeTitle)
 						Text("\(viewModel.partyName)")
+							.font(.title)
+
+						Text("Votes to Win")
+							.font(.largeTitle)
+						Text("\(viewModel.partyMaxVotes)")
 							.font(.title)
 
 						Button("Leave Party") {

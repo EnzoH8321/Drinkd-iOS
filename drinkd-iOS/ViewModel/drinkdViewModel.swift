@@ -22,6 +22,9 @@ class drinkdViewModel: ObservableObject {
 
 	@Published var model = drinkdModel()
 
+	var fcmToken: String {
+		return model.fcmToken
+	}
 	var userLocationError = false
 	var isPhone: Bool {
 		return model.isPhone
@@ -41,8 +44,8 @@ class drinkdViewModel: ObservableObject {
 	var partyId: String {
 		return model.partyId ?? "No Party ID not Found"
 	}
-	var partyMaxVotes: String {
-		return model.partyMaxVotes ?? "No Max Votes Found"
+	var partyMaxVotes: Int {
+		return model.partyMaxVotes ?? 0
 	}
 	var partyName: String {
 		return model.partyName ?? "No Party Name"
@@ -290,7 +293,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	//called when the create party button in the create party screen in pushed
-	func createNewParty(setVotes partyVotes: String? = nil, setName partyName: String? = nil) {
+	func createNewParty(setVotes partyVotes: Int? = nil, setName partyName: String? = nil) {
 		objectWillChange.send()
 		self.model.createParty(setVotes: partyVotes, setName: partyName)
 		self.model.setCurrentToPartyTrue()
@@ -372,7 +375,7 @@ class drinkdViewModel: ObservableObject {
 						self.model.setFriendsPartyId(code: valueProperty as? String)
 
 					case FireBasePartyProps.partyMaxVotes.rawValue:
-						self.model.joinParty(getVotes: valueProperty as? String)
+						self.model.joinParty(getVotes: valueProperty as? Int)
 
 					case FireBasePartyProps.partyName.rawValue:
 						self.model.setPartyName(name: valueProperty as? String)
@@ -446,6 +449,7 @@ class drinkdViewModel: ObservableObject {
 		}
 
 	}
+
 }
 
 struct drinkdViewModel_Previews: PreviewProvider {
