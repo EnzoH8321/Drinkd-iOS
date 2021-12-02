@@ -74,6 +74,7 @@ struct MasterView: View {
 					.onChange(of: selectedTab) {tabVal in
 						switch (tabVal) {
 						case 2 :
+							viewModel.removeImageUrl()
 							viewModel.calculateTopThreeRestaurants()
 						default:
 							break

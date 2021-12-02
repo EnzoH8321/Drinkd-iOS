@@ -50,7 +50,7 @@ struct PartyView_Create: View {
 
 			Button("Create Party") {
 
-				let filteredName = name.filter { "0123456789".contains($0) }
+				let filteredName = 	name.filter { "0123456789".contains($0) }
 				let nameLength = name.count
 
 				if ( nameLength > 15 || nameLength == 0 || filteredName.count > 0) {

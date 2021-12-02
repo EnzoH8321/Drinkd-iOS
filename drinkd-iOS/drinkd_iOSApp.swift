@@ -124,8 +124,6 @@ extension AppDelegate {
 			print("Message ID: \(messageID)")
 		}
 
-		print(userInfo)
-
 		// Change this to your preferred presentation option
 		completionHandler([[.banner, .badge, .sound]])
 	}

@@ -81,7 +81,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
-
+	
 	//Hidden API KEY
 	let token = (Bundle.main.infoDictionary?["API_KEY"] as? String)!
 

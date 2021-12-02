@@ -149,8 +149,6 @@ struct drinkdModel {
 			return
 		}
 
-//		let reference = self.ref.child("parties").child(validFriendPartyId).child("tokens")
-
 		if let partyVotes = votes {
 			self.partyMaxVotes = partyVotes
 		}
@@ -159,7 +157,6 @@ struct drinkdModel {
 			self.partyURL = siteURL
 		}
 
-		//Adds your device id to the database for notification
 		self.ref.child("parties").child(validFriendPartyId).child("tokens").updateChildValues([fcmToken: fcmToken])
 	}
 
@@ -214,12 +211,10 @@ struct drinkdModel {
 	}
 
 	mutating func appendTopThreeRestaurants(in array: [Dictionary<String, FireBaseTopChoice>.Element]) {
-
 		//Empties Elements
 		firstChoice = FirebaseRestaurantInfo()
 		secondChoice = FirebaseRestaurantInfo()
 		thirdChoice = FirebaseRestaurantInfo()
-
 
 		for element in 0..<array.count {
 
