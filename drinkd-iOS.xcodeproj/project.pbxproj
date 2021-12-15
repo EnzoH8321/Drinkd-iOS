@@ -16,6 +16,7 @@
 		549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549BFC462728CFBA00F96F48 /* CustomLocationView.swift */; };
 		54B3E537270E140E0004ECC5 /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B3E536270E140C0004ECC5 /* Star.swift */; };
 		54B3E539270F68800004ECC5 /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B3E538270F687F0004ECC5 /* Firebase.swift */; };
+		54BEE37427593A9300C82880 /* YelpNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BEE37327593A9300C82880 /* YelpNetworking.swift */; };
 		54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */; };
 		54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* MasterView.swift */; };
 		54F9C80D26FBB537008FA516 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80C26FBB537008FA516 /* Assets.xcassets */; };
@@ -76,6 +77,7 @@
 		549BFC462728CFBA00F96F48 /* CustomLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLocationView.swift; sourceTree = "<group>"; };
 		54B3E536270E140C0004ECC5 /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
 		54B3E538270F687F0004ECC5 /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
+		54BEE37327593A9300C82880 /* YelpNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpNetworking.swift; sourceTree = "<group>"; };
 		54F9C80526FBB536008FA516 /* drinkd-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "drinkd-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSApp.swift; sourceTree = "<group>"; };
 		54F9C80A26FBB536008FA516 /* MasterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterView.swift; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 			children = (
 				54F9C85C2703E52A008FA516 /* RemoteImageLoader.swift */,
 				54F9C854270244B9008FA516 /* Location.swift */,
+				54BEE37327593A9300C82880 /* YelpNetworking.swift */,
 			);
 			path = WebService;
 			sourceTree = "<group>";
@@ -553,6 +556,7 @@
 				54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */,
 				5407FD72271924D5008BC496 /* PartyCardView.swift in Sources */,
 				54F9C8572702494E008FA516 /* drinkdViewModel.swift in Sources */,
+				54BEE37427593A9300C82880 /* YelpNetworking.swift in Sources */,
 				54F9C85D2703E52A008FA516 /* RemoteImageLoader.swift in Sources */,
 				54F9C85B27037F2F008FA516 /* drinkdModel.swift in Sources */,
 				54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */,
@@ -656,7 +660,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -714,7 +718,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

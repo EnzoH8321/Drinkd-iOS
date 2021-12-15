@@ -143,8 +143,6 @@ struct drinkdModel {
 
 	mutating func joinParty( getVotes votes: Int? = nil,  getURL url: String? = nil) {
 
-		let uniqueID = UUID()
-
 		guard let validFriendPartyId = self.friendPartyId else {
 			return
 		}

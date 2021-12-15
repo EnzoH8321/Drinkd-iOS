@@ -15,11 +15,6 @@ import UserNotifications
 @main
 struct drinkd_iOSApp: App {
 
-	init() {
-		//Initializes firebase
-//		FirebaseApp.configure()
-	}
-
 	@UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
 	let persistenceController = PersistenceController.shared
@@ -36,7 +31,7 @@ struct drinkd_iOSApp: App {
 						ATTrackingManager.requestTrackingAuthorization { status in
 							switch (status) {
 							case .authorized:
-								viewModel.fetchRestaurantsOnStartUp()
+								fetchRestaurantsOnStartUp(viewModel: viewModel)
 								print("User has Authorized Tracking")
 							case .notDetermined:
 								print("Not Determined")
@@ -44,14 +39,16 @@ struct drinkd_iOSApp: App {
 								print("Restricted Tracking")
 							case .denied:
 								print("User has Denied Tracking")
-								viewModel.fetchRestaurantsOnStartUp()
+								fetchRestaurantsOnStartUp(viewModel: viewModel)
 							@unknown default:
 								print("Unknown")
 							}
 						}
 					} else {
-						viewModel.fetchRestaurantsOnStartUp()
+
+						fetchRestaurantsOnStartUp(viewModel: viewModel)
 					}
+
 
 				}
 

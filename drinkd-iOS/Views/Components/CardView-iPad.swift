@@ -198,7 +198,7 @@ struct CardViewIpad: View {
 		@EnvironmentObject var viewModel: drinkdViewModel
 
 		var body: some View {
-			Button("Submit", action: {	viewModel.submitRestaurantScore()})
+			Button("Submit", action: {	submitRestaurantScore(viewModel: viewModel)})
 		}
 	}
 

@@ -9,8 +9,6 @@
 
 import SwiftUI
 
-
-
 struct CardView: View {
 
 	private enum CardPadding: CGFloat{
@@ -76,7 +74,7 @@ struct CardView: View {
 					Text("\(restaurantScore) / \(restaurantPrice)")
 						.font(.title3)
 					RemoteImageLoader(url: "\(restaurantImage)")
-					//						.frame(maxHeight: 300)
+				
 					HStack {
 						VStack(alignment: .leading) {
 							HStack {
@@ -194,7 +192,7 @@ struct CardView: View {
 		@EnvironmentObject var viewModel: drinkdViewModel
 
 		var body: some View {
-			Button("Submit", action: {	viewModel.submitRestaurantScore()})
+			Button("Submit", action: {	submitRestaurantScore(viewModel: viewModel)})
 		}
 	}
 }

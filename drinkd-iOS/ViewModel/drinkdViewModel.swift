@@ -10,6 +10,10 @@ import SwiftUI
 import Firebase
 import AppTrackingTransparency
 
+enum ErrorHanding: Error {
+	case businessArrayNotFound
+}
+
 class drinkdViewModel: ObservableObject {
 
 	private enum ErrorHanding: Error {
@@ -80,211 +84,14 @@ class drinkdViewModel: ObservableObject {
 		return model.thirdChoice
 	}
 
-	private var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
-	
+	var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
+
 	//Hidden API KEY
 	let token = (Bundle.main.infoDictionary?["API_KEY"] as? String)!
 
 	init() {
 		locationFetcher = LocationFetcher()
 		locationFetcher.start()
-	}
-
-	//Fetches a user defined location. Used when user disabled location services.
-	func fetchUsingCustomLocation(longitude: Double, latitude: Double) {
-
-		guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
-			print("Invalid URL")
-			return
-		}
-
-		var request = URLRequest(url: url)
-		request.httpMethod = "GET"
-		request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
-		//URLSession
-		URLSession.shared.dataTask(with: request) { data, response, error in
-
-			//If URLSession returns data, below code block will execute
-			if let verifiedData = data {
-
-				do {
-					let JSONDecoderValue = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
-					if let JSONArray = JSONDecoderValue.businesses {
-						DispatchQueue.main.async {
-							self.objectWillChange.send()
-							self.model.appendDeliveryOptions(in: JSONArray)
-							self.model.createParty(setURL: url.absoluteString)
-							self.removeSplashScreen = true
-							self.userLocationError = false
-						}
-					} else {
-						throw ErrorHanding.businessArrayNotFound
-					}
-
-				} catch(ErrorHanding.businessArrayNotFound) {
-					print("Did not correctly retrieve the Business Array from the Business Search Endpoint")
-
-				} catch {
-					print(error)
-				}
-				return
-			}
-			//If you are here, URLSession returned error instead of data
-			print("\(error?.localizedDescription ?? "Unknown error")")
-
-		}.resume()
-
-	}
-
-	func fetchRestaurantsOnStartUp() {
-		//Checks to see if the function already ran to prevent duplicate calls
-		if (self.restaurantList.count > 0) {
-			return
-		}
-
-		self.setDeviceType()
-
-		//1.Creating the URL we want to read.
-		//2.Wrapping that in a URLRequest, which allows us to configure how the URL should be accessed.
-		//3.Create and start a networking task from that URL request.
-		//4.Handle the result of that networking task.
-		var longitude: Double = 0.0
-		var latitude: Double = 0.0
-
-		//If user location was found, continue
-		if let location = locationFetcher.lastKnownLocation {
-			latitude = location.latitude
-			longitude = location.longitude
-		}
-		//If defaults are used, then the user location could not be found
-		if (longitude == 0.0 || latitude == 0.0) {
-			self.userLocationError = true
-			print("could not fetch user location")
-			return
-		}
-
-		guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
-			print("Invalid URL")
-			return
-		}
-
-		var request = URLRequest(url: url)
-		request.httpMethod = "GET"
-		request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
-
-		//URLSession
-		URLSession.shared.dataTask(with: request) { data, response, error in
-
-			//If URLSession returns data, below code block will execute
-			if let verifiedData = data {
-				do {
-					let JSONDecoderValue = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
-					if let JSONArray = JSONDecoderValue.businesses {
-
-						DispatchQueue.main.async {
-							self.objectWillChange.send()
-							self.model.appendDeliveryOptions(in: JSONArray)
-							self.model.createParty(setURL: url.absoluteString)
-							self.removeSplashScreen = true
-							self.userLocationError = false
-						}
-					} else {
-						throw ErrorHanding.businessArrayNotFound
-					}
-
-				} catch(ErrorHanding.businessArrayNotFound) {
-					print("Did not correctly retrieve the Business Array from the Business Search Endpoint")
-
-				} catch {
-					print(error)
-				}
-				return
-			}
-			//If you are here, URLSession returned error instead of data
-			print("\(error?.localizedDescription ?? "Unknown error")")
-
-		}.resume()
-	}
-
-	func fetchRestaurantsAfterJoiningParty() {
-		objectWillChange.send()
-
-		guard let verifiedPartyURL = self.partyURL else {
-			return print("NO URL FOUND")
-		}
-
-		guard let verifiedURL = URL(string: verifiedPartyURL) else {
-			print("INVALID URL")
-			return
-		}
-
-		var request = URLRequest(url: verifiedURL)
-		request.httpMethod = "GET"
-		request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
-		//URLSession
-		URLSession.shared.dataTask(with: request) { data, response, error in
-
-			//If URLSession returns data, below code block will execute
-			if let verifiedData = data {
-				do {
-					let JSONDecoderValue = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
-
-					if let JSONArray = JSONDecoderValue.businesses {
-						DispatchQueue.main.async {
-							self.objectWillChange.send()
-							self.model.clearAllRestaurants()
-							self.model.appendDeliveryOptions(in: JSONArray)
-
-						}
-					} else {
-						throw ErrorHanding.businessArrayNotFound
-					}
-
-				} catch(ErrorHanding.businessArrayNotFound) {
-					print("Did not correctly retrieve the Business Array from the Business Search Endpoint")
-
-				} catch {
-					print(error)
-				}
-				return
-			}
-			//If you are here, URLSession returned error instead of data
-			print("\(error?.localizedDescription ?? "Unknown error")")
-
-		}.resume()
-	}
-
-	func submitRestaurantScore() {
-		objectWillChange.send()
-
-		guard let barList = topBarList["\(currentCardIndex)"] else {
-			return print("No restaurant with this key")
-		}
-
-		//Verifies name in case it contains illegal characters
-		let unverifiedName = barList.name
-		let score: Int = barList.score
-		let name: String = unverifiedName.replacingOccurrences(of: "[\\[\\].#$]", with: "", options: .regularExpression, range: nil)
-
-		let currentURLOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].url ?? "NO URL FOUND"
-		//Adds id of card for
-		let currentIDOfTopCard: String = model.localRestaurantsDefault[currentCardIndex].id ?? "NO ID FOUND"
-		let currentImageURLTopCard: String = model.localRestaurantsDefault[currentCardIndex].image_url ?? "NO IMAGE URL FOUND"
-		var localReference: DatabaseReference
-
-		if (self.isPartyLeader) {
-
-			localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.partyId)")
-			localReference.child("topBars").child(self.partyId ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
-			
-		} else if (!self.isPartyLeader) {
-
-			localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.friendPartyId)")
-			localReference.child("topBars").child(self.partyId ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
-		}
 	}
 
 	func updateRestaurantList() {
@@ -297,57 +104,6 @@ class drinkdViewModel: ObservableObject {
 		objectWillChange.send()
 		self.model.createParty(setVotes: partyVotes, setName: partyName)
 		self.model.setCurrentToPartyTrue()
-	}
-
-	func calculateTopThreeRestaurants() {
-
-		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.isPartyLeader ? self.partyId : self.friendPartyId)").child("topBars")
-
-		localReference.observe(DataEventType.value, with: { snapshot in
-
-			if (!snapshot.exists()) {
-				print("No one has scored restaurant yet")
-			} else {
-
-				DispatchQueue.main.async {
-					self.objectWillChange.send()
-
-					do {
-						guard let codableData = try? JSONSerialization.data(withJSONObject: snapshot.value) else {
-							return print("unable to serialize")
-						}
-						let decoder = JSONDecoder()
-						let data = try decoder.decode(FireBaseMaster.self, from: codableData)
-						var testArray: [String: FireBaseTopChoice] = [:]
-						for element in data.models {
-							for dictionaryElement in element.value.models {
-
-								if (testArray.contains { key, value in key == dictionaryElement.key}) {
-									testArray[dictionaryElement.key]?.score += dictionaryElement.value.score
-								} else {
-									testArray[dictionaryElement.key] = dictionaryElement.value
-								}
-							}
-						}
-						let sortedDict = testArray.sorted {
-
-							if ($0.value.score == $1.value.score) {
-								return $0.key > $1.key
-							} else {
-								return $0.value.score > $1.value.score
-							}
-						}
-						let array = Array(sortedDict)
-
-						self.model.appendTopThreeRestaurants(in: array)
-
-					} catch {
-						print("error - \(error)")
-					}
-
-				}
-			}
-		})
 	}
 
 	func JoinExistingParty(getCode partyCode: String) {
