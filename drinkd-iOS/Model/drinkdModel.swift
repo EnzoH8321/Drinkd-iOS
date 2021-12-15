@@ -103,7 +103,7 @@ struct drinkdModel {
 	}
 	
 	mutating func createParty(setVotes partyVotes: Int? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
-		print("FCM TOKEN -> \(AppDelegate.fcmToken)")
+		
 		self.fcmToken = AppDelegate.fcmToken
 		self.partyId = String(Int.random(in: 100...20000))
 		self.partyMaxVotes = partyVotes

@@ -56,7 +56,7 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel) {
 				if let JSONArray = JSONDecoderValue.businesses {
 
 					DispatchQueue.main.async {
-						print(JSONArray)
+						
 						viewModel.objectWillChange.send()
 						viewModel.model.appendDeliveryOptions(in: JSONArray)
 						viewModel.model.createParty(setURL: url.absoluteString)

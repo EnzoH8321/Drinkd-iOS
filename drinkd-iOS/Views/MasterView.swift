@@ -8,14 +8,14 @@
 import SwiftUI
 import Firebase
 
-@available(iOS 15.0, *)
+
 struct MasterView: View {
 
 	@EnvironmentObject var viewModel: drinkdViewModel
 	@State private var selectedTab: Int = 1
 	//Firebase
 	var ref = Database.database().reference()
-	
+
 	var body: some View {
 
 		VStack {
