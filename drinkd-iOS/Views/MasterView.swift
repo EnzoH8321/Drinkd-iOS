@@ -31,7 +31,7 @@ struct MasterView: View {
 								HomeView()
 									.frame(width: globalWidth - 30 , height: globalHeight / 1.15)
 									.padding(.bottom, 30)
-									.navigationBarTitle("")
+									.navigationTitle("")
 									.navigationBarHidden(true)
 									.tabItem {
 										Image(systemName: "house")
