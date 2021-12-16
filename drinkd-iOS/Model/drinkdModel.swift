@@ -94,9 +94,11 @@ struct drinkdModel {
 	mutating func appendCardsToDecklist()  {
 	
 		if (counter == 0) {
-			for element in 0..<localRestaurantsDefault.count {
-				localRestaurants.append(localRestaurantsDefault[element])
-			}
+//			for element in 0..<localRestaurantsDefault.count {
+//				localRestaurants.append(localRestaurantsDefault[element])
+//			}
+			//Toggle to refresh the homeview
+			self.isPhone = true
 
 			counter = localRestaurantsDefault.count
 		}

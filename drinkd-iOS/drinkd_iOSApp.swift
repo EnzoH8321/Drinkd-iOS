@@ -28,6 +28,7 @@ struct drinkd_iOSApp: App {
 				.environment(\.managedObjectContext, persistenceController.container.viewContext)
 				.environmentObject(viewModel)
 				.onAppear {
+					fetchRestaurantsOnStartUp(viewModel: viewModel)
 //					fetchRestaurantsOnStartUp(viewModel: viewModel)
 					viewModel.setuserLocationError()
 				}
@@ -50,7 +51,7 @@ struct drinkd_iOSApp: App {
 								print("Unknown")
 
 							}
-							fetchRestaurantsOnStartUp(viewModel: viewModel)
+
 						}
 					}
 

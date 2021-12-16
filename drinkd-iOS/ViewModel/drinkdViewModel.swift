@@ -102,6 +102,7 @@ class drinkdViewModel: ObservableObject {
 	func updateRestaurantList() {
 		objectWillChange.send()
 		self.model.appendCardsToDecklist()
+		
 	}
 
 	//called when the create party button in the create party screen in pushed
