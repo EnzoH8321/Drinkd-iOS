@@ -28,7 +28,7 @@ struct drinkd_iOSApp: App {
 				.environment(\.managedObjectContext, persistenceController.container.viewContext)
 				.environmentObject(viewModel)
 				.onAppear {
-					fetchRestaurantsOnStartUp(viewModel: viewModel)
+//					fetchRestaurantsOnStartUp(viewModel: viewModel)
 					viewModel.setuserLocationError()
 				}
 				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
@@ -37,18 +37,20 @@ struct drinkd_iOSApp: App {
 						ATTrackingManager.requestTrackingAuthorization { status in
 							switch (status) {
 							case .authorized:
-
 								print("User has Authorized Tracking")
 							case .notDetermined:
 								print("Not Determined")
 							case .restricted:
 								print("Restricted Tracking")
+
 							case .denied:
 								print("User has Denied Tracking")
 
 							@unknown default:
 								print("Unknown")
+
 							}
+							fetchRestaurantsOnStartUp(viewModel: viewModel)
 						}
 					}
 

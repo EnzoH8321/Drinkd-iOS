@@ -29,7 +29,9 @@ class drinkdViewModel: ObservableObject {
 	var fcmToken: String {
 		return model.fcmToken
 	}
+
 	var userLocationError = false
+
 	var isPhone: Bool {
 		return model.isPhone
 	}
@@ -94,6 +96,7 @@ class drinkdViewModel: ObservableObject {
 	init() {
 //		locationFetcher = LocationFetcher()
 		locationFetcher.start()
+		
 	}
 
 	func updateRestaurantList() {

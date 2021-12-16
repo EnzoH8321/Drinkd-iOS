@@ -40,6 +40,7 @@ class LocationFetcher: NSObject, CLLocationManagerDelegate {
 				.authorizedWhenInUse,
 				.authorizedAlways:
 			self.errorWithLocationAuth = false
+			
 		case .denied,
 				.notDetermined,
 				.restricted:

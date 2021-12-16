@@ -92,9 +92,7 @@ struct drinkdModel {
 	}
 	
 	mutating func appendCardsToDecklist()  {
-		print(localRestaurantsDefault.count)
-
-
+	
 		if (counter == 0) {
 			for element in 0..<localRestaurantsDefault.count {
 				localRestaurants.append(localRestaurantsDefault[element])

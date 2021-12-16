@@ -63,9 +63,6 @@ struct CardViewIpad: View {
 
 		GeometryReader { geo in
 
-//			let globalWidth = geo.frame(in: .global).width
-//			let globalHeight = geo.frame(in: .global).height
-
 			ZStack {
 				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 					.fill(Color.white)
@@ -130,7 +127,7 @@ struct CardViewIpad: View {
 									.padding([.leading], 10)
 								Spacer()
 								if (!viewModel.currentlyInParty) {
-									noPartyYelpButton(buttonName: "square.text.square", yelpURL: "\(restaurantURL)")
+									noPartyYelpButton(buttonName: "doc.plaintext", yelpURL: "\(restaurantURL)")
 										.padding(.bottom, 20)
 										.padding(.trailing, 20)
 								}

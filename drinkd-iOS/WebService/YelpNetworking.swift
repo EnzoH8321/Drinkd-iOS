@@ -28,10 +28,10 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel) {
 	if let location = viewModel.locationFetcher.lastKnownLocation {
 		latitude = location.latitude
 		longitude = location.longitude
+//		viewModel.userLocationError = false
 	}
 	//If defaults are used, then the user location could not be found
 	if (longitude == 0.0 || latitude == 0.0) {
-//		viewModel.userLocationError = true
 		print("could not fetch user location")
 		return
 	}
