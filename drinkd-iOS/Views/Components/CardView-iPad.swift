@@ -85,7 +85,7 @@ struct CardViewIpad: View {
 									.scaledToFit()
 									.frame(width: 40)
 								Text("\(restaurantAddress1)  \n\(restaurantCity)")
-									.padding([.leading], 10)
+									.padding([.leading, .top], 10)
 
 							}
 							HStack {
@@ -97,7 +97,6 @@ struct CardViewIpad: View {
 									.padding([.leading], 10)
 							}
 							//
-
 							HStack {
 								Image(systemName: "figure.walk")
 									.resizable()

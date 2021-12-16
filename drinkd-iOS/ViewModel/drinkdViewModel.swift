@@ -30,6 +30,11 @@ class drinkdViewModel: ObservableObject {
 		return model.fcmToken
 	}
 
+	//toggle refresh
+	var toggleRefresh: Bool {
+		return model.toggleRefresh
+	}
+
 	var userLocationError = false
 
 	var isPhone: Bool {

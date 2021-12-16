@@ -56,6 +56,9 @@ struct drinkdModel {
 	private(set) var secondChoice = FirebaseRestaurantInfo()
 	private(set) var thirdChoice = FirebaseRestaurantInfo()
 
+	//refreshes deck in homeview
+	private(set) var toggleRefresh = true
+
 	mutating func setToken(token: String) {
 		self.fcmToken = token
 	}
@@ -98,7 +101,7 @@ struct drinkdModel {
 //				localRestaurants.append(localRestaurantsDefault[element])
 //			}
 			//Toggle to refresh the homeview
-			self.isPhone = true
+			self.toggleRefresh.toggle()
 
 			counter = localRestaurantsDefault.count
 		}

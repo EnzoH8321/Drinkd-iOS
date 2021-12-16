@@ -9,9 +9,10 @@ import Foundation
 import Firebase
 
 func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel) {
-
+	print("RESTAURANT COUNT -> \(viewModel.restaurantList.count)")
+	//TODO: Issue where during reload there is a possibility to do a 2x call. Fix issue 
 	//Checks to see if the function already ran to prevent duplicate calls
-	if (viewModel.restaurantList.count > 0) {
+	if (viewModel.model.localRestaurants.count > 0) {
 		return
 	}
 
@@ -26,13 +27,14 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel) {
 
 	//If user location was found, continue
 	if let location = viewModel.locationFetcher.lastKnownLocation {
+		print("FETCH WORKED, IT SHOULD POP UP")
 		latitude = location.latitude
 		longitude = location.longitude
 //		viewModel.userLocationError = false
 	}
 	//If defaults are used, then the user location could not be found
 	if (longitude == 0.0 || latitude == 0.0) {
-		print("could not fetch user location")
+		print("COULD NOT FETCH USER LOCATION")
 		return
 	}
 
@@ -58,7 +60,12 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel) {
 					DispatchQueue.main.async {
 						
 						viewModel.objectWillChange.send()
-						viewModel.model.appendDeliveryOptions(in: JSONArray)
+						//Checks to see if the function already ran to prevent duplicate calls
+						//TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
+						if (viewModel.model.localRestaurants.count <= 0) {
+							viewModel.model.appendDeliveryOptions(in: JSONArray)
+						}
+
 						viewModel.model.createParty(setURL: url.absoluteString)
 						viewModel.removeSplashScreen = true
 						viewModel.userLocationError = false

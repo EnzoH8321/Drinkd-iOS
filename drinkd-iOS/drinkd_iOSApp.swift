@@ -28,13 +28,32 @@ struct drinkd_iOSApp: App {
 				.environment(\.managedObjectContext, persistenceController.container.viewContext)
 				.environmentObject(viewModel)
 				.onAppear {
-					fetchRestaurantsOnStartUp(viewModel: viewModel)
-//					fetchRestaurantsOnStartUp(viewModel: viewModel)
-					viewModel.setuserLocationError()
+					//					fetchRestaurantsOnStartUp(viewModel: viewModel)
+
+					//TODO: We have to add this because its the only way for ios 14 to actually fetch data
+					if (viewModel.isPhone) {
+						if #available(iOS 13, *) {
+							viewModel.setuserLocationError()
+							fetchRestaurantsOnStartUp(viewModel: viewModel)
+						}
+					}
+
+
+
 				}
+			//TODO: From some reason, on receive glitches on iOS 14. Not called for some reason. During INIT OF IOS 14, you do have to put api call here or else it does not automatically do a call :(
 				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+					//					fetchRestaurantsOnStartUp(viewModel: viewModel)
+					//					viewModel.setuserLocationError()
+
+					//TODO: We do this because on iPAD fetching on ios14 only works in on receive.... ipad ios 15 works normally
+					if (!viewModel.isPhone) {
+						fetchRestaurantsOnStartUp(viewModel: viewModel)
+						viewModel.setuserLocationError()
+					}
 
 					if #available(iOS 14, *) {
+
 						ATTrackingManager.requestTrackingAuthorization { status in
 							switch (status) {
 							case .authorized:
@@ -49,12 +68,15 @@ struct drinkd_iOSApp: App {
 
 							@unknown default:
 								print("Unknown")
-
 							}
-
 						}
 					}
+					//TODO: For ios 14 to fetch during first time startup, you must put this code here. After initial startup, ios 14 will never call this code again....
+					if (viewModel.isPhone) {
+						fetchRestaurantsOnStartUp(viewModel: viewModel)
+					}
 
+					
 				}
 		}
 	}
