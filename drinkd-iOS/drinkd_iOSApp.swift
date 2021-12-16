@@ -8,10 +8,11 @@
 import SwiftUI
 import UIKit
 import Firebase
+import FirebaseMessaging
 import AppTrackingTransparency
 import UserNotifications
 
-@available(iOS 15.0, *)
+
 @main
 struct drinkd_iOSApp: App {
 
@@ -26,12 +27,17 @@ struct drinkd_iOSApp: App {
 			MasterView()
 				.environment(\.managedObjectContext, persistenceController.container.viewContext)
 				.environmentObject(viewModel)
+				.onAppear {
+					fetchRestaurantsOnStartUp(viewModel: viewModel)
+					viewModel.setuserLocationError()
+				}
 				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+
 					if #available(iOS 14, *) {
 						ATTrackingManager.requestTrackingAuthorization { status in
 							switch (status) {
 							case .authorized:
-								fetchRestaurantsOnStartUp(viewModel: viewModel)
+
 								print("User has Authorized Tracking")
 							case .notDetermined:
 								print("Not Determined")
@@ -39,19 +45,14 @@ struct drinkd_iOSApp: App {
 								print("Restricted Tracking")
 							case .denied:
 								print("User has Denied Tracking")
-								fetchRestaurantsOnStartUp(viewModel: viewModel)
+
 							@unknown default:
 								print("Unknown")
 							}
 						}
-					} else {
-
-						fetchRestaurantsOnStartUp(viewModel: viewModel)
 					}
 
-
 				}
-
 		}
 	}
 }
@@ -62,6 +63,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 	static var fcmToken: String = "TestTOKEN"
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+
+
 
 		FirebaseApp.configure()
 

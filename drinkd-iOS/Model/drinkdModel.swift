@@ -30,7 +30,7 @@ struct drinkdModel {
 
 	private(set) var fcmToken: String = ""
 	private(set) var isPhone: Bool = true
-	private(set) var counter: Int = 10
+	private(set) var counter: Int = 9
 	private(set) var currentCardIndex: Int = 9
 	private(set) var currentlyInParty = false
 	private(set) var partyId: String?
@@ -92,14 +92,30 @@ struct drinkdModel {
 	}
 	
 	mutating func appendCardsToDecklist()  {
-		self.counter -= 1
-		
+		print(localRestaurantsDefault.count)
+
+
 		if (counter == 0) {
 			for element in 0..<localRestaurantsDefault.count {
 				localRestaurants.append(localRestaurantsDefault[element])
 			}
-			counter = 10
+
+			counter = localRestaurantsDefault.count
 		}
+
+		self.counter -= 1
+
+	}
+
+	mutating func removeCardFromDeck() {
+
+		self.currentCardIndex -= 1
+
+		if (self.currentCardIndex < 0) {
+			self.currentCardIndex = 9
+		}
+
+
 	}
 	
 	mutating func createParty(setVotes partyVotes: Int? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
@@ -109,8 +125,7 @@ struct drinkdModel {
 		self.partyMaxVotes = partyVotes
 		self.partyName = partyName
 		self.partyTimestamp = Int(Date().timeIntervalSince1970 * 1000)
-		//TODO: Removed due to it being called on fetchRestaurantonstartup
-//		self.currentlyInParty = true
+
 		
 		if let url = partyURL {
 			self.partyURL = url
@@ -179,15 +194,7 @@ struct drinkdModel {
 		self.partyId = partyIdString
 	}
 
-	mutating func removeCardFromDeck() {
-		
-		self.currentCardIndex -= 1
 
-		if (self.currentCardIndex < 0) {
-			self.currentCardIndex = 9
-		}
-		
-	}
 
 	mutating func addScoreToCard(points: Int) {
 

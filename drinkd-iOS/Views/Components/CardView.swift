@@ -124,7 +124,7 @@ struct CardView: View {
 									.padding([.leading], 10)
 								Spacer()
 								if (!viewModel.currentlyInParty) {
-									noPartyYelpButton(buttonName: "square.text.square", yelpURL: "\(restaurantURL)")
+									noPartyYelpButton(buttonName: "doc.plaintext", yelpURL: "\(restaurantURL)")
 										.padding(.bottom, 20)
 										.padding(.trailing, 10)
 								}

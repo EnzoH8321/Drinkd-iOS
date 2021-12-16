@@ -43,6 +43,7 @@ class drinkdViewModel: ObservableObject {
 	var queryPartyError = false
 	
 	var restaurantList: [YelpApiBusinessSearchProperties] {
+		
 		return model.localRestaurants
 	}
 	var partyId: String {
@@ -58,7 +59,7 @@ class drinkdViewModel: ObservableObject {
 		return model.partyURL
 	}
 
-	var locationFetcher: LocationFetcher
+
 	var currentCardIndex: Int {
 		return model.currentCardIndex
 	}
@@ -86,11 +87,12 @@ class drinkdViewModel: ObservableObject {
 
 	var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
 
+	var locationFetcher = LocationFetcher()
 	//Hidden API KEY
 	let token = (Bundle.main.infoDictionary?["API_KEY"] as? String)!
 
 	init() {
-		locationFetcher = LocationFetcher()
+//		locationFetcher = LocationFetcher()
 		locationFetcher.start()
 	}
 
@@ -153,6 +155,7 @@ class drinkdViewModel: ObservableObject {
 	}
 
 	func whenCardIsDraggedFromView() {
+		objectWillChange.send()
 		self.model.removeCardFromDeck()
 	}
 
@@ -204,6 +207,12 @@ class drinkdViewModel: ObservableObject {
 			self.model.findDeviceType(device: .ipad)
 		}
 
+	}
+
+	func setuserLocationError() {
+		objectWillChange.send()
+		self.userLocationError = locationFetcher.errorWithLocationAuth
+		print("userlocationerror -> \(self.userLocationError)")
 	}
 
 }

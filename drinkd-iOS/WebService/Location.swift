@@ -10,6 +10,7 @@ import CoreLocation
 class LocationFetcher: NSObject, CLLocationManagerDelegate {
 	let manager = CLLocationManager()
 	var lastKnownLocation: CLLocationCoordinate2D?
+	private(set) var errorWithLocationAuth = false
 
 	override init() {
 		super.init()
@@ -23,7 +24,32 @@ class LocationFetcher: NSObject, CLLocationManagerDelegate {
 
 	func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
 		lastKnownLocation = locations.first?.coordinate
+		
 	}
+
+	func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+		print("Error -> \(error.localizedDescription)")
+		self.errorWithLocationAuth = true
+	}
+
+	func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+		let authorization = manager.authorizationStatus
+
+		switch (authorization) {
+		case .authorized,
+				.authorizedWhenInUse,
+				.authorizedAlways:
+			self.errorWithLocationAuth = false
+		case .denied,
+				.notDetermined,
+				.restricted:
+			self.errorWithLocationAuth = true
+		@unknown default:
+			print("")
+		}
+	}
+
+	
 }
 
 
