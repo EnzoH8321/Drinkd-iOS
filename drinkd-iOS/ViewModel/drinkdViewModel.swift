@@ -98,17 +98,80 @@ class drinkdViewModel: ObservableObject {
 	//Hidden API KEY
 	let token = (Bundle.main.infoDictionary?["API_KEY"] as? String)!
 
+	//Chat
+	var personalUsername: String {
+		return model.personalUserName
+	}
+
+	var personalID: Int {
+		return model.personalUserID
+	}
+
+	var chatMessageList: [FireBaseMessage] {
+		return model.chatMessageList
+	}
+
+	//
+
 	init() {
-//		locationFetcher = LocationFetcher()
+		//		locationFetcher = LocationFetcher()
 		locationFetcher.start()
 		
 	}
+	//Chat
+	func addMessage(message: FireBaseMessage) {
+		self.model.addMessage(message: message)
+	}
 
+	func fetchExistingMessages() {
+
+
+		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(isPartyLeader ? partyId : friendPartyId)").child("messages")
+
+		localReference.observe(DataEventType.value, with: { snapshot in
+
+			if (!snapshot.exists()) {
+				return print("Unable to get messages from Firebase")
+			} else {
+
+				DispatchQueue.main.async {
+					self.objectWillChange.send()
+
+					do {
+						guard let rawData = try? JSONSerialization.data(withJSONObject: snapshot.value) else {
+							return print("UNABLE TO SERIALIZE")
+						}
+
+						let decoder = JSONDecoder()
+
+						print(rawData)
+
+						guard let data = try? decoder.decode(FireBaseMessageArray.self, from: rawData) else {
+							return print("UNABLE TO DECODE")
+						}
+
+						let messageArray = data.array
+
+						self.model.fetchEntireMessageList(messageList: messageArray)
+
+					} catch {
+						print(error)
+					}
+
+				}
+				
+			}
+
+		})
+	}
+
+	//
 	func updateRestaurantList() {
 		objectWillChange.send()
 		self.model.appendCardsToDecklist()
 		
 	}
+
 
 	//called when the create party button in the create party screen in pushed
 	func createNewParty(setVotes partyVotes: Int? = nil, setName partyName: String? = nil) {
@@ -218,11 +281,18 @@ class drinkdViewModel: ObservableObject {
 
 	}
 
+	func forModelSetUsernameAndId(username: String, id: Int) {
+		self.model.setPersonalUserAndID(forName: username, forID: id)
+	}
+
+	//Checks if the user locations could/could not be found
 	func setuserLocationError() {
 		objectWillChange.send()
 		self.userLocationError = locationFetcher.errorWithLocationAuth
 		print("userlocationerror -> \(self.userLocationError)")
 	}
+
+
 
 }
 

@@ -8,6 +8,7 @@
 import Foundation
 import Firebase
 
+
 func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel) {
 	print("RESTAURANT COUNT -> \(viewModel.restaurantList.count)")
 	//TODO: Issue where during reload there is a possibility to do a 2x call. Fix issue 

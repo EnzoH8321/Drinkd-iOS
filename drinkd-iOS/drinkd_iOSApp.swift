@@ -38,8 +38,6 @@ struct drinkd_iOSApp: App {
 						}
 					}
 
-
-
 				}
 			//TODO: From some reason, on receive glitches on iOS 14. Not called for some reason. During INIT OF IOS 14, you do have to put api call here or else it does not automatically do a call :(
 				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in

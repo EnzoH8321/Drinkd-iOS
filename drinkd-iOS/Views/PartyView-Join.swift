@@ -11,17 +11,24 @@ import SwiftUI
 struct PartyView_Join: View {
 
 	@State private var partyCode: String = ""
+	@State private var personalUsername: String = ""
 
 	var body: some View {
 
 		VStack {
+
 			Text("Enter a Party ID Below")
 				.font(.title)
+
+			TextField("Enter a username here", text: $personalUsername)
+				.border(Color(UIColor.separator))
+				.textFieldStyle(.roundedBorder)
+
 			TextField("Party ID Here", text: $partyCode)
 				.border(Color(UIColor.separator))
 				.textFieldStyle(.roundedBorder)
 
-			JoinPartyButton(code: partyCode)
+			JoinPartyButton(code: partyCode, username: personalUsername)
 
 			Spacer()
 		}
@@ -30,16 +37,21 @@ struct PartyView_Join: View {
 	private struct JoinPartyButton: View {
 
 		@EnvironmentObject var viewModel: drinkdViewModel
-		var partyCode: String
 
-		init(code: String) {
+		var partyCode: String
+		var username: String
+		var personalUserID = Int.random(in: 1...4563456495)
+
+		init(code: String, username: String) {
 			self.partyCode = code
+			self.username = username
 		}
 
 		var body: some View {
 
 			Button("Join Party") {
 				viewModel.JoinExistingParty(getCode: self.partyCode)
+				viewModel.forModelSetUsernameAndId(username: self.username, id: self.personalUserID)
 				fetchRestaurantsAfterJoiningParty(viewModel: viewModel)
 			}
 			.alert(isPresented: $viewModel.queryPartyError) {

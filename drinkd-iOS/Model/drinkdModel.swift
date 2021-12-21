@@ -32,7 +32,7 @@ struct drinkdModel {
 	private(set) var isPhone: Bool = true
 	private(set) var counter: Int = 9
 	private(set) var currentCardIndex: Int = 9
-	private(set) var currentlyInParty = false
+	private(set) var currentlyInParty = true
 	private(set) var partyId: String?
 	private(set) var partyMaxVotes: Int?
 	private(set) var partyName: String?
@@ -51,16 +51,34 @@ struct drinkdModel {
 	//
 	private(set) var localRestaurantsDefault: [YelpApiBusinessSearchProperties] = []
 	//For top choices view
-
 	private(set) var firstChoice = FirebaseRestaurantInfo()
 	private(set) var secondChoice = FirebaseRestaurantInfo()
 	private(set) var thirdChoice = FirebaseRestaurantInfo()
+	//For chat
+	private(set) var personalUserName = ""
+	private(set) var personalUserID = 0
+	private(set) var chatMessageList: [FireBaseMessage] = []
 
 	//refreshes deck in homeview
 	private(set) var toggleRefresh = true
 
+	//For chat
+	mutating func setPersonalUserAndID(forName name: String, forID id: Int) {
+		self.personalUserName = name
+		self.personalUserID = id
+	}
+
 	mutating func setToken(token: String) {
 		self.fcmToken = token
+	}
+
+	mutating func addMessage(message: FireBaseMessage) {
+		self.chatMessageList.append(message)
+		
+	}
+
+	mutating func fetchEntireMessageList(messageList: [FireBaseMessage]) {
+		chatMessageList = messageList
 	}
 
 	//
@@ -117,8 +135,6 @@ struct drinkdModel {
 		if (self.currentCardIndex < 0) {
 			self.currentCardIndex = 9
 		}
-
-
 	}
 	
 	mutating func createParty(setVotes partyVotes: Int? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
@@ -154,7 +170,8 @@ struct drinkdModel {
 			return
 		}
 
-		self.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL, "tokens": [fcmToken: fcmToken]])
+		//TODO: Messages set to string, can this be improved?
+		self.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL, "tokens": [fcmToken: fcmToken], "messages": ""])
 		self.setUserLevel(level: .creator)
 		
 	}
