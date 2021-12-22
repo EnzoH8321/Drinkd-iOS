@@ -130,11 +130,11 @@ struct FireBaseTopChoicesArray: Codable {
 
 
 struct FireBaseMessageArray: Codable {
-	var array: [FireBaseMessage]
+	var messages: [FireBaseMessage]
 }
 
 struct FireBaseMessage: Codable, Identifiable {
-	var id = UUID()
+	var id: String
 	var username: String
 	var personalChatId: Int
 	var message: String

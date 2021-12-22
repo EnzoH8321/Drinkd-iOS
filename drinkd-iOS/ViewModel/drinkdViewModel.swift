@@ -119,19 +119,15 @@ class drinkdViewModel: ObservableObject {
 		
 	}
 	//Chat
-	func addMessage(message: FireBaseMessage) {
-		self.model.addMessage(message: message)
-	}
 
 	func fetchExistingMessages() {
-
 
 		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(isPartyLeader ? partyId : friendPartyId)").child("messages")
 
 		localReference.observe(DataEventType.value, with: { snapshot in
 
 			if (!snapshot.exists()) {
-				return print("Unable to get messages from Firebase")
+				return print("Unable to get messages from Firebase/No current messages")
 			} else {
 
 				DispatchQueue.main.async {
@@ -142,18 +138,15 @@ class drinkdViewModel: ObservableObject {
 							return print("UNABLE TO SERIALIZE")
 						}
 
+						print(snapshot)
+
 						let decoder = JSONDecoder()
-
-						print(rawData)
-
 						guard let data = try? decoder.decode(FireBaseMessageArray.self, from: rawData) else {
 							return print("UNABLE TO DECODE")
 						}
-
-						let messageArray = data.array
-
+						let messageArray = data.messages
 						self.model.fetchEntireMessageList(messageList: messageArray)
-
+						print("Decoded firebase list -> \(self.model.chatMessageList)")
 					} catch {
 						print(error)
 					}
@@ -163,6 +156,14 @@ class drinkdViewModel: ObservableObject {
 			}
 
 		})
+	}
+
+	func sendMessage(forMessage message: FireBaseMessage) {
+		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(isPartyLeader ? partyId : friendPartyId)").child("messages")
+
+		localReference.child("\(message.id)").setValue(["id": message.id, "username": message.username, "personalId": message.personalChatId, "message": message.message])
+
+		fetchExistingMessages()
 	}
 
 	//

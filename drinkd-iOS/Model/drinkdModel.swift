@@ -63,6 +63,7 @@ struct drinkdModel {
 	private(set) var toggleRefresh = true
 
 	//For chat
+	//TODO: Finish Chat Features
 	mutating func setPersonalUserAndID(forName name: String, forID id: Int) {
 		self.personalUserName = name
 		self.personalUserID = id
@@ -72,14 +73,12 @@ struct drinkdModel {
 		self.fcmToken = token
 	}
 
-	mutating func addMessage(message: FireBaseMessage) {
-		self.chatMessageList.append(message)
-		
-	}
+	
 
 	mutating func fetchEntireMessageList(messageList: [FireBaseMessage]) {
 		chatMessageList = messageList
 	}
+
 
 	//
 	mutating func getLocalRestaurants() -> [YelpApiBusinessSearchProperties] {
@@ -171,7 +170,7 @@ struct drinkdModel {
 		}
 
 		//TODO: Messages set to string, can this be improved?
-		self.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL, "tokens": [fcmToken: fcmToken], "messages": ""])
+		self.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL, "tokens": [fcmToken: fcmToken]])
 		self.setUserLevel(level: .creator)
 		
 	}
