@@ -21,11 +21,10 @@ struct CustomLocationView: View {
 			Text("Please enter the Latitude below")
 				.padding(.top, 10)
 			TextField("Latitude", text: $latitude)
+				.textFieldStyle(regularTextFieldStyle())
 			Text("Please enter the Longitude below")
 			TextField("Longitude", text: $longitude)
-				.border(Color(UIColor.separator))
-				.textFieldStyle(.roundedBorder)
-
+				.textFieldStyle(regularTextFieldStyle())
 			Button("Submit Custom Location") {
 				//If 0.0 they are nil
 				let latitude = Double(self.latitude) ?? 0.0

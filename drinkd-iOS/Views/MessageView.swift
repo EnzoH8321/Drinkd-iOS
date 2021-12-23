@@ -16,6 +16,7 @@ struct MessageView: View {
 
     var body: some View {
 		VStack(alignment: .leading) {
+			
 			HStack {
 				Text("\(username)")
 					.bold()

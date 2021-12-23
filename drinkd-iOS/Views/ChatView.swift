@@ -27,8 +27,7 @@ struct ChatView: View {
 				}
 				HStack {
 					TextField("Text Here", text: $messageString)
-						.border(Color(UIColor.separator))
-						.textFieldStyle(.roundedBorder)
+						.textFieldStyle(regularTextFieldStyle())
 						.frame(width: globalWidth * 0.75)
 
 					Button(action: {

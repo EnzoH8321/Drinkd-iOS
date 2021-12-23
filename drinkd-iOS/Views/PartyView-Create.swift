@@ -23,14 +23,11 @@ struct PartyView_Create: View {
 				.font(.title)
 			//
 			TextField("Choose a Username", text: $userName)
-				.border(Color(UIColor.separator))
-				.textFieldStyle(.roundedBorder)
+				.textFieldStyle(regularTextFieldStyle())
 			TextField("Choose a Party Name(Max 15 Characters, No Numbers)", text: $partyName )
-				.border(Color(UIColor.separator))
-				.textFieldStyle(.roundedBorder)
+				.textFieldStyle(regularTextFieldStyle())
 			TextField("Set a Winning Vote Amount", text: $winningVoteAmount)
-				.border(Color(UIColor.separator))
-				.textFieldStyle(.roundedBorder)
+				.textFieldStyle(regularTextFieldStyle())
 			CreatePartyButton(partyName: partyName, votes: winningVoteAmount, userName: userName)
 			//
 			Spacer()

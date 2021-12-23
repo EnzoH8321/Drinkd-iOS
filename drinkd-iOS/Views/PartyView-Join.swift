@@ -21,12 +21,10 @@ struct PartyView_Join: View {
 				.font(.title)
 
 			TextField("Enter a username here", text: $personalUsername)
-				.border(Color(UIColor.separator))
-				.textFieldStyle(.roundedBorder)
+				.textFieldStyle(regularTextFieldStyle())
 
 			TextField("Party ID Here", text: $partyCode)
-				.border(Color(UIColor.separator))
-				.textFieldStyle(.roundedBorder)
+				.textFieldStyle(regularTextFieldStyle())
 
 			JoinPartyButton(code: partyCode, username: personalUsername)
 
