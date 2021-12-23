@@ -114,9 +114,7 @@ class drinkdViewModel: ObservableObject {
 	//
 
 	init() {
-		//		locationFetcher = LocationFetcher()
 		locationFetcher.start()
-		
 	}
 	//Chat
 	func fetchExistingMessages() {
@@ -133,20 +131,16 @@ class drinkdViewModel: ObservableObject {
 					self.objectWillChange.send()
 
 					do {
-
 						var messagesArray: [FireBaseMessage] = []
-
-						guard let serializedData = try? JSONSerialization.data(withJSONObject: snapshot.value) else {
-							return print("UNABLE TO SERIALIZE")
-						}
 
 						for messageObj in snapshot.children {
 
 							let messageData = messageObj as! DataSnapshot
 
-							guard let serializedMessageObj = try? JSONSerialization.data(withJSONObject: messageData.value) else {
-								return
+							guard let serializedMessageObj = try? JSONSerialization.data(withJSONObject: messageData.value as Any) else {
+								return print("Data Could not be serialized")
 							}
+
 							let decodedMessageObj = try JSONDecoder().decode(FireBaseMessage.self, from: serializedMessageObj)
 
 

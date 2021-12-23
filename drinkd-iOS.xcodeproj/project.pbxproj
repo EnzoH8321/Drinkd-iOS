@@ -18,6 +18,7 @@
 		549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549BFC462728CFBA00F96F48 /* CustomLocationView.swift */; };
 		54B3E537270E140E0004ECC5 /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B3E536270E140C0004ECC5 /* Star.swift */; };
 		54B3E539270F68800004ECC5 /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B3E538270F687F0004ECC5 /* Firebase.swift */; };
+		54B86718277522D2004D02A1 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B86717277522D2004D02A1 /* Errors.swift */; };
 		54BEE37427593A9300C82880 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BEE37327593A9300C82880 /* Networking.swift */; };
 		54C8A4B5277431EE0090D968 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C8A4B4277431EE0090D968 /* Extensions.swift */; };
 		54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */; };
@@ -82,6 +83,7 @@
 		549BFC462728CFBA00F96F48 /* CustomLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLocationView.swift; sourceTree = "<group>"; };
 		54B3E536270E140C0004ECC5 /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
 		54B3E538270F687F0004ECC5 /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
+		54B86717277522D2004D02A1 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		54BEE37327593A9300C82880 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		54C8A4B4277431EE0090D968 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		54F9C80526FBB536008FA516 /* drinkd-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "drinkd-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -268,6 +270,7 @@
 				54B3E538270F687F0004ECC5 /* Firebase.swift */,
 				54F9C84526FCF403008FA516 /* Global.swift */,
 				54C8A4B4277431EE0090D968 /* Extensions.swift */,
+				54B86717277522D2004D02A1 /* Errors.swift */,
 			);
 			path = Globals;
 			sourceTree = "<group>";
@@ -568,6 +571,7 @@
 				5407FD72271924D5008BC496 /* PartyCardView.swift in Sources */,
 				54F9C8572702494E008FA516 /* drinkdViewModel.swift in Sources */,
 				54BEE37427593A9300C82880 /* Networking.swift in Sources */,
+				54B86718277522D2004D02A1 /* Errors.swift in Sources */,
 				54F9C85D2703E52A008FA516 /* RemoteImageLoader.swift in Sources */,
 				54F9C85B27037F2F008FA516 /* drinkdModel.swift in Sources */,
 				54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */,

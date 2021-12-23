@@ -17,7 +17,7 @@ extension Date {
 		//Format Date
 		let dateVar = Date(timeIntervalSince1970: TimeInterval( milliseconds / 1000))
 		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "dd-MM-yyyy hh:mm"
+		dateFormatter.dateFormat = "MMM d, h:mm a"
 		let dateString = dateFormatter.string(from: dateVar)
 
 		return dateString

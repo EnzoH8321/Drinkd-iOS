@@ -199,8 +199,8 @@ func calculateTopThreeRestaurants(viewModel: drinkdViewModel) {
 				viewModel.objectWillChange.send()
 
 				do {
-					guard let codableData = try? JSONSerialization.data(withJSONObject: snapshot.value) else {
-						return print("unable to serialize")
+					guard let codableData = try? JSONSerialization.data(withJSONObject: snapshot.value as Any) else {
+						return
 					}
 					let decoder = JSONDecoder()
 					let data = try decoder.decode(FireBaseMaster.self, from: codableData)

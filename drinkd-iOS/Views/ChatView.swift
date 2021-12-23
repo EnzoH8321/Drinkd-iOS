@@ -26,7 +26,7 @@ struct ChatView: View {
 					}
 				}
 				HStack {
-					TextField("Text Here", text: $messageString)
+					TextField("Enter Text Here", text: $messageString)
 						.textFieldStyle(regularTextFieldStyle())
 						.frame(width: globalWidth * 0.75)
 
