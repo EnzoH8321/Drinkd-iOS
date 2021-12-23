@@ -15,8 +15,8 @@ struct MessageView: View {
 
     var body: some View {
 		VStack(alignment: .leading) {
-			Text("UserName")
-			Text("MessageItself")
+			Text("\(username)")
+			Text("\(message)")
 			
 		}
 		.border(.black, width: 1)

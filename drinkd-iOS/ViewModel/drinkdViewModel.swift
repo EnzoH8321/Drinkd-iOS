@@ -134,18 +134,25 @@ class drinkdViewModel: ObservableObject {
 					self.objectWillChange.send()
 
 					do {
+
+						var messagesArray: [FireBaseMessage] = []
+
 						guard let rawData = try? JSONSerialization.data(withJSONObject: snapshot.value) else {
 							return print("UNABLE TO SERIALIZE")
 						}
 
-						print(snapshot)
 
-						let decoder = JSONDecoder()
-						guard let data = try? decoder.decode(FireBaseMessageArray.self, from: rawData) else {
-							return print("UNABLE TO DECODE")
+						for element in snapshot.children {
+							let elementData = element as! DataSnapshot
+							guard let serialized = try? JSONSerialization.data(withJSONObject: elementData.value) else {
+								return
+							}
+							let finalData = try JSONDecoder().decode(FireBaseMessage.self, from: serialized)
+							let fbMessage = FireBaseMessage(id: finalData.id, username: finalData.username, personalId: finalData.personalId, message: finalData.message)
+							messagesArray.append(fbMessage)
 						}
-						let messageArray = data.messages
-						self.model.fetchEntireMessageList(messageList: messageArray)
+
+						self.model.fetchEntireMessageList(messageList: messagesArray)
 						print("Decoded firebase list -> \(self.model.chatMessageList)")
 					} catch {
 						print(error)
@@ -161,7 +168,7 @@ class drinkdViewModel: ObservableObject {
 	func sendMessage(forMessage message: FireBaseMessage) {
 		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(isPartyLeader ? partyId : friendPartyId)").child("messages")
 
-		localReference.child("\(message.id)").setValue(["id": message.id, "username": message.username, "personalId": message.personalChatId, "message": message.message])
+		localReference.child("\(message.id)").setValue(["id": message.id, "username": message.username, "personalId": message.personalId, "message": message.message])
 
 		fetchExistingMessages()
 	}

@@ -136,7 +136,7 @@ struct FireBaseMessageArray: Codable {
 struct FireBaseMessage: Codable, Identifiable {
 	var id: String
 	var username: String
-	var personalChatId: Int
+	var personalId: Int
 	var message: String
 }
 
