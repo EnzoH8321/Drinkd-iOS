@@ -148,11 +148,17 @@ class drinkdViewModel: ObservableObject {
 								return
 							}
 							let finalData = try JSONDecoder().decode(FireBaseMessage.self, from: serialized)
-							let fbMessage = FireBaseMessage(id: finalData.id, username: finalData.username, personalId: finalData.personalId, message: finalData.message)
+
+							let fbMessage = FireBaseMessage(id: finalData.id, username: finalData.username, personalId: finalData.personalId, message: finalData.message, timestamp: finalData.timestamp)
 							messagesArray.append(fbMessage)
 						}
 
-						self.model.fetchEntireMessageList(messageList: messagesArray)
+						//Sorts Messages by timestamp
+						let sortedMessageArray = messagesArray.sorted {
+							return $0.timestamp < $1.timestamp
+						}
+
+						self.model.fetchEntireMessageList(messageList: sortedMessageArray)
 						print("Decoded firebase list -> \(self.model.chatMessageList)")
 					} catch {
 						print(error)
@@ -168,7 +174,8 @@ class drinkdViewModel: ObservableObject {
 	func sendMessage(forMessage message: FireBaseMessage) {
 		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(isPartyLeader ? partyId : friendPartyId)").child("messages")
 
-		localReference.child("\(message.id)").setValue(["id": message.id, "username": message.username, "personalId": message.personalId, "message": message.message])
+
+		localReference.child("\(message.id)").setValue(["id": message.id, "username": message.username, "personalId": message.personalId, "message": message.message, "timestamp": message.timestamp])
 
 		fetchExistingMessages()
 	}

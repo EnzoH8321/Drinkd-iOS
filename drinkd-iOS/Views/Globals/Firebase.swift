@@ -138,6 +138,7 @@ struct FireBaseMessage: Codable, Identifiable {
 	var username: String
 	var personalId: Int
 	var message: String
+	var timestamp: Int
 }
 
 
