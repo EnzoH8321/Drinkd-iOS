@@ -119,7 +119,6 @@ class drinkdViewModel: ObservableObject {
 		
 	}
 	//Chat
-
 	func fetchExistingMessages() {
 
 		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(isPartyLeader ? partyId : friendPartyId)").child("messages")
@@ -137,20 +136,23 @@ class drinkdViewModel: ObservableObject {
 
 						var messagesArray: [FireBaseMessage] = []
 
-						guard let rawData = try? JSONSerialization.data(withJSONObject: snapshot.value) else {
+						guard let serializedData = try? JSONSerialization.data(withJSONObject: snapshot.value) else {
 							return print("UNABLE TO SERIALIZE")
 						}
 
+						for messageObj in snapshot.children {
 
-						for element in snapshot.children {
-							let elementData = element as! DataSnapshot
-							guard let serialized = try? JSONSerialization.data(withJSONObject: elementData.value) else {
+							let messageData = messageObj as! DataSnapshot
+
+							guard let serializedMessageObj = try? JSONSerialization.data(withJSONObject: messageData.value) else {
 								return
 							}
-							let finalData = try JSONDecoder().decode(FireBaseMessage.self, from: serialized)
+							let decodedMessageObj = try JSONDecoder().decode(FireBaseMessage.self, from: serializedMessageObj)
 
-							let fbMessage = FireBaseMessage(id: finalData.id, username: finalData.username, personalId: finalData.personalId, message: finalData.message, timestamp: finalData.timestamp)
-							messagesArray.append(fbMessage)
+
+							let finalMessageObj = FireBaseMessage(id: decodedMessageObj.id, username: decodedMessageObj.username, personalId: decodedMessageObj.personalId, message: decodedMessageObj.message, timestamp: decodedMessageObj.timestamp, timestampString: Date().formatDate(forMilliseconds: decodedMessageObj.timestamp))
+
+							messagesArray.append(finalMessageObj)
 						}
 
 						//Sorts Messages by timestamp
@@ -175,7 +177,7 @@ class drinkdViewModel: ObservableObject {
 		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(isPartyLeader ? partyId : friendPartyId)").child("messages")
 
 
-		localReference.child("\(message.id)").setValue(["id": message.id, "username": message.username, "personalId": message.personalId, "message": message.message, "timestamp": message.timestamp])
+		localReference.child("\(message.id)").setValue(["id": message.id, "username": message.username, "personalId": message.personalId, "message": message.message, "timestamp": message.timestamp, "timestampString": Date().formatDate(forMilliseconds: message.timestamp)])
 
 		fetchExistingMessages()
 	}
@@ -307,7 +309,7 @@ class drinkdViewModel: ObservableObject {
 		print("userlocationerror -> \(self.userLocationError)")
 	}
 
-
+	
 
 }
 

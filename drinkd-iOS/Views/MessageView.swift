@@ -12,14 +12,20 @@ struct MessageView: View {
 	var username: String
 	var message: String
 	var personalChatID: Int
-	var timestamp: Int
+	var timestampString: String
 
     var body: some View {
 		VStack(alignment: .leading) {
-			Text("\(username)")
-				.bold()
+			HStack {
+				Text("\(username)")
+					.bold()
+
+				Text("\(timestampString)")
+					.padding([.leading], 30)
+			}
+
 			Text("\(message)")
-			Text("\(timestamp)")
+
 		}
 
     }
@@ -27,6 +33,7 @@ struct MessageView: View {
 
 struct MessageView_Previews: PreviewProvider {
     static var previews: some View {
-		MessageView(username: "Enzo", message: "CHAT FEAUTRES WORKS", personalChatID: 4545454, timestamp: 345346346456546)
+		MessageView(username: "Enzo", message: "CHAT FEATURES WORKS", personalChatID: 4545454, timestampString: "Dfdfd")
+
     }
 }

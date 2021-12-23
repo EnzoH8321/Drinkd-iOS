@@ -21,9 +21,6 @@ struct CustomLocationView: View {
 			Text("Please enter the Latitude below")
 				.padding(.top, 10)
 			TextField("Latitude", text: $latitude)
-				.border(Color(UIColor.separator))
-				.textFieldStyle(.roundedBorder)
-
 			Text("Please enter the Longitude below")
 			TextField("Longitude", text: $longitude)
 				.border(Color(UIColor.separator))
