@@ -8,5 +8,6 @@
 import Foundation
 
 enum NetworkErrors: Error {
-	case SerializationError
+	case serializationError
+	case decodingError
 }

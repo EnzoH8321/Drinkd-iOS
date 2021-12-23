@@ -10,8 +10,8 @@ import Firebase
 
 
 func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel) {
-	print("RESTAURANT COUNT -> \(viewModel.restaurantList.count)")
-	//TODO: Issue where during reload there is a possibility to do a 2x call. Fix issue 
+
+	//TODO: Issue where during reload there is a possibility to do a 2x call. Fix issue
 	//Checks to see if the function already ran to prevent duplicate calls
 	if (viewModel.model.localRestaurants.count > 0) {
 		return
@@ -31,7 +31,6 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel) {
 		print("FETCH WORKED, IT SHOULD POP UP")
 		latitude = location.latitude
 		longitude = location.longitude
-//		viewModel.userLocationError = false
 	}
 	//If defaults are used, then the user location could not be found
 	if (longitude == 0.0 || latitude == 0.0) {
@@ -199,12 +198,17 @@ func calculateTopThreeRestaurants(viewModel: drinkdViewModel) {
 				viewModel.objectWillChange.send()
 
 				do {
-					guard let codableData = try? JSONSerialization.data(withJSONObject: snapshot.value as Any) else {
-						return
-					}
 					let decoder = JSONDecoder()
-					let data = try decoder.decode(FireBaseMaster.self, from: codableData)
 					var testArray: [String: FireBaseTopChoice] = [:]
+
+					guard let codableData = try? JSONSerialization.data(withJSONObject: snapshot.value as Any) else {
+						throw NetworkErrors.serializationError
+					}
+
+					guard let data = try? decoder.decode(FireBaseMaster.self, from: codableData) else {
+						throw NetworkErrors.decodingError
+					}
+
 					for element in data.models {
 						for dictionaryElement in element.value.models {
 
@@ -213,22 +217,27 @@ func calculateTopThreeRestaurants(viewModel: drinkdViewModel) {
 							} else {
 								testArray[dictionaryElement.key] = dictionaryElement.value
 							}
+
 						}
 					}
-					let sortedDict = testArray.sorted {
 
+					let sortedDict = testArray.sorted {
 						if ($0.value.score == $1.value.score) {
 							return $0.key > $1.key
 						} else {
 							return $0.value.score > $1.value.score
 						}
 					}
-					let array = Array(sortedDict)
 
+					let array = Array(sortedDict)
 					viewModel.model.appendTopThreeRestaurants(in: array)
 
+				} catch NetworkErrors.serializationError {
+					print("Data Serialization Error")
+				} catch NetworkErrors.decodingError {
+					print("JSON Decoding Error")
 				} catch {
-					print("error - \(error)")
+					print(error)
 				}
 
 			}
