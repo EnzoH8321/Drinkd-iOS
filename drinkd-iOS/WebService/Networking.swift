@@ -176,29 +176,32 @@ func fetchRestaurantsAfterJoiningParty(viewModel: drinkdViewModel, completionHan
 	}.resume()
 }
 
-func calculateTopThreeRestaurants(viewModel: drinkdViewModel) {
+func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
 	let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("topBars")
 
 	localReference.observe(DataEventType.value, with: { snapshot in
 
 		if (!snapshot.exists()) {
-			print("No one has scored restaurant yet")
+			completionHandler(.failure(.databaseRefNotFoundError))
+			return
 		} else {
 
 			DispatchQueue.main.async {
+
 				viewModel.objectWillChange.send()
 
-				do {
 					let decoder = JSONDecoder()
 					var testArray: [String: FireBaseTopChoice] = [:]
 
 					guard let codableData = try? JSONSerialization.data(withJSONObject: snapshot.value as Any) else {
-						throw NetworkErrors.serializationError
+						completionHandler(.failure(.serializationError))
+						return
 					}
 
 					guard let data = try? decoder.decode(FireBaseMaster.self, from: codableData) else {
-						throw NetworkErrors.decodingError
+						completionHandler(.failure(.decodingError))
+						return
 					}
 
 					for element in data.models {
@@ -223,15 +226,6 @@ func calculateTopThreeRestaurants(viewModel: drinkdViewModel) {
 
 					let array = Array(sortedDict)
 					viewModel.model.appendTopThreeRestaurants(in: array)
-
-				} catch NetworkErrors.serializationError {
-					print("Data Serialization Error")
-				} catch NetworkErrors.decodingError {
-					print("JSON Decoding Error")
-				} catch {
-					print(error)
-				}
-
 			}
 		}
 	})

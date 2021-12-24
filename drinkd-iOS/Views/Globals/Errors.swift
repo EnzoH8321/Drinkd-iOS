@@ -14,6 +14,7 @@ enum NetworkErrors: Error {
 	case invalidURLError
 	case noURLFoundError
 	case generalNetworkError
+	case databaseRefNotFoundError
 }
 
 enum NetworkSuccess {
