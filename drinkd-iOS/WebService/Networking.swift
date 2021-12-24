@@ -63,22 +63,22 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @e
 				completionHandler(.failure(.decodingError))
 				return
 			}
-				//If you are here, the network should have fetched the data correctly.
-				if let JSONArray = JSONDecoderValue.businesses {
-					DispatchQueue.main.async {
-						
-						viewModel.objectWillChange.send()
-						//Checks to see if the function already ran to prevent duplicate calls
-						//TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
-						if (viewModel.model.localRestaurants.count <= 0) {
-							viewModel.model.appendDeliveryOptions(in: JSONArray)
-						}
-						completionHandler(.success(.connectionSuccess))
-						viewModel.model.createParty(setURL: url.absoluteString)
-						viewModel.removeSplashScreen = true
-						viewModel.userLocationError = false
+			//If you are here, the network should have fetched the data correctly.
+			if let JSONArray = JSONDecoderValue.businesses {
+				DispatchQueue.main.async {
+
+					viewModel.objectWillChange.send()
+					//Checks to see if the function already ran to prevent duplicate calls
+					//TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
+					if (viewModel.model.localRestaurants.count <= 0) {
+						viewModel.model.appendDeliveryOptions(in: JSONArray)
 					}
+					completionHandler(.success(.connectionSuccess))
+					viewModel.model.createParty(setURL: url.absoluteString)
+					viewModel.removeSplashScreen = true
+					viewModel.userLocationError = false
 				}
+			}
 		}
 	}.resume()
 }
@@ -111,16 +111,16 @@ func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, lat
 				return
 			}
 
-				if let JSONArray = JSONDecoderValue.businesses {
-					DispatchQueue.main.async {
-						viewModel.objectWillChange.send()
-						completionHandler(.success(.connectionSuccess))
-						viewModel.model.appendDeliveryOptions(in: JSONArray)
-						viewModel.model.createParty(setURL: url.absoluteString)
-						viewModel.removeSplashScreen = true
-						viewModel.userLocationError = false
-					}
+			if let JSONArray = JSONDecoderValue.businesses {
+				DispatchQueue.main.async {
+					viewModel.objectWillChange.send()
+					completionHandler(.success(.connectionSuccess))
+					viewModel.model.appendDeliveryOptions(in: JSONArray)
+					viewModel.model.createParty(setURL: url.absoluteString)
+					viewModel.removeSplashScreen = true
+					viewModel.userLocationError = false
 				}
+			}
 		}
 
 	}.resume()
@@ -160,17 +160,15 @@ func fetchRestaurantsAfterJoiningParty(viewModel: drinkdViewModel, completionHan
 				return
 			}
 
-				if let JSONArray = JSONDecoderValue.businesses {
-					DispatchQueue.main.async {
-						viewModel.objectWillChange.send()
-						completionHandler(.success(.connectionSuccess))
-						viewModel.model.clearAllRestaurants()
-						viewModel.model.appendDeliveryOptions(in: JSONArray)
-					}
+			if let JSONArray = JSONDecoderValue.businesses {
+				DispatchQueue.main.async {
+					viewModel.objectWillChange.send()
+					completionHandler(.success(.connectionSuccess))
+					viewModel.model.clearAllRestaurants()
+					viewModel.model.appendDeliveryOptions(in: JSONArray)
 				}
+			}
 		}
-		//If you are here, URLSession returned error instead of data
-		print("\(error?.localizedDescription ?? "Unknown error")")
 
 	}.resume()
 }
@@ -191,47 +189,47 @@ func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler:
 				viewModel.objectWillChange.send()
 
 
-					let decoder = JSONDecoder()
-					var testArray: [String: FireBaseTopChoice] = [:]
+				let decoder = JSONDecoder()
+				var testArray: [String: FireBaseTopChoice] = [:]
 
-					guard let codableData = try? JSONSerialization.data(withJSONObject: snapshot.value as Any) else {
-						completionHandler(.failure(.serializationError))
-						return
-					}
+				guard let codableData = try? JSONSerialization.data(withJSONObject: snapshot.value as Any) else {
+					completionHandler(.failure(.serializationError))
+					return
+				}
 
-					guard let data = try? decoder.decode(FireBaseMaster.self, from: codableData) else {
-						completionHandler(.failure(.decodingError))
-						return
-					}
+				guard let data = try? decoder.decode(FireBaseMaster.self, from: codableData) else {
+					completionHandler(.failure(.decodingError))
+					return
+				}
 
-					for element in data.models {
-						for dictionaryElement in element.value.models {
+				for element in data.models {
+					for dictionaryElement in element.value.models {
 
-							if (testArray.contains { key, value in key == dictionaryElement.key}) {
-								testArray[dictionaryElement.key]?.score += dictionaryElement.value.score
-							} else {
-								testArray[dictionaryElement.key] = dictionaryElement.value
-							}
-
-						}
-					}
-
-					let sortedDict = testArray.sorted {
-						if ($0.value.score == $1.value.score) {
-							return $0.key > $1.key
+						if (testArray.contains { key, value in key == dictionaryElement.key}) {
+							testArray[dictionaryElement.key]?.score += dictionaryElement.value.score
 						} else {
-							return $0.value.score > $1.value.score
+							testArray[dictionaryElement.key] = dictionaryElement.value
 						}
-					}
 
-					let array = Array(sortedDict)
-					viewModel.model.appendTopThreeRestaurants(in: array)
-					completionHandler(.success(.connectionSuccess))
+					}
+				}
+
+				let sortedDict = testArray.sorted {
+					if ($0.value.score == $1.value.score) {
+						return $0.key > $1.key
+					} else {
+						return $0.value.score > $1.value.score
+					}
+				}
+
+				let array = Array(sortedDict)
+				viewModel.model.appendTopThreeRestaurants(in: array)
+				completionHandler(.success(.connectionSuccess))
 			}
 		}
 	})
 }
-
+//Submits user score to server
 func submitRestaurantScore(viewModel: drinkdViewModel) {
 	viewModel.objectWillChange.send()
 
@@ -261,3 +259,80 @@ func submitRestaurantScore(viewModel: drinkdViewModel) {
 		localReference.child("topBars").child(viewModel.partyId ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
 	}
 }
+
+//Fetches chat messages from server
+func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+
+	let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages")
+
+	localReference.observe(DataEventType.value, with: { snapshot in
+
+		if (!snapshot.exists()) {
+			completionHandler(.failure(.databaseRefNotFoundError))
+			return
+		} else {
+
+			DispatchQueue.main.async {
+
+				viewModel.objectWillChange.send()
+
+				var messagesArray: [FireBaseMessage] = []
+
+				for messageObj in snapshot.children {
+
+					let messageData = messageObj as! DataSnapshot
+
+					guard let serializedMessageObj = try? JSONSerialization.data(withJSONObject: messageData.value as Any) else {
+						completionHandler(.failure(.serializationError))
+						return
+					}
+
+					guard let decodedMessageObj = try? JSONDecoder().decode(FireBaseMessage.self, from: serializedMessageObj) else {
+						completionHandler(.failure(.decodingError))
+						return
+					}
+
+
+					let finalMessageObj = FireBaseMessage(id: decodedMessageObj.id, username: decodedMessageObj.username, personalId: decodedMessageObj.personalId, message: decodedMessageObj.message, timestamp: decodedMessageObj.timestamp, timestampString: Date().formatDate(forMilliseconds: decodedMessageObj.timestamp))
+
+
+					messagesArray.append(finalMessageObj)
+				}
+
+				//Sorts Messages by timestamp
+				let sortedMessageArray = messagesArray.sorted {
+					return $0.timestamp < $1.timestamp
+				}
+				completionHandler(.success(.connectionSuccess))
+				viewModel.model.fetchEntireMessageList(messageList: sortedMessageArray)
+
+			}
+		}
+	})
+}
+
+//Sends a new message to the server
+func sendMessage(forMessage message: FireBaseMessage, viewModel: drinkdViewModel , completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+
+	guard let localReference = try? Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages") else {
+		completionHandler(.failure(.databaseRefNotFoundError))
+		return
+	}
+
+	localReference.child("\(message.id)").setValue(["id": message.id, "username": message.username, "personalId": message.personalId, "message": message.message, "timestamp": message.timestamp, "timestampString": Date().formatDate(forMilliseconds: message.timestamp)])
+
+	fetchExistingMessages(viewModel: viewModel) { result in
+
+		switch(result) {
+		case .success(_):
+			print("Success")
+		case .failure(_):
+			print("Failure")
+		}
+	}
+
+	completionHandler(.success(.connectionSuccess))
+}
+
+//Leave your current party. If you are the party leader, the party will be disbanded.
+

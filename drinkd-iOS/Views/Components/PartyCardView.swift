@@ -45,11 +45,20 @@ struct PartyCardView: View {
 
 							NavigationLink(isActive: $showingChatView, destination: {ChatView()}, label: {EmptyView()})
 
-
 							Button("Join Chat") {
 								showingChatView = true
-								viewModel.fetchExistingMessages()
-								print(viewModel.chatMessageList)
+
+								fetchExistingMessages(viewModel: viewModel) { result in
+
+									switch(result) {
+									case .success(_):
+										print("Success")
+									case .failure(_):
+										print("Failure")
+									}
+
+								}
+
 							}
 							.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 

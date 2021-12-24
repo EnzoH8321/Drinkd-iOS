@@ -36,7 +36,15 @@ struct ChatView: View {
 						let timeStamp = Date().currentTimeMillis()
 						let message = FireBaseMessage(id: stringifiedUUID, username: viewModel.personalUsername, personalId: viewModel.personalID, message: messageString, timestamp: timeStamp, timestampString: Date().formatDate(forMilliseconds: timeStamp))
 
-						viewModel.sendMessage(forMessage: message)
+						sendMessage(forMessage: message, viewModel: viewModel) { result in
+							
+							switch(result) {
+							case .success(_):
+								print("Success")
+							case .failure(_):
+								print("Failure")
+							}
+						}
 
 					}, label: {
 						Image(systemName: "arrowtriangle.right.fill")

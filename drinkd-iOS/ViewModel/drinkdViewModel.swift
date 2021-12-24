@@ -112,65 +112,9 @@ class drinkdViewModel: ObservableObject {
 	init() {
 		locationFetcher.start()
 	}
-	//Chat
-	func fetchExistingMessages() {
+	
 
-		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(isPartyLeader ? partyId : friendPartyId)").child("messages")
-
-		localReference.observe(DataEventType.value, with: { snapshot in
-
-			if (!snapshot.exists()) {
-				return print("Unable to get messages from Firebase/No current messages")
-			} else {
-
-				DispatchQueue.main.async {
-					self.objectWillChange.send()
-
-					do {
-						var messagesArray: [FireBaseMessage] = []
-
-						for messageObj in snapshot.children {
-
-							let messageData = messageObj as! DataSnapshot
-
-							guard let serializedMessageObj = try? JSONSerialization.data(withJSONObject: messageData.value as Any) else {
-								return print("Data Could not be serialized")
-							}
-
-							let decodedMessageObj = try JSONDecoder().decode(FireBaseMessage.self, from: serializedMessageObj)
-
-
-							let finalMessageObj = FireBaseMessage(id: decodedMessageObj.id, username: decodedMessageObj.username, personalId: decodedMessageObj.personalId, message: decodedMessageObj.message, timestamp: decodedMessageObj.timestamp, timestampString: Date().formatDate(forMilliseconds: decodedMessageObj.timestamp))
-
-							messagesArray.append(finalMessageObj)
-						}
-
-						//Sorts Messages by timestamp
-						let sortedMessageArray = messagesArray.sorted {
-							return $0.timestamp < $1.timestamp
-						}
-
-						self.model.fetchEntireMessageList(messageList: sortedMessageArray)
-						print("Decoded firebase list -> \(self.model.chatMessageList)")
-					} catch {
-						print(error)
-					}
-
-				}
-				
-			}
-
-		})
-	}
-
-	func sendMessage(forMessage message: FireBaseMessage) {
-		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(isPartyLeader ? partyId : friendPartyId)").child("messages")
-
-
-		localReference.child("\(message.id)").setValue(["id": message.id, "username": message.username, "personalId": message.personalId, "message": message.message, "timestamp": message.timestamp, "timestampString": Date().formatDate(forMilliseconds: message.timestamp)])
-
-		fetchExistingMessages()
-	}
+	
 
 	//
 	func updateRestaurantList() {
