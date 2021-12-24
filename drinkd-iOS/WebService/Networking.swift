@@ -177,7 +177,9 @@ func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler:
 
 	let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("topBars")
 
-	localReference.observe(DataEventType.value, with: { snapshot in
+	var dbHandle = DatabaseHandle()
+
+	dbHandle = localReference.observe(DataEventType.value, with: { snapshot in
 
 		if (!snapshot.exists()) {
 			completionHandler(.failure(.databaseRefNotFoundError))
@@ -225,6 +227,7 @@ func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler:
 				let array = Array(sortedDict)
 				viewModel.model.appendTopThreeRestaurants(in: array)
 				completionHandler(.success(.connectionSuccess))
+				localReference.removeObserver(withHandle: dbHandle)
 			}
 		}
 	})
@@ -265,7 +268,9 @@ func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escap
 
 	let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages")
 
-	localReference.observe(DataEventType.value, with: { snapshot in
+	var dbHandle = DatabaseHandle()
+
+	dbHandle =  localReference.observe(DataEventType.value, with: { snapshot in
 
 		if (!snapshot.exists()) {
 			completionHandler(.failure(.databaseRefNotFoundError))
@@ -305,10 +310,12 @@ func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escap
 				}
 				completionHandler(.success(.connectionSuccess))
 				viewModel.model.fetchEntireMessageList(messageList: sortedMessageArray)
-
+				localReference.removeObserver(withHandle: dbHandle)
 			}
 		}
 	})
+
+
 }
 
 //Sends a new message to the server
