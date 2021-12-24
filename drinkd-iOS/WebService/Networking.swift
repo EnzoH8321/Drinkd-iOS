@@ -59,7 +59,6 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @e
 		//If URLSession returns data, below code block will execute
 		if let verifiedData = data {
 
-
 			guard let JSONDecoderValue = try? JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData) else {
 				completionHandler(.failure(.decodingError))
 				return
@@ -132,12 +131,12 @@ func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, lat
 func fetchRestaurantsAfterJoiningParty(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
 	guard let verifiedPartyURL = viewModel.partyURL else {
-		completionHandler(.failure(.noURLFoundError))
+		print("No URL Found")
 		return
 	}
 
 	guard let verifiedURL = URL(string: verifiedPartyURL) else {
-		completionHandler(.failure(.invalidURLError))
+		print("Could not convert string to URL")
 		return
 	}
 
@@ -148,7 +147,7 @@ func fetchRestaurantsAfterJoiningParty(viewModel: drinkdViewModel, completionHan
 	//URLSession
 	URLSession.shared.dataTask(with: request) { data, response, error in
 
-		if let error = error {
+		if error != nil {
 			completionHandler(.failure(.generalNetworkError))
 			return
 		}
@@ -191,6 +190,7 @@ func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler:
 
 				viewModel.objectWillChange.send()
 
+
 					let decoder = JSONDecoder()
 					var testArray: [String: FireBaseTopChoice] = [:]
 
@@ -226,6 +226,7 @@ func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler:
 
 					let array = Array(sortedDict)
 					viewModel.model.appendTopThreeRestaurants(in: array)
+					completionHandler(.success(.connectionSuccess))
 			}
 		}
 	})

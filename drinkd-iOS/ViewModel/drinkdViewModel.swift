@@ -10,10 +10,6 @@ import SwiftUI
 import Firebase
 import AppTrackingTransparency
 
-enum ErrorHanding: Error {
-	case businessArrayNotFound
-}
-
 class drinkdViewModel: ObservableObject {
 
 	private enum ErrorHanding: Error {
