@@ -314,10 +314,7 @@ func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escap
 //Sends a new message to the server
 func sendMessage(forMessage message: FireBaseMessage, viewModel: drinkdViewModel , completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
-	guard let localReference = try? Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages") else {
-		completionHandler(.failure(.databaseRefNotFoundError))
-		return
-	}
+	let localReference =  Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages") 
 
 	localReference.child("\(message.id)").setValue(["id": message.id, "username": message.username, "personalId": message.personalId, "message": message.message, "timestamp": message.timestamp, "timestampString": Date().formatDate(forMilliseconds: message.timestamp)])
 
