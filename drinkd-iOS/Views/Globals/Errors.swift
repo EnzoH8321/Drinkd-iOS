@@ -12,6 +12,7 @@ enum NetworkErrors: Error {
 	case decodingError
 	case noUserLocationFoundError
 	case invalidURLError
+	case noURLFoundError
 	case generalNetworkError
 }
 

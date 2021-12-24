@@ -85,10 +85,10 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @e
 }
 //
 //Fetches a user defined location. Used when user disabled location services.
-func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, latitude: Double) {
+func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, latitude: Double, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
 	guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
-		print("Invalid URL")
+		completionHandler(.failure(.invalidURLError))
 		return
 	}
 
@@ -99,47 +99,45 @@ func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, lat
 	//URLSession
 	URLSession.shared.dataTask(with: request) { data, response, error in
 
+		if let error = error {
+			completionHandler(.failure(.generalNetworkError))
+			return
+		}
+
 		//If URLSession returns data, below code block will execute
 		if let verifiedData = data {
 
-			do {
-				let JSONDecoderValue = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
+			guard let JSONDecoderValue = try? JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData) else {
+				completionHandler(.failure(.decodingError))
+				return
+			}
+
 				if let JSONArray = JSONDecoderValue.businesses {
 					DispatchQueue.main.async {
 						viewModel.objectWillChange.send()
+						completionHandler(.success(.connectionSuccess))
 						viewModel.model.appendDeliveryOptions(in: JSONArray)
 						viewModel.model.createParty(setURL: url.absoluteString)
 						viewModel.removeSplashScreen = true
 						viewModel.userLocationError = false
 					}
-				} else {
-					throw ErrorHanding.businessArrayNotFound
 				}
-
-			} catch(ErrorHanding.businessArrayNotFound) {
-				print("Did not correctly retrieve the Business Array from the Business Search Endpoint")
-
-			} catch {
-				print(error)
-			}
-			return
 		}
-		//If you are here, URLSession returned error instead of data
-		print("\(error?.localizedDescription ?? "Unknown error")")
 
 	}.resume()
 
 }
 
 //Fetch restaurant after joining party
-func fetchRestaurantsAfterJoiningParty(viewModel: drinkdViewModel) {
+func fetchRestaurantsAfterJoiningParty(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
 	guard let verifiedPartyURL = viewModel.partyURL else {
-		return print("NO URL FOUND")
+		completionHandler(.failure(.noURLFoundError))
+		return
 	}
 
 	guard let verifiedURL = URL(string: verifiedPartyURL) else {
-		print("INVALID URL")
+		completionHandler(.failure(.invalidURLError))
 		return
 	}
 
@@ -150,29 +148,27 @@ func fetchRestaurantsAfterJoiningParty(viewModel: drinkdViewModel) {
 	//URLSession
 	URLSession.shared.dataTask(with: request) { data, response, error in
 
+		if let error = error {
+			completionHandler(.failure(.generalNetworkError))
+			return
+		}
+
 		//If URLSession returns data, below code block will execute
 		if let verifiedData = data {
-			do {
-				let JSONDecoderValue = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
+
+			guard let JSONDecoderValue = try? JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData) else {
+				completionHandler(.failure(.decodingError))
+				return
+			}
 
 				if let JSONArray = JSONDecoderValue.businesses {
 					DispatchQueue.main.async {
 						viewModel.objectWillChange.send()
+						completionHandler(.success(.connectionSuccess))
 						viewModel.model.clearAllRestaurants()
 						viewModel.model.appendDeliveryOptions(in: JSONArray)
-
 					}
-				} else {
-					throw ErrorHanding.businessArrayNotFound
 				}
-
-			} catch(ErrorHanding.businessArrayNotFound) {
-				print("Did not correctly retrieve the Business Array from the Business Search Endpoint")
-
-			} catch {
-				print(error)
-			}
-			return
 		}
 		//If you are here, URLSession returned error instead of data
 		print("\(error?.localizedDescription ?? "Unknown error")")

@@ -34,7 +34,16 @@ struct CustomLocationView: View {
 					print("values are wrong")
 					return
 				}
-				fetchUsingCustomLocation(viewModel: viewModel,longitude: longitude, latitude: latitude)
+				fetchUsingCustomLocation(viewModel: viewModel,longitude: longitude, latitude: latitude) { result in
+
+					switch(result) {
+					case .success(_):
+						print("Success")
+					case .failure(_):
+						print("Failure")
+					}
+
+				}
 			}
 			.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 			Spacer()
