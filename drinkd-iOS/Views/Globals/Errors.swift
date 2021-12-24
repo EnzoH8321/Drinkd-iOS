@@ -10,4 +10,11 @@ import Foundation
 enum NetworkErrors: Error {
 	case serializationError
 	case decodingError
+	case noUserLocationFoundError
+	case invalidURLError
+	case generalNetworkError
+}
+
+enum NetworkSuccess {
+	case connectionSuccess
 }

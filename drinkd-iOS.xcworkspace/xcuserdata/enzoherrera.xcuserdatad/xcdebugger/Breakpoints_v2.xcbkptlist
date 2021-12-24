@@ -14,10 +14,8 @@
             filePath = "drinkd-iOS/WebService/Networking.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "262"
-            endingLineNumber = "262"
-            landmarkName = "submitRestaurantScore(viewModel:)"
-            landmarkType = "9">
+            startingLineNumber = "273"
+            endingLineNumber = "273">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

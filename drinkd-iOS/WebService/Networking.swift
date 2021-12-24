@@ -9,7 +9,7 @@ import Foundation
 import Firebase
 
 
-func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel) {
+func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
 	//TODO: Issue where during reload there is a possibility to do a 2x call. Fix issue
 	//Checks to see if the function already ran to prevent duplicate calls
@@ -34,12 +34,12 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel) {
 	}
 	//If defaults are used, then the user location could not be found
 	if (longitude == 0.0 || latitude == 0.0) {
-		print("COULD NOT FETCH USER LOCATION")
+		completionHandler(.failure(.noUserLocationFoundError))
 		return
 	}
 
 	guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
-		print("Invalid URL")
+		completionHandler(.failure(.invalidURLError))
 		return
 	}
 
@@ -51,12 +51,21 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel) {
 	//URLSession
 	URLSession.shared.dataTask(with: request) { data, response, error in
 
+		if let error = error {
+			completionHandler(.failure(.generalNetworkError))
+			return
+		}
+
 		//If URLSession returns data, below code block will execute
 		if let verifiedData = data {
-			do {
-				let JSONDecoderValue = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData)
-				if let JSONArray = JSONDecoderValue.businesses {
 
+
+			guard let JSONDecoderValue = try? JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData) else {
+				completionHandler(.failure(.decodingError))
+				return
+			}
+				//If you are here, the network should have fetched the data correctly.
+				if let JSONArray = JSONDecoderValue.businesses {
 					DispatchQueue.main.async {
 						
 						viewModel.objectWillChange.send()
@@ -65,26 +74,13 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel) {
 						if (viewModel.model.localRestaurants.count <= 0) {
 							viewModel.model.appendDeliveryOptions(in: JSONArray)
 						}
-
+						completionHandler(.success(.connectionSuccess))
 						viewModel.model.createParty(setURL: url.absoluteString)
 						viewModel.removeSplashScreen = true
 						viewModel.userLocationError = false
 					}
-				} else {
-					throw ErrorHanding.businessArrayNotFound
 				}
-
-			} catch(ErrorHanding.businessArrayNotFound) {
-				print("Did not correctly retrieve the Business Array from the Business Search Endpoint")
-
-			} catch {
-				print(error)
-			}
-			return
 		}
-		//If you are here, URLSession returned error instead of data
-		print("\(error?.localizedDescription ?? "Unknown error")")
-
 	}.resume()
 }
 //
