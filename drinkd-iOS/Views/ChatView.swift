@@ -17,21 +17,23 @@ struct ChatView: View {
 		GeometryReader { geo in
 
 			let globalWidth = geo.frame(in: .global).width
+			let globalHeight = geo.frame(in: .local).height
 
 			VStack {
-
-				List {
-					ForEach(viewModel.chatMessageList) { message in
-						MessageView(username: message.username, message: message.message, personalChatID: message.personalId, timestampString: message.timestampString)
-
+				ScrollView {
+					VStack {
+						ForEach(viewModel.chatMessageList) { messageObj in
+							MessageView(username: messageObj.username, message: messageObj.message, personalChatID: messageObj.personalId, timestampString: messageObj.timestampString)
+								.frame(height: globalHeight * 0.10)
+						}
 					}
 				}
-				
+
 				HStack {
 					TextField("Enter Text Here", text: $messageString)
 						.textFieldStyle(regularTextFieldStyle())
 						.frame(width: globalWidth * 0.75)
-
+					
 					Button(action: {
 
 						let stringifiedUUID = UUID().uuidString
@@ -59,7 +61,7 @@ struct ChatView_Previews: PreviewProvider {
 
 	static var previews: some View {
 		let drinkd = drinkdViewModel()
-		drinkd.model.fetchEntireMessageList(messageList: [FireBaseMessage(id: "34234", username: "Enzo", personalId: 34, message: "Hello", timestamp: 34, timestampString: "3434"), FireBaseMessage(id: "34234", username: "Enzo", personalId: 34, message: "Hello", timestamp: 34, timestampString: "3434")])
+		drinkd.model.fetchEntireMessageList(messageList: [FireBaseMessage(id: "34234", username: "Enzo", personalId: 34, message: "Hello Man, how are you doing? This is enzo. I am currently in LA", timestamp: 34, timestampString: "3434"), FireBaseMessage(id: "34234", username: "Enzo", personalId: 34, message: "Hello Man, how are you doing? This is enzo. I am currently in Alabama", timestamp: 34, timestampString: "3434")])
 		return ChatView()
 			.environmentObject(drinkd)
 	}
