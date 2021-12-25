@@ -28,6 +28,7 @@ struct MessageView: View {
 			Text("\(message)")
 
 		}
+		
 
     }
 }

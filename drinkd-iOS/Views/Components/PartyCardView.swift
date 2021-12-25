@@ -63,7 +63,7 @@ struct PartyCardView: View {
 							.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 
 							Button("Leave Party") {
-								self.viewModel.leaveParty()
+								leaveParty(viewModel: viewModel)
 							}
 							.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 						}

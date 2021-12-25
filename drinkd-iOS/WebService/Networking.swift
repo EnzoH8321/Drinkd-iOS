@@ -319,7 +319,7 @@ func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escap
 }
 
 //Sends a new message to the server
-func sendMessage(forMessage message: FireBaseMessage, viewModel: drinkdViewModel , completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+func sendMessage(forMessage message: FireBaseMessage, viewModel: drinkdViewModel ) {
 
 	let localReference =  Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages") 
 
@@ -335,8 +335,22 @@ func sendMessage(forMessage message: FireBaseMessage, viewModel: drinkdViewModel
 		}
 	}
 
-	completionHandler(.success(.connectionSuccess))
+
 }
 
 //Leave your current party. If you are the party leader, the party will be disbanded.
+func leaveParty(viewModel: drinkdViewModel) {
+	viewModel.objectWillChange.send()
 
+	if (viewModel.isPartyLeader) {
+		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.partyId)")
+		localReference.removeValue()
+
+	} else if (!viewModel.isPartyLeader) {
+		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.partyId)").child("topBars").child("\(viewModel.friendPartyId)")
+		localReference.removeValue()
+	}
+
+	viewModel.model.leaveParty()
+
+}

@@ -112,9 +112,6 @@ class drinkdViewModel: ObservableObject {
 	init() {
 		locationFetcher.start()
 	}
-	
-
-	
 
 	//
 	func updateRestaurantList() {
@@ -194,27 +191,7 @@ class drinkdViewModel: ObservableObject {
 		self.model.emptyTheTopBarList()
 	}
 
-	func leaveParty() {
-		objectWillChange.send()
-
-		//Does not delete the test app
-		if (self.partyId == "11727") {
-			self.model.leaveParty()
-			return
-		}
-
-		if (self.isPartyLeader) {
-			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.partyId)")
-			localReference.removeValue()
-
-		} else if (!self.isPartyLeader) {
-			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.partyId)").child("topBars").child("\(self.friendPartyId)")
-			localReference.removeValue()
-		}
-
-		self.model.leaveParty()
-
-	}
+	
 
 	func removeImageUrl() {
 		objectWillChange.send()
