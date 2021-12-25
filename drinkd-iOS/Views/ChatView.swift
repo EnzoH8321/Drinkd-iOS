@@ -12,19 +12,21 @@ struct ChatView: View {
 	@EnvironmentObject var viewModel: drinkdViewModel
 	@State var messageString = ""
 
-    var body: some View {
+	var body: some View {
 
 		GeometryReader { geo in
 
 			let globalWidth = geo.frame(in: .global).width
 
 			VStack {
+
 				List {
 					ForEach(viewModel.chatMessageList) { message in
-
 						MessageView(username: message.username, message: message.message, personalChatID: message.personalId, timestampString: message.timestampString)
+
 					}
 				}
+				
 				HStack {
 					TextField("Enter Text Here", text: $messageString)
 						.textFieldStyle(regularTextFieldStyle())
@@ -36,15 +38,7 @@ struct ChatView: View {
 						let timeStamp = Date().currentTimeMillis()
 						let message = FireBaseMessage(id: stringifiedUUID, username: viewModel.personalUsername, personalId: viewModel.personalID, message: messageString, timestamp: timeStamp, timestampString: Date().formatDate(forMilliseconds: timeStamp))
 
-						sendMessage(forMessage: message, viewModel: viewModel) { result in
-							
-							switch(result) {
-							case .success(_):
-								print("Success")
-							case .failure(_):
-								print("Failure")
-							}
-						}
+						sendMessage(forMessage: message, viewModel: viewModel)
 
 					}, label: {
 						Image(systemName: "arrowtriangle.right.fill")
@@ -57,16 +51,16 @@ struct ChatView: View {
 			}
 		}
 	}
-
-
 }
 
 struct ChatView_Previews: PreviewProvider {
 
 	let test = ""
 
-    static var previews: some View {
-        ChatView()
-			.environmentObject(drinkdViewModel())
-    }
+	static var previews: some View {
+		let drinkd = drinkdViewModel()
+		drinkd.model.fetchEntireMessageList(messageList: [FireBaseMessage(id: "34234", username: "Enzo", personalId: 34, message: "Hello", timestamp: 34, timestampString: "3434"), FireBaseMessage(id: "34234", username: "Enzo", personalId: 34, message: "Hello", timestamp: 34, timestampString: "3434")])
+		return ChatView()
+			.environmentObject(drinkd)
+	}
 }
