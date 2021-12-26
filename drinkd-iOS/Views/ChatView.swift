@@ -22,9 +22,9 @@ struct ChatView: View {
 			VStack {
 				ScrollView {
 					VStack {
-						ForEach(viewModel.chatMessageList) { messageObj in
+						ForEach(viewModel.chatMessageList, id: \.self) { messageObj in
 							MessageView(username: messageObj.username, message: messageObj.message, personalChatID: messageObj.personalId, timestampString: messageObj.timestampString)
-//								.frame(height: globalHeight * 0.10)
+								
 						}
 					}
 				}

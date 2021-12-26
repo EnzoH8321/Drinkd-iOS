@@ -15,10 +15,6 @@ struct MessageView: View {
 	var timestampString: String
 
 	var body: some View {
-		GeometryReader { geo in
-
-			let fullWidth = geo.frame(in: .global).width
-			let fullHeight = geo.frame(in: .global).height
 
 			ZStack() {
 				RoundedRectangle(cornerRadius: 5)
@@ -29,18 +25,18 @@ struct MessageView: View {
 					HStack {
 						Text("\(username)")
 							.bold()
-							.padding([.leading], 10)
+							.padding([.leading, .top], 10)
 
 						Text("\(timestampString)")
 							.padding([.leading], 30)
 					}
 					
 					Text("\(message)")
-						.padding([.leading], 10)
+						.padding([.leading, .bottom], 10)
 				}
 			}
-			.frame(width: fullWidth)
-		}
+
+
 	}
 }
 
