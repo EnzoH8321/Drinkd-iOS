@@ -24,7 +24,7 @@ struct ChatView: View {
 					VStack {
 						ForEach(viewModel.chatMessageList) { messageObj in
 							MessageView(username: messageObj.username, message: messageObj.message, personalChatID: messageObj.personalId, timestampString: messageObj.timestampString)
-								.frame(height: globalHeight * 0.10)
+//								.frame(height: globalHeight * 0.10)
 						}
 					}
 				}
