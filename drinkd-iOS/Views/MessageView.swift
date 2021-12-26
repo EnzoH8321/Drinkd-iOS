@@ -29,12 +29,14 @@ struct MessageView: View {
 					HStack {
 						Text("\(username)")
 							.bold()
+							.padding([.leading], 10)
 
 						Text("\(timestampString)")
 							.padding([.leading], 30)
 					}
 					
 					Text("\(message)")
+						.padding([.leading], 10)
 				}
 			}
 			.frame(width: fullWidth)

@@ -61,7 +61,7 @@ struct ChatView_Previews: PreviewProvider {
 
 	static var previews: some View {
 		let drinkd = drinkdViewModel()
-		drinkd.model.fetchEntireMessageList(messageList: [FireBaseMessage(id: "34234", username: "Enzo", personalId: 34, message: "Hello Man, how are you doing? This is enzo. I am currently in LA", timestamp: 34, timestampString: "3434"), FireBaseMessage(id: "34234", username: "Enzo", personalId: 34, message: "Hello Man, how are you doing? This is enzo. I am currently in Alabama", timestamp: 34, timestampString: "3434")])
+		drinkd.model.fetchEntireMessageList(messageList: [FireBaseMessage(id: "34234", username: "Enzo", personalId: 34, message: "Hello Man, how are you doing? This is enzo. I am currently in LA. Why La you may as? well this is something", timestamp: 34, timestampString: "3434"), FireBaseMessage(id: "34234", username: "Enzo", personalId: 34, message: "Hello Man, how are you doing? This is enzo. I am currently in Alabama", timestamp: 34, timestampString: "3434")])
 		return ChatView()
 			.environmentObject(drinkd)
 	}
