@@ -20,12 +20,12 @@ struct MessageView: View {
 			let fullWidth = geo.frame(in: .global).width
 			let fullHeight = geo.frame(in: .global).height
 
-			ZStack(alignment: .center) {
-
+			ZStack() {
 				RoundedRectangle(cornerRadius: 5)
 					.fill(Color(red: 203/255, green: 203/255, blue: 203/255))
 
 				VStack(alignment: .leading, spacing: 10) {
+					
 					HStack {
 						Text("\(username)")
 							.bold()
@@ -37,13 +37,9 @@ struct MessageView: View {
 					Text("\(message)")
 				}
 			}
-			.padding([.leading, .trailing], fullWidth * 0.10)
-//			.padding([.top, .bottom], fullHeight )
-
+			.frame(width: fullWidth)
 		}
-
 	}
-
 }
 
 struct MessageView_Previews: PreviewProvider {
