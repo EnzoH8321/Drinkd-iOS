@@ -45,6 +45,7 @@ struct ChatView: View {
 					}, label: {
 						Image(systemName: "arrowtriangle.right.fill")
 							.resizable()
+                            .foregroundColor(AppColors.primaryColor)
 							.frame(width: 25, height: 25)
 					})
 						.padding([.leading], 20)
