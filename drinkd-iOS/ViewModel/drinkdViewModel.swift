@@ -191,8 +191,6 @@ class drinkdViewModel: ObservableObject {
 		self.model.emptyTheTopBarList()
 	}
 
-	
-
 	func removeImageUrl() {
 		objectWillChange.send()
 		self.model.removeImageUrls()

@@ -18,11 +18,11 @@ struct MessageView: View {
 
 			ZStack() {
 				RoundedRectangle(cornerRadius: 5)
-					.fill(Color(red: 203/255, green: 203/255, blue: 203/255))
+					.fill(Color(red: 230/255, green: 230/255, blue: 230/255))
 
 				VStack(alignment: .leading, spacing: 10) {
 					
-					HStack {
+                    HStack(alignment: .bottom) {
 						Text("\(username)")
 							.bold()
 							.padding([.leading, .top], 10)
@@ -34,8 +34,9 @@ struct MessageView: View {
 					Text("\(message)")
 						.padding([.leading, .bottom], 10)
 				}
-			}
-
+            }
+            .cornerRadius(8)
+            .padding([.leading, .trailing], 10)
 
 	}
 }
@@ -46,3 +47,4 @@ struct MessageView_Previews: PreviewProvider {
 
 	}
 }
+
