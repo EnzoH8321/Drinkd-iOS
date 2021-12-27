@@ -21,14 +21,10 @@ struct CustomLocationView: View {
 			Text("Please enter the Latitude below")
 				.padding(.top, 10)
 			TextField("Latitude", text: $latitude)
-				.border(Color(UIColor.separator))
-				.textFieldStyle(.roundedBorder)
-
+				.textFieldStyle(regularTextFieldStyle())
 			Text("Please enter the Longitude below")
 			TextField("Longitude", text: $longitude)
-				.border(Color(UIColor.separator))
-				.textFieldStyle(.roundedBorder)
-
+				.textFieldStyle(regularTextFieldStyle())
 			Button("Submit Custom Location") {
 				//If 0.0 they are nil
 				let latitude = Double(self.latitude) ?? 0.0
@@ -38,7 +34,16 @@ struct CustomLocationView: View {
 					print("values are wrong")
 					return
 				}
-				fetchUsingCustomLocation(viewModel: viewModel,longitude: longitude, latitude: latitude)
+				fetchUsingCustomLocation(viewModel: viewModel,longitude: longitude, latitude: latitude) { result in
+
+					switch(result) {
+					case .success(_):
+						print("Success")
+					case .failure(_):
+						print("Failure")
+					}
+
+				}
 			}
 			.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 			Spacer()

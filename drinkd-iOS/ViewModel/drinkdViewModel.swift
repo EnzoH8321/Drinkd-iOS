@@ -10,10 +10,6 @@ import SwiftUI
 import Firebase
 import AppTrackingTransparency
 
-enum ErrorHanding: Error {
-	case businessArrayNotFound
-}
-
 class drinkdViewModel: ObservableObject {
 
 	private enum ErrorHanding: Error {
@@ -98,17 +94,32 @@ class drinkdViewModel: ObservableObject {
 	//Hidden API KEY
 	let token = (Bundle.main.infoDictionary?["API_KEY"] as? String)!
 
-	init() {
-//		locationFetcher = LocationFetcher()
-		locationFetcher.start()
-		
+	//Chat
+	var personalUsername: String {
+		return model.personalUserName
 	}
 
+	var personalID: Int {
+		return model.personalUserID
+	}
+
+	var chatMessageList: [FireBaseMessage] {
+		return model.chatMessageList
+	}
+
+	//
+
+	init() {
+		locationFetcher.start()
+	}
+
+	//
 	func updateRestaurantList() {
 		objectWillChange.send()
 		self.model.appendCardsToDecklist()
 		
 	}
+
 
 	//called when the create party button in the create party screen in pushed
 	func createNewParty(setVotes partyVotes: Int? = nil, setName partyName: String? = nil) {
@@ -180,28 +191,6 @@ class drinkdViewModel: ObservableObject {
 		self.model.emptyTheTopBarList()
 	}
 
-	func leaveParty() {
-		objectWillChange.send()
-
-		//Does not delete the test app
-		if (self.partyId == "11727") {
-			self.model.leaveParty()
-			return
-		}
-
-		if (self.isPartyLeader) {
-			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.partyId)")
-			localReference.removeValue()
-
-		} else if (!self.isPartyLeader) {
-			let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.partyId)").child("topBars").child("\(self.friendPartyId)")
-			localReference.removeValue()
-		}
-
-		self.model.leaveParty()
-
-	}
-
 	func removeImageUrl() {
 		objectWillChange.send()
 		self.model.removeImageUrls()
@@ -218,11 +207,18 @@ class drinkdViewModel: ObservableObject {
 
 	}
 
+	func forModelSetUsernameAndId(username: String, id: Int) {
+		self.model.setPersonalUserAndID(forName: username, forID: id)
+	}
+
+	//Checks if the user locations could/could not be found
 	func setuserLocationError() {
 		objectWillChange.send()
 		self.userLocationError = locationFetcher.errorWithLocationAuth
 		print("userlocationerror -> \(self.userLocationError)")
 	}
+
+	
 
 }
 

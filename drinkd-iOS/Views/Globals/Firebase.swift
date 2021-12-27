@@ -127,3 +127,19 @@ struct FireBaseTopChoicesArray: Codable {
 		self.models = models
 	}
 }
+
+
+struct FireBaseMessageArray: Codable {
+	var messages: [FireBaseMessage]
+}
+
+struct FireBaseMessage: Codable, Identifiable, Hashable {
+	var id: String
+	var username: String
+	var personalId: Int
+	var message: String
+	var timestamp: Int
+	var timestampString: String
+}
+
+

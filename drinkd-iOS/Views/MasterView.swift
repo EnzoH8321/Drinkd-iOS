@@ -75,7 +75,14 @@ struct MasterView: View {
 						switch (tabVal) {
 						case 2 :
 							viewModel.removeImageUrl()
-							calculateTopThreeRestaurants(viewModel: viewModel)
+							calculateTopThreeRestaurants(viewModel: viewModel) { result in
+								switch(result) {
+								case .success(_):
+									print("Success")
+								case .failure(_):
+									print("Failure")
+								}
+							}
 						default:
 							break
 						}

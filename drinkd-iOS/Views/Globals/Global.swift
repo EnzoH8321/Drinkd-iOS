@@ -58,7 +58,6 @@ struct DefaultAppButton: ButtonStyle {
 			.padding()
 			.background(AppColors.primaryColor)
 			.clipShape(ButtonSyling.clipShape)
-//			.shadow(color: configuration.isPressed ? Color.gray : ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y:  ButtonSyling.buttonShadowY)
 			.opacity(configuration.isPressed ? 0.5 : 1)
 			.padding(20)
 	}
@@ -102,4 +101,14 @@ struct noPartyYelpButtonStyle: ButtonStyle {
 			.opacity(configuration.isPressed ? 0.5 : 1)
 
 	}
+}
+
+//TextField
+struct regularTextFieldStyle: TextFieldStyle {
+
+	func _body(configuration: TextField<_Label>) -> some View {
+			configuration
+			.border(Color(UIColor.separator))
+			.textFieldStyle(.roundedBorder)
+		}
 }
