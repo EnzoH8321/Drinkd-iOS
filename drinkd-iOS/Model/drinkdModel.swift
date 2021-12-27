@@ -79,7 +79,6 @@ struct drinkdModel {
 		chatMessageList = messageList
 	}
 
-
 	//
 	mutating func getLocalRestaurants() -> [YelpApiBusinessSearchProperties] {
 		return localRestaurants
