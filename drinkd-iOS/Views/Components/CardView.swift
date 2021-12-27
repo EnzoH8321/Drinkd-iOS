@@ -50,7 +50,6 @@ struct CardView: View {
 		self.restaurantZipCode = restaurantDetails.location?.zip_code ?? ""
 		self.restaurantState = restaurantDetails.location?.state ?? ""
 		self.restaurantURL = restaurantDetails.url ?? ""
-
 		self.optionsDelivery = restaurantDetails.deliveryAvailable ?? false
 		self.optionsReservations = restaurantDetails.reservationAvailable ?? false
 		self.optionsPickup = restaurantDetails.pickUpAvailable ?? false
