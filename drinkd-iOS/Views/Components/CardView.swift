@@ -16,6 +16,9 @@ struct CardView: View {
         case mediumPadding = 12
     }
     
+    @State private var scrollDimensionminY = 0.0
+    @State private var scrollDimensionmaxY = 0.0
+    @State private var frame = CGRect(x: 0, y: 0, width: 0, height: 0)
     @State private var offset = CGSize.zero
     @EnvironmentObject var viewModel: drinkdViewModel
     
@@ -78,68 +81,80 @@ struct CardView: View {
                     RemoteImageLoader(url: "\(restaurantImage)")
                     
                     HStack {
-                        VStack(alignment: .leading) {
-                            Text("About")
-                                .font(.title2)
-                                .bold()
+                        GeometryReader { geo in
                             
-                            ScrollView {
-                                VStack(alignment: .leading) {
-                                    HStack {
-                                        Image(systemName: "house")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 35)
-                                        Text("\(restaurantAddress1)  \n\(restaurantCity)")
-                                            .padding([.leading], 10)
-                                        
-                                    }
-                                    HStack {
-                                        Image(systemName: "phone")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 35)
-                                        Text("\(restaurantPhoneNumber)")
-                                            .padding([.leading], 10)
-                                    }
-                                    //
-                                    HStack {
-                                        Image(systemName: "figure.walk")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 35)
-                                        Text(optionsPickup ? "Pickup Available" : "Pickup Unavailable")
-                                            .padding([.leading], 10)
-                                    }
-                                    
-                                    
-                                    HStack {
-                                        Image(systemName: "bicycle")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 35)
-                                        Text(optionsDelivery ? "Delivery Available" : "Delivery Unavailable")
-                                            .padding([.leading], 10)
-                                    }
-                                         
-                                    HStack {
-                                        Image(systemName: "square.and.pencil")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 35)
-                                        Text(optionsReservations ? "Reservations Available" : "Reservations Unavailable")
-                                            .padding([.leading], 10)
-                                        Spacer()
-                                        if (!viewModel.currentlyInParty) {
-                                            noPartyYelpButton(buttonName: "doc.plaintext", yelpURL: "\(restaurantURL)")
-                                                .padding(.bottom, 20)
-                                                .padding(.trailing, 10)
+                            let minY = geo.frame(in: CoordinateSpace.global).minY
+                            let maxY = geo.frame(in: CoordinateSpace.global).maxY
+                            let frame = geo.frame(in: CoordinateSpace.global)
+                            
+                            VStack(alignment: .leading) {
+                                Text("About")
+                                    .font(.title2)
+                                    .bold()
+                                
+                                ScrollView {
+                                    VStack(alignment: .leading) {
+                                        HStack {
+                                            Image(systemName: "house")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 35)
+                                            Text("\(restaurantAddress1)  \n\(restaurantCity)")
+                                                .padding([.leading], 10)
+                                            
+                                        }
+                                        HStack {
+                                            Image(systemName: "phone")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 35)
+                                            Text("\(restaurantPhoneNumber)")
+                                                .padding([.leading], 10)
+                                        }
+                                        //
+                                        HStack {
+                                            Image(systemName: "figure.walk")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 35)
+                                            Text(optionsPickup ? "Pickup Available" : "Pickup Unavailable")
+                                                .padding([.leading], 10)
                                         }
                                         
+                                        
+                                        HStack {
+                                            Image(systemName: "bicycle")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 35)
+                                            Text(optionsDelivery ? "Delivery Available" : "Delivery Unavailable")
+                                                .padding([.leading], 10)
+                                        }
+                                        
+                                        HStack {
+                                            Image(systemName: "square.and.pencil")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 35)
+                                            Text(optionsReservations ? "Reservations Available" : "Reservations Unavailable")
+                                                .padding([.leading], 10)
+                                            Spacer()
+                                            if (!viewModel.currentlyInParty) {
+                                                noPartyYelpButton(buttonName: "doc.plaintext", yelpURL: "\(restaurantURL)")
+                                                    .padding(.bottom, 20)
+                                                    .padding(.trailing, 10)
+                                            }
+                                            
+                                        }
                                     }
                                 }
+                               
                             }
-                            
+                            .onAppear {
+                                self.scrollDimensionminY = minY
+                                self.scrollDimensionmaxY = maxY
+                                self.frame = frame
+                            }
                         }
                         
                     }
@@ -166,9 +181,7 @@ struct CardView: View {
                             .frame(height: 50, alignment: .center)
                             Spacer()
                         }
-                        
                     }
-                    
                 }
                 .padding(.all, CardPadding.mediumPadding.rawValue)
             }
@@ -178,7 +191,12 @@ struct CardView: View {
             .gesture(
                 DragGesture()
                     .onChanged { gesture in
-                        print(gesture.startLocation)
+                        print("full frame -> \(self.frame)")
+                        print("Scroll Dimension -> \(self.scrollDimensionminY)")
+                        print("Gesture Start Location -> \(gesture.startLocation.y)")
+                        
+                        if (gesture.startLocation.y + 60 > self.scrollDimensionminY) {return}
+                      
                         self.offset = gesture.translation
                     }
                 
