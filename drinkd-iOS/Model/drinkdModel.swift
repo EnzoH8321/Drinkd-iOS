@@ -32,7 +32,7 @@ struct drinkdModel {
 	private(set) var isPhone: Bool = true
 	private(set) var counter: Int = 9
 	private(set) var currentCardIndex: Int = 9
-	private(set) var currentlyInParty = true
+	private(set) var currentlyInParty = false
 	private(set) var partyId: String?
 	private(set) var partyMaxVotes: Int?
 	private(set) var partyName: String?

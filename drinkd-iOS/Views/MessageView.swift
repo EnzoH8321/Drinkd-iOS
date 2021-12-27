@@ -49,8 +49,8 @@ struct MessageView: View {
             .foregroundColor(isMyMessage ? .white : .black)
             
         }
-        .padding([.leading], isMyMessage ? 65 : 30)
-        .padding([.trailing], isMyMessage ? 30 : 65)
+        .padding([.leading], isMyMessage ? 65 : 20)
+        .padding([.trailing], isMyMessage ? 20 : 65)
         
     }
 }
