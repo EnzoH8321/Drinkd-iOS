@@ -16,9 +16,8 @@ struct ChatView: View {
 
 		GeometryReader { geo in
 
-			let globalWidth = geo.frame(in: .global).width
-			let globalHeight = geo.frame(in: .global).height
-
+			let globalWidth = geo.frame(in: .local).width
+			
 			VStack {
 				ScrollView {
 					VStack {
@@ -30,6 +29,7 @@ struct ChatView: View {
 				}
 
 				HStack {
+                    Spacer()
 					TextField("Enter Text Here", text: $messageString)
 						.textFieldStyle(regularTextFieldStyle())
 						.frame(width: globalWidth * 0.75)
@@ -49,6 +49,7 @@ struct ChatView: View {
 							.frame(width: 25, height: 25)
 					})
 						.padding([.leading], 20)
+                    Spacer()
 				}
 				.padding([.bottom], 10)
 			}
