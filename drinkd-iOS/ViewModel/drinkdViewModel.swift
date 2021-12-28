@@ -137,7 +137,7 @@ class drinkdViewModel: ObservableObject {
 		topBarsReference.getData(completion: { error, snapshot in
 
 			if(!snapshot.exists()) {
-				print("party does not exist")
+				print("Party does not exist")
 				self.queryPartyError = true
 				return
 			} else {

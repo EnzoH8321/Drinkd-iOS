@@ -31,7 +31,7 @@ struct CustomLocationView: View {
 				let longitude = Double(self.longitude) ?? 0.0
 
 				if (latitude == 0.0 || longitude == 0.0) {
-					print("values are wrong")
+					print("Values are wrong")
 					return
 				}
 				fetchUsingCustomLocation(viewModel: viewModel,longitude: longitude, latitude: latitude) { result in

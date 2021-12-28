@@ -242,9 +242,9 @@ struct CardView: View {
             .gesture(
                 DragGesture()
                     .onChanged { gesture in
-                        print("full frame -> \(self.frame)")
-                        print("Scroll Dimension -> \(self.scrollDimensionminY)")
-                        print("Gesture Start Location -> \(gesture.startLocation.y)")
+//                        print("full frame -> \(self.frame)")
+//                        print("Scroll Dimension -> \(self.scrollDimensionminY)")
+//                        print("Gesture Start Location -> \(gesture.startLocation.y)")
                         //TODO: currently not able to get accurate frame of scrollview. Find a solution without having to add extra padding
                         if (gesture.startLocation.y + 60 > self.scrollDimensionminY) {return}
                         

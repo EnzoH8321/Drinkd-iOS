@@ -139,8 +139,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 			print("Message ID: \(messageID)")
 		}
 
-		print(userInfo)
-
 		completionHandler(UIBackgroundFetchResult.newData)
 	}
 
@@ -192,8 +190,6 @@ extension AppDelegate {
 		if let messageID = userInfo[gcmMessageIDKey] {
 			print("Message ID from userNotificationCenter didReceive: \(messageID)")
 		}
-
-		print(userInfo)
 
 		completionHandler()
 	}

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-//TODO: Make Chat dynamic, update on the fly
+//TODO: Make Chat dynamic, update on the fly.
 struct ChatView: View {
 
 	@EnvironmentObject var viewModel: drinkdViewModel

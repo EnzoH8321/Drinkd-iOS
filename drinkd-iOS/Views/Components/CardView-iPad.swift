@@ -207,7 +207,7 @@ struct CardViewIpad: View {
 		var body: some View {
 			Button {
 				guard let url = URL(string: "\(yelpURL)") else {
-					return print("BAD URL")
+					return print("Bad URL")
 				}
 				openURL(url)
 			} label: {

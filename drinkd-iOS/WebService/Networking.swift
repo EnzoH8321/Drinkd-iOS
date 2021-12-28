@@ -28,7 +28,6 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @e
 
 	//If user location was found, continue
 	if let location = viewModel.locationFetcher.lastKnownLocation {
-		print("FETCH WORKED, IT SHOULD POP UP")
 		latitude = location.latitude
 		longitude = location.longitude
 	}

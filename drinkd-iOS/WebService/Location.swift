@@ -46,7 +46,7 @@ class LocationFetcher: NSObject, CLLocationManagerDelegate {
 				.restricted:
 			self.errorWithLocationAuth = true
 		@unknown default:
-			print("")
+			print("Unknown Default")
 		}
 	}
 
