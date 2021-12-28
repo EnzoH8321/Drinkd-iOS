@@ -83,6 +83,7 @@ struct CardView: View {
                         
                         ForEach(0..<restaurantScore) { element in
                             Image(systemName: "star.fill")
+                                .foregroundColor(AppColors.primaryColor)
                         }
                         Text("/")
                         Text("\(restaurantPrice)")

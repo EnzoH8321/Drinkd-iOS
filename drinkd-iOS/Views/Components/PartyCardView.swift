@@ -45,28 +45,35 @@ struct PartyCardView: View {
 
 							NavigationLink(isActive: $showingChatView, destination: {ChatView()}, label: {EmptyView()})
 
-							Button("Join Chat") {
-								showingChatView = true
+                            Button {
+                                showingChatView = true
 
-								fetchExistingMessages(viewModel: viewModel) { result in
+                                fetchExistingMessages(viewModel: viewModel) { result in
 
-									switch(result) {
-									case .success(_):
-										print("Success")
-									case .failure(_):
-										print("Failure")
-									}
+                                    switch(result) {
+                                    case .success(_):
+                                        print("Success")
+                                    case .failure(_):
+                                        print("Failure")
+                                    }
 
-								}
-
+                                }
+                            } label: {
+                                Text("Join Chat")
+                                    .bold()
 							}
 							.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
-
-							Button("Leave Party") {
-								leaveParty(viewModel: viewModel)
+                            //
+                            Button {
+                                leaveParty(viewModel: viewModel)
+                            } label: {
+								Text("Leave Party")
+                                    .bold()
 							}
 							.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+                            
 						}
+                        
 					}
 					.frame(width: globalWidth, height: globalHeight / 1.25)
 					Spacer()
