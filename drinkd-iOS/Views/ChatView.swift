@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//TODO: Make Chat dynamic, update on the fly
 struct ChatView: View {
 
 	@EnvironmentObject var viewModel: drinkdViewModel
@@ -19,39 +19,45 @@ struct ChatView: View {
 			let globalWidth = geo.frame(in: .local).width
 			
 			VStack {
-				ScrollView {
-					VStack {
-						ForEach(viewModel.chatMessageList, id: \.self) { messageObj in
-                            MessageView(username: messageObj.username, message: messageObj.message, messageChatID: messageObj.personalId, personalChatId: viewModel.personalID ,timestampString: messageObj.timestampString)
-								
-						}
-					}
-				}
+                ScrollViewReader { scrollView in
+                    ScrollView {
+                        VStack {
+                            ForEach(viewModel.chatMessageList, id: \.self) { messageObj in
+                                MessageView(username: messageObj.username, message: messageObj.message, messageChatID: messageObj.personalId, personalChatId: viewModel.personalID ,timestampString: messageObj.timestampString)
+                                    
+                            }
+                        }
+                    }
 
-				HStack {
-                    Spacer()
-					TextField("Enter Text Here", text: $messageString)
-						.textFieldStyle(regularTextFieldStyle())
-						.frame(width: globalWidth * 0.75)
-					
-					Button(action: {
+                    HStack {
+                        Spacer()
+                        TextField("Enter Text Here", text: $messageString)
+                            .textFieldStyle(regularTextFieldStyle())
+                            .frame(width: globalWidth * 0.75)
+                        
+                        Button(action: {
 
-						let stringifiedUUID = UUID().uuidString
-						let timeStamp = Date().currentTimeMillis()
-						let message = FireBaseMessage(id: stringifiedUUID, username: viewModel.personalUsername, personalId: viewModel.personalID, message: messageString, timestamp: timeStamp, timestampString: Date().formatDate(forMilliseconds: timeStamp))
+                            let stringifiedUUID = UUID().uuidString
+                            let timeStamp = Date().currentTimeMillis()
+                            let message = FireBaseMessage(id: stringifiedUUID, username: viewModel.personalUsername, personalId: viewModel.personalID, message: messageString, timestamp: timeStamp, timestampString: Date().formatDate(forMilliseconds: timeStamp))
 
-						sendMessage(forMessage: message, viewModel: viewModel)
-
-					}, label: {
-						Image(systemName: "plus")
-							.resizable()
-//                            .foregroundColor(AppColors.primaryColor)
-							.frame(width: 20, height: 20)
-					})
-						.padding([.leading], 20)
-                    Spacer()
-				}
-				.padding([.bottom], 10)
+                            sendMessage(forMessage: message, viewModel: viewModel)
+                            //Scrolls to the last message after hitting the button if not empty
+                            if (!viewModel.chatMessageList.isEmpty) {
+                                scrollView.scrollTo(viewModel.chatMessageList[viewModel.chatMessageList.endIndex - 1])
+                            }
+                            
+                        }, label: {
+                            Image(systemName: "plus")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                        })
+                            .padding([.leading], 20)
+                        Spacer()
+                    }
+                    .padding([.bottom], 10)
+                }
+				
 			}
 		}
 	}
