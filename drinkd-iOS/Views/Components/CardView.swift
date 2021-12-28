@@ -41,9 +41,12 @@ struct CardView: View {
     
     //We use optionals because the API can return null for some properties
     init(in restaurantDetails: YelpApiBusinessSearchProperties, forView viewModel: drinkdViewModel) {
+        
+        let verifiedRestaurantScore = restaurantDetails.rating ?? 0
+        
         self.restaurantTitle = restaurantDetails.name ?? "Name not found"
         self.restaurantCategories = restaurantDetails.categories?[0].title ?? "None"
-        self.restaurantScore = Int(restaurantDetails.rating ?? 0)
+        self.restaurantScore =  verifiedRestaurantScore > 5 ? 5 : Int(verifiedRestaurantScore)
         self.restaurantPrice = restaurantDetails.price ?? "Not Found"
         self.restaurantImage = restaurantDetails.image_url ?? "Not Found"
         self.restaurantCity = restaurantDetails.location?.city ?? "Not Found"
@@ -76,8 +79,15 @@ struct CardView: View {
                     Text("\(restaurantCategories)")
                         .font(.title3)
                     
-                    Text("\(restaurantScore) / \(restaurantPrice)")
-                        .font(.title3)
+                    HStack {
+                        
+                        ForEach(0..<restaurantScore) { element in
+                            Image(systemName: "star.fill")
+                        }
+                        
+                        Text("\(restaurantPrice)")
+                            .font(.title3)
+                    }
                     
                     RemoteImageLoader(url: "\(restaurantImage)")
                     
@@ -318,7 +328,7 @@ struct CardView_Previews_Online: PreviewProvider {
         let mockVM = drinkdViewModel()
         mockVM.model.setCurrentToPartyTrue()
         
-        return  CardView(in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 56, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "454", location: YelpApiBusinessDetails_Location(address1: "4545", address2: "4545", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "test", display_phone: "test", distance: 6565.56), forView: mockVM).environmentObject(mockVM)
+        return  CardView(in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 5, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "454", location: YelpApiBusinessDetails_Location(address1: "4545", address2: "4545", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "test", display_phone: "test", distance: 6565.56), forView: mockVM).environmentObject(mockVM)
     }
     
 }
