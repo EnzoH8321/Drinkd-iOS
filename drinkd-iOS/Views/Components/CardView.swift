@@ -56,7 +56,7 @@ struct CardView: View {
         self.optionsDelivery = restaurantDetails.deliveryAvailable ?? false
         self.optionsReservations = restaurantDetails.reservationAvailable ?? false
         self.optionsPickup = restaurantDetails.pickUpAvailable ?? false
-        
+
     }
     
     var body: some View {
@@ -71,12 +71,13 @@ struct CardView: View {
                 VStack(alignment: .leading) {
                     Text("\(restaurantTitle)")
                         .font(.largeTitle)
+                        .bold()
                     
                     Text("\(restaurantCategories)")
-                        .font(.title2)
+                        .font(.title3)
                     
                     Text("\(restaurantScore) / \(restaurantPrice)")
-                        .font(.title2)
+                        .font(.title3)
                     
                     RemoteImageLoader(url: "\(restaurantImage)")
                     
@@ -94,6 +95,7 @@ struct CardView: View {
                                 
                                 ScrollView {
                                     VStack(alignment: .leading) {
+                                        
                                         HStack {
                                             VStack(alignment: .leading) {
                                                 Text("Address")
@@ -106,7 +108,7 @@ struct CardView: View {
                                             Image(systemName: "house")
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: 35)
+                                                .frame(width: 30)
                                             
                                         }
                                         HStack {
@@ -119,7 +121,7 @@ struct CardView: View {
                                             Image(systemName: "phone")
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: 35)
+                                                .frame(width: 30)
                                         }
                                         //
                                         HStack {
@@ -133,7 +135,7 @@ struct CardView: View {
                                             Image(systemName: "figure.walk.circle")
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: 35)
+                                                .frame(width: 30)
                                         }
                                         
                                         
@@ -147,7 +149,7 @@ struct CardView: View {
                                             Image(systemName: "car")
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: 35)
+                                                .frame(width: 30)
                                             
                                         }
                                         
@@ -162,7 +164,7 @@ struct CardView: View {
                                             Image(systemName: "square.and.pencil")
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: 35)
+                                                .frame(width: 30)
                                                                             
                                         }
                                         
@@ -193,7 +195,7 @@ struct CardView: View {
                             Spacer()
                             SubmitButton()
                                 .buttonStyle(viewModel.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
-                            YelpDetailButton(buttonName: "More Info", yelpURL: "\(restaurantURL)")
+                            YelpDetailButton(yelpURL: "\(restaurantURL)")
                             Spacer()
                         }
                         
@@ -259,7 +261,6 @@ struct YelpDetailButton: View {
     @Environment(\.openURL) var openURL
     
     let deviceIsPhone = UIDevice.current.userInterfaceIdiom == .phone
-    let buttonName: String
     let yelpURL: String
     
     
