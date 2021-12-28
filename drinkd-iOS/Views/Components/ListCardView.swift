@@ -73,12 +73,13 @@ struct ListCardView: View {
 					RemoteImageLoader(url: "\(restaurantInfo.image_url)")
                         .cornerRadius(radius: CardSpecificStyle.cornerRadius, corners: [.topLeft, .bottomLeft])
 
-					VStack {
+                    VStack() {
+                        Spacer()
 						Image(systemName: self.placementImage)
 							.resizable()
 							.scaledToFit()
 							.frame(width: 50)
-
+                        Spacer()
 						VStack(alignment: .leading) {
 							Text("\(restaurantInfo.name)")
                                 .font(.title2)
@@ -88,8 +89,8 @@ struct ListCardView: View {
                                 .font(.headline)
                                 
                         }
-                        .padding()
-						
+                    
+						Spacer()
 					}
 
 				}

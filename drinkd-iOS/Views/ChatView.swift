@@ -43,10 +43,10 @@ struct ChatView: View {
 						sendMessage(forMessage: message, viewModel: viewModel)
 
 					}, label: {
-						Image(systemName: "arrowtriangle.right.fill")
+						Image(systemName: "plus")
 							.resizable()
-                            .foregroundColor(AppColors.primaryColor)
-							.frame(width: 25, height: 25)
+//                            .foregroundColor(AppColors.primaryColor)
+							.frame(width: 20, height: 20)
 					})
 						.padding([.leading], 20)
                     Spacer()

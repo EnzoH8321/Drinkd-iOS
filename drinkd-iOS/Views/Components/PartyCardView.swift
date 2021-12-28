@@ -19,7 +19,6 @@ struct PartyCardView: View {
 			let globalHeight = proxy.frame(in: .global).height
 			NavigationView {
 				VStack {
-					Spacer()
 					ZStack {
 						RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 							.fill(Color.white)
