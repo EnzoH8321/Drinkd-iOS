@@ -42,8 +42,9 @@ struct PartyView_Join: View {
             
             Spacer()
         }
-       
+        .navigationBarTitleDisplayMode(.inline)
     }
+    
         
     
     private struct JoinPartyButton: View {
@@ -78,7 +79,7 @@ struct PartyView_Join: View {
             } label: {
                 
                 Text("Join Party")
-                    .font(.body)
+                    .bold()
                 
             }.alert(isPresented: $viewModel.queryPartyError) {
                 Alert(title: Text("Error"), message: Text("Party Does not exist"))

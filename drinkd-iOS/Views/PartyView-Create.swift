@@ -54,8 +54,7 @@ struct PartyView_Create: View {
             //
             Spacer()
         }
-
-       
+        .navigationBarTitleDisplayMode(.inline)
     }
     
     private struct CreatePartyButton: View {
@@ -94,7 +93,7 @@ struct PartyView_Create: View {
                 
             } label: {
                 Text("Create Party")
-                    .font(.body)
+                    .bold()
             }
             .alert(isPresented: $showAlert) {
                 Alert(title: Text("Error"), message: Text("Check for Valid Name or Vote Amount"))

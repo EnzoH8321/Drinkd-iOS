@@ -35,7 +35,7 @@ struct PartyView: View {
 			}
 		}
 		.navigationViewStyle(StackNavigationViewStyle())
-        
+
 	}
 }
 
@@ -46,6 +46,7 @@ struct JoinOrCreatePartyButton: View {
 
 	var body: some View {
 		Text("\(buttonName)")
+            .bold()
 	}
 }
 
