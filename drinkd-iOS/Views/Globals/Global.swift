@@ -79,7 +79,6 @@ struct CardInfoButton: ButtonStyle {
 			.clipShape(ButtonSyling.clipShape)
 			.shadow(color: configuration.isPressed ? Color.gray : ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y:  ButtonSyling.buttonShadowY)
 			.opacity(configuration.isPressed ? 0.5 : 1)
-	
 	}
 }
 

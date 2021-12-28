@@ -59,7 +59,7 @@ struct CardView: View {
         self.optionsDelivery = restaurantDetails.deliveryAvailable ?? false
         self.optionsReservations = restaurantDetails.reservationAvailable ?? false
         self.optionsPickup = restaurantDetails.pickUpAvailable ?? false
-
+        
     }
     
     var body: some View {
@@ -90,6 +90,7 @@ struct CardView: View {
                     }
                     
                     RemoteImageLoader(url: "\(restaurantImage)")
+                        
                     
                     HStack {
                         GeometryReader { geo in
@@ -110,11 +111,11 @@ struct CardView: View {
                                             VStack(alignment: .leading) {
                                                 Text("Address")
                                                     .font(.headline)
-                                                    
+                                                
                                                 Text("\(restaurantAddress1), \(restaurantCity)")
                                                     .font(.subheadline)
                                             }
-
+                                            
                                             Spacer()
                                             Image(systemName: "house")
                                                 .resizable()
@@ -146,7 +147,7 @@ struct CardView: View {
                                                     .font(.headline)
                                                 Text(optionsPickup ? "Pickup Available" : "Pickup Unavailable")
                                                     .font(.subheadline)
-                                                   
+                                                
                                             }
                                             Spacer()
                                             Image(systemName: "bag")
@@ -178,13 +179,13 @@ struct CardView: View {
                                                 Text(optionsReservations ? "Reservations Available" : "Reservations Unavailable")
                                                     .font(.subheadline)
                                             }
-                                          
+                                            
                                             Spacer()
                                             Image(systemName: "square.and.pencil")
                                                 .resizable()
                                                 .scaledToFit()
                                                 .frame(width: 24)
-                                                                            
+                                            
                                         }
                                         
                                         if (!viewModel.currentlyInParty) {
@@ -194,11 +195,11 @@ struct CardView: View {
                                                     .padding(.top, 20)
                                                 Spacer()
                                             }
-                                         
+                                            
                                         }
                                     }
                                 }
-                               
+                                
                             }
                             .onAppear {
                                 self.scrollDimensionminY = minY
@@ -206,14 +207,14 @@ struct CardView: View {
                                 self.frame = frame
                             }
                         }
-                
+                        
                     }
                     
                     if (viewModel.currentlyInParty) {
                         HStack {
                             Spacer()
                             SubmitButton()
-                                .buttonStyle(viewModel.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
+                            
                             YelpDetailButton(yelpURL: "\(restaurantURL)")
                             Spacer()
                         }
@@ -246,7 +247,7 @@ struct CardView: View {
                         print("Gesture Start Location -> \(gesture.startLocation.y)")
                         //TODO: currently not able to get accurate frame of scrollview. Find a solution without having to add extra padding
                         if (gesture.startLocation.y + 60 > self.scrollDimensionminY) {return}
-                      
+                        
                         self.offset = gesture.translation
                     }
                 
@@ -264,15 +265,22 @@ struct CardView: View {
                     }
             )
         }
-        
-    }
     
-    private struct SubmitButton: View {
-        @EnvironmentObject var viewModel: drinkdViewModel
+    }
+}
+
+struct SubmitButton: View {
+    @EnvironmentObject var viewModel: drinkdViewModel
+    
+    var body: some View {
         
-        var body: some View {
-            Button("Submit", action: {	submitRestaurantScore(viewModel: viewModel)})
+        Button {
+            submitRestaurantScore(viewModel: viewModel)
+        } label: {
+            Text("Submit")
+                .bold()
         }
+        .buttonStyle(viewModel.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
     }
 }
 
@@ -281,7 +289,6 @@ struct YelpDetailButton: View {
     
     let deviceIsPhone = UIDevice.current.userInterfaceIdiom == .phone
     let yelpURL: String
-    
     
     var body: some View {
         Button {

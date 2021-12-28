@@ -35,7 +35,7 @@ struct PartyView: View {
 			}
 		}
 		.navigationViewStyle(StackNavigationViewStyle())
-
+        
 	}
 }
 
