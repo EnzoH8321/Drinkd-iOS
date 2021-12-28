@@ -163,14 +163,17 @@ struct CardView: View {
                                                 .resizable()
                                                 .scaledToFit()
                                                 .frame(width: 35)
-                                           
-                                            
+                                                                            
                                         }
                                         
                                         if (!viewModel.currentlyInParty) {
-                                            noPartyYelpButton(buttonName: "doc.plaintext", yelpURL: "\(restaurantURL)")
-                                                .padding(.bottom, 20)
-                                                .padding(.trailing, 10)
+                                            HStack {
+                                                Spacer()
+                                                noPartyYelpButton(buttonName: "doc.plaintext", yelpURL: "\(restaurantURL)")
+                                                    .padding(.top, 20)
+                                                Spacer()
+                                            }
+                                         
                                         }
                                     }
                                 }
@@ -182,7 +185,7 @@ struct CardView: View {
                                 self.frame = frame
                             }
                         }
-                        
+                
                     }
                     
                     if (viewModel.currentlyInParty) {
@@ -268,7 +271,7 @@ struct YelpDetailButton: View {
             openURL(url)
         } label: {
             Text("More Info")
-            
+                .bold()
         }
         .buttonStyle(deviceIsPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
     }
@@ -290,11 +293,11 @@ struct noPartyYelpButton: View {
             }
             openURL(url)
         } label: {
-            Image(systemName: "\(buttonName)")
-                .resizable()
-                .frame(width: deviceIsPhone ? 20 : 40, height: deviceIsPhone ? 20 : 40)
+            Text("More Info")
+                .bold()
+            
         }
-        .buttonStyle(deviceIsPhone ? noPartyYelpButtonStyle(deviceType: .phone) : noPartyYelpButtonStyle(deviceType: .ipad))
+        .buttonStyle(deviceIsPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
     }
 }
 
