@@ -42,7 +42,9 @@ struct PartyView_Join: View {
             
             Spacer()
         }
+       
     }
+        
     
     private struct JoinPartyButton: View {
         
