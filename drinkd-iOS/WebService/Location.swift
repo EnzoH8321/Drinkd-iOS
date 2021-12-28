@@ -24,7 +24,8 @@ class LocationFetcher: NSObject, CLLocationManagerDelegate {
 
 	func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
 		lastKnownLocation = locations.first?.coordinate
-		
+        self.errorWithLocationAuth = false
+      
 	}
 
 	func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

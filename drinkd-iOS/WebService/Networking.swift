@@ -34,11 +34,13 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @e
 	//If defaults are used, then the user location could not be found
 	if (longitude == 0.0 || latitude == 0.0) {
 		completionHandler(.failure(.noUserLocationFoundError))
+        print("ERROR - NO USER LOCATION FOUND ")
 		return
 	}
 
 	guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
 		completionHandler(.failure(.invalidURLError))
+        print("ERROR - INVALID URL")
 		return
 	}
 
@@ -50,8 +52,9 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @e
 	//URLSession
 	URLSession.shared.dataTask(with: request) { data, response, error in
 
-		if let error = error {
+        if error != nil {
 			completionHandler(.failure(.generalNetworkError))
+            print("ERROR - GENERAL NETWORK ERROR")
 			return
 		}
 
@@ -60,6 +63,7 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @e
 
 			guard let JSONDecoderValue = try? JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData) else {
 				completionHandler(.failure(.decodingError))
+                print("ERROR - DECODING ERROR")
 				return
 			}
 			//If you are here, the network should have fetched the data correctly.
@@ -97,7 +101,7 @@ func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, lat
 	//URLSession
 	URLSession.shared.dataTask(with: request) { data, response, error in
 
-		if let error = error {
+        if error != nil {
 			completionHandler(.failure(.generalNetworkError))
 			return
 		}

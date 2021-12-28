@@ -37,9 +37,9 @@ struct drinkd_iOSApp: App {
 
 								switch(result) {
 								case .success(_):
-									print("Success")
+									print("Success, initial data fetch was successful")
 								case .failure(_):
-									print("Failed")
+									print("Failed, initial data fetch was unsuccessful")
 								}
 
 							}
