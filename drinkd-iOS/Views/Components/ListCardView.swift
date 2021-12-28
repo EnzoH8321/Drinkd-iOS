@@ -68,24 +68,28 @@ struct ListCardView: View {
 				RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 					.fill(Color.white)
 					.shadow(radius: AppShadow.lowShadowRadius)
-				VStack {
+				HStack {
 
 					RemoteImageLoader(url: "\(restaurantInfo.image_url)")
-						.frame(width: globalWidth)
-						.cornerRadius(radius: CardSpecificStyle.cornerRadius, corners: [.topLeft, .topRight])
+                        .cornerRadius(radius: CardSpecificStyle.cornerRadius, corners: [.topLeft, .bottomLeft])
 
-					HStack {
+					VStack {
 						Image(systemName: self.placementImage)
 							.resizable()
 							.scaledToFit()
-							.frame(width: 35)
+							.frame(width: 50)
 
 						VStack(alignment: .leading) {
 							Text("\(restaurantInfo.name)")
+                                .font(.title2)
+                                .bold()
+                            
 							Text("Votes: \(restaurantInfo.score)")
-						}
-						.padding(.leading, 15)
-						.frame(width: 150)
+                                .font(.headline)
+                                
+                        }
+                        .padding()
+						
 					}
 
 				}

@@ -16,6 +16,7 @@ struct PartyView: View {
 		NavigationView {
 			if (!viewModel.currentlyInParty) {
 				VStack {
+                    Spacer()
 					NavigationLink(destination: PartyView_Join()) {
 						JoinOrCreatePartyButton(buttonName: "Join Party")
 					}
@@ -26,7 +27,7 @@ struct PartyView: View {
 						JoinOrCreatePartyButton(buttonName: "Create Party")
 					}
 					.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
-
+                    Spacer()
 				}
 			} else {
 				VStack{
@@ -35,7 +36,7 @@ struct PartyView: View {
 			}
 		}
 		.navigationViewStyle(StackNavigationViewStyle())
-
+        .navigationBarHidden(true)
 	}
 }
 

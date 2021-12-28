@@ -80,7 +80,6 @@ struct CardView: View {
                         .font(.title3)
                     
                     HStack {
-                        
                         ForEach(0..<restaurantScore) { element in
                             Image(systemName: "star.fill")
                                 .foregroundColor(AppColors.primaryColor)

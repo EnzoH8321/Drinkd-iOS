@@ -234,6 +234,7 @@ struct drinkdModel {
 	}
 
 	mutating func appendTopThreeRestaurants(in array: [Dictionary<String, FireBaseTopChoice>.Element]) {
+        print(array)
 		//Empties Elements
 		firstChoice = FirebaseRestaurantInfo()
 		secondChoice = FirebaseRestaurantInfo()
