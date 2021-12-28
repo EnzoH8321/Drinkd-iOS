@@ -76,7 +76,7 @@ struct CardView: View {
                         .font(.title2)
                     
                     Text("\(restaurantScore) / \(restaurantPrice)")
-                        .font(.title3)
+                        .font(.title2)
                     
                     RemoteImageLoader(url: "\(restaurantImage)")
                     
@@ -95,56 +95,82 @@ struct CardView: View {
                                 ScrollView {
                                     VStack(alignment: .leading) {
                                         HStack {
+                                            VStack(alignment: .leading) {
+                                                Text("Address")
+                                                    .font(.headline)
+                                                    
+                                                Text("\(restaurantAddress1), \(restaurantCity)")
+                                            }
+
+                                            Spacer()
                                             Image(systemName: "house")
                                                 .resizable()
                                                 .scaledToFit()
                                                 .frame(width: 35)
-                                            Text("\(restaurantAddress1)  \n\(restaurantCity)")
-                                                .padding([.leading], 10)
                                             
                                         }
                                         HStack {
+                                            VStack(alignment: .leading) {
+                                                Text("Phone")
+                                                    .font(.headline)
+                                                Text("\(restaurantPhoneNumber)")
+                                            }
+                                            Spacer()
                                             Image(systemName: "phone")
                                                 .resizable()
                                                 .scaledToFit()
                                                 .frame(width: 35)
-                                            Text("\(restaurantPhoneNumber)")
-                                                .padding([.leading], 10)
                                         }
                                         //
                                         HStack {
-                                            Image(systemName: "figure.walk")
+                                            VStack(alignment: .leading) {
+                                                Text("Pickup Options")
+                                                    .font(.headline)
+                                                Text(optionsPickup ? "Pickup Available" : "Pickup Unavailable")
+                                                   
+                                            }
+                                            Spacer()
+                                            Image(systemName: "figure.walk.circle")
                                                 .resizable()
                                                 .scaledToFit()
                                                 .frame(width: 35)
-                                            Text(optionsPickup ? "Pickup Available" : "Pickup Unavailable")
-                                                .padding([.leading], 10)
                                         }
                                         
                                         
                                         HStack {
-                                            Image(systemName: "bicycle")
+                                            VStack(alignment: .leading) {
+                                                Text("Delivery Options")
+                                                    .font(.headline)
+                                                Text(optionsDelivery ? "Delivery Available" : "Delivery Unavailable")
+                                            }
+                                            Spacer()
+                                            Image(systemName: "car")
                                                 .resizable()
                                                 .scaledToFit()
                                                 .frame(width: 35)
-                                            Text(optionsDelivery ? "Delivery Available" : "Delivery Unavailable")
-                                                .padding([.leading], 10)
+                                            
                                         }
                                         
                                         HStack {
+                                            VStack(alignment: .leading) {
+                                                Text("Reservation Options")
+                                                    .font(.headline)
+                                                Text(optionsReservations ? "Reservations Available" : "Reservations Unavailable")
+                                            }
+                                          
+                                            Spacer()
                                             Image(systemName: "square.and.pencil")
                                                 .resizable()
                                                 .scaledToFit()
                                                 .frame(width: 35)
-                                            Text(optionsReservations ? "Reservations Available" : "Reservations Unavailable")
-                                                .padding([.leading], 10)
-                                            Spacer()
-                                            if (!viewModel.currentlyInParty) {
-                                                noPartyYelpButton(buttonName: "doc.plaintext", yelpURL: "\(restaurantURL)")
-                                                    .padding(.bottom, 20)
-                                                    .padding(.trailing, 10)
-                                            }
+                                           
                                             
+                                        }
+                                        
+                                        if (!viewModel.currentlyInParty) {
+                                            noPartyYelpButton(buttonName: "doc.plaintext", yelpURL: "\(restaurantURL)")
+                                                .padding(.bottom, 20)
+                                                .padding(.trailing, 10)
                                         }
                                     }
                                 }
@@ -194,7 +220,7 @@ struct CardView: View {
                         print("full frame -> \(self.frame)")
                         print("Scroll Dimension -> \(self.scrollDimensionminY)")
                         print("Gesture Start Location -> \(gesture.startLocation.y)")
-                        
+                        //TODO: currently not able to get accurate frame of scrollview. Find a solution without having to add extra padding
                         if (gesture.startLocation.y + 60 > self.scrollDimensionminY) {return}
                       
                         self.offset = gesture.translation
@@ -247,7 +273,8 @@ struct YelpDetailButton: View {
         .buttonStyle(deviceIsPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
     }
 }
-//Not currently in party
+
+//Button that goes to the yelp website.
 struct noPartyYelpButton: View {
     @Environment(\.openURL) var openURL
     
@@ -275,7 +302,7 @@ struct CardView_Previews: PreviewProvider {
     
     static var previews: some View {
         
-        CardView(in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 56, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "454", location: YelpApiBusinessDetails_Location(address1: "4545", address2: "4545", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "test", display_phone: "test", distance: 6565.56), forView: drinkdViewModel()).environmentObject(drinkdViewModel())
+        CardView(in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 5, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "$$", location: YelpApiBusinessDetails_Location(address1: "155 W 51st St", address2: "Suite 1-", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "650-339-0869", display_phone: "test", distance: 6565.56), forView: drinkdViewModel()).environmentObject(drinkdViewModel())
     }
     
 }
