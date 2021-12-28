@@ -17,11 +17,13 @@ struct PartyView_Join: View {
         VStack {
             Text("Join Party")
                 .font(.title)
+                .bold()
                 .padding()
             
             VStack(alignment: .leading, spacing: 1) {
                 Text("Create a Username")
                     .font(.callout)
+                    .bold()
                     .padding([.bottom], 8)
                
                 TextField("Enter a username here", text: $personalUsername)
@@ -32,6 +34,7 @@ struct PartyView_Join: View {
             VStack(alignment: .leading, spacing: 1) {
                 Text("Enter a Party ID")
                     .font(.callout)
+                    .bold()
                     .padding([.bottom], 8)
                 TextField("Party ID", text: $partyCode)
                     .textFieldStyle(regularTextFieldStyle())

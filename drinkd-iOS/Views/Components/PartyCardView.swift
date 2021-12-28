@@ -30,17 +30,17 @@ struct PartyCardView: View {
 								.font(.largeTitle)
 
 							Text("\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)")
-								.font(.title)
+								.font(.title2)
 
 							Text("Partyname:")
 								.font(.largeTitle)
 							Text("\(viewModel.partyName)")
-								.font(.title)
+								.font(.title2)
 
 							Text("Votes to Win")
 								.font(.largeTitle)
 							Text("\(viewModel.partyMaxVotes)")
-								.font(.title)
+								.font(.title2)
 
 							NavigationLink(isActive: $showingChatView, destination: {ChatView()}, label: {EmptyView()})
 

@@ -92,7 +92,7 @@ struct ListCardView: View {
                     
 						Spacer()
 					}
-
+                    .padding()
 				}
 			}
 			.frame(width: globalWidth, height: globalHeight, alignment: .center)

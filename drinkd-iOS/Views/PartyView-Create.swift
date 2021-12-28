@@ -21,11 +21,13 @@ struct PartyView_Create: View {
         VStack {
             Text("Create Your Party")
                 .font(.title)
+                .bold()
                 .padding()
             //
             VStack(alignment: .leading, spacing: 1) {
                 Text("Create a Username")
                     .font(.callout)
+                    .bold()
                     .padding([.bottom], 8)
                 
                 TextField("Username", text: $userName)
@@ -35,6 +37,7 @@ struct PartyView_Create: View {
             VStack(alignment: .leading, spacing: 1) {
                 Text("Create a Party Name")
                     .font(.callout)
+                    .bold()
                     .padding([.bottom], 8)
                 
                 TextField("Party Name(Max 15 Characters, No Numbers)", text: $partyName )
@@ -44,6 +47,7 @@ struct PartyView_Create: View {
             VStack(alignment: .leading, spacing: 1) {
                 Text("Set a Winning Vote Amount")
                     .font(.callout)
+                    .bold()
                     .padding([.bottom], 8)
                 
                 TextField("Votes", text: $winningVoteAmount)
