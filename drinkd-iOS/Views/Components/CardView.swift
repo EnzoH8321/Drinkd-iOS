@@ -84,7 +84,7 @@ struct CardView: View {
                         ForEach(0..<restaurantScore) { element in
                             Image(systemName: "star.fill")
                         }
-                        
+                        Text("/")
                         Text("\(restaurantPrice)")
                             .font(.title3)
                     }
@@ -104,14 +104,15 @@ struct CardView: View {
                                     .bold()
                                 
                                 ScrollView {
+                                    
                                     VStack(alignment: .leading) {
-                                        
                                         HStack {
                                             VStack(alignment: .leading) {
                                                 Text("Address")
                                                     .font(.headline)
                                                     
                                                 Text("\(restaurantAddress1), \(restaurantCity)")
+                                                    .font(.subheadline)
                                             }
 
                                             Spacer()
@@ -126,6 +127,7 @@ struct CardView: View {
                                                 Text("Phone")
                                                     .font(.headline)
                                                 Text("\(restaurantPhoneNumber)")
+                                                    .font(.subheadline)
                                             }
                                             Spacer()
                                             Image(systemName: "phone")
@@ -133,12 +135,17 @@ struct CardView: View {
                                                 .scaledToFit()
                                                 .frame(width: 24)
                                         }
+                                        .onTapGesture {
+                                            
+                                            UIApplication.shared.open(URL(string: "tel:\(restaurantPhoneNumber)")!)
+                                        }
                                         //
                                         HStack {
                                             VStack(alignment: .leading) {
                                                 Text("Pickup Options")
                                                     .font(.headline)
                                                 Text(optionsPickup ? "Pickup Available" : "Pickup Unavailable")
+                                                    .font(.subheadline)
                                                    
                                             }
                                             Spacer()
@@ -154,6 +161,7 @@ struct CardView: View {
                                                 Text("Delivery Options")
                                                     .font(.headline)
                                                 Text(optionsDelivery ? "Delivery Available" : "Delivery Unavailable")
+                                                    .font(.subheadline)
                                             }
                                             Spacer()
                                             Image(systemName: "car")
@@ -168,6 +176,7 @@ struct CardView: View {
                                                 Text("Reservation Options")
                                                     .font(.headline)
                                                 Text(optionsReservations ? "Reservations Available" : "Reservations Unavailable")
+                                                    .font(.subheadline)
                                             }
                                           
                                             Spacer()
