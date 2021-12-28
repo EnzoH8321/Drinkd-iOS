@@ -22,15 +22,17 @@ struct TopChoicesView: View {
 				if (viewModel.currentlyInParty && viewModel.firstPlace.image_url != "") {
 					ListCardView(restaurantInfo: self.viewModel.firstPlace, placementImage: 1)
 						.frame(width: abs(globalWidth - 20))
-						.frame(maxHeight: globalHeight / 2)
+						.frame(maxHeight: globalHeight / 3)
 
 					if (viewModel.currentlyInParty && viewModel.secondPlace.image_url != "") {
 						ListCardView(restaurantInfo: self.viewModel.secondPlace, placementImage: 2)
 							.frame(width: abs(globalWidth - 20))
+                            .frame(maxHeight: globalHeight / 3)
 						if (viewModel.currentlyInParty && viewModel.thirdPlace.image_url != "") {
 
 							ListCardView(restaurantInfo: self.viewModel.thirdPlace, placementImage: 3)
 								.frame(width: abs(globalWidth - 20))
+                                .frame(maxHeight: globalHeight / 3)
 								.padding([.bottom], 10)
 						}
 					}
@@ -58,7 +60,10 @@ struct TopChoicesView_Previews: PreviewProvider {
         
         let mockViewModel = drinkdViewModel()
         mockViewModel.model.setCurrentToPartyTrue()
-        let testArray = [(key: "Ñaño Ecuadorian Kitchen", value: drinkd_iOS.FireBaseTopChoice(id: "9YXvNE2jpEhA4k6M8WDH7A", image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/daSLaUvXCPKIRs1fUVL1Dg/o.jpg", score: 8, url: "https://www.yelp.com/biz/%C3%B1a%C3%B1o-ecuadorian-kitchen-new-york?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A", key: "16956")), (key: "Rudy\'s Bar & Grill", value: drinkd_iOS.FireBaseTopChoice(id: "4nohlTsGHEDdpwYkRTt-fA", image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/k4saxN6f0AAXH1-aqNiSNQ/o.jpg", score: 5, url: "https://www.yelp.com/biz/rudys-bar-and-grill-new-york?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A", key: "4925")), (key: "Bea", value: drinkd_iOS.FireBaseTopChoice(id: "Rc1lxc5lSKJYd162JHNMfQ", image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/m2d14AiiBqqly1gpMyU2RQ/o.jpg", score: 5, url: "https://www.yelp.com/biz/bea-new-york?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A", key: "19510")), (key: "Lilly\'s Craft and Kitchen", value: drinkd_iOS.FireBaseTopChoice(id: "JXcYD52B4190gIh6_RSXCg", image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/M9xP4V9f8ZQe2TOtGVnNNg/o.jpg", score: 4, url: "https://www.yelp.com/biz/lillys-craft-and-kitchen-new-york?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A", key: "16956")), (key: "B Side Pizza & Wine Bar", value: drinkd_iOS.FireBaseTopChoice(id: "c3D2ckzacnPtdGIM8tb-_w", image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/0oC3VssQ0t1gSEEf9HWlmA/o.jpg", score: 4, url: "https://www.yelp.com/biz/b-side-pizza-and-wine-bar-new-york?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A", key: "19510")), (key: "Dutch Freds", value: drinkd_iOS.FireBaseTopChoice(id: "SaYTVG7wHCMDBofHCgXPaA", image_url: "https://s3-media3.fl.yelpcdn.com/bphoto/F5fSQkZSmWf_JEkcFUpcyA/o.jpg", score: 2, url: "https://www.yelp.com/biz/dutch-freds-new-york-2?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A", key: "19510"))]
+        let array1 = (key: "Ñaño Ecuadorian Kitchen", value: drinkd_iOS.FireBaseTopChoice(id: "9YXvNE2jpEhA4k6M8WDH7A", image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/daSLaUvXCPKIRs1fUVL1Dg/o.jpg", score: 8, url: "https://www.yelp.com/biz/%C3%B1a%C3%B1o-ecuadorian-kitchen-new-york?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A", key: "16956"))
+        let array2 = (key: "Rudy\'s Bar & Grill", value: drinkd_iOS.FireBaseTopChoice(id: "4nohlTsGHEDdpwYkRTt-fA", image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/k4saxN6f0AAXH1-aqNiSNQ/o.jpg", score: 5, url: "https://www.yelp.com/biz/rudys-bar-and-grill-new-york?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A", key: "4925"))
+        let array3 = (key: "Bea", value: drinkd_iOS.FireBaseTopChoice(id: "Rc1lxc5lSKJYd162JHNMfQ", image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/m2d14AiiBqqly1gpMyU2RQ/o.jpg", score: 5, url: "https://www.yelp.com/biz/bea-new-york?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A", key: "19510"))
+        let testArray = [array1, array2, array3]
  
         mockViewModel.model.appendTopThreeRestaurants(in: testArray)
         
