@@ -118,7 +118,7 @@ struct CardView: View {
                                             Image(systemName: "house")
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: 30)
+                                                .frame(width: 24)
                                             
                                         }
                                         HStack {
@@ -131,7 +131,7 @@ struct CardView: View {
                                             Image(systemName: "phone")
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: 30)
+                                                .frame(width: 24)
                                         }
                                         //
                                         HStack {
@@ -142,10 +142,10 @@ struct CardView: View {
                                                    
                                             }
                                             Spacer()
-                                            Image(systemName: "figure.walk.circle")
+                                            Image(systemName: "bag")
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: 30)
+                                                .frame(width: 24)
                                         }
                                         
                                         
@@ -159,7 +159,7 @@ struct CardView: View {
                                             Image(systemName: "car")
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: 30)
+                                                .frame(width: 24)
                                             
                                         }
                                         
@@ -174,7 +174,7 @@ struct CardView: View {
                                             Image(systemName: "square.and.pencil")
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: 30)
+                                                .frame(width: 24)
                                                                             
                                         }
                                         
