@@ -16,9 +16,7 @@ struct PartyCardView: View {
 		GeometryReader { proxy in
 
 			let globalWidth = proxy.frame(in: .global).width
-			let globalHeight = proxy.frame(in: .local).height
             
-			
 				VStack {
 					ZStack {
 						RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
