@@ -36,7 +36,7 @@ struct PartyView: View {
 			}
 		}
 		.navigationViewStyle(StackNavigationViewStyle())
-        .navigationBarHidden(true)
+
 	}
 }
 

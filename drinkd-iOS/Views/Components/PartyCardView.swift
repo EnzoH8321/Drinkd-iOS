@@ -16,16 +16,17 @@ struct PartyCardView: View {
 		GeometryReader { proxy in
 
 			let globalWidth = proxy.frame(in: .global).width
-			let globalHeight = proxy.frame(in: .global).height
-			NavigationView {
+			let globalHeight = proxy.frame(in: .local).height
+            
+			
 				VStack {
 					ZStack {
 						RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
 							.fill(Color.white)
 							.shadow(radius: AppShadow.lowShadowRadius)
-							.frame(width: abs(globalWidth - 50), alignment: .center)
+							.frame(width: abs(globalWidth - 50))
 
-						VStack (alignment: .center) {
+						VStack {
 							Text("Party ID:")
 								.font(.largeTitle)
 
@@ -72,12 +73,11 @@ struct PartyCardView: View {
 							.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
                             
 						}
-                        
 					}
-					.frame(width: globalWidth, height: globalHeight / 1.25)
+					.frame(width: globalWidth)
 					Spacer()
 				}
-			}.navigationBarHidden(true)
+			
 
 
 		}

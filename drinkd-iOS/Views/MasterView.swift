@@ -56,7 +56,7 @@ struct MasterView: View {
 							}.tag(2)
 						//
 						PartyView()
-							.frame(width: globalWidth, height: globalHeight)
+//							.frame(width: globalWidth, height: globalHeight)
 							.navigationBarTitle("")
 							.navigationBarHidden(true)
 							.tabItem {
