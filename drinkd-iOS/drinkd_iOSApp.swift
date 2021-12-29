@@ -21,14 +21,29 @@ struct drinkd_iOSApp: App {
 	let persistenceController = PersistenceController.shared
 
 	@StateObject var viewModel = drinkdViewModel()
+    @State var showErrorAlert = false
 
 	var body: some Scene {
 		WindowGroup {
 			MasterView()
+                .alert(isPresented: $showErrorAlert) {
+                    Alert(title: Text("Error Retrieving User Location"), primaryButton: .default(Text("Retry"), action: {
+                        fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
+
+                            switch(result) {
+                            case .success(_):
+                                print("Success, initial data fetch was successful")
+                            case .failure(_):
+                                print("Failed, initial data fetch was unsuccessful")
+                                
+                            }
+
+                        }
+                    }), secondaryButton: .cancel())
+                }
 				.environment(\.managedObjectContext, persistenceController.container.viewContext)
 				.environmentObject(viewModel)
 				.onAppear {
-
 					//TODO: We have to add this because its the only way for ios 14 to actually fetch data
 					if (viewModel.isPhone) {
 						if #available(iOS 13, *) {
@@ -40,6 +55,7 @@ struct drinkd_iOSApp: App {
 									print("Success, initial data fetch was successful")
 								case .failure(_):
 									print("Failed, initial data fetch was unsuccessful")
+                                    showErrorAlert = true
 								}
 
 							}
@@ -47,6 +63,7 @@ struct drinkd_iOSApp: App {
 					}
 
 				}
+                
 			//TODO: From some reason, on receive glitches on iOS 14. Not called for some reason. During INIT OF IOS 14, you do have to put api call here or else it does not automatically do a call :(
 				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
 
@@ -57,6 +74,7 @@ struct drinkd_iOSApp: App {
 							switch(result) {
 							case .success(_):
 								print("Success")
+                                self.showErrorAlert = false
 							case .failure(_):
 								print("Failed")
 							}
@@ -91,6 +109,7 @@ struct drinkd_iOSApp: App {
 							switch(result) {
 							case .success(_):
 								print("Success")
+                                self.showErrorAlert = false
 							case .failure(_):
 								print("Failed")
 							}
