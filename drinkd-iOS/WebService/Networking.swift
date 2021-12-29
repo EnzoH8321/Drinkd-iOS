@@ -79,7 +79,7 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @e
 					completionHandler(.success(.connectionSuccess))
 					viewModel.model.createParty(setURL: url.absoluteString)
 					viewModel.removeSplashScreen = true
-					viewModel.userLocationError = false
+					viewModel.userDeniedLocationServices = false
 				}
 			}
 		}
@@ -121,7 +121,7 @@ func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, lat
 					viewModel.model.appendDeliveryOptions(in: JSONArray)
 					viewModel.model.createParty(setURL: url.absoluteString)
 					viewModel.removeSplashScreen = true
-					viewModel.userLocationError = false
+					viewModel.userDeniedLocationServices = false
 				}
 			}
 		}

@@ -18,14 +18,25 @@ struct CustomLocationView: View {
 		VStack {
 			Text("You have disabled location services. Please provide custom coordinates for Drinkd to use by entering a latitude and longitude below. For a more streamlined experience, please enable location services.")
 				.font(.title3)
-			Text("Please enter the Latitude below")
-				.padding(.top, 10)
-			TextField("Latitude", text: $latitude)
-				.textFieldStyle(regularTextFieldStyle())
-			Text("Please enter the Longitude below")
-			TextField("Longitude", text: $longitude)
-				.textFieldStyle(regularTextFieldStyle())
-			Button("Submit Custom Location") {
+            
+            VStack(alignment: .leading) {
+                Text("Please enter the latitude below")
+                    .bold()
+                    .padding(.top, 8)
+                TextField("Latitude", text: $latitude)
+                    .textFieldStyle(regularTextFieldStyle())
+            }.padding()
+			
+            VStack(alignment: .leading) {
+                Text("Please enter the longitude below")
+                    .bold()
+                    .padding(.top, 8)
+                TextField("Longitude", text: $longitude)
+                    .textFieldStyle(regularTextFieldStyle())
+            }.padding()
+            
+			
+			Button {
 				//If 0.0 they are nil
 				let latitude = Double(self.latitude) ?? 0.0
 				let longitude = Double(self.longitude) ?? 0.0
@@ -44,7 +55,10 @@ struct CustomLocationView: View {
 					}
 
 				}
-			}
+            } label: {
+                Text("Submit")
+                    .bold()
+            }
 			.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 			Spacer()
 		}

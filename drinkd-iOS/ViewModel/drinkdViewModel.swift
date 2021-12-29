@@ -31,7 +31,7 @@ class drinkdViewModel: ObservableObject {
 		return model.toggleRefresh
 	}
 
-	var userLocationError = false
+	var userDeniedLocationServices = false
 
 	var isPhone: Bool {
 		return model.isPhone
@@ -211,15 +211,11 @@ class drinkdViewModel: ObservableObject {
 		self.model.setPersonalUserAndID(forName: username, forID: id)
 	}
 
-	//Checks if the user locations could/could not be found
-	func setuserLocationError() {
+	//Checks if the user accepted location services. 
+	func checkIfUserDeniedTracking() {
 		objectWillChange.send()
-		self.userLocationError = locationFetcher.errorWithLocationAuth
-		print("userlocationerror -> \(self.userLocationError)")
+		self.userDeniedLocationServices = locationFetcher.errorWithLocationAuth
 	}
-
-	
-
 }
 
 struct drinkdViewModel_Previews: PreviewProvider {

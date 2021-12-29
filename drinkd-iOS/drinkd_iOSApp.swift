@@ -28,6 +28,7 @@ struct drinkd_iOSApp: App {
 			MasterView()
                 .alert(isPresented: $showErrorAlert) {
                     Alert(title: Text("Error Retrieving User Location"), primaryButton: .default(Text("Retry"), action: {
+                        viewModel.checkIfUserDeniedTracking()
                         fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
 
                             switch(result) {
@@ -35,7 +36,7 @@ struct drinkd_iOSApp: App {
                                 print("Success, initial data fetch was successful")
                             case .failure(_):
                                 print("Failed, initial data fetch was unsuccessful")
-                                
+                                viewModel.checkIfUserDeniedTracking()
                             }
 
                         }
@@ -47,17 +48,20 @@ struct drinkd_iOSApp: App {
 					//TODO: We have to add this because its the only way for ios 14 to actually fetch data
 					if (viewModel.isPhone) {
 						if #available(iOS 13, *) {
-							viewModel.setuserLocationError()
+							viewModel.checkIfUserDeniedTracking()
 							fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
 
 								switch(result) {
 								case .success(_):
 									print("Success, initial data fetch was successful")
+                            
 								case .failure(_):
 									print("Failed, initial data fetch was unsuccessful")
-                                    showErrorAlert = true
+                                    //If it fails and user manually chooses to not share location, set the Alert and retry fetching the restaurants.
+                                    if (!viewModel.userDeniedLocationServices) {
+                                        showErrorAlert = true
+                                    }
 								}
-
 							}
 						}
 					}
@@ -80,7 +84,7 @@ struct drinkd_iOSApp: App {
 							}
 
 						}
-						viewModel.setuserLocationError()
+						viewModel.checkIfUserDeniedTracking()
 					}
 
 					if #available(iOS 14, *) {

@@ -27,7 +27,7 @@ struct MasterView: View {
 
 					TabView(selection: $selectedTab) {
 						//
-						if (!viewModel.userLocationError) {
+						if (!viewModel.userDeniedLocationServices) {
 							HomeView()
 								.frame(width: globalWidth - 30 , height: globalHeight / 1.15)
 								.padding(.bottom, 30)
