@@ -18,6 +18,7 @@ The hardest part about going for a night out with your friends is deciding where
 
  * Notifications 
  * Improved Customizability
+ * iPad specific styling/features
  
 
 ## Contact Me
