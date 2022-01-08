@@ -161,11 +161,7 @@ struct HowToView: View {
 
 }
 
-extension Text {
-	func addBottomPadding() -> some View {
-		return self.padding(.bottom, 10)
-	}
-}
+
 
 struct HowToView_Previews: PreviewProvider {
 	static var previews: some View {

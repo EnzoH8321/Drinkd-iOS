@@ -24,3 +24,9 @@ extension Date {
 		return dateString
 	}
 }
+
+extension Text {
+    func addBottomPadding() -> some View {
+        return self.padding(.bottom, 10)
+    }
+}
