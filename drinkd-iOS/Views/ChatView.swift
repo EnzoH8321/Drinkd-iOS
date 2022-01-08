@@ -59,8 +59,12 @@ struct ChatView: View {
                 }
 				
 			}
+            .onDisappear {
+                //Removes the FB messaging observer
+                removeMessagingObserver(viewModel: viewModel)
+            }
 		}
-	}
+    }
 }
 
 struct ChatView_Previews: PreviewProvider {

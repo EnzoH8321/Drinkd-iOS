@@ -300,9 +300,7 @@ func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escap
 						return
 					}
 
-
 					let finalMessageObj = FireBaseMessage(id: decodedMessageObj.id, username: decodedMessageObj.username, personalId: decodedMessageObj.personalId, message: decodedMessageObj.message, timestamp: decodedMessageObj.timestamp, timestampString: Date().formatDate(forMilliseconds: decodedMessageObj.timestamp))
-
 
 					messagesArray.append(finalMessageObj)
 				}
@@ -313,12 +311,19 @@ func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escap
 				}
 				completionHandler(.success(.connectionSuccess))
 				viewModel.model.fetchEntireMessageList(messageList: sortedMessageArray)
-				localReference.removeObserver(withHandle: dbHandle)
+//				localReference.removeObserver(withHandle: dbHandle)
 			}
 		}
 	})
 
 
+}
+
+//Removes Messaging observers
+func removeMessagingObserver(viewModel: drinkdViewModel) {
+    let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages")
+    
+    localReference.removeAllObservers()
 }
 
 //Sends a new message to the server
