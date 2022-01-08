@@ -95,15 +95,18 @@ struct HowToView: View {
 	private struct createPartySheet: View {
 		var body: some View {
 			VStack(alignment: .leading) {
-				Text("Creating a party makes you the Party Leader. As the Party Leader you are responsible for creating and dismantling your party.")
+                Text("Creating A Party")
+                    .font(.title)
+                    .bold()
+                    .addBottomPadding()
+				Text("Creating a party makes you the party leader. As the party leader you are responsible for creating and destroying your party.")
 					.addBottomPadding()
-				Text("To create a party, follow the below steps:")
+				Text("1. Go to the party tab. Choose a name for your party.")
 					.addBottomPadding()
-				Text("1. Go to the Party tab. Choose a name for your party.")
+				Text("2. You will see a unique party ID. This number allows your friends to join your party.")
 					.addBottomPadding()
-				Text("2. You will see a unique Party ID. This number allows others to join your party.")
-					.addBottomPadding()
-				Text("3. The leave button will both exit and destroy your current party. All users in the party will be kicked out.")
+				Text("3. The leave button will both exit and destroy your current party. All users in the party will be kicked out automatically.")
+                    .addBottomPadding()
 			}
 		}
 	}
@@ -111,9 +114,14 @@ struct HowToView: View {
 	private struct joinPartySheet: View {
 		var body: some View {
 			VStack(alignment: .leading) {
-				Text("1. To join a party, click on the Party tab, press join button and enter the Party ID in the Input Field.")
+                Text("Joining A Party")
+                    .font(.title)
+                    .bold()
+                    .addBottomPadding()
+				Text("1. To join a party, click on the party tab, press the join button and enter the party ID in the input field.")
 					.addBottomPadding()
 				Text("2. If a valid ID is entered, you will enter into the main party screen. If an invalid ID is entered, you will be presented with an error.")
+                    .addBottomPadding()
 			}
 		}
 	}
@@ -121,13 +129,18 @@ struct HowToView: View {
 	private struct voteForPartySheet: View {
 		var body: some View {
 			VStack(alignment: .leading) {
+                Text("Voting For A Restaurant")
+                    .font(.title)
+                    .bold()
+                    .addBottomPadding()
 				Text("1. To vote for a restaurant, you must either create or join an existing party.")
 					.addBottomPadding()
-				Text("2. Each card on the Home screen will have a row of five stars. Press one of the stars to set a rating for that restaurant, minimum rating is one and maximum is five.")
+				Text("2. Each card on the home screen will have a row of five stars. Press one of the stars to set a rating for that restaurant, the minimum rating is one and the maximum is five.")
 					.addBottomPadding()
-				Text("3. Press on the Submit button to finalize the vote. If you do not press submit, the rating will not be finalized.")
+				Text("3. Press on the submit button to finalize the vote. If you do not press submit, the rating will not be finalized.")
 					.addBottomPadding()
-				Text("4. After submitting a rating, you can rerate by choosing a different rating and resubmitting. This will override your previous rating of the restaurant.")
+				Text("4. After submitting a rating, you can rerate by choosing a different rating and hitting submit. This will override your previous rating of the restaurant.")
+                    .addBottomPadding()
 			}
 		}
 	}
@@ -135,11 +148,16 @@ struct HowToView: View {
 	private struct topChoicesSheet: View {
 		var body: some View {
 			VStack(alignment: .leading) {
-				Text("1. On the Top Choices screen, you can see your parties highest rated restaurants.")
+                Text("Restaurant Rankings")
+                    .font(.title)
+                    .bold()
+                    .addBottomPadding()
+				Text("1. On the top choices screen, you can see your parties highest rated restaurants.")
 					.addBottomPadding()
-				Text("2. The list is updated everytime a user votes for a restaurant.")
+				Text("2. The list is updated every time a user votes for a restaurant.")
 					.addBottomPadding()
 				Text("3. To see the the highest rated restaurants, you must be in a party.")
+                    .addBottomPadding()
 			}
 		}
 	}
@@ -163,8 +181,30 @@ struct HowToView: View {
 
 
 
+
 struct HowToView_Previews: PreviewProvider {
+    
+    struct TestTopChoicesSheet: View {
+        var body: some View {
+            VStack(alignment: .leading) {
+                Text("Top Choices Screen")
+                    .font(.title)
+                    .bold()
+                    .addBottomPadding()
+                Text("1. On the Top Choices screen, you can see your parties highest rated restaurants.")
+                    .addBottomPadding()
+                Text("2. The list is updated everytime a user votes for a restaurant.")
+                    .addBottomPadding()
+                Text("3. To see the the highest rated restaurants, you must be in a party.")
+                    .addBottomPadding()
+            }
+            
+            
+        }
+    }
+    
 	static var previews: some View {
 		HowToView()
+        TestTopChoicesSheet()
 	}
 }

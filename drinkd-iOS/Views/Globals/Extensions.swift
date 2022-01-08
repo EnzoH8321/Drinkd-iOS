@@ -27,6 +27,6 @@ extension Date {
 
 extension Text {
     func addBottomPadding() -> some View {
-        return self.padding(.bottom, 10)
+        return self.padding(16).fixedSize(horizontal: false, vertical: true)
     }
 }
