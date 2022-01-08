@@ -17,8 +17,7 @@ The hardest part about going for a night out with your friends is deciding where
 ## TODO
 
  * Notifications 
- * Chat Feature
- * Settings / Dark Mode
+ * Improved Customizability
  
 
 ## Contact Me
