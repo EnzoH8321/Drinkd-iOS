@@ -15,6 +15,9 @@
 		5444B98F273EE09200FA6DA2 /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5444B98E273EE09100FA6DA2 /* SheetView.swift */; };
 		5444B991273EE99800FA6DA2 /* HowToView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5444B990273EE99800FA6DA2 /* HowToView.swift */; };
 		5456285A278A252200CA6005 /* FireBaseAPIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562859278A252200CA6005 /* FireBaseAPIModels.swift */; };
+		5456285C278A5FE400CA6005 /* MockJSON.json in Resources */ = {isa = PBXBuildFile; fileRef = 5456285B278A5FE400CA6005 /* MockJSON.json */; };
+		54562864278A62BF00CA6005 /* drinkd_iOS_NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562863278A62BF00CA6005 /* drinkd_iOS_NetworkingTests.swift */; };
+		5456286B278A62E800CA6005 /* NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5456286A278A62E800CA6005 /* NetworkingTests.swift */; };
 		5496D19B276D188E000C732A /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5496D19A276D188E000C732A /* MessageView.swift */; };
 		549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549BFC462728CFBA00F96F48 /* CustomLocationView.swift */; };
 		54B3E537270E140E0004ECC5 /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B3E536270E140C0004ECC5 /* Star.swift */; };
@@ -49,6 +52,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		54562865278A62BF00CA6005 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 54F9C7FD26FBB536008FA516 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54F9C80426FBB536008FA516;
+			remoteInfo = "drinkd-iOS";
+		};
 		54F9C81B26FBB538008FA516 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 54F9C7FD26FBB536008FA516 /* Project object */;
@@ -79,6 +89,10 @@
 		5444B98E273EE09100FA6DA2 /* SheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
 		5444B990273EE99800FA6DA2 /* HowToView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToView.swift; sourceTree = "<group>"; };
 		54562859278A252200CA6005 /* FireBaseAPIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireBaseAPIModels.swift; sourceTree = "<group>"; };
+		5456285B278A5FE400CA6005 /* MockJSON.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockJSON.json; sourceTree = "<group>"; };
+		54562861278A62BF00CA6005 /* drinkd-iOS-NetworkingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "drinkd-iOS-NetworkingTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		54562863278A62BF00CA6005 /* drinkd_iOS_NetworkingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOS_NetworkingTests.swift; sourceTree = "<group>"; };
+		5456286A278A62E800CA6005 /* NetworkingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingTests.swift; sourceTree = "<group>"; };
 		5478EAFC2734D8560071A0B2 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		5496D19A276D188E000C732A /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		549BFC462728CFBA00F96F48 /* CustomLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLocationView.swift; sourceTree = "<group>"; };
@@ -120,6 +134,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5456285E278A62BF00CA6005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		54F9C80226FBB536008FA516 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -156,12 +177,21 @@
 			path = "API Models";
 			sourceTree = "<group>";
 		};
+		54562862278A62BF00CA6005 /* drinkd-iOS-NetworkingTests */ = {
+			isa = PBXGroup;
+			children = (
+				54562863278A62BF00CA6005 /* drinkd_iOS_NetworkingTests.swift */,
+			);
+			path = "drinkd-iOS-NetworkingTests";
+			sourceTree = "<group>";
+		};
 		54F9C7FC26FBB536008FA516 = {
 			isa = PBXGroup;
 			children = (
 				54F9C80726FBB536008FA516 /* drinkd-iOS */,
 				54F9C81D26FBB538008FA516 /* drinkd-iOSTests */,
 				54F9C82726FBB538008FA516 /* drinkd-iOSUITests */,
+				54562862278A62BF00CA6005 /* drinkd-iOS-NetworkingTests */,
 				54F9C80626FBB536008FA516 /* Products */,
 				B60D2EA78C0A3169F255A777 /* Pods */,
 				C7BF67415388183F4D1E3DFA /* Frameworks */,
@@ -174,6 +204,7 @@
 				54F9C80526FBB536008FA516 /* drinkd-iOS.app */,
 				54F9C81A26FBB538008FA516 /* drinkd-iOSTests.xctest */,
 				54F9C82426FBB538008FA516 /* drinkd-iOSUITests.xctest */,
+				54562861278A62BF00CA6005 /* drinkd-iOS-NetworkingTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -209,7 +240,9 @@
 		54F9C81D26FBB538008FA516 /* drinkd-iOSTests */ = {
 			isa = PBXGroup;
 			children = (
+				5456286A278A62E800CA6005 /* NetworkingTests.swift */,
 				54F9C81E26FBB538008FA516 /* drinkd_iOSTests.swift */,
+				5456285B278A5FE400CA6005 /* MockJSON.json */,
 			);
 			path = "drinkd-iOSTests";
 			sourceTree = "<group>";
@@ -319,6 +352,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		54562860278A62BF00CA6005 /* drinkd-iOS-NetworkingTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 54562867278A62BF00CA6005 /* Build configuration list for PBXNativeTarget "drinkd-iOS-NetworkingTests" */;
+			buildPhases = (
+				5456285D278A62BF00CA6005 /* Sources */,
+				5456285E278A62BF00CA6005 /* Frameworks */,
+				5456285F278A62BF00CA6005 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				54562866278A62BF00CA6005 /* PBXTargetDependency */,
+			);
+			name = "drinkd-iOS-NetworkingTests";
+			productName = "drinkd-iOS-NetworkingTests";
+			productReference = 54562861278A62BF00CA6005 /* drinkd-iOS-NetworkingTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		54F9C80426FBB536008FA516 /* drinkd-iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 54F9C82E26FBB538008FA516 /* Build configuration list for PBXNativeTarget "drinkd-iOS" */;
@@ -384,9 +435,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1300;
+				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1300;
 				TargetAttributes = {
+					54562860278A62BF00CA6005 = {
+						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = 54F9C80426FBB536008FA516;
+					};
 					54F9C80426FBB536008FA516 = {
 						CreatedOnToolsVersion = 13.0;
 					};
@@ -416,11 +471,19 @@
 				54F9C80426FBB536008FA516 /* drinkd-iOS */,
 				54F9C81926FBB538008FA516 /* drinkd-iOSTests */,
 				54F9C82326FBB538008FA516 /* drinkd-iOSUITests */,
+				54562860278A62BF00CA6005 /* drinkd-iOS-NetworkingTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		5456285F278A62BF00CA6005 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		54F9C80326FBB536008FA516 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -435,6 +498,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5456285C278A5FE400CA6005 /* MockJSON.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -551,6 +615,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5456285D278A62BF00CA6005 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54562864278A62BF00CA6005 /* drinkd_iOS_NetworkingTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		54F9C80126FBB536008FA516 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -593,6 +665,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				54F9C81F26FBB538008FA516 /* drinkd_iOSTests.swift in Sources */,
+				5456286B278A62E800CA6005 /* NetworkingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -608,6 +681,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		54562866278A62BF00CA6005 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 54F9C80426FBB536008FA516 /* drinkd-iOS */;
+			targetProxy = 54562865278A62BF00CA6005 /* PBXContainerItemProxy */;
+		};
 		54F9C81C26FBB538008FA516 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 54F9C80426FBB536008FA516 /* drinkd-iOS */;
@@ -621,6 +699,44 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		54562868278A62BF00CA6005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9537WHKZZD;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.enzoHerrera.drinkd-iOS-NetworkingTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/drinkd-iOS.app/drinkd-iOS";
+			};
+			name = Debug;
+		};
+		54562869278A62BF00CA6005 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9537WHKZZD;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.enzoHerrera.drinkd-iOS-NetworkingTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/drinkd-iOS.app/drinkd-iOS";
+			};
+			name = Release;
+		};
 		54F9C82C26FBB538008FA516 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5478EAFC2734D8560071A0B2 /* Config.xcconfig */;
@@ -927,6 +1043,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		54562867278A62BF00CA6005 /* Build configuration list for PBXNativeTarget "drinkd-iOS-NetworkingTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				54562868278A62BF00CA6005 /* Debug */,
+				54562869278A62BF00CA6005 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		54F9C80026FBB536008FA516 /* Build configuration list for PBXProject "drinkd-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -31,6 +31,7 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @e
 		latitude = location.latitude
 		longitude = location.longitude
 	}
+    
 	//If defaults are used, then the user location could not be found
 	if (longitude == 0.0 || latitude == 0.0) {
 		completionHandler(.failure(.noUserLocationFoundError))
@@ -69,7 +70,7 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @e
 			//If you are here, the network should have fetched the data correctly.
 			if let JSONArray = JSONDecoderValue.businesses {
 				DispatchQueue.main.async {
-
+                    
 					viewModel.objectWillChange.send()
 					//Checks to see if the function already ran to prevent duplicate calls
 					//TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
