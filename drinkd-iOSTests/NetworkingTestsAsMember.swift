@@ -13,12 +13,15 @@ class NetworkingTestsAsMember: XCTestCase {
     
     var sut: drinkdViewModel!
     
+    override class func setUp() {
+        
+    }
+    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         try super.setUpWithError()
         sut = drinkdViewModel()
         createAndJoinParty()
-        
     }
     
     override func tearDownWithError() throws {
@@ -28,7 +31,40 @@ class NetworkingTestsAsMember: XCTestCase {
     }
     
     func testFetchingRestaurantsAfterJoiningParty() throws {
+        let expectation = XCTestExpectation(description: "Restaurants Fetched Successfully")
         
+
+        fetchRestaurantsAfterJoiningParty(viewModel: self.sut) { result in
+            
+            switch(result) {
+                
+            case .success(_):
+                
+                expectation.fulfill()
+                
+            case .failure(let failure):
+                switch(failure) {
+                case .databaseRefNotFoundError:
+                    XCTFail("DB REF NOT FOUND")
+                case .serializationError:
+                    XCTFail("SERIALIZATION ERROR")
+                case .decodingError:
+                    XCTFail("DECODING ERROR")
+                case .noUserLocationFoundError:
+                    XCTFail("NO USER LOCATION ERROR")
+                case .invalidURLError:
+                    XCTFail("INVALID URL ERROR")
+                case .noURLFoundError:
+                    XCTFail("NO URL FOUND ERROR")
+                case .generalNetworkError:
+                    XCTFail("GENERAL NETWORK ERROR")
+                }
+            }
+        }
+        
+        wait(for: [expectation], timeout: 2)
+        XCTAssertTrue(self.sut.model.localRestaurants.count > 0)
+        XCTAssertTrue(self.sut.model.localRestaurantsDefault.count > 0)
     }
     
     
@@ -48,7 +84,7 @@ extension NetworkingTestsAsMember {
             case .success(_):
                 
                 if (self.sut == nil) {return}
-                
+                print("PARTY URL FINAL -> \(self.sut.model.partyURL)")
                 
             case .failure(let failure):
                 switch(failure) {

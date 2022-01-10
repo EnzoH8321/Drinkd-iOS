@@ -83,57 +83,7 @@ class NetworkingTests: XCTestCase {
     //Test Before Party
     
     
-  
-    
-    func testFetchRestaurantsWorksWithValidData() throws {
-        let expectation = XCTestExpectation(description: "Restaurants Fetched Successfully")
-        
-//        let testURL = "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=37.33233141&longitude=-122.0312186&limit=10"
-//
-//        sut.model.createParty(setVotes: 5, setName: "Enzo", setURL: testURL)
-        
-        fetchRestaurantsAfterJoiningParty(viewModel: self.sut) { result in
-            
-            switch(result) {
-                
-            case .success(_):
-                
-                expectation.fulfill()
-                
-            case .failure(let failure):
-                switch(failure) {
-                case .databaseRefNotFoundError:
-                    XCTFail("DB REF NOT FOUND")
-                case .serializationError:
-                    XCTFail("SERIALIZATION ERROR")
-                case .decodingError:
-                    XCTFail("DECODING ERROR")
-                case .noUserLocationFoundError:
-                    XCTFail("NO USER LOCATION ERROR")
-                case .invalidURLError:
-                    XCTFail("INVALID URL ERROR")
-                case .noURLFoundError:
-                    XCTFail("NO URL FOUND ERROR")
-                case .generalNetworkError:
-                    XCTFail("GENERAL NETWORK ERROR")
-                }
-            }
-        }
-        
-        wait(for: [expectation], timeout: 2)
-        XCTAssertTrue(self.sut.model.localRestaurants.count > 0)
-        XCTAssertTrue(self.sut.model.localRestaurantsDefault.count > 0)
-    }
-    
-    //    func testCalculateTopThreeRestaurantsWithValidData() throws {
-    //
-    //        let expectation = XCTestExpectation(description: "Top Three Restaurants Fetched Successfully")
-    //
-    //
-    //
-    //        sut.model.createParty(setVotes: 5, setName: "Enzo", setURL: testURL)
-    //
-    //    }
+
     
     
 }
