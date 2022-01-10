@@ -102,7 +102,7 @@ func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, lat
 	//URLSession
 	URLSession.shared.dataTask(with: request) { data, response, error in
 
-        if error != nil {
+        if error != nil { 
 			completionHandler(.failure(.generalNetworkError))
 			return
 		}
@@ -125,7 +125,7 @@ func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, lat
 					viewModel.userDeniedLocationServices = false
                     
 				}
-			}
+            }
 		}
 
 	}.resume()

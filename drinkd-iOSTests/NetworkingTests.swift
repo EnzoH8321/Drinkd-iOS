@@ -32,7 +32,7 @@ class NetworkingTests: XCTestCase {
      4. userdeniedlocationservices is false
      5. userlevel should be creator
      */
-    func testInitialFetchWorks() throws {
+    func testInitialFetchWorksWithValidData() throws {
         
         let expectation = XCTestExpectation(description: "Data Received Successfully")
         
@@ -44,13 +44,6 @@ class NetworkingTests: XCTestCase {
             switch(result) {
                 
             case .success(_):
-                
-                XCTAssertTrue(self.sut.model.localRestaurants.count > 0)
-                XCTAssertTrue(self.sut.model.localRestaurantsDefault.count > 0)
-                //                XCTAssertTrue(self.sut.model.partyURL != nil)
-                XCTAssertTrue(self.sut.removeSplashScreen)
-                XCTAssertTrue(!self.sut.userDeniedLocationServices)
-                XCTAssertTrue(self.sut.isPartyLeader == false)
                 
                 expectation.fulfill()
                 
@@ -75,9 +68,15 @@ class NetworkingTests: XCTestCase {
             
         }
         wait(for: [expectation], timeout: 1)
+        XCTAssertTrue(self.sut.model.localRestaurants.count > 0)
+        XCTAssertTrue(self.sut.model.localRestaurantsDefault.count > 0)
+        XCTAssertTrue(self.sut.model.partyURL != nil)
+        XCTAssertTrue(self.sut.removeSplashScreen)
+        XCTAssertTrue(!self.sut.userDeniedLocationServices)
+        XCTAssertTrue(self.sut.isPartyLeader == false)
     }
     
-    func testCustomLocationWorks() throws {
+    func testCustomLocationWorksWithValidData() throws {
         
         let expectation = XCTestExpectation(description: "Data Received Successfully")
         
@@ -90,14 +89,6 @@ class NetworkingTests: XCTestCase {
             switch(result) {
                 
             case .success(_):
-                
-
-                XCTAssertTrue(self.sut.model.localRestaurants.count > 0)
-                XCTAssertTrue(self.sut.model.localRestaurantsDefault.count > 0)
-                XCTAssertTrue(self.sut.model.partyURL != nil)
-                XCTAssertTrue(self.sut.removeSplashScreen)
-                XCTAssertTrue(!self.sut.userDeniedLocationServices)
-                XCTAssertTrue(self.sut.isPartyLeader == false)
                 
                 expectation.fulfill()
                 
@@ -122,6 +113,12 @@ class NetworkingTests: XCTestCase {
             
         }
         wait(for: [expectation], timeout: 6)
+        XCTAssertTrue(self.sut.model.localRestaurants.count > 0)
+        XCTAssertTrue(self.sut.model.localRestaurantsDefault.count > 0)
+        XCTAssertTrue(self.sut.model.partyURL != nil)
+        XCTAssertTrue(self.sut.removeSplashScreen)
+        XCTAssertTrue(!self.sut.userDeniedLocationServices)
+        XCTAssertTrue(self.sut.isPartyLeader == false)
     }
     
 }
