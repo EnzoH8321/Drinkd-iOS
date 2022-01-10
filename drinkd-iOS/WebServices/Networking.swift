@@ -123,6 +123,7 @@ func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, lat
 					viewModel.model.createParty(setURL: url.absoluteString)
 					viewModel.removeSplashScreen = true
 					viewModel.userDeniedLocationServices = false
+                    
 				}
 			}
 		}
