@@ -21,19 +21,26 @@ class NetworkingTestsAsMember: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         try super.setUpWithError()
         sut = drinkdViewModel()
-        createAndJoinParty()
+        let expectation = XCTestExpectation(description: "Restaurants Fetched Successfully")
+        
+        createAndJoinParty {
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 2)
+        
     }
     
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         try super.tearDownWithError()
+        leaveParty(viewModel: self.sut)
         sut = nil
     }
     
     func testFetchingRestaurantsAfterJoiningParty() throws {
         let expectation = XCTestExpectation(description: "Restaurants Fetched Successfully")
         
-
         fetchRestaurantsAfterJoiningParty(viewModel: self.sut) { result in
             
             switch(result) {
@@ -67,6 +74,25 @@ class NetworkingTestsAsMember: XCTestCase {
         XCTAssertTrue(self.sut.model.localRestaurantsDefault.count > 0)
     }
     
+    func testCalculateTopThreeRestaurants() throws {
+        let expectation = XCTestExpectation(description: "Top Three Restaurants Successfully Received")
+        let firstChoice = self.sut.model.firstChoice
+        let secondChoice = self.sut.model.secondChoice
+        let thirdChoice = self.sut.model.thirdChoice
+        
+        XCTAssertNotEqual(firstChoice.name, "")
+        XCTAssertNotEqual(firstChoice.score, 0)
+        XCTAssertNotEqual(firstChoice.url, "")
+        XCTAssertNotEqual(firstChoice.image_url, "")
+        /*
+         var name: String = ""
+         var score: Int = 0
+         var url: String = ""
+         var image_url: String = ""
+         
+         */
+    }
+    
     
 }
 
@@ -84,7 +110,7 @@ extension NetworkingTestsAsMember {
             case .success(_):
                 
                 if (self.sut == nil) {return}
-                print("PARTY URL FINAL -> \(self.sut.model.partyURL)")
+                
                 
             case .failure(let failure):
                 switch(failure) {
@@ -108,7 +134,7 @@ extension NetworkingTestsAsMember {
         }
     }
     
-    func createAndJoinParty() {
+    func createAndJoinParty(completionHandler: @escaping () -> Void) {
         
         sut.locationFetcher.lastKnownLocation = CLLocationCoordinate2D(latitude: 37.503731, longitude: -122.264931)
         
@@ -138,6 +164,8 @@ extension NetworkingTestsAsMember {
                 
                 self.mockJoinParty()
                 
+                completionHandler()
+                
             case .failure(let failure):
                 switch(failure) {
                 case .databaseRefNotFoundError:
@@ -160,6 +188,8 @@ extension NetworkingTestsAsMember {
     }
     
     func removeMockParty() {
+        self.sut.model.setUserLevelToMember()
         leaveParty(viewModel: sut)
+        self.sut.model.leaveParty()
     }
 }

@@ -208,8 +208,6 @@ struct drinkdModel {
 		self.partyId = partyIdString
 	}
 
-
-
 	mutating func addScoreToCard(points: Int) {
 
 		if (points == currentScoreOfTopCard) {

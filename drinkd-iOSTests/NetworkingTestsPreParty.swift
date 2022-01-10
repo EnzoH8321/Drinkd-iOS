@@ -117,7 +117,5 @@ class NetworkingTestsPreParty: XCTestCase {
         XCTAssertTrue(!self.sut.userDeniedLocationServices)
         XCTAssertTrue(self.sut.isPartyLeader == false)
     }
-    
-    
 
 }
