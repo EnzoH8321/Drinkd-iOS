@@ -134,7 +134,7 @@ func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, lat
 
 //Fetch restaurant after joining party
 func fetchRestaurantsAfterJoiningParty(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
-
+    
 	guard let verifiedPartyURL = viewModel.partyURL else {
 		print("No URL Found")
         completionHandler(.failure(.noURLFoundError))

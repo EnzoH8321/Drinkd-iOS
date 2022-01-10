@@ -37,6 +37,14 @@
                BlueprintName = "drinkd-iOSTests"
                ReferencedContainer = "container:drinkd-iOS.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "NetworkingTests/testCustomLocationWorksWithValidData()">
+               </Test>
+               <Test
+                  Identifier = "NetworkingTests/testInitialFetchWorksWithValidData()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
