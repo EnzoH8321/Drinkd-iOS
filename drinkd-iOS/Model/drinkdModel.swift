@@ -73,8 +73,6 @@ struct drinkdModel {
 		self.fcmToken = token
 	}
 
-	
-
 	mutating func fetchEntireMessageList(messageList: [FireBaseMessage]) {
 		chatMessageList = messageList
 	}
@@ -121,9 +119,7 @@ struct drinkdModel {
 
 			counter = localRestaurantsDefault.count
 		}
-
 		self.counter -= 1
-
 	}
 
 	mutating func removeCardFromDeck() {

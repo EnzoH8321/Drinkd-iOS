@@ -102,7 +102,7 @@ func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, lat
 	//URLSession
 	URLSession.shared.dataTask(with: request) { data, response, error in
 
-        if error != nil { 
+        if error != nil {
 			completionHandler(.failure(.generalNetworkError))
 			return
 		}
@@ -137,11 +137,13 @@ func fetchRestaurantsAfterJoiningParty(viewModel: drinkdViewModel, completionHan
 
 	guard let verifiedPartyURL = viewModel.partyURL else {
 		print("No URL Found")
+        completionHandler(.failure(.noURLFoundError))
 		return
 	}
 
 	guard let verifiedURL = URL(string: verifiedPartyURL) else {
 		print("Could not convert string to URL")
+        completionHandler(.failure(.invalidURLError))
 		return
 	}
 
@@ -189,12 +191,12 @@ func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler:
 		if (!snapshot.exists()) {
 			completionHandler(.failure(.databaseRefNotFoundError))
 			return
+            
 		} else {
 
 			DispatchQueue.main.async {
 
 				viewModel.objectWillChange.send()
-
 
 				let decoder = JSONDecoder()
 				var testArray: [String: FireBaseTopChoice] = [:]
