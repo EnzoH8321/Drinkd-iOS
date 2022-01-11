@@ -14,9 +14,7 @@ class NetworkingTestsAsMember: XCTestCase {
     
     var sut: drinkdViewModel!
     
-    override class func setUp() {
-        
-    }
+
     
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -82,17 +80,41 @@ class NetworkingTestsAsMember: XCTestCase {
         let secondChoice = self.sut.model.secondChoice
         let thirdChoice = self.sut.model.thirdChoice
         
+        calculateTopThreeRestaurants(viewModel: self.sut) { result in
+            
+            switch(result) {
+                
+            case .success(_):
+                
+                if (self.sut == nil) {return}
+                
+                
+            case .failure(let failure):
+                switch(failure) {
+                case .databaseRefNotFoundError:
+                    XCTFail("DB REF NOT FOUND")
+                case .serializationError:
+                    XCTFail("SERIALIZATION ERROR")
+                case .decodingError:
+                    XCTFail("DECODING ERROR")
+                case .noUserLocationFoundError:
+                    XCTFail("NO USER LOCATION ERROR")
+                case .invalidURLError:
+                    XCTFail("INVALID URL ERROR")
+                case .noURLFoundError:
+                    XCTFail("NO URL FOUND ERROR")
+                case .generalNetworkError:
+                    XCTFail("GENERAL NETWORK ERROR")
+                }
+            }
+            
+        }
+        
         XCTAssertNotEqual(firstChoice.name, "")
         XCTAssertNotEqual(firstChoice.score, 0)
         XCTAssertNotEqual(firstChoice.url, "")
         XCTAssertNotEqual(firstChoice.image_url, "")
-        /*
-         var name: String = ""
-         var score: Int = 0
-         var url: String = ""
-         var image_url: String = ""
-         
-         */
+
     }
     
     
