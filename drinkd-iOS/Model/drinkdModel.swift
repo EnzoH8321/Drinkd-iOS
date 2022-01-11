@@ -190,6 +190,10 @@ struct drinkdModel {
 	mutating func setUserLevelToMember() {
 		self.setUserLevel(level: .member)
 	}
+    
+    mutating func setUserLevelToCreator() {
+        self.setUserLevel(level: .creator)
+    }
 
 	mutating func setFriendsPartyId(code: String?) {
 		self.friendPartyId = code

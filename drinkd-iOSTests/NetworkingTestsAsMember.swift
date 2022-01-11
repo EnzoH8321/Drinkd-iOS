@@ -8,6 +8,7 @@
 import XCTest
 @testable import drinkd_iOS
 import CoreLocation
+import Firebase
 
 class NetworkingTestsAsMember: XCTestCase {
     
@@ -34,7 +35,7 @@ class NetworkingTestsAsMember: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         try super.tearDownWithError()
-        leaveParty(viewModel: self.sut)
+        removeMockParty()
         sut = nil
     }
     
@@ -75,6 +76,7 @@ class NetworkingTestsAsMember: XCTestCase {
     }
     
     func testCalculateTopThreeRestaurants() throws {
+        
         let expectation = XCTestExpectation(description: "Top Three Restaurants Successfully Received")
         let firstChoice = self.sut.model.firstChoice
         let secondChoice = self.sut.model.secondChoice
@@ -145,7 +147,7 @@ extension NetworkingTestsAsMember {
                 
             case .success(_):
                 
-                if (self.sut == nil) {return}
+//                if (self.sut == nil) {return}
                 
                 self.sut.model.createParty(setVotes: 5, setName: "Enzo", setURL: testURL)
                 
@@ -187,9 +189,23 @@ extension NetworkingTestsAsMember {
         }
     }
     
+    
+    //TODO: Kinda hacky, fix later
     func removeMockParty() {
-        self.sut.model.setUserLevelToMember()
-        leaveParty(viewModel: sut)
-        self.sut.model.leaveParty()
+        
+        if let friendPartyID = self.sut.model.friendPartyId {
+            self.sut.model.setUserLevelToCreator()
+            let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(friendPartyID)")
+            localReference.removeValue()
+        } else {
+            print("PARTY ID -> \(self.sut.model.partyId)")
+            print("FRIEND ID -> \(self.sut.model.friendPartyId)")
+            print("ID -> \(self.sut.model)")
+            let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(self.sut.model.partyId!)")
+            localReference.removeValue()
+        }
+        
+        
+
     }
 }
