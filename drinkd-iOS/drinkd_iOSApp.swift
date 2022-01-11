@@ -13,7 +13,31 @@ import AppTrackingTransparency
 import UserNotifications
 
 
+
 @main
+struct AppLauncher {
+
+    static func main() throws {
+        if NSClassFromString("XCTestCase") == nil {
+            drinkd_iOSApp.main()
+        } else {
+            TestApp.main()
+        }
+    }
+}
+
+struct TestApp: App {
+    
+    init() {
+        FirebaseApp.configure()
+    }
+
+    var body: some Scene {
+        WindowGroup { Text("Running Unit Tests") }
+    }
+}
+
+
 struct drinkd_iOSApp: App {
 
 	@UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate

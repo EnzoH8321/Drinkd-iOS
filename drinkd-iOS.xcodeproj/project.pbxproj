@@ -20,6 +20,9 @@
 		5456286B278A62E800CA6005 /* NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5456286A278A62E800CA6005 /* NetworkingTests.swift */; };
 		5456286D278CB1D800CA6005 /* NetworkingTestsPreParty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5456286C278CB1D800CA6005 /* NetworkingTestsPreParty.swift */; };
 		5456286F278CB42100CA6005 /* NetworkingTestsAsMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5456286E278CB42100CA6005 /* NetworkingTestsAsMember.swift */; };
+		54562871278DFAF600CA6005 /* Model_Methods_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562870278DFAF600CA6005 /* Model_Methods_Tests.swift */; };
+		54562873278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json in Resources */ = {isa = PBXBuildFile; fileRef = 54562872278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json */; };
+		54562876278E000300CA6005 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562875278E000300CA6005 /* Extensions.swift */; };
 		5496D19B276D188E000C732A /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5496D19A276D188E000C732A /* MessageView.swift */; };
 		549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549BFC462728CFBA00F96F48 /* CustomLocationView.swift */; };
 		54B3E537270E140E0004ECC5 /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B3E536270E140C0004ECC5 /* Star.swift */; };
@@ -97,6 +100,9 @@
 		5456286A278A62E800CA6005 /* NetworkingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingTests.swift; sourceTree = "<group>"; };
 		5456286C278CB1D800CA6005 /* NetworkingTestsPreParty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingTestsPreParty.swift; sourceTree = "<group>"; };
 		5456286E278CB42100CA6005 /* NetworkingTestsAsMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingTestsAsMember.swift; sourceTree = "<group>"; };
+		54562870278DFAF600CA6005 /* Model_Methods_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model_Methods_Tests.swift; sourceTree = "<group>"; };
+		54562872278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockYelpBusinessSearchProperties.json; sourceTree = "<group>"; };
+		54562875278E000300CA6005 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		5478EAFC2734D8560071A0B2 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		5496D19A276D188E000C732A /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		549BFC462728CFBA00F96F48 /* CustomLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLocationView.swift; sourceTree = "<group>"; };
@@ -189,6 +195,14 @@
 			path = "drinkd-iOS-NetworkingTests";
 			sourceTree = "<group>";
 		};
+		54562874278DFFED00CA6005 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				54562875278E000300CA6005 /* Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		54F9C7FC26FBB536008FA516 = {
 			isa = PBXGroup;
 			children = (
@@ -244,11 +258,14 @@
 		54F9C81D26FBB538008FA516 /* drinkd-iOSTests */ = {
 			isa = PBXGroup;
 			children = (
+				54562874278DFFED00CA6005 /* Extensions */,
+				54562870278DFAF600CA6005 /* Model_Methods_Tests.swift */,
 				5456286E278CB42100CA6005 /* NetworkingTestsAsMember.swift */,
 				5456286C278CB1D800CA6005 /* NetworkingTestsPreParty.swift */,
 				5456286A278A62E800CA6005 /* NetworkingTests.swift */,
 				54F9C81E26FBB538008FA516 /* drinkd_iOSTests.swift */,
 				5456285B278A5FE400CA6005 /* MockJSON.json */,
+				54562872278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json */,
 			);
 			path = "drinkd-iOSTests";
 			sourceTree = "<group>";
@@ -504,6 +521,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54562873278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json in Resources */,
 				5456285C278A5FE400CA6005 /* MockJSON.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -671,6 +689,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5456286D278CB1D800CA6005 /* NetworkingTestsPreParty.swift in Sources */,
+				54562876278E000300CA6005 /* Extensions.swift in Sources */,
+				54562871278DFAF600CA6005 /* Model_Methods_Tests.swift in Sources */,
 				54F9C81F26FBB538008FA516 /* drinkd_iOSTests.swift in Sources */,
 				5456286B278A62E800CA6005 /* NetworkingTests.swift in Sources */,
 				5456286F278CB42100CA6005 /* NetworkingTestsAsMember.swift in Sources */,

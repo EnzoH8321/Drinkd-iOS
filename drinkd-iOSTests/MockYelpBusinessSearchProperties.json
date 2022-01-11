@@ -1,0 +1,46 @@
+
+        {
+            "id": "fTeiio1L2ZBIRdlzjdjAeg",
+            "alias": "alexanders-steakhouse-cupertino-11",
+            "name": "Alexander's Steakhouse",
+            "image_url": "https://s3-media4.fl.yelpcdn.com/bphoto/ZE5WP-PX9aBfKF1jorHj6A/o.jpg",
+            "is_closed": false,
+            "url": "https://www.yelp.com/biz/alexanders-steakhouse-cupertino-11?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A",
+            "review_count": 3808,
+            "categories": [
+                {
+                    "alias": "steak",
+                    "title": "Steakhouses"
+                },
+                {
+                    "alias": "wine_bars",
+                    "title": "Wine Bars"
+                }
+            ],
+            "rating": 4.0,
+            "coordinates": {
+                "latitude": 37.3233674576911,
+                "longitude": -122.009842804904
+            },
+            "transactions": [
+                "delivery",
+                "pickup"
+            ],
+            "price": "$$$$",
+            "location": {
+                "address1": "19379 Stevens Creek Blvd",
+                "address2": null,
+                "address3": "",
+                "city": "Cupertino",
+                "zip_code": "95014",
+                "country": "US",
+                "state": "CA",
+                "display_address": [
+                    "19379 Stevens Creek Blvd",
+                    "Cupertino, CA 95014"
+                ]
+            },
+            "phone": "+14084462222",
+            "display_phone": "(408) 446-2222",
+            "distance": 2136.7641990020275
+        }
