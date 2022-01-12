@@ -5,6 +5,7 @@
 //  Created by Enzo Herrera on 1/11/22.
 //
 
+import Firebase
 import Foundation
 import CoreLocation
 @testable import drinkd_iOS
@@ -93,7 +94,7 @@ class MockNetworkingClass: NetworkingProtocol {
             completionHandler(.failure(.invalidURLError))
             return
         }
-    
+        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(viewModel.token)", forHTTPHeaderField: "Authorization")
@@ -187,6 +188,62 @@ class MockNetworkingClass: NetworkingProtocol {
     
     func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
         
+        let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("topBars")
+        
+        var dbHandle = DatabaseHandle()
+        
+        dbHandle = localReference.observe(DataEventType.value, with: { snapshot in
+            
+            if (!snapshot.exists()) {
+                completionHandler(.failure(.databaseRefNotFoundError))
+                return
+                
+            } else {
+                
+                DispatchQueue.main.async {
+                    
+                    viewModel.objectWillChange.send()
+                    
+                    let decoder = JSONDecoder()
+                    var testArray: [String: FireBaseTopChoice] = [:]
+                    
+                    guard let codableData = try? JSONSerialization.data(withJSONObject: snapshot.value as Any) else {
+                        completionHandler(.failure(.serializationError))
+                        return
+                    }
+                    
+                    guard let data = try? decoder.decode(FireBaseMaster.self, from: codableData) else {
+                        completionHandler(.failure(.decodingError))
+                        return
+                    }
+                    
+                    for element in data.models {
+                        for dictionaryElement in element.value.models {
+                            
+                            if (testArray.contains { key, value in key == dictionaryElement.key}) {
+                                testArray[dictionaryElement.key]?.score += dictionaryElement.value.score
+                            } else {
+                                testArray[dictionaryElement.key] = dictionaryElement.value
+                            }
+                            
+                        }
+                    }
+                    
+                    let sortedDict = testArray.sorted {
+                        if ($0.value.score == $1.value.score) {
+                            return $0.key > $1.key
+                        } else {
+                            return $0.value.score > $1.value.score
+                        }
+                    }
+                    
+                    let array = Array(sortedDict)
+                    viewModel.model.appendTopThreeRestaurants(in: array)
+                    completionHandler(.success(.connectionSuccess))
+                    localReference.removeObserver(withHandle: dbHandle)
+                }
+            }
+        })
     }
     
     func submitRestaurantScore(viewModel: drinkdViewModel) {
@@ -222,7 +279,7 @@ class MockNetworkingClass: NetworkingProtocol {
         URLSession.shared.dataTask(with: request) { data, response, error in
             
         }
- 
+        
         model.findDeviceType(device: .phone)
         model.setCurrentToPartyTrue()
         model.setPartyId()

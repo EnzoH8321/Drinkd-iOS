@@ -150,6 +150,42 @@ class Networking_Methods_Tests: XCTestCase {
         XCTAssertTrue(self.sut.model.localRestaurantsDefault.count > 0)
     }
     
-    
+    func test_calculateTopThreeRestaurants_withValidData() throws {
+        
+        let expectation = XCTestExpectation(description:"Top Three Restaurants received successfully")
+
+        networking.calculateTopThreeRestaurants(viewModel: sut) { result in
+            
+            switch(result) {
+                
+            case .success(_):
+                
+                expectation.fulfill()
+                
+            case .failure(let failure):
+                switch(failure) {
+                    
+                case .serializationError:
+                    XCTFail("SERIALIZATION ERROR")
+                case .decodingError:
+                    XCTFail("DECODING ERROR")
+                case .noUserLocationFoundError:
+                    XCTFail("NO USER LOCATION FOUND ERROR")
+                case .invalidURLError:
+                    XCTFail("INVALID URL ERROR")
+                case .noURLFoundError:
+                    XCTFail("NO URL FOUND ERROR")
+                case .generalNetworkError:
+                    XCTFail("GENERAL NETWORK ERROR")
+                case .databaseRefNotFoundError:
+                    XCTFail("DATABASE REF NOT FOUND ERROR")
+                }
+            }
+            
+        }
+        
+        wait(for: [expectation], timeout: 2)
+        
+    }
     
 }
