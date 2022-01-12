@@ -139,9 +139,10 @@ struct drinkdModel {
 		self.partyName = partyName
 		self.partyTimestamp = Int(Date().timeIntervalSince1970 * 1000)
 
-		
+      
 		if let url = partyURL {
 			self.partyURL = url
+            
 		}
 		
 		guard let partyID = self.partyId else {

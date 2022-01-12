@@ -8,6 +8,17 @@
 import Foundation
 import Firebase
 
+protocol NetworkingProtocol {
+    func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
+    func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, latitude: Double, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
+    func fetchRestaurantsAfterJoiningParty(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
+    func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
+    func submitRestaurantScore(viewModel: drinkdViewModel)
+    func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
+    func removeMessagingObserver(viewModel: drinkdViewModel)
+    func sendMessage(forMessage message: FireBaseMessage, viewModel: drinkdViewModel )
+    
+}
 
 func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
