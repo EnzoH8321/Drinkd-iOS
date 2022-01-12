@@ -38,12 +38,8 @@ class Networking_Methods_Tests: XCTestCase {
             
             switch(result) {
             case .success(_):
-               
-                XCTAssertTrue(self.sut.model.localRestaurants.count > 0)
-                XCTAssertTrue(self.sut.model.localRestaurantsDefault.count > 0)
-//                XCTAssertNotNil(self.sut.partyURL)
-                XCTAssertEqual(self.sut.removeSplashScreen, true)
-                XCTAssertEqual(self.sut.userDeniedLocationServices, false)
+                
+                
                 
                 expectation.fulfill()
             case .failure(let failure):
@@ -68,23 +64,26 @@ class Networking_Methods_Tests: XCTestCase {
         }
         
         wait(for: [expectation], timeout: 1)
+        XCTAssertTrue(self.sut.model.localRestaurants.count > 0)
+        XCTAssertTrue(self.sut.model.localRestaurantsDefault.count > 0)
+                        XCTAssertNotNil(self.sut.partyURL)
+        XCTAssertEqual(self.sut.removeSplashScreen, true)
+        XCTAssertEqual(self.sut.userDeniedLocationServices, false)
     }
     
     func test_fetchUsingCustomLocation_WithValidLocation() throws {
         
         let expectation = XCTestExpectation(description:"Got Data Back Successfully")
         
-        networking.fetchUsingCustomLocation(viewModel: sut, longitude: 37.33182 , latitude: -122.03118) { result in
+        networking.fetchUsingCustomLocation(viewModel: sut, longitude: -122.03118 , latitude: 37.33182) { result in
             
             switch(result) {
             case .success(_):
-               
-               
-            expectation.fulfill()
+                expectation.fulfill()
                 
             case .failure(let failure):
                 switch(failure) {
-                
+                    
                 case .serializationError:
                     XCTFail("SERIALIZATION ERROR")
                 case .decodingError:
@@ -104,6 +103,53 @@ class Networking_Methods_Tests: XCTestCase {
         }
         
         wait(for: [expectation], timeout: 2)
+        XCTAssertTrue(self.sut.model.localRestaurants.count > 0)
+        XCTAssertTrue(self.sut.model.localRestaurantsDefault.count > 0)
+        XCTAssertNotNil(self.sut.partyURL)
+        XCTAssertTrue(self.sut.removeSplashScreen == true)
+        XCTAssertTrue(self.sut.userDeniedLocationServices == false)
     }
+    
+    func test_fetchRestaurantsAfterJoiningParty() throws {
+        
+        let expectation = XCTestExpectation(description:"Got Data Back Successfully")
+        
+        sut.locationFetcher.lastKnownLocation = CLLocationCoordinate2D(latitude: 37.33182, longitude: -122.03118)
+        
+        self.sut.model.setPartyURL(toURL: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=37.33182&longitude=-122.03118&limit=10")
+        
+        networking.fetchRestaurantsAfterJoiningParty(viewModel: sut) { result in
+            switch(result) {
+                
+            case .success(_):
+                
+                expectation.fulfill()
+                
+            case .failure(let failure):
+                switch(failure) {
+                    
+                case .serializationError:
+                    XCTFail("SERIALIZATION ERROR")
+                case .decodingError:
+                    XCTFail("DECODING ERROR")
+                case .noUserLocationFoundError:
+                    XCTFail("NO USER LOCATION FOUND ERROR")
+                case .invalidURLError:
+                    XCTFail("INVALID URL ERROR")
+                case .noURLFoundError:
+                    XCTFail("NO URL FOUND ERROR")
+                case .generalNetworkError:
+                    XCTFail("GENERAL NETWORK ERROR")
+                case .databaseRefNotFoundError:
+                    XCTFail("DATABASE REF NOT FOUND ERROR")
+                }
+            }
+        }
+        wait(for: [expectation], timeout: 3)
+        XCTAssertTrue(self.sut.model.localRestaurants.count > 0)
+        XCTAssertTrue(self.sut.model.localRestaurantsDefault.count > 0)
+    }
+    
+    
     
 }

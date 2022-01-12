@@ -40,6 +40,7 @@ struct drinkdModel {
 	private(set) var partyURL: String?
 	//Id for someone elses party
 	private(set) var friendPartyId: String?
+    
 	private(set) var isPartyLeader: Bool?
 	private(set) var topBarList: [String: restaurantScoreInfo] = [:]
 	private(set) var currentScoreOfTopCard: Int = 0
@@ -291,4 +292,18 @@ struct drinkdModel {
 			self.isPhone = false
 		}
 	}
+    
+    mutating func setPartyMaxVotes(toVote vote: Int) {
+        self.partyMaxVotes = vote
+    }
+    
+    mutating func setPartyTimestamp(toTimeStamp timestamp: Int) {
+        self.partyTimestamp = timestamp
+    }
+    
+    mutating func setPartyURL(toURL url: String) {
+        self.partyURL = url
+    }
 }
+
+
