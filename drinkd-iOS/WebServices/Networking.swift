@@ -206,12 +206,11 @@ func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler:
 		} else {
 
 			DispatchQueue.main.async {
-
 				viewModel.objectWillChange.send()
 
 				let decoder = JSONDecoder()
 				var testArray: [String: FireBaseTopChoice] = [:]
-
+                
 				guard let codableData = try? JSONSerialization.data(withJSONObject: snapshot.value as Any) else {
 					completionHandler(.failure(.serializationError))
 					return

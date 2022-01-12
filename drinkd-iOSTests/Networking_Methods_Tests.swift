@@ -153,6 +153,9 @@ class Networking_Methods_Tests: XCTestCase {
     func test_calculateTopThreeRestaurants_withValidData() throws {
         
         let expectation = XCTestExpectation(description:"Top Three Restaurants received successfully")
+        
+        self.sut.model.createParty(setVotes: 5, setName: "enzo", setURL: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=37.33182&longitude=-122.03118&limit=10")
+        
 
         networking.calculateTopThreeRestaurants(viewModel: sut) { result in
             
@@ -184,8 +187,21 @@ class Networking_Methods_Tests: XCTestCase {
             
         }
         
-        wait(for: [expectation], timeout: 2)
+        wait(for: [expectation], timeout: 1)
+        XCTAssertEqual(self.sut.model.firstChoice.name, "Yard House")
+        XCTAssertEqual(self.sut.model.firstChoice.score, 4)
+        XCTAssertEqual(self.sut.model.firstChoice.image_url, "https://s3-media2.fl.yelpcdn.com/bphoto/vMrdF6MDik_SSoFh11VCNg/o.jpg")
+        XCTAssertEqual(self.sut.model.firstChoice.url, "https://www.yelp.com/biz/yard-house-san-jose-4?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A")
         
+        XCTAssertEqual(self.sut.model.secondChoice.name, "St John's Bar & Grill")
+        XCTAssertEqual(self.sut.model.secondChoice.score, 3)
+        XCTAssertEqual(self.sut.model.secondChoice.image_url, "https://s3-media2.fl.yelpcdn.com/bphoto/bZJiPvcYz-qVBrB8HxXKgg/o.jpg")
+        XCTAssertEqual(self.sut.model.secondChoice.url, "https://www.yelp.com/biz/st-johns-bar-and-grill-sunnyvale-2?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A")
+        
+        XCTAssertEqual(self.sut.model.thirdChoice.name, "SpiceKlub - Cupertino")
+        XCTAssertEqual(self.sut.model.thirdChoice.score, 2)
+        XCTAssertEqual(self.sut.model.thirdChoice.image_url,  "https://s3-media2.fl.yelpcdn.com/bphoto/LJveUTzCRTf37MxQocbedQ/o.jpg")
+        XCTAssertEqual(self.sut.model.thirdChoice.url, "https://www.yelp.com/biz/spiceklub-cupertino-cupertino-2?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A")
     }
     
 }

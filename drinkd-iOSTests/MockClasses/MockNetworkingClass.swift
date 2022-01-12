@@ -188,69 +188,143 @@ class MockNetworkingClass: NetworkingProtocol {
     
     func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
         
-        let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("topBars")
+        
+        guard let url = Bundle(for: type(of: self)).url(forResource: "TopThreeChoices", withExtension: "json") else {
+            completionHandler(.failure(.generalNetworkError))
+            return
+        }
+        
+        let request = URLRequest(url: url)
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if (error != nil ) {
+                completionHandler(.failure(.generalNetworkError))
+            }
+            
+            if let verifiedData = data {
+            
+                DispatchQueue.main.async {
+                    
+                    do {
+                        viewModel.objectWillChange.send()
+                        let decoder = JSONDecoder()
+                        var testArray: [String: FireBaseTopChoice] = [:]
+                        
+                        
+                        let data = try decoder.decode(FireBaseMaster.self, from: verifiedData)
+                        
+                        for element in data.models {
+                            for dictionaryElement in element.value.models {
+                                
+                                if (testArray.contains { key, value in key == dictionaryElement.key}) {
+                                    testArray[dictionaryElement.key]?.score += dictionaryElement.value.score
+                                } else {
+                                    testArray[dictionaryElement.key] = dictionaryElement.value
+                                }
+                                
+                            }
+                        }
+                        
+                        let sortedDict = testArray.sorted {
+                            if ($0.value.score == $1.value.score) {
+                                return $0.key > $1.key
+                            } else {
+                                return $0.value.score > $1.value.score
+                            }
+                        }
+                        
+                        let array = Array(sortedDict)
+                        viewModel.model.appendTopThreeRestaurants(in: array)
+                        completionHandler(.success(.connectionSuccess))
+                    } catch {
+                        print(error)
+                    }
+                    
+                    
+                }
+            }
+        }.resume()
+        
+    }
+    
+    func submitRestaurantScore(viewModel: drinkdViewModel) {
+        viewModel.objectWillChange.send()
+        
+        guard let barList = viewModel.topBarList["\(viewModel.currentCardIndex)"] else {
+            return print("No restaurant with this key")
+        }
+        
+        //Verifies name in case it contains illegal characters
+        let unverifiedName = barList.name
+        let score: Int = barList.score
+        let name: String = unverifiedName.replacingOccurrences(of: "[\\[\\].#$]", with: "", options: .regularExpression, range: nil)
+        
+        let currentURLOfTopCard: String = viewModel.model.localRestaurantsDefault[viewModel.currentCardIndex].url ?? "NO URL FOUND"
+        //Adds id of card for
+        let currentIDOfTopCard: String = viewModel.model.localRestaurantsDefault[viewModel.currentCardIndex].id ?? "NO ID FOUND"
+        let currentImageURLTopCard: String = viewModel.model.localRestaurantsDefault[viewModel.currentCardIndex].image_url ?? "NO IMAGE URL FOUND"
+        var localReference: DatabaseReference
+        
+        if (viewModel.isPartyLeader) {
+            
+            localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.partyId)")
+            localReference.child("topBars").child(viewModel.partyId ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
+            
+        } else if (!viewModel.isPartyLeader) {
+            
+            localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.friendPartyId)")
+            localReference.child("topBars").child(viewModel.partyId ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
+        }
+    }
+    
+    func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+        
+        let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages")
         
         var dbHandle = DatabaseHandle()
         
-        dbHandle = localReference.observe(DataEventType.value, with: { snapshot in
+        dbHandle =  localReference.observe(DataEventType.value, with: { snapshot in
             
             if (!snapshot.exists()) {
                 completionHandler(.failure(.databaseRefNotFoundError))
                 return
-                
             } else {
                 
                 DispatchQueue.main.async {
                     
                     viewModel.objectWillChange.send()
                     
-                    let decoder = JSONDecoder()
-                    var testArray: [String: FireBaseTopChoice] = [:]
+                    var messagesArray: [FireBaseMessage] = []
                     
-                    guard let codableData = try? JSONSerialization.data(withJSONObject: snapshot.value as Any) else {
-                        completionHandler(.failure(.serializationError))
-                        return
-                    }
-                    
-                    guard let data = try? decoder.decode(FireBaseMaster.self, from: codableData) else {
-                        completionHandler(.failure(.decodingError))
-                        return
-                    }
-                    
-                    for element in data.models {
-                        for dictionaryElement in element.value.models {
-                            
-                            if (testArray.contains { key, value in key == dictionaryElement.key}) {
-                                testArray[dictionaryElement.key]?.score += dictionaryElement.value.score
-                            } else {
-                                testArray[dictionaryElement.key] = dictionaryElement.value
-                            }
-                            
+                    for messageObj in snapshot.children {
+                        
+                        let messageData = messageObj as! DataSnapshot
+                        
+                        guard let serializedMessageObj = try? JSONSerialization.data(withJSONObject: messageData.value as Any) else {
+                            completionHandler(.failure(.serializationError))
+                            return
                         }
-                    }
-                    
-                    let sortedDict = testArray.sorted {
-                        if ($0.value.score == $1.value.score) {
-                            return $0.key > $1.key
-                        } else {
-                            return $0.value.score > $1.value.score
+                        
+                        guard let decodedMessageObj = try? JSONDecoder().decode(FireBaseMessage.self, from: serializedMessageObj) else {
+                            completionHandler(.failure(.decodingError))
+                            return
                         }
+                        
+                        let finalMessageObj = FireBaseMessage(id: decodedMessageObj.id, username: decodedMessageObj.username, personalId: decodedMessageObj.personalId, message: decodedMessageObj.message, timestamp: decodedMessageObj.timestamp, timestampString: Date().formatDate(forMilliseconds: decodedMessageObj.timestamp))
+                        
+                        messagesArray.append(finalMessageObj)
                     }
                     
-                    let array = Array(sortedDict)
-                    viewModel.model.appendTopThreeRestaurants(in: array)
+                    //Sorts Messages by timestamp
+                    let sortedMessageArray = messagesArray.sorted {
+                        return $0.timestamp < $1.timestamp
+                    }
                     completionHandler(.success(.connectionSuccess))
-                    localReference.removeObserver(withHandle: dbHandle)
+                    viewModel.model.fetchEntireMessageList(messageList: sortedMessageArray)
+                    //                localReference.removeObserver(withHandle: dbHandle)
                 }
             }
         })
-    }
-    
-    func submitRestaurantScore(viewModel: drinkdViewModel) {
-        
-    }
-    
-    func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
         
     }
     
