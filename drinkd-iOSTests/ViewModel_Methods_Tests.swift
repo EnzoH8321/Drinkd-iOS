@@ -55,5 +55,24 @@ class ViewModel_Methods_Tests: XCTestCase {
         XCTAssertEqual(sut.partyName, "Enzo")
         XCTAssertEqual(sut.currentlyInParty, true)
     }
+    //TODO: Mock the Firebase DB
+    func test_joinExistingParty() throws {
+        sut.JoinExistingParty(getCode: "TestingPartyCode")
+        
+        XCTAssertTrue(sut.queryPartyError, "Query party should show true")
+    }
+    
+    func test_whenCardIsDraggedFromView() {
+        sut.whenCardIsDraggedFromView()
+        
+        XCTAssertEqual(sut.currentCardIndex, 8)
+    }
+    
+    func test_whenStarIsTapped() {
+        sut.whenStarIsTapped(getPoints: 5)
+        
+        XCTAssertEqual(sut.currentScoreOfTopCard, 5)
+        XCTAssertEqual(sut.topBarList["9"]?.score, 5)
+    }
     
 }

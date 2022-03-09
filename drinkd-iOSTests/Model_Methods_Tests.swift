@@ -25,6 +25,21 @@ class Model_Methods_Tests: XCTestCase {
         sut = nil
     }
     
+    //Utility
+    private func addLocalRestaurants() {
+        guard let data = try? getData(fromJSON: "MockYelpBusinessSearchProperties") else {
+            XCTFail("Could not get data")
+            return
+        }
+        guard let decode = try? JSONDecoder().decode(YelpApiBusinessSearchProperties.self, from: data) else {
+            XCTFail("Could not decode")
+            return
+        }
+        
+        sut.appendDeliveryOptions(in: [decode, decode, decode, decode, decode, decode, decode, decode, decode])
+    }
+    
+    //Start
     func test_setPersonalUserAndID() throws {
         
         sut.setPersonalUserAndID(forName: "Enzo", forID: 5)
@@ -56,14 +71,42 @@ class Model_Methods_Tests: XCTestCase {
         XCTAssertEqual(sut.localRestaurantsDefault.count, 1)
     }
     
-    func test_appendCardsToDecklist() throws {
+    //Tests func call when there are no cards in deck
+    func test_appendDeliveryOptions_counterAtZero_counterSetToLocalRestaurantCount() throws {
         
+        self.addLocalRestaurants()
+       
         sut.appendCardsToDecklist()
         sut.appendCardsToDecklist()
         sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
         
-        XCTAssertEqual(sut.counter, 6)
+       //When called and counter is at 0, counter should equal the length of the local restaurants array - 1
+        XCTAssertEqual(sut.counter, sut.localRestaurants.count - 1)
+       
+    }
+    
+    func test_appendDeliveryOptions_counterAtZero_toggleSetToFalse() throws {
+        self.addLocalRestaurants()
+       
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
+        sut.appendCardsToDecklist()
         
+        XCTAssertEqual(sut.toggleRefresh, false)
     }
     
     func test_removeCardFromDeck() throws {

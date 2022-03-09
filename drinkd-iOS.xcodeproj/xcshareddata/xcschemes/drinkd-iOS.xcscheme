@@ -44,6 +44,9 @@
                <Test
                   Identifier = "NetworkingTests/testInitialFetchWorksWithValidData()">
                </Test>
+               <Test
+                  Identifier = "ViewModel_Methods_Tests/test_joinExistingParty()">
+               </Test>
             </SkippedTests>
          </TestableReference>
          <TestableReference

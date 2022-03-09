@@ -11,6 +11,10 @@ import CoreLocation
 @testable import drinkd_iOS
 
 class MockNetworkingClass: NetworkingProtocol {
+    
+    
+    var mockDB = MockDatabaseObject()
+    
     func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
         
         //TODO: Issue where during reload there is a possibility to do a 2x call. Fix issue
@@ -250,31 +254,22 @@ class MockNetworkingClass: NetworkingProtocol {
     func submitRestaurantScore(viewModel: drinkdViewModel) {
         viewModel.objectWillChange.send()
         
-        guard let barList = viewModel.topBarList["\(viewModel.currentCardIndex)"] else {
-            return print("No restaurant with this key")
-        }
-        
-        //Verifies name in case it contains illegal characters
-        let unverifiedName = barList.name
-        let score: Int = barList.score
-        let name: String = unverifiedName.replacingOccurrences(of: "[\\[\\].#$]", with: "", options: .regularExpression, range: nil)
-        
-        let currentURLOfTopCard: String = viewModel.model.localRestaurantsDefault[viewModel.currentCardIndex].url ?? "NO URL FOUND"
+        let score: Int = 6
+        let currentURLOfTopCard: String = "www.realurl.com"
         //Adds id of card for
-        let currentIDOfTopCard: String = viewModel.model.localRestaurantsDefault[viewModel.currentCardIndex].id ?? "NO ID FOUND"
-        let currentImageURLTopCard: String = viewModel.model.localRestaurantsDefault[viewModel.currentCardIndex].image_url ?? "NO IMAGE URL FOUND"
-        var localReference: DatabaseReference
-        
+        let currentIDOfTopCard: String = "TESTINGID"
+        let currentImageURLTopCard: String = "www.imageurl.com"
+         
         if (viewModel.isPartyLeader) {
             
-            localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.partyId)")
-            localReference.child("topBars").child(viewModel.partyId ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
+            mockDB.party.fakeNumber.topBars.fakeNumber.firstBar = Bar(id: currentIDOfTopCard, image_url: currentImageURLTopCard, score: score, url: currentURLOfTopCard)
+
             
         } else if (!viewModel.isPartyLeader) {
-            
-            localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.friendPartyId)")
-            localReference.child("topBars").child(viewModel.partyId ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
+
+            mockDB.party.fakeNumber.topBars.fakeNumber.firstBar = Bar(id: currentIDOfTopCard, image_url: currentImageURLTopCard, score: score, url: currentURLOfTopCard)
         }
+        
     }
     
     func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
