@@ -15,11 +15,13 @@ class Networking_Methods_Tests: XCTestCase {
     var sut: drinkdViewModel!
     var networking: MockNetworkingClass!
     
+    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         try super.setUpWithError()
         sut = drinkdViewModel()
         networking = MockNetworkingClass()
+        
     }
     
     override func tearDownWithError() throws {
@@ -27,6 +29,7 @@ class Networking_Methods_Tests: XCTestCase {
         try super.tearDownWithError()
         sut = nil
         networking = nil
+        
     }
     
     func test_fetchRestaurantsOnStartUp_WithValidLocation() throws {
@@ -204,4 +207,15 @@ class Networking_Methods_Tests: XCTestCase {
         XCTAssertEqual(self.sut.model.thirdChoice.url, "https://www.yelp.com/biz/spiceklub-cupertino-cupertino-2?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A")
     }
     
+    func test_submitRestaurant_WithValidData() throws {
+        let firstTopBar = networking.mockDB.party.fakeNumber.topBars.fakeNumber.firstBar
+        networking.submitRestaurantScore(viewModel: sut)
+        
+       
+
+        XCTAssertEqual(firstTopBar.score, 6)
+        XCTAssertEqual(firstTopBar.url, "www.realurl.com")
+        XCTAssertEqual(firstTopBar.image_url, "www.imageurl.com")
+        XCTAssertEqual(firstTopBar.id, "TESTINGID")
+    }
 }

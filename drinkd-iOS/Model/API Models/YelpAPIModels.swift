@@ -102,3 +102,5 @@ struct YelpApiBusinessDetails_SpecialHours: Codable {
 	let end: String?
 	let is_overnight: Bool?
 }
+
+
