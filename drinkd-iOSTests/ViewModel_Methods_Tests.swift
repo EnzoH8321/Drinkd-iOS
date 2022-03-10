@@ -12,12 +12,15 @@ class ViewModel_Methods_Tests: XCTestCase {
     
     var sut: drinkdViewModel!
     var model: drinkdModel!
+    var locationFetcher: LocationFetcher!
     
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         try super.setUpWithError()
         sut = drinkdViewModel()
         model = drinkdModel()
+        locationFetcher = LocationFetcher()
+       
     }
     
     override func tearDownWithError() throws {
@@ -25,6 +28,7 @@ class ViewModel_Methods_Tests: XCTestCase {
         try super.tearDownWithError()
         sut = nil
         model = nil
+        locationFetcher = nil
     }
     
     private func addLocalRestaurants() {
@@ -37,7 +41,7 @@ class ViewModel_Methods_Tests: XCTestCase {
             return
         }
         
-        sut.model.appendDeliveryOptions(in: [decode, decode, decode, decode, decode, decode, decode, decode, decode])
+        sut.model.appendDeliveryOptions(in: [decode, decode, decode, decode, decode, decode, decode, decode, decode, decode])
     }
     
     //Start
@@ -69,9 +73,11 @@ class ViewModel_Methods_Tests: XCTestCase {
     }
     
     func test_whenStarIsTapped() {
+        self.addLocalRestaurants()
         sut.whenStarIsTapped(getPoints: 5)
         
         XCTAssertEqual(sut.currentScoreOfTopCard, 5)
+        //Use default currentcard index 9
         XCTAssertEqual(sut.topBarList["9"]?.score, 5)
     }
     
@@ -118,8 +124,12 @@ class ViewModel_Methods_Tests: XCTestCase {
         XCTAssertEqual(sut.personalID, 5)
     }
     
+    //TODO: Work on a mock for the Location Fetcher
     func test_checkIfUserDeniedTracking() {
+        sut.checkIfUserDeniedTracking()
+        locationFetcher.start()
         
+        XCTAssertFalse(sut.userDeniedLocationServices)
     }
     
 }
