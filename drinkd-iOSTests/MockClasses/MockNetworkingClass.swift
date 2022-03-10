@@ -193,7 +193,7 @@ class MockNetworkingClass: NetworkingProtocol {
     func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
         
         
-        guard let url = Bundle(for: type(of: self)).url(forResource: "TopThreeChoices", withExtension: "json") else {
+        guard let url = Bundle(for: type(of: self)).url(forResource: "MockTopThreeChoices", withExtension: "json") else {
             completionHandler(.failure(.generalNetworkError))
             return
         }

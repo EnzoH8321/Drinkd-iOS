@@ -211,11 +211,10 @@ class Networking_Methods_Tests: XCTestCase {
         let firstTopBar = networking.mockDB.party.fakeNumber.topBars.fakeNumber.firstBar
         networking.submitRestaurantScore(viewModel: sut)
         
-       
-
-        XCTAssertEqual(firstTopBar.score, 6)
-        XCTAssertEqual(firstTopBar.url, "www.realurl.com")
-        XCTAssertEqual(firstTopBar.image_url, "www.imageurl.com")
-        XCTAssertEqual(firstTopBar.id, "TESTINGID")
+        //Based on the TopBarsMain firstbar property in the MockDatabaseObject
+        XCTAssertEqual(firstTopBar.score, 2)
+        XCTAssertEqual(firstTopBar.url, "https://www.yelp.com/biz/spiceklub-cupertino-cupertino-2?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A")
+        XCTAssertEqual(firstTopBar.image_url, "https://s3-media2.fl.yelpcdn.com/bphoto/LJveUTzCRTf37MxQocbedQ/o.jpg")
+        XCTAssertEqual(firstTopBar.id, "D4PT90tVAHWwIWAoXxT9Cw")
     }
 }

@@ -41,7 +41,6 @@ class Model_Methods_Tests: XCTestCase {
     
     //Start
     func test_setPersonalUserAndID() throws {
-        
         sut.setPersonalUserAndID(forName: "Enzo", forID: 5)
         
         XCTAssertEqual(sut.personalUserName, "Enzo")

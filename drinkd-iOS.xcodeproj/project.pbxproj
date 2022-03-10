@@ -22,7 +22,7 @@
 		54562876278E000300CA6005 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562875278E000300CA6005 /* Extensions.swift */; };
 		5456287B278E39CE00CA6005 /* Networking_Methods_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5456287A278E39CE00CA6005 /* Networking_Methods_Tests.swift */; };
 		5456287E278E3C1200CA6005 /* MockNetworkingClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5456287D278E3C1200CA6005 /* MockNetworkingClass.swift */; };
-		54562886278EAE2D00CA6005 /* TopThreeChoices.json in Resources */ = {isa = PBXBuildFile; fileRef = 54562885278EAE2D00CA6005 /* TopThreeChoices.json */; };
+		54562886278EAE2D00CA6005 /* MockTopThreeChoices.json in Resources */ = {isa = PBXBuildFile; fileRef = 54562885278EAE2D00CA6005 /* MockTopThreeChoices.json */; };
 		5456288A278F63C600CA6005 /* MockDatabaseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562889278F63C600CA6005 /* MockDatabaseObject.swift */; };
 		54631E5F27D87522008CE6B8 /* ViewModel_Methods_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54631E5E27D87522008CE6B8 /* ViewModel_Methods_Tests.swift */; };
 		5496D19B276D188E000C732A /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5496D19A276D188E000C732A /* MessageView.swift */; };
@@ -103,7 +103,7 @@
 		54562875278E000300CA6005 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		5456287A278E39CE00CA6005 /* Networking_Methods_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking_Methods_Tests.swift; sourceTree = "<group>"; };
 		5456287D278E3C1200CA6005 /* MockNetworkingClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkingClass.swift; sourceTree = "<group>"; };
-		54562885278EAE2D00CA6005 /* TopThreeChoices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TopThreeChoices.json; sourceTree = "<group>"; };
+		54562885278EAE2D00CA6005 /* MockTopThreeChoices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockTopThreeChoices.json; sourceTree = "<group>"; };
 		54562889278F63C600CA6005 /* MockDatabaseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDatabaseObject.swift; sourceTree = "<group>"; };
 		54631E5E27D87522008CE6B8 /* ViewModel_Methods_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel_Methods_Tests.swift; sourceTree = "<group>"; };
 		5478EAFC2734D8560071A0B2 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
@@ -214,6 +214,16 @@
 			path = MockClasses;
 			sourceTree = "<group>";
 		};
+		54631E6027DA77CF008CE6B8 /* MockFiles */ = {
+			isa = PBXGroup;
+			children = (
+				54562872278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json */,
+				5456285B278A5FE400CA6005 /* MockJSON.json */,
+				54562885278EAE2D00CA6005 /* MockTopThreeChoices.json */,
+			);
+			path = MockFiles;
+			sourceTree = "<group>";
+		};
 		54F9C7FC26FBB536008FA516 = {
 			isa = PBXGroup;
 			children = (
@@ -269,13 +279,11 @@
 		54F9C81D26FBB538008FA516 /* drinkd-iOSTests */ = {
 			isa = PBXGroup;
 			children = (
+				54631E6027DA77CF008CE6B8 /* MockFiles */,
 				5456287C278E3BCF00CA6005 /* MockClasses */,
 				54562874278DFFED00CA6005 /* Extensions */,
 				54562870278DFAF600CA6005 /* Model_Methods_Tests.swift */,
 				5456287A278E39CE00CA6005 /* Networking_Methods_Tests.swift */,
-				5456285B278A5FE400CA6005 /* MockJSON.json */,
-				54562872278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json */,
-				54562885278EAE2D00CA6005 /* TopThreeChoices.json */,
 				54631E5E27D87522008CE6B8 /* ViewModel_Methods_Tests.swift */,
 			);
 			path = "drinkd-iOSTests";
@@ -533,7 +541,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				54562873278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json in Resources */,
-				54562886278EAE2D00CA6005 /* TopThreeChoices.json in Resources */,
+				54562886278EAE2D00CA6005 /* MockTopThreeChoices.json in Resources */,
 				5456285C278A5FE400CA6005 /* MockJSON.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
