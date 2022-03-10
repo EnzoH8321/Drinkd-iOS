@@ -37,6 +37,7 @@ class drinkdViewModel: ObservableObject {
 		return model.isPhone
 	}
 	var removeSplashScreen = true
+    
 	var currentlyInParty: Bool {
 		return model.currentlyInParty
 	}
@@ -136,8 +137,9 @@ class drinkdViewModel: ObservableObject {
 		topBarsReference.getData(completion: { error, snapshot in
 
 			if(!snapshot.exists()) {
-				print("Party does not exist")
 				self.queryPartyError = true
+                print("Party does not exist")
+                print(self.queryPartyError)
 				return
 			} else {
 
@@ -217,8 +219,8 @@ class drinkdViewModel: ObservableObject {
 	}
 }
 
-struct drinkdViewModel_Previews: PreviewProvider {
-	static var previews: some View {
-		/*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
-	}
-}
+//struct drinkdViewModel_Previews: PreviewProvider {
+//	static var previews: some View {
+//		/*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+//	}
+//}
