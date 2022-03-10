@@ -75,4 +75,51 @@ class ViewModel_Methods_Tests: XCTestCase {
         XCTAssertEqual(sut.topBarList["9"]?.score, 5)
     }
     
+    func test_setCurrentTopCardScoreToZero() {
+        sut.setCurrentTopCardScoreToZero()
+        
+        XCTAssertEqual(sut.currentScoreOfTopCard, 0)
+    }
+    
+    func test_emptyTopBarList() {
+        sut.emptyTopBarList()
+        
+        XCTAssertEqual(sut.topBarList.count, 0)
+    }
+    
+    func test_removeImageUrl() {
+        sut.removeImageUrl()
+        
+        XCTAssertEqual(sut.firstPlace.image_url, "")
+        XCTAssertEqual(sut.secondPlace.image_url, "")
+        XCTAssertEqual(sut.thirdPlace.image_url, "")
+    }
+    
+    func test_setDeviceType() {
+        
+        if (UIDevice.current.userInterfaceIdiom == .phone) {
+            sut.setDeviceType()
+            XCTAssertTrue(sut.isPhone, "Device is not a phone")
+            return
+        } else if (UIDevice.current.userInterfaceIdiom == .pad) {
+            sut.setDeviceType()
+            XCTAssertFalse(sut.isPhone)
+            return
+        }
+        
+        XCTFail("Neither Phone nor iPad. Add more tests")
+        
+    }
+    
+    func test_forModelSetUsernameAndId() {
+        sut.forModelSetUsernameAndId(username: "Enzo", id: 5)
+        
+        XCTAssertEqual(sut.personalUsername, "Enzo")
+        XCTAssertEqual(sut.personalID, 5)
+    }
+    
+    func test_checkIfUserDeniedTracking() {
+        
+    }
+    
 }
