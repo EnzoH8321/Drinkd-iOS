@@ -136,42 +136,46 @@ class drinkdViewModel: ObservableObject {
 		//Reads data at a path and listens for changes
 		topBarsReference.getData(completion: { error, snapshot in
 
-			if(!snapshot.exists()) {
-				self.queryPartyError = true
-                print("Party does not exist")
-                print(self.queryPartyError)
-				return
-			} else {
+            if let validSnapshot = snapshot {
+                if(!validSnapshot.exists()) {
+                    self.queryPartyError = true
+                    print("Party does not exist")
+                    print(self.queryPartyError)
+                    return
+                } else {
 
-				//Organizes values into a usable swift object
-				guard let value = snapshot.value as? [String: AnyObject] else {
-					print("Value cannot be unwrapped to a Swift readable format ")
-					return
-				}
-				for (key, valueProperty) in value {
-					switch key {
-					case FireBasePartyProps.partyID.rawValue:
-						self.model.setFriendsPartyId(code: valueProperty as? String)
+                    //Organizes values into a usable swift object
+                    guard let value = validSnapshot.value as? [String: AnyObject] else {
+                        print("Value cannot be unwrapped to a Swift readable format ")
+                        return
+                    }
+                    for (key, valueProperty) in value {
+                        switch key {
+                        case FireBasePartyProps.partyID.rawValue:
+                            self.model.setFriendsPartyId(code: valueProperty as? String)
 
-					case FireBasePartyProps.partyMaxVotes.rawValue:
-						self.model.joinParty(getVotes: valueProperty as? Int)
+                        case FireBasePartyProps.partyMaxVotes.rawValue:
+                            self.model.joinParty(getVotes: valueProperty as? Int)
 
-					case FireBasePartyProps.partyName.rawValue:
-						self.model.setPartyName(name: valueProperty as? String)
+                        case FireBasePartyProps.partyName.rawValue:
+                            self.model.setPartyName(name: valueProperty as? String)
 
-					case FireBasePartyProps.partyURL.rawValue:
-						self.model.joinParty(getURL: valueProperty as? String)
+                        case FireBasePartyProps.partyURL.rawValue:
+                            self.model.joinParty(getURL: valueProperty as? String)
 
-					default:
-						continue
-					}
-				}
+                        default:
+                            continue
+                        }
+                    }
 
-				self.model.setUserLevelToMember()
-				self.model.setPartyId()
-				self.model.setCurrentToPartyTrue()
-				self.queryPartyError = false
-			}
+                    self.model.setUserLevelToMember()
+                    self.model.setPartyId()
+                    self.model.setCurrentToPartyTrue()
+                    self.queryPartyError = false
+                }
+            }
+
+
 		})
 	}
 

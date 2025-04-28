@@ -224,7 +224,6 @@
 				54F9C82726FBB538008FA516 /* drinkd-iOSUITests */,
 				54562862278A62BF00CA6005 /* drinkd-iOS-NetworkingTests */,
 				54F9C80626FBB536008FA516 /* Products */,
-				B60D2EA78C0A3169F255A777 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -356,13 +355,6 @@
 				54BEE37327593A9300C82880 /* Networking.swift */,
 			);
 			path = WebServices;
-			sourceTree = "<group>";
-		};
-		B60D2EA78C0A3169F255A777 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
