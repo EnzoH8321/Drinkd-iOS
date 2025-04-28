@@ -1,0 +1,482 @@
+
+{
+    "businesses": [
+        {
+            "id": "fTeiio1L2ZBIRdlzjdjAeg",
+            "alias": "alexanders-steakhouse-cupertino-11",
+            "name": "Alexander's Steakhouse",
+            "image_url": "https://s3-media4.fl.yelpcdn.com/bphoto/ZE5WP-PX9aBfKF1jorHj6A/o.jpg",
+            "is_closed": false,
+            "url": "https://www.yelp.com/biz/alexanders-steakhouse-cupertino-11?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A",
+            "review_count": 3808,
+            "categories": [
+                {
+                    "alias": "steak",
+                    "title": "Steakhouses"
+                },
+                {
+                    "alias": "wine_bars",
+                    "title": "Wine Bars"
+                }
+            ],
+            "rating": 4.0,
+            "coordinates": {
+                "latitude": 37.3233674576911,
+                "longitude": -122.009842804904
+            },
+            "transactions": [
+                "delivery",
+                "pickup"
+            ],
+            "price": "$$$$",
+            "location": {
+                "address1": "19379 Stevens Creek Blvd",
+                "address2": null,
+                "address3": "",
+                "city": "Cupertino",
+                "zip_code": "95014",
+                "country": "US",
+                "state": "CA",
+                "display_address": [
+                    "19379 Stevens Creek Blvd",
+                    "Cupertino, CA 95014"
+                ]
+            },
+            "phone": "+14084462222",
+            "display_phone": "(408) 446-2222",
+            "distance": 2136.7641990020275
+        },
+        {
+            "id": "228MtApQZsrGTHy8psMmiw",
+            "alias": "galpão-gaucho-brazilian-steakhouse-cupertino-3",
+            "name": "Galpão Gaucho Brazilian Steakhouse",
+            "image_url": "https://s3-media2.fl.yelpcdn.com/bphoto/8Co7lv8jW01z-rA4Cwlncg/o.jpg",
+            "is_closed": false,
+            "url": "https://www.yelp.com/biz/galp%C3%A3o-gaucho-brazilian-steakhouse-cupertino-3?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A",
+            "review_count": 989,
+            "categories": [
+                {
+                    "alias": "brazilian",
+                    "title": "Brazilian"
+                },
+                {
+                    "alias": "bars",
+                    "title": "Bars"
+                }
+            ],
+            "rating": 4.5,
+            "coordinates": {
+                "latitude": 37.3227351,
+                "longitude": -122.0191885
+            },
+            "transactions": [
+                "restaurant_reservation"
+            ],
+            "price": "$$$",
+            "location": {
+                "address1": "19780 Stevens Creek Blvd",
+                "address2": "",
+                "address3": null,
+                "city": "Cupertino",
+                "zip_code": "95014",
+                "country": "US",
+                "state": "CA",
+                "display_address": [
+                    "19780 Stevens Creek Blvd",
+                    "Cupertino, CA 95014"
+                ]
+            },
+            "phone": "+14083662370",
+            "display_phone": "(408) 366-2370",
+            "distance": 1515.468353284407
+        },
+        {
+            "id": "QhNe3BpAK2Uuk6gEa_PBPQ",
+            "alias": "10-butchers-korean-bbq-sunnyvale",
+            "name": "10 Butchers Korean BBQ",
+            "image_url": "https://s3-media2.fl.yelpcdn.com/bphoto/xoIuQ5w1LTkf31mkQcx0rA/o.jpg",
+            "is_closed": false,
+            "url": "https://www.yelp.com/biz/10-butchers-korean-bbq-sunnyvale?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A",
+            "review_count": 643,
+            "categories": [
+                {
+                    "alias": "korean",
+                    "title": "Korean"
+                },
+                {
+                    "alias": "bbq",
+                    "title": "Barbeque"
+                },
+                {
+                    "alias": "wine_bars",
+                    "title": "Wine Bars"
+                }
+            ],
+            "rating": 4.5,
+            "coordinates": {
+                "latitude": 37.3629070559647,
+                "longitude": -122.025449623203
+            },
+            "transactions": [
+                "delivery",
+                "pickup"
+            ],
+            "location": {
+                "address1": "595 E El Camino Real",
+                "address2": "",
+                "address3": null,
+                "city": "Sunnyvale",
+                "zip_code": "94087",
+                "country": "US",
+                "state": "CA",
+                "display_address": [
+                    "595 E El Camino Real",
+                    "Sunnyvale, CA 94087"
+                ]
+            },
+            "phone": "+14087208889",
+            "display_phone": "(408) 720-8889",
+            "distance": 3437.8854554680406
+        },
+        {
+            "id": "XezTWg5OcwWqGDU2reJtNA",
+            "alias": "orens-hummus-cupertino-2",
+            "name": "Oren's Hummus",
+            "image_url": "https://s3-media4.fl.yelpcdn.com/bphoto/gzC3ic9ZJmVDi0WPBMEwWA/o.jpg",
+            "is_closed": false,
+            "url": "https://www.yelp.com/biz/orens-hummus-cupertino-2?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A",
+            "review_count": 659,
+            "categories": [
+                {
+                    "alias": "mediterranean",
+                    "title": "Mediterranean"
+                },
+                {
+                    "alias": "wine_bars",
+                    "title": "Wine Bars"
+                }
+            ],
+            "rating": 4.0,
+            "coordinates": {
+                "latitude": 37.32382191567003,
+                "longitude": -122.00986623833752
+            },
+            "transactions": [
+                "delivery",
+                "pickup",
+                "restaurant_reservation"
+            ],
+            "price": "$$",
+            "location": {
+                "address1": "19419 Stevens Creek Blvd",
+                "address2": "",
+                "address3": null,
+                "city": "Cupertino",
+                "zip_code": "95014",
+                "country": "US",
+                "state": "CA",
+                "display_address": [
+                    "19419 Stevens Creek Blvd",
+                    "Cupertino, CA 95014"
+                ]
+            },
+            "phone": "+14089825237",
+            "display_phone": "(408) 982-5237",
+            "distance": 2111.806713163046
+        },
+        {
+            "id": "2G1l8CMoem_TgMZMu7KLCA",
+            "alias": "grub-burger-bar-santa-clara-3",
+            "name": "Grub Burger Bar",
+            "image_url": "https://s3-media2.fl.yelpcdn.com/bphoto/f5gdZMJE7BA11WYRP-QOlQ/o.jpg",
+            "is_closed": false,
+            "url": "https://www.yelp.com/biz/grub-burger-bar-santa-clara-3?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A",
+            "review_count": 811,
+            "categories": [
+                {
+                    "alias": "tradamerican",
+                    "title": "American (Traditional)"
+                },
+                {
+                    "alias": "bars",
+                    "title": "Bars"
+                }
+            ],
+            "rating": 4.0,
+            "coordinates": {
+                "latitude": 37.33707,
+                "longitude": -121.995186
+            },
+            "transactions": [
+                "delivery",
+                "pickup"
+            ],
+            "price": "$$",
+            "location": {
+                "address1": "785 Lawrence Expy",
+                "address2": "",
+                "address3": null,
+                "city": "Santa Clara",
+                "zip_code": "95051",
+                "country": "US",
+                "state": "CA",
+                "display_address": [
+                    "785 Lawrence Expy",
+                    "Santa Clara, CA 95051"
+                ]
+            },
+            "phone": "+14084003374",
+            "display_phone": "(408) 400-3374",
+            "distance": 3228.9835372556604
+        },
+        {
+            "id": "NcczP4978qaXRqNcwBjvvA",
+            "alias": "duke-of-edinburgh-cupertino",
+            "name": "Duke of Edinburgh",
+            "image_url": "https://s3-media2.fl.yelpcdn.com/bphoto/x4TCyblaVg8SdOSOx8pEZQ/o.jpg",
+            "is_closed": false,
+            "url": "https://www.yelp.com/biz/duke-of-edinburgh-cupertino?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A",
+            "review_count": 586,
+            "categories": [
+                {
+                    "alias": "british",
+                    "title": "British"
+                },
+                {
+                    "alias": "pubs",
+                    "title": "Pubs"
+                }
+            ],
+            "rating": 3.5,
+            "coordinates": {
+                "latitude": 37.33495,
+                "longitude": -122.01485
+            },
+            "transactions": [
+                "delivery"
+            ],
+            "price": "$$",
+            "location": {
+                "address1": "10801 N Wolfe Rd",
+                "address2": "",
+                "address3": "",
+                "city": "Cupertino",
+                "zip_code": "95014",
+                "country": "US",
+                "state": "CA",
+                "display_address": [
+                    "10801 N Wolfe Rd",
+                    "Cupertino, CA 95014"
+                ]
+            },
+            "phone": "+14084463853",
+            "display_phone": "(408) 446-3853",
+            "distance": 1480.9467195959612
+        },
+        {
+            "id": "D4JwVsHXHbIRnuP0KFzFWw",
+            "alias": "legends-pizza-cupertino",
+            "name": "Legends Pizza",
+            "image_url": "https://s3-media1.fl.yelpcdn.com/bphoto/sb6cDHHpn6kjvLSS6mg5Fw/o.jpg",
+            "is_closed": false,
+            "url": "https://www.yelp.com/biz/legends-pizza-cupertino?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A",
+            "review_count": 174,
+            "categories": [
+                {
+                    "alias": "pizza",
+                    "title": "Pizza"
+                },
+                {
+                    "alias": "bars",
+                    "title": "Bars"
+                },
+                {
+                    "alias": "chicken_wings",
+                    "title": "Chicken Wings"
+                }
+            ],
+            "rating": 4.0,
+            "coordinates": {
+                "latitude": 37.3227351,
+                "longitude": -122.0180084
+            },
+            "transactions": [
+                "delivery",
+                "pickup"
+            ],
+            "price": "$$",
+            "location": {
+                "address1": "19732 Stevens Creek Blvd",
+                "address2": "",
+                "address3": null,
+                "city": "Cupertino",
+                "zip_code": "95014",
+                "country": "US",
+                "state": "CA",
+                "display_address": [
+                    "19732 Stevens Creek Blvd",
+                    "Cupertino, CA 95014"
+                ]
+            },
+            "phone": "+14082550500",
+            "display_phone": "(408) 255-0500",
+            "distance": 1637.1807928378996
+        },
+        {
+            "id": "-gfhu2eud9pWiMP35imQRw",
+            "alias": "st-johns-bar-and-grill-sunnyvale-2",
+            "name": "St. John's Bar & Grill",
+            "image_url": "https://s3-media2.fl.yelpcdn.com/bphoto/bZJiPvcYz-qVBrB8HxXKgg/o.jpg",
+            "is_closed": false,
+            "url": "https://www.yelp.com/biz/st-johns-bar-and-grill-sunnyvale-2?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A",
+            "review_count": 2341,
+            "categories": [
+                {
+                    "alias": "tradamerican",
+                    "title": "American (Traditional)"
+                },
+                {
+                    "alias": "burgers",
+                    "title": "Burgers"
+                },
+                {
+                    "alias": "sportsbars",
+                    "title": "Sports Bars"
+                }
+            ],
+            "rating": 4.0,
+            "coordinates": {
+                "latitude": 37.382468,
+                "longitude": -121.995161
+            },
+            "transactions": [
+                "delivery",
+                "pickup"
+            ],
+            "price": "$$",
+            "location": {
+                "address1": "510 Lawrence Expy",
+                "address2": "",
+                "address3": "",
+                "city": "Sunnyvale",
+                "zip_code": "94085",
+                "country": "US",
+                "state": "CA",
+                "display_address": [
+                    "510 Lawrence Expy",
+                    "Sunnyvale, CA 94085"
+                ]
+            },
+            "phone": "+14087388515",
+            "display_phone": "(408) 738-8515",
+            "distance": 6421.56307989143
+        },
+        {
+            "id": "MRlHo4kxMHRVj5iUyvxZQA",
+            "alias": "yard-house-san-jose-4",
+            "name": "Yard House",
+            "image_url": "https://s3-media2.fl.yelpcdn.com/bphoto/vMrdF6MDik_SSoFh11VCNg/o.jpg",
+            "is_closed": false,
+            "url": "https://www.yelp.com/biz/yard-house-san-jose-4?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A",
+            "review_count": 3838,
+            "categories": [
+                {
+                    "alias": "newamerican",
+                    "title": "American (New)"
+                },
+                {
+                    "alias": "vegetarian",
+                    "title": "Vegetarian"
+                },
+                {
+                    "alias": "bars",
+                    "title": "Bars"
+                }
+            ],
+            "rating": 3.5,
+            "coordinates": {
+                "latitude": 37.3229817029011,
+                "longitude": -121.947494338623
+            },
+            "transactions": [
+                "delivery",
+                "pickup"
+            ],
+            "price": "$$",
+            "location": {
+                "address1": "300 Santana Row",
+                "address2": "Ste 101",
+                "address3": "",
+                "city": "San Jose",
+                "zip_code": "95128",
+                "country": "US",
+                "state": "CA",
+                "display_address": [
+                    "300 Santana Row",
+                    "Ste 101",
+                    "San Jose, CA 95128"
+                ]
+            },
+            "phone": "+14082419273",
+            "display_phone": "(408) 241-9273",
+            "distance": 7475.542683039276
+        },
+        {
+            "id": "D4PT90tVAHWwIWAoXxT9Cw",
+            "alias": "spiceklub-cupertino-cupertino-2",
+            "name": "SpiceKlub - Cupertino",
+            "image_url": "https://s3-media2.fl.yelpcdn.com/bphoto/LJveUTzCRTf37MxQocbedQ/o.jpg",
+            "is_closed": false,
+            "url": "https://www.yelp.com/biz/spiceklub-cupertino-cupertino-2?adjust_creative=X6-vs_4_PMvNnrncoQ9t9A&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=X6-vs_4_PMvNnrncoQ9t9A",
+            "review_count": 362,
+            "categories": [
+                {
+                    "alias": "indpak",
+                    "title": "Indian"
+                },
+                {
+                    "alias": "vegetarian",
+                    "title": "Vegetarian"
+                },
+                {
+                    "alias": "cocktailbars",
+                    "title": "Cocktail Bars"
+                }
+            ],
+            "rating": 3.5,
+            "coordinates": {
+                "latitude": 37.318146,
+                "longitude": -122.031861
+            },
+            "transactions": [
+                "delivery",
+                "pickup",
+                "restaurant_reservation"
+            ],
+            "price": "$$$$",
+            "location": {
+                "address1": "10310 S De Anza Blvd",
+                "address2": null,
+                "address3": "",
+                "city": "Cupertino",
+                "zip_code": "95014",
+                "country": "US",
+                "state": "CA",
+                "display_address": [
+                    "10310 S De Anza Blvd",
+                    "Cupertino, CA 95014"
+                ]
+            },
+            "phone": "+14088996171",
+            "display_phone": "(408) 899-6171",
+            "distance": 1579.7304483604198
+        }
+    ],
+    "total": 199,
+    "region": {
+        "center": {
+            "longitude": -122.0312186,
+            "latitude": 37.33233141
+        }
+    }
+}
