@@ -9,12 +9,7 @@
 
 import SwiftUI
 
-struct CardView: View {
-    
-    private enum CardPadding: CGFloat{
-        case smallPadding = 4
-        case mediumPadding = 12
-    }
+struct CardView: View { 
     
     @State private var scrollDimensionminY = 0.0
     @State private var scrollDimensionmaxY = 0.0
@@ -207,7 +202,7 @@ struct CardView: View {
                         }
                     }
                 }
-                .padding(.all, CardPadding.mediumPadding.rawValue)
+                .padding(.all, 12)
             }
             .rotationEffect(.degrees(Double(offset.width / 5 )))
             .offset(x: offset.width * 5, y: 0)
