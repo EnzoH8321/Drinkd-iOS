@@ -92,111 +92,104 @@ struct CardView: View {
                     
                     RemoteImageLoader(url: "\(restaurantImage)")
 
-                    HStack {
-                        GeometryReader { geo in
-                            
-                            let minY = geo.frame(in: CoordinateSpace.global).minY
-                            let maxY = geo.frame(in: CoordinateSpace.global).maxY
-                            let frame = geo.frame(in: CoordinateSpace.global)
-                            
-                            VStack(alignment: .leading) {
-                                Text("About")
-                                    .font(.title2)
-                                    .bold()
-                                
-                                ScrollView {
-                                    
-                                    VStack(alignment: .leading) {
+                    GeometryReader { geo in
 
-                                        RowView(headline: "Address",
-                                                subheadline: "\(restaurantAddress1), \(restaurantCity)",
-                                                imageName: "house")
+                        let minY = geo.frame(in: CoordinateSpace.global).minY
+                        let maxY = geo.frame(in: CoordinateSpace.global).maxY
+                        let frame = geo.frame(in: CoordinateSpace.global)
 
-                                        Divider()
+                        VStack(alignment: .leading) {
+                            Text("About")
+                                .font(.title2)
+                                .bold()
 
-                                        RowView(headline: "Phone",
-                                                subheadline: "\(restaurantPhoneNumber)",
-                                                imageName: "phone")
-                                            .onTapGesture {
+                            ScrollView {
 
-                                                UIApplication.shared.open(URL(string: "tel:\(restaurantPhoneNumber)")!)
-                                            }
+                                VStack(alignment: .leading) {
 
-                                        Divider()
+                                    RowView(headline: "Address",
+                                            subheadline: "\(restaurantAddress1), \(restaurantCity)",
+                                            imageName: "house")
 
-                                        RowView(headline: "Pickup Options",
-                                                subheadline: optionsPickup ? "Pickup Available" : "Pickup Unavailable",
-                                                imageName: "bag")
+                                    Divider()
 
-                                        Divider()
+                                    RowView(headline: "Phone",
+                                            subheadline: "\(restaurantPhoneNumber)",
+                                            imageName: "phone")
+                                    .onTapGesture {
 
-                                        RowView(headline: "Delivery Options",
-                                                subheadline: optionsDelivery ? "Delivery Available" : "Delivery Unavailable",
-                                                imageName: "car")
-
-                                        Divider()
-
-                                        RowView(headline: "Reservation Options",
-                                                subheadline: optionsReservations ? "Reservations Available" : "Reservations Unavailable",
-                                                imageName: "square.and.pencil")
-
-                                        Divider()
-
-                                        if (!viewModel.currentlyInParty) {
-                                            HStack {
-                                                Spacer()
-
-                                                // More Info Button
-                                                Button("More Info") {
-                                                    guard let url = URL(string: "\(restaurantURL)") else {
-                                                        return print("BAD URL")
-                                                    }
-                                                    openURL(url)
-                                                }
-                                                .bold()
-                                                .buttonStyle(viewModel.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
-                                                .padding(.top, 20)
-
-                                                Spacer()
-                                            }
-                                            
-                                        }
+                                        UIApplication.shared.open(URL(string: "tel:\(restaurantPhoneNumber)")!)
                                     }
-                                    .labeledContentStyle(LabeledContentCardStyling())
+
+                                    Divider()
+
+                                    RowView(headline: "Pickup Options",
+                                            subheadline: optionsPickup ? "Pickup Available" : "Pickup Unavailable",
+                                            imageName: "bag")
+
+                                    Divider()
+
+                                    RowView(headline: "Delivery Options",
+                                            subheadline: optionsDelivery ? "Delivery Available" : "Delivery Unavailable",
+                                            imageName: "car")
+
+                                    Divider()
+
+                                    RowView(headline: "Reservation Options",
+                                            subheadline: optionsReservations ? "Reservations Available" : "Reservations Unavailable",
+                                            imageName: "square.and.pencil")
+
+                                    Divider()
+
+                                    if (!viewModel.currentlyInParty) {
+                                        HStack {
+                                            Spacer()
+
+                                            // More Info Button
+                                            Button("More Info") {
+                                                guard let url = URL(string: "\(restaurantURL)") else {
+                                                    return print("BAD URL")
+                                                }
+                                                openURL(url)
+                                            }
+                                            .bold()
+                                            .buttonStyle(viewModel.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
+                                            .padding(.top, 20)
+
+                                            Spacer()
+                                        }
+
+                                    }
                                 }
-                                
+                                .labeledContentStyle(LabeledContentCardStyling())
                             }
-                            .onAppear {
-                                self.scrollDimensionminY = minY
-                                self.scrollDimensionmaxY = maxY
-                                self.frame = frame
-                            }
+
                         }
-                        
+                        .onAppear {
+                            self.scrollDimensionminY = minY
+                            self.scrollDimensionmaxY = maxY
+                            self.frame = frame
+                        }
                     }
-                    
+
                     if (viewModel.currentlyInParty) {
                         // Button H-Stack
                         HStack {
                             Spacer()
                             // Submit Button
-                            Button {
+                            Button("Submit") {
                                 submitRestaurantScore(viewModel: viewModel)
-                            } label: {
-                                Text("Submit")
-                                    .bold()
                             }
+
                             // More Info Button
-                            Button {
+                            Button("More Info") {
                                 guard let url = URL(string: "\(restaurantURL)") else { return print("BAD URL") }
                                 openURL(url)
-                            } label: {
-                                Text("More Info")
-                                    .bold()
                             }
 
                             Spacer()
                         }
+                        .bold()
                         .buttonStyle(viewModel.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
 
                         HStack {
@@ -272,30 +265,6 @@ extension CardView {
             }
             .labeledContentStyle(LabeledContentCardStyling())
         }
-    }
-}
-
-//Button that goes to the yelp website.
-struct noPartyYelpButton: View {
-    @Environment(\.openURL) var openURL
-    
-    let deviceIsPhone = UIDevice.current.userInterfaceIdiom == .phone
-    let buttonName: String
-    let yelpURL: String
-    
-    
-    var body: some View {
-        Button {
-            guard let url = URL(string: "\(yelpURL)") else {
-                return print("BAD URL")
-            }
-            openURL(url)
-        } label: {
-            Text("More Info")
-                .bold()
-            
-        }
-        .buttonStyle(deviceIsPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
     }
 }
 

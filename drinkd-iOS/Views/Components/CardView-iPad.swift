@@ -20,7 +20,7 @@ struct CardViewIpad: View {
 
 	@State private var offset = CGSize.zero
 	@EnvironmentObject var viewModel: drinkdViewModel
-	
+    @Environment(\.openURL) var openURL
 
 	var restaurantTitle: String
 	var restaurantCategories: String
@@ -126,7 +126,17 @@ struct CardViewIpad: View {
 									.padding([.leading], 10)
 								Spacer()
 								if (!viewModel.currentlyInParty) {
-									noPartyYelpButton(buttonName: "doc.plaintext", yelpURL: "\(restaurantURL)")
+                                    Button {
+                                        guard let url = URL(string: "\(restaurantURL)") else {
+                                            return print("BAD URL")
+                                        }
+                                        openURL(url)
+                                    } label: {
+                                        Text("More Info")
+                                            .bold()
+
+                                    }
+                                    .buttonStyle(viewModel.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
 										.padding(.bottom, 20)
 										.padding(.trailing, 20)
 								}
