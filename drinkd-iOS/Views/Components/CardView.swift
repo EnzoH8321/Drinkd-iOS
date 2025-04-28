@@ -112,6 +112,8 @@ struct CardView: View {
                                                 subheadline: "\(restaurantAddress1), \(restaurantCity)",
                                                 imageName: "house")
 
+                                        Divider()
+
                                         RowView(headline: "Phone",
                                                 subheadline: "\(restaurantPhoneNumber)",
                                                 imageName: "phone")
@@ -120,17 +122,25 @@ struct CardView: View {
                                                 UIApplication.shared.open(URL(string: "tel:\(restaurantPhoneNumber)")!)
                                             }
 
+                                        Divider()
+
                                         RowView(headline: "Pickup Options",
                                                 subheadline: optionsPickup ? "Pickup Available" : "Pickup Unavailable",
                                                 imageName: "bag")
+
+                                        Divider()
 
                                         RowView(headline: "Delivery Options",
                                                 subheadline: optionsDelivery ? "Delivery Available" : "Delivery Unavailable",
                                                 imageName: "car")
 
+                                        Divider()
+
                                         RowView(headline: "Reservation Options",
                                                 subheadline: optionsReservations ? "Reservations Available" : "Reservations Unavailable",
                                                 imageName: "square.and.pencil")
+
+                                        Divider()
 
                                         if (!viewModel.currentlyInParty) {
                                             HStack {
