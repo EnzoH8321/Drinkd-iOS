@@ -91,8 +91,7 @@ struct CardView: View {
                     }
                     
                     RemoteImageLoader(url: "\(restaurantImage)")
-                        
-                    
+
                     HStack {
                         GeometryReader { geo in
                             
@@ -108,97 +107,52 @@ struct CardView: View {
                                 ScrollView {
                                     
                                     VStack(alignment: .leading) {
-                                        HStack {
-                                            VStack(alignment: .leading) {
-                                                Text("Address")
-                                                    .font(.headline)
-                                                
-                                                Text("\(restaurantAddress1), \(restaurantCity)")
-                                                    .font(.subheadline)
+
+                                        RowView(headline: "Address",
+                                                subheadline: "\(restaurantAddress1), \(restaurantCity)",
+                                                imageName: "house")
+
+                                        RowView(headline: "Phone",
+                                                subheadline: "\(restaurantPhoneNumber)",
+                                                imageName: "phone")
+                                            .onTapGesture {
+
+                                                UIApplication.shared.open(URL(string: "tel:\(restaurantPhoneNumber)")!)
                                             }
-                                            
-                                            Spacer()
-                                            Image(systemName: "house")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 24)
-                                            
-                                        }
-                                        HStack {
-                                            VStack(alignment: .leading) {
-                                                Text("Phone")
-                                                    .font(.headline)
-                                                Text("\(restaurantPhoneNumber)")
-                                                    .font(.subheadline)
-                                            }
-                                            Spacer()
-                                            Image(systemName: "phone")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 24)
-                                        }
-                                        .onTapGesture {
-                                            
-                                            UIApplication.shared.open(URL(string: "tel:\(restaurantPhoneNumber)")!)
-                                        }
-                                        //
-                                        HStack {
-                                            VStack(alignment: .leading) {
-                                                Text("Pickup Options")
-                                                    .font(.headline)
-                                                Text(optionsPickup ? "Pickup Available" : "Pickup Unavailable")
-                                                    .font(.subheadline)
-                                                
-                                            }
-                                            Spacer()
-                                            Image(systemName: "bag")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 24)
-                                        }
-                                        
-                                        
-                                        HStack {
-                                            VStack(alignment: .leading) {
-                                                Text("Delivery Options")
-                                                    .font(.headline)
-                                                Text(optionsDelivery ? "Delivery Available" : "Delivery Unavailable")
-                                                    .font(.subheadline)
-                                            }
-                                            Spacer()
-                                            Image(systemName: "car")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 24)
-                                            
-                                        }
-                                        
-                                        HStack {
-                                            VStack(alignment: .leading) {
-                                                Text("Reservation Options")
-                                                    .font(.headline)
-                                                Text(optionsReservations ? "Reservations Available" : "Reservations Unavailable")
-                                                    .font(.subheadline)
-                                            }
-                                            
-                                            Spacer()
-                                            Image(systemName: "square.and.pencil")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 24)
-                                            
-                                        }
-                                        
+
+                                        RowView(headline: "Pickup Options",
+                                                subheadline: optionsPickup ? "Pickup Available" : "Pickup Unavailable",
+                                                imageName: "bag")
+
+                                        RowView(headline: "Delivery Options",
+                                                subheadline: optionsDelivery ? "Delivery Available" : "Delivery Unavailable",
+                                                imageName: "car")
+
+                                        RowView(headline: "Reservation Options",
+                                                subheadline: optionsReservations ? "Reservations Available" : "Reservations Unavailable",
+                                                imageName: "square.and.pencil")
+
                                         if (!viewModel.currentlyInParty) {
                                             HStack {
                                                 Spacer()
-                                                noPartyYelpButton(buttonName: "doc.plaintext", yelpURL: "\(restaurantURL)")
-                                                    .padding(.top, 20)
+
+                                                // More Info Button
+                                                Button("More Info") {
+                                                    guard let url = URL(string: "\(restaurantURL)") else {
+                                                        return print("BAD URL")
+                                                    }
+                                                    openURL(url)
+                                                }
+                                                .bold()
+                                                .buttonStyle(viewModel.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
+                                                .padding(.top, 20)
+
                                                 Spacer()
                                             }
                                             
                                         }
                                     }
+                                    .labeledContentStyle(LabeledContentCardStyling())
                                 }
                                 
                             }
@@ -279,6 +233,35 @@ struct CardView: View {
             )
         }
     
+    }
+}
+
+extension CardView {
+
+    private struct RowView:  View {
+
+        let headline: String
+        var subheadline: String = ""
+        let imageName: String
+
+        var body: some View {
+            LabeledContent {
+                Image(systemName: imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24)
+                    .tint(Color.black)
+            } label: {
+                VStack(alignment: .leading) {
+                    Text(headline)
+                        .font(.headline)
+
+                    Text(subheadline)
+                        .font(.subheadline)
+                }
+            }
+            .labeledContentStyle(LabeledContentCardStyling())
+        }
     }
 }
 

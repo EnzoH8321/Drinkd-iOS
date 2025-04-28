@@ -111,3 +111,16 @@ struct regularTextFieldStyle: TextFieldStyle {
 			.textFieldStyle(.roundedBorder)
 		}
 }
+
+struct LabeledContentCardStyling: LabeledContentStyle {
+
+    func makeBody(configuration: Configuration) -> some View {
+        HStack {
+            configuration.label
+            Spacer()
+            configuration.content
+                .tint(Color.black)
+        }
+    }
+
+}
