@@ -21,7 +21,8 @@ struct CardView: View {
     @State private var frame = CGRect(x: 0, y: 0, width: 0, height: 0)
     @State private var offset = CGSize.zero
     @EnvironmentObject var viewModel: drinkdViewModel
-    
+    @Environment(\.openURL) var openURL
+
     var restaurantTitle: String
     var restaurantCategories: String
     var restaurantScore: Int
@@ -211,14 +212,29 @@ struct CardView: View {
                     }
                     
                     if (viewModel.currentlyInParty) {
+                        // Button H-Stack
                         HStack {
                             Spacer()
-                            SubmitButton()
-                            
-                            YelpDetailButton(yelpURL: "\(restaurantURL)")
+                            // Submit Button
+                            Button {
+                                submitRestaurantScore(viewModel: viewModel)
+                            } label: {
+                                Text("Submit")
+                                    .bold()
+                            }
+                            // More Info Button
+                            Button {
+                                guard let url = URL(string: "\(restaurantURL)") else { return print("BAD URL") }
+                                openURL(url)
+                            } label: {
+                                Text("More Info")
+                                    .bold()
+                            }
+
                             Spacer()
                         }
-                        
+                        .buttonStyle(viewModel.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
+
                         HStack {
                             Spacer()
                             Group {
@@ -263,41 +279,6 @@ struct CardView: View {
             )
         }
     
-    }
-}
-
-struct SubmitButton: View {
-    @EnvironmentObject var viewModel: drinkdViewModel
-    
-    var body: some View {
-        
-        Button {
-            submitRestaurantScore(viewModel: viewModel)
-        } label: {
-            Text("Submit")
-                .bold()
-        }
-        .buttonStyle(viewModel.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
-    }
-}
-
-struct YelpDetailButton: View {
-    @Environment(\.openURL) var openURL
-    
-    let deviceIsPhone = UIDevice.current.userInterfaceIdiom == .phone
-    let yelpURL: String
-    
-    var body: some View {
-        Button {
-            guard let url = URL(string: "\(yelpURL)") else {
-                return print("BAD URL")
-            }
-            openURL(url)
-        } label: {
-            Text("More Info")
-                .bold()
-        }
-        .buttonStyle(deviceIsPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
     }
 }
 

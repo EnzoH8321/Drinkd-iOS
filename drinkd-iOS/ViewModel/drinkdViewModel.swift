@@ -92,7 +92,7 @@ class drinkdViewModel: ObservableObject {
 
 	var locationFetcher = LocationFetcher()
 	//Hidden API KEY
-	let token = (Bundle.main.infoDictionary?["API_KEY"] as? String)!
+    let token: String = ProcessInfo.processInfo.environment["YELP_APIKEY"]!
 
 	//Chat
 	var personalUsername: String {
