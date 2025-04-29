@@ -9,7 +9,7 @@ import SwiftUI
 //TODO: Make Chat dynamic, update on the fly.
 struct ChatView: View {
 
-	@EnvironmentObject var viewModel: drinkdViewModel
+    @Environment(drinkdViewModel.self) var viewModel
 	@State var messageString = ""
 
 	var body: some View {
@@ -23,8 +23,8 @@ struct ChatView: View {
                     ScrollView {
                         VStack {
                             ForEach(viewModel.chatMessageList, id: \.self) { messageObj in
-                                MessageView(username: messageObj.username, message: messageObj.message, messageChatID: messageObj.personalId, personalChatId: viewModel.personalID ,timestampString: messageObj.timestampString)
-                                    
+                                MessageView(username: messageObj.username, message: messageObj.message, messageChatID: messageObj.personalId, personalChatId: viewModel.personalUserID ,timestampString: messageObj.timestampString)
+
                             }
                         }
                     }
@@ -40,7 +40,7 @@ struct ChatView: View {
 
                             let stringifiedUUID = UUID().uuidString
                             let timeStamp = Date().currentTimeMillis()
-                            let message = FireBaseMessage(id: stringifiedUUID, username: viewModel.personalUsername, personalId: viewModel.personalID, message: messageString, timestamp: timeStamp, timestampString: Date().formatDate(forMilliseconds: timeStamp))
+                            let message = FireBaseMessage(id: stringifiedUUID, username: viewModel.personalUserName, personalId: viewModel.personalUserID, message: messageString, timestamp: timeStamp, timestampString: Date().formatDate(forMilliseconds: timeStamp))
 
                             sendMessage(forMessage: message, viewModel: viewModel)
                             //Scrolls to the last message after hitting the button if not empty
@@ -73,9 +73,9 @@ struct ChatView_Previews: PreviewProvider {
 
 	static var previews: some View {
         let drinkd = drinkdViewModel()
-		drinkd.model.fetchEntireMessageList(messageList: [FireBaseMessage(id: "34234", username: "Enzo", personalId: 35, message: "Hello Man, how are you doing? This is enzo. I am currently in LA. Why La you may as? well this is something", timestamp: 34, timestampString: "3434"), FireBaseMessage(id: "34234", username: "Enzo", personalId: 36, message: "Hello Man, how are you doing? This is enzo. I am currently in Alabama", timestamp: 34, timestampString: "3434")])
-        drinkd.model.setPersonalUserAndID(forName: "Enzo", forID: 35)
+		drinkd.fetchEntireMessageList(messageList: [FireBaseMessage(id: "34234", username: "Enzo", personalId: 35, message: "Hello Man, how are you doing? This is enzo. I am currently in LA. Why La you may as? well this is something", timestamp: 34, timestampString: "3434"), FireBaseMessage(id: "34234", username: "Enzo", personalId: 36, message: "Hello Man, how are you doing? This is enzo. I am currently in Alabama", timestamp: 34, timestampString: "3434")])
+        drinkd.setPersonalUserAndID(forName: "Enzo", forID: 35)
 		return ChatView()
-			.environmentObject(drinkd)
+			.environment(drinkd)
 	}
 }

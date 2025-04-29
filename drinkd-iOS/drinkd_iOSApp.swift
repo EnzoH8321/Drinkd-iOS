@@ -19,6 +19,7 @@ struct AppLauncher {
 
     static func main() throws {
         if NSClassFromString("XCTestCase") == nil {
+            FirebaseApp.configure()
             drinkd_iOSApp.main()
         } else {
             TestApp.main()
@@ -44,7 +45,7 @@ struct drinkd_iOSApp: App {
 
 	let persistenceController = PersistenceController.shared
 
-	@StateObject var viewModel = drinkdViewModel()
+	@State var viewModel = drinkdViewModel()
     @State var showErrorAlert = false
 
 	var body: some Scene {
@@ -67,7 +68,7 @@ struct drinkd_iOSApp: App {
                     }), secondaryButton: .cancel())
                 }
 				.environment(\.managedObjectContext, persistenceController.container.viewContext)
-				.environmentObject(viewModel)
+				.environment(viewModel)
 				.onAppear {
 					//TODO: We have to add this because its the only way for ios 14 to actually fetch data
 					if (viewModel.isPhone) {
@@ -157,10 +158,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 	static var fcmToken: String = "TestTOKEN"
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-
-
-
-		FirebaseApp.configure()
 
 		Messaging.messaging().delegate = self
 

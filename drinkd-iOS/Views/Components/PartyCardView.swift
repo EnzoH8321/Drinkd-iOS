@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PartyCardView: View {
 
-	@EnvironmentObject var viewModel: drinkdViewModel
+    @Environment(drinkdViewModel.self) var viewModel
 	@State private var showingChatView = false
 
 	var body: some View {
@@ -85,7 +85,6 @@ struct PartyCardView: View {
 
 struct PartyCardView_Previews: PreviewProvider {
 	static var previews: some View {
-		PartyCardView()
-			.environmentObject(drinkdViewModel())
+		PartyCardView()			
 	}
 }

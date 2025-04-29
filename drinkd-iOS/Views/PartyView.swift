@@ -10,7 +10,7 @@ import SwiftUI
 
 struct PartyView: View {
 
-	@EnvironmentObject var viewModel: drinkdViewModel
+    @Environment(drinkdViewModel.self) var viewModel
 
 	var body: some View {
 		NavigationView {
@@ -57,7 +57,7 @@ struct JoinOrCreatePartyButton: View {
 struct PartyView_Previews: PreviewProvider {
 	static var previews: some View {
 		PartyView()
-			.environmentObject(drinkdViewModel())
+			
 
 	}
 }

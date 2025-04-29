@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-	@EnvironmentObject var viewModel: drinkdViewModel
+    @Environment(drinkdViewModel.self) var viewModel
     // Used to manually refresh view
     @State var refreshView = false
 
@@ -19,16 +19,16 @@ struct HomeView: View {
                 ZStack {
                     //TODO: Find a way to refresh without having to toggle between card views.
 
-                    ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
-                        CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
-                            .stacked(at: element, in: viewModel.restaurantList.count)
+                    ForEach(0..<viewModel.localRestaurants.count, id: \.self) { element in
+                        CardView(in: viewModel.localRestaurants[element], forView: self.viewModel)
+                            .stacked(at: element, in: viewModel.localRestaurants.count)
 
                     }
 
                 }
                 .id(refreshView)
 			}
-            .onChange(of: viewModel.model.counter) { oldValue, newValue in
+            .onChange(of: viewModel.counter) { oldValue, newValue in
                 if newValue == 0 {
                     // Used to Manually refresh view
                     refreshView.toggle()
@@ -56,7 +56,6 @@ struct HomeView_Previews: PreviewProvider {
 
 	static var previews: some View {
 		HomeView()
-			.environmentObject(drinkdViewModel())
 	}
 }
 

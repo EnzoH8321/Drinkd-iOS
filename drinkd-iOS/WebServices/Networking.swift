@@ -24,7 +24,7 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @e
 
 	//TODO: Issue where during reload there is a possibility to do a 2x call. Fix issue
 	//Checks to see if the function already ran to prevent duplicate calls
-	if (viewModel.model.localRestaurants.count > 0) {
+	if (viewModel.localRestaurants.count > 0) {
 		return
 	}
 
@@ -82,14 +82,14 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @e
 			if let JSONArray = JSONDecoderValue.businesses {
 				DispatchQueue.main.async {
                     
-					viewModel.objectWillChange.send()
+//					viewModel.objectWillChange.send()
 					//Checks to see if the function already ran to prevent duplicate calls
 					//TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
-					if (viewModel.model.localRestaurants.count <= 0) {
-						viewModel.model.appendDeliveryOptions(in: JSONArray)
+					if (viewModel.localRestaurants.count <= 0) {
+						viewModel.appendDeliveryOptions(in: JSONArray)
 					}
 					completionHandler(.success(.connectionSuccess))
-					viewModel.model.createParty(setURL: url.absoluteString)
+					viewModel.createParty(setURL: url.absoluteString)
 					viewModel.removeSplashScreen = true
 					viewModel.userDeniedLocationServices = false
 				}
@@ -128,10 +128,10 @@ func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, lat
 
 			if let JSONArray = JSONDecoderValue.businesses {
 				DispatchQueue.main.async {
-					viewModel.objectWillChange.send()
+
 					completionHandler(.success(.connectionSuccess))
-					viewModel.model.appendDeliveryOptions(in: JSONArray)
-					viewModel.model.createParty(setURL: url.absoluteString)
+					viewModel.appendDeliveryOptions(in: JSONArray)
+					viewModel.createParty(setURL: url.absoluteString)
 					viewModel.removeSplashScreen = true
 					viewModel.userDeniedLocationServices = false
                     
@@ -180,10 +180,10 @@ func fetchRestaurantsAfterJoiningParty(viewModel: drinkdViewModel, completionHan
 
 			if let JSONArray = JSONDecoderValue.businesses {
 				DispatchQueue.main.async {
-					viewModel.objectWillChange.send()
+
 					completionHandler(.success(.connectionSuccess))
-					viewModel.model.clearAllRestaurants()
-					viewModel.model.appendDeliveryOptions(in: JSONArray)
+					viewModel.clearAllRestaurants()
+					viewModel.appendDeliveryOptions(in: JSONArray)
 				}
 			}
 		}
@@ -206,7 +206,7 @@ func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler:
 		} else {
 
 			DispatchQueue.main.async {
-				viewModel.objectWillChange.send()
+
 
 				let decoder = JSONDecoder()
 				var testArray: [String: FireBaseTopChoice] = [:]
@@ -242,7 +242,7 @@ func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler:
 				}
 
 				let array = Array(sortedDict)
-				viewModel.model.appendTopThreeRestaurants(in: array)
+				viewModel.appendTopThreeRestaurants(in: array)
 				completionHandler(.success(.connectionSuccess))
 				localReference.removeObserver(withHandle: dbHandle)
 			}
@@ -251,7 +251,7 @@ func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler:
 }
 //Submits user score to server
 func submitRestaurantScore(viewModel: drinkdViewModel) {
-	viewModel.objectWillChange.send()
+
 
 	guard let barList = viewModel.topBarList["\(viewModel.currentCardIndex)"] else {
 		return print("No restaurant with this key")
@@ -262,21 +262,21 @@ func submitRestaurantScore(viewModel: drinkdViewModel) {
 	let score: Int = barList.score
 	let name: String = unverifiedName.replacingOccurrences(of: "[\\[\\].#$]", with: "", options: .regularExpression, range: nil)
 
-	let currentURLOfTopCard: String = viewModel.model.localRestaurantsDefault[viewModel.currentCardIndex].url ?? "NO URL FOUND"
+	let currentURLOfTopCard: String = viewModel.localRestaurantsDefault[viewModel.currentCardIndex].url ?? "NO URL FOUND"
 	//Adds id of card for
-	let currentIDOfTopCard: String = viewModel.model.localRestaurantsDefault[viewModel.currentCardIndex].id ?? "NO ID FOUND"
-	let currentImageURLTopCard: String = viewModel.model.localRestaurantsDefault[viewModel.currentCardIndex].image_url ?? "NO IMAGE URL FOUND"
+	let currentIDOfTopCard: String = viewModel.localRestaurantsDefault[viewModel.currentCardIndex].id ?? "NO ID FOUND"
+	let currentImageURLTopCard: String = viewModel.localRestaurantsDefault[viewModel.currentCardIndex].image_url ?? "NO IMAGE URL FOUND"
 	var localReference: DatabaseReference
 
 	if (viewModel.isPartyLeader) {
 
 		localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.partyId)")
-		localReference.child("topBars").child(viewModel.partyId ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
+		localReference.child("topBars").child(viewModel.partyId ?? "No Party ID not Found").child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
 
 	} else if (!viewModel.isPartyLeader) {
 
 		localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.friendPartyId)")
-		localReference.child("topBars").child(viewModel.partyId ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
+        localReference.child("topBars").child(viewModel.partyId ?? "No Party ID not Found" ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
 	}
 }
 
@@ -295,8 +295,6 @@ func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escap
 		} else {
 
 			DispatchQueue.main.async {
-
-				viewModel.objectWillChange.send()
 
 				var messagesArray: [FireBaseMessage] = []
 
@@ -324,7 +322,7 @@ func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escap
 					return $0.timestamp < $1.timestamp
 				}
 				completionHandler(.success(.connectionSuccess))
-				viewModel.model.fetchEntireMessageList(messageList: sortedMessageArray)
+				viewModel.fetchEntireMessageList(messageList: sortedMessageArray)
 //				localReference.removeObserver(withHandle: dbHandle)
 			}
 		}
@@ -362,7 +360,7 @@ func sendMessage(forMessage message: FireBaseMessage, viewModel: drinkdViewModel
 
 //Leave your current party. If you are the party leader, the party will be disbanded.
 func leaveParty(viewModel: drinkdViewModel) {
-	viewModel.objectWillChange.send()
+
 
 	if (viewModel.isPartyLeader) {
 		let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.partyId)")
@@ -373,6 +371,6 @@ func leaveParty(viewModel: drinkdViewModel) {
 		localReference.removeValue()
 	}
 
-	viewModel.model.leaveParty()
+	viewModel.leaveParty()
 
 }

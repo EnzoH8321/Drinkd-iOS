@@ -52,8 +52,8 @@ struct PartyView_Join: View {
     
     private struct JoinPartyButton: View {
         
-        @EnvironmentObject var viewModel: drinkdViewModel
-        
+        @Environment(drinkdViewModel.self) var viewModel
+
         var partyCode: String
         var username: String
         var personalUserID = Int.random(in: 1...4563456495)
@@ -64,6 +64,7 @@ struct PartyView_Join: View {
         }
         
         var body: some View {
+            @Bindable var viewModel = viewModel
             
             Button {
                 
@@ -98,6 +99,5 @@ struct PartyView_Join: View {
 struct PartyView_Join_Previews: PreviewProvider {
     static var previews: some View {
         PartyView_Join()
-            .environmentObject(drinkdViewModel())
     }
 }

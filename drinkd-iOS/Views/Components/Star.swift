@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Star: View {
-	@EnvironmentObject var viewModel: drinkdViewModel
+    @Environment(drinkdViewModel.self) var viewModel
 	@State private var hasBeenTapped = false
 	@State private var rotationAmount = 0.0
 
@@ -39,7 +39,6 @@ struct Star: View {
 
 struct Star_Previews: PreviewProvider {
 	static var previews: some View {
-		Star(starValue: 5)
-			.environmentObject(drinkdViewModel())
+		Star(starValue: 5)			
 	}
 }

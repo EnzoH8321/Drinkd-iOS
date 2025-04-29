@@ -8,128 +8,95 @@
 import Foundation
 import SwiftUI
 import Firebase
-import AppTrackingTransparency
 
-class drinkdViewModel: ObservableObject {
+@Observable
+class drinkdViewModel {
 
-	private enum ErrorHanding: Error {
-		case businessArrayNotFound
-	}
+    private enum TransactionTypes: String {
+        case pickup
+        case delivery
+        case restaurant_reservation
+    }
 
-	private enum FireBasePartyProps: String {
-		case partyID, partyMaxVotes, partyName, partyTimestamp, partyURL
-	}
+    private enum userLevel: String {
+        case creator
+        case member
+    }
 
-	@Published var model = drinkdModel()
+    var fcmToken: String = ""
+    var isPhone: Bool = true
+    var counter: Int = 9
+    var currentCardIndex: Int = 9
+    var currentlyInParty = false
+    var partyId: String?
+    var partyMaxVotes: Int?
+    var partyName: String?
+    var partyTimestamp: Int?
+    var partyURL: String?
+    //Id for someone elses party
+    var friendPartyId: String?
+    var isPartyLeader: Bool = false
+    var topBarList: [String: restaurantScoreInfo] = [:]
+    var currentScoreOfTopCard: Int = 0
+    var topThreeRestaurantArray: [[String: FireBaseTopChoice]] = []
+    //Database ref
+    let ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
+    //Represents Deck
+    var localRestaurants: [YelpApiBusinessSearchProperties] = []
+    //
+    var localRestaurantsDefault: [YelpApiBusinessSearchProperties] = []
+    //For top choices view
+    var firstChoice = FirebaseRestaurantInfo()
+    var secondChoice = FirebaseRestaurantInfo()
+    var thirdChoice = FirebaseRestaurantInfo()
+    //For chat
+    var personalUserName = ""
+    var personalUserID = 0
+    var chatMessageList: [FireBaseMessage] = []
+    var queryPartyError = false
+    var userDeniedLocationServices = false
+    var removeSplashScreen = true
 
-	var fcmToken: String {
-		return model.fcmToken
-	}
+    private enum ErrorHanding: Error {
+        case businessArrayNotFound
+    }
 
-	var userDeniedLocationServices = false
-
-	var isPhone: Bool {
-		return model.isPhone
-	}
-	var removeSplashScreen = true
-    
-	var currentlyInParty: Bool {
-		return model.currentlyInParty
-	}
-	var isPartyLeader: Bool {
-		return model.isPartyLeader ?? false
-	}
-	var queryPartyError = false
-	
-	var restaurantList: [YelpApiBusinessSearchProperties] {
-		return model.localRestaurants
-	}
-	var partyId: String {
-		return model.partyId ?? "No Party ID not Found"
-	}
-	var partyMaxVotes: Int {
-		return model.partyMaxVotes ?? 0
-	}
-	var partyName: String {
-		return model.partyName ?? "No Party Name"
-	}
-	var partyURL: String? {
-		return model.partyURL
-	}
+    private enum FireBasePartyProps: String {
+        case partyID, partyMaxVotes, partyName, partyTimestamp, partyURL
+    }
 
 
-	var currentCardIndex: Int {
-		return model.currentCardIndex
-	}
-	var currentScoreOfTopCard: Int{
-		return model.currentScoreOfTopCard
-	}
-	var topBarList: [String: restaurantScoreInfo] {
-		return model.topBarList
-	}
-
-	//Id for someone elses party
-	var friendPartyId: String {
-		return model.friendPartyId ?? "Master Party ID not Found"
-	}
-
-	var firstPlace: FirebaseRestaurantInfo {
-		return model.firstChoice
-	}
-	var secondPlace: FirebaseRestaurantInfo {
-		return model.secondChoice
-	}
-	var thirdPlace: FirebaseRestaurantInfo {
-		return model.thirdChoice
-	}
-
-	var ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
-
-	var locationFetcher = LocationFetcher()
-	//Hidden API KEY
+    var locationFetcher = LocationFetcher()
+    //Hidden API KEY
     let token: String = ProcessInfo.processInfo.environment["YELP_APIKEY"]!
 
-	//Chat
-	var personalUsername: String {
-		return model.personalUserName
-	}
 
-	var personalID: Int {
-		return model.personalUserID
-	}
+    init() {
+        locationFetcher.start()
+    }
 
-	var chatMessageList: [FireBaseMessage] {
-		return model.chatMessageList
-	}
+    //
+    func updateRestaurantList() {
+        //		objectWillChange.send()
+        appendCardsToDecklist()
 
-	//
-
-	init() {
-		locationFetcher.start()
-	}
-
-	//
-	func updateRestaurantList() {
-		objectWillChange.send()
-		self.model.appendCardsToDecklist()
-		
-	}
+    }
 
 
-	//called when the create party button in the create party screen in pushed
-	func createNewParty(setVotes partyVotes: Int? = nil, setName partyName: String? = nil) {
-		objectWillChange.send()
-		self.model.createParty(setVotes: partyVotes, setName: partyName)
-		self.model.setCurrentToPartyTrue()
-	}
+    //called when the create party button in the create party screen in pushed
+    func createNewParty(setVotes partyVotes: Int? = nil, setName partyName: String? = nil) {
+        //		objectWillChange.send()
+        createParty(setVotes: partyVotes, setName: partyName)
+        setCurrentToPartyTrue()
+    }
 
-	func JoinExistingParty(getCode partyCode: String) {
-		objectWillChange.send()
+    func JoinExistingParty(getCode partyCode: String) {
+        //		objectWillChange.send()
 
-		let topBarsReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyCode)")
+        let topBarsReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyCode)")
 
-		//Reads data at a path and listens for changes
-		topBarsReference.getData(completion: { error, snapshot in
+        //Reads data at a path and listens for changes
+        topBarsReference.getData(completion: { error, snapshot in
 
             if let validSnapshot = snapshot {
                 if(!validSnapshot.exists()) {
@@ -147,75 +114,307 @@ class drinkdViewModel: ObservableObject {
                     for (key, valueProperty) in value {
                         switch key {
                         case FireBasePartyProps.partyID.rawValue:
-                            self.model.setFriendsPartyId(code: valueProperty as? String)
+                            self.setFriendsPartyId(code: valueProperty as? String)
 
                         case FireBasePartyProps.partyMaxVotes.rawValue:
-                            self.model.joinParty(getVotes: valueProperty as? Int)
+                            self.joinParty(getVotes: valueProperty as? Int)
 
                         case FireBasePartyProps.partyName.rawValue:
-                            self.model.setPartyName(name: valueProperty as? String)
+                            self.setPartyName(name: valueProperty as? String)
 
                         case FireBasePartyProps.partyURL.rawValue:
-                            self.model.joinParty(getURL: valueProperty as? String)
+                            self.joinParty(getURL: valueProperty as? String)
 
                         default:
                             continue
                         }
                     }
 
-                    self.model.setUserLevelToMember()
-                    self.model.setPartyId()
-                    self.model.setCurrentToPartyTrue()
+                    self.setUserLevelToMember()
+                    self.setPartyId()
+                    self.setCurrentToPartyTrue()
                     self.queryPartyError = false
                 }
             }
 
 
-		})
-	}
+        })
+    }
 
-	func whenCardIsDraggedFromView() {
-		objectWillChange.send()
-		self.model.removeCardFromDeck()
-	}
+    func whenCardIsDraggedFromView() {
+        //		objectWillChange.send()
+        removeCardFromDeck()
+    }
 
-	func whenStarIsTapped(getPoints: Int) {
-		self.model.addScoreToCard(points: getPoints)
-	}
+    func whenStarIsTapped(getPoints: Int) {
+        addScoreToCard(points: getPoints)
+    }
 
-	func setCurrentTopCardScoreToZero() {
-		self.model.setCurrentTopCardScoreToZero()
-	}
+    func emptyTopBarList() {
+        emptyTheTopBarList()
+    }
 
-	func emptyTopBarList() {
-		self.model.emptyTheTopBarList()
-	}
+    func removeImageUrl() {
+        //		objectWillChange.send()
+        removeImageUrls()
+    }
 
-	func removeImageUrl() {
-		objectWillChange.send()
-		self.model.removeImageUrls()
-	}
+    func setDeviceType() {
+        let isPhone =  UIDevice.current.userInterfaceIdiom == .phone
 
-	func setDeviceType() {
-		let isPhone =  UIDevice.current.userInterfaceIdiom == .phone
+        if (isPhone) {
+            findDeviceType(device: .phone)
+        } else {
+            findDeviceType(device: .ipad)
+        }
 
-		if (isPhone) {
-			self.model.findDeviceType(device: .phone)
-		} else {
-			self.model.findDeviceType(device: .ipad)
-		}
+    }
 
-	}
+    func forModelSetUsernameAndId(username: String, id: Int) {
+        setPersonalUserAndID(forName: username, forID: id)
+    }
 
-	func forModelSetUsernameAndId(username: String, id: Int) {
-		self.model.setPersonalUserAndID(forName: username, forID: id)
-	}
+    //Checks if the user accepted location services.
+    func checkIfUserDeniedTracking() {
+        //		objectWillChange.send()
+        self.userDeniedLocationServices = locationFetcher.errorWithLocationAuth
+    }
 
-	//Checks if the user accepted location services. 
-	func checkIfUserDeniedTracking() {
-		objectWillChange.send()
-		self.userDeniedLocationServices = locationFetcher.errorWithLocationAuth
-	}
+    //For chat
+    //TODO: Finish Chat Features
+    func setPersonalUserAndID(forName name: String, forID id: Int) {
+        self.personalUserName = name
+        self.personalUserID = id
+    }
+
+    func setToken(token: String) {
+        self.fcmToken = token
+    }
+
+    func fetchEntireMessageList(messageList: [FireBaseMessage]) {
+        chatMessageList = messageList
+    }
+
+    //
+    func getLocalRestaurants() -> [YelpApiBusinessSearchProperties] {
+        return localRestaurants
+    }
+    //Used when a party is joined
+    func clearAllRestaurants() {
+        self.localRestaurants.removeAll()
+        self.localRestaurantsDefault.removeAll()
+    }
+
+    //Checks to see if the transaction array exists. if it does, parse it and fill the needed transaction properties
+    func appendDeliveryOptions(in restaurants: [YelpApiBusinessSearchProperties]) {
+
+        for var element in restaurants {
+            let transactionArray = element.transactions ?? [""]
+
+            if (transactionArray.contains(TransactionTypes.pickup.rawValue)) {
+                element.pickUpAvailable = true
+            }
+            if (transactionArray.contains(TransactionTypes.delivery.rawValue)) {
+                element.deliveryAvailable = true
+            }
+            if (transactionArray.contains(TransactionTypes.restaurant_reservation.rawValue)) {
+                element.reservationAvailable = true
+            }
+
+            localRestaurants.append(element)
+            localRestaurantsDefault.append(element)
+        }
+    }
+
+    func appendCardsToDecklist()  {
+
+        if (counter == 0) {
+            counter = localRestaurantsDefault.count
+        }
+        self.counter -= 1
+    }
+
+    func removeCardFromDeck() {
+
+        self.currentCardIndex -= 1
+
+        if (self.currentCardIndex < 0) {
+            self.currentCardIndex = 9
+        }
+    }
+
+    func createParty(setVotes partyVotes: Int? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
+
+        self.fcmToken = AppDelegate.fcmToken
+        self.partyId = String(Int.random(in: 100...20000))
+        self.partyMaxVotes = partyVotes
+        self.partyName = partyName
+        self.partyTimestamp = Int(Date().timeIntervalSince1970 * 1000)
+
+
+        if let url = partyURL {
+            self.partyURL = url
+
+        }
+
+        guard let partyID = self.partyId else {
+            return
+        }
+
+        guard let partyMaxVotes = self.partyMaxVotes else {
+            return
+        }
+
+        guard let partyName = self.partyName else {
+            return
+        }
+
+        guard let partyTimestamp = self.partyTimestamp else {
+            return
+        }
+
+        guard let partyURL = self.partyURL else {
+            return
+        }
+
+        //TODO: Messages set to string, can this be improved?
+        self.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL, "tokens": [fcmToken: fcmToken]])
+        self.setUserLevel(level: .creator)
+
+    }
+
+    func joinParty( getVotes votes: Int? = nil,  getURL url: String? = nil) {
+
+        guard let validFriendPartyId = self.friendPartyId else {
+            return
+        }
+
+        if let partyVotes = votes {
+            self.partyMaxVotes = partyVotes
+        }
+
+        if let siteURL = url {
+            self.partyURL = siteURL
+        }
+
+        self.ref.child("parties").child(validFriendPartyId).child("tokens").updateChildValues([fcmToken: fcmToken])
+    }
+
+    func setUserLevelToMember() {
+        self.setUserLevel(level: .member)
+    }
+
+    func setUserLevelToCreator() {
+        self.setUserLevel(level: .creator)
+    }
+
+    func setFriendsPartyId(code: String?) {
+        self.friendPartyId = code
+    }
+
+    func setPartyName(name: String?) {
+        self.partyName = name
+    }
+
+    func setCurrentToPartyTrue() {
+        self.currentlyInParty = true
+    }
+
+    func setPartyId() {
+        let partyIdString = String(Int.random(in: 100...20000))
+        self.partyId = partyIdString
+    }
+
+    func addScoreToCard(points: Int) {
+
+        if (points == currentScoreOfTopCard) {
+            return
+        }
+
+        self.currentScoreOfTopCard = points
+
+        topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points, url: self.partyURL ?? "URL NOT FOUND")
+    }
+
+    func setCurrentTopCardScoreToZero() {
+        self.currentScoreOfTopCard = 0
+    }
+
+    func emptyTheTopBarList() {
+        self.topBarList.removeAll()
+    }
+
+    func appendTopThreeRestaurants(in array: [Dictionary<String, FireBaseTopChoice>.Element]) {
+        //Empties Elements
+        firstChoice = FirebaseRestaurantInfo()
+        secondChoice = FirebaseRestaurantInfo()
+        thirdChoice = FirebaseRestaurantInfo()
+
+        for element in 0..<array.count {
+
+            switch (element) {
+            case 0:
+                let firstElementValues = array[0].value
+                let firstElementKey = array[0].key
+                firstChoice = FirebaseRestaurantInfo(name: firstElementKey, score: firstElementValues.score, url: firstElementValues.url, image_url: firstElementValues.image_url)
+            case 1:
+                let secondElementValues = array[1].value
+                let secondIndexKey = array[1].key
+                secondChoice = FirebaseRestaurantInfo(name: secondIndexKey, score: secondElementValues.score, url: secondElementValues.url, image_url: secondElementValues.image_url)
+            case 2:
+                let thirdElementValues = array[2].value
+                let thirdKey = array[2].key
+                thirdChoice = FirebaseRestaurantInfo(name: thirdKey, score: thirdElementValues.score, url: thirdElementValues.url, image_url: thirdElementValues.image_url)
+            default:
+                break
+            }
+        }
+    }
+
+    private func setUserLevel(level: userLevel) {
+        switch (level) {
+        case .member:
+            self.isPartyLeader = false
+        case .creator:
+            self.isPartyLeader = true
+        }
+    }
+
+    func leaveParty() {
+        self.currentlyInParty = false
+        self.firstChoice = FirebaseRestaurantInfo()
+        self.secondChoice = FirebaseRestaurantInfo()
+        self.thirdChoice = FirebaseRestaurantInfo()
+        self.partyId = ""
+    }
+
+    func removeImageUrls(){
+        self.firstChoice.image_url = ""
+        self.secondChoice.image_url = ""
+        self.thirdChoice.image_url = ""
+    }
+
+    func findDeviceType(device: DeviceType) {
+
+        switch (device) {
+        case .phone:
+            self.isPhone = true
+        case .ipad:
+            self.isPhone = false
+        }
+    }
+
+    func setPartyMaxVotes(toVote vote: Int) {
+        self.partyMaxVotes = vote
+    }
+
+    func setPartyTimestamp(toTimeStamp timestamp: Int) {
+        self.partyTimestamp = timestamp
+    }
+
+    func setPartyURL(toURL url: String) {
+        self.partyURL = url
+    }
 }
 
 //struct drinkdViewModel_Previews: PreviewProvider {

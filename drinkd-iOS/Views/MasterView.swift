@@ -11,7 +11,7 @@ import Firebase
 
 struct MasterView: View {
 
-	@EnvironmentObject var viewModel: drinkdViewModel
+    @Environment(drinkdViewModel.self) var viewModel
 	@State private var selectedTab: Int = 1
 	//Firebase
 	var ref = Database.database().reference()
@@ -102,7 +102,6 @@ struct MasterView: View {
 @available(iOS 15.0, *)
 struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
-		MasterView()
-			.environmentObject(drinkdViewModel())
+		MasterView()			
 	}
 }
