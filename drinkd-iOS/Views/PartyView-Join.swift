@@ -69,7 +69,7 @@ struct PartyView_Join: View {
             Button {
                 
                 viewModel.JoinExistingParty(getCode: self.partyCode)
-                viewModel.forModelSetUsernameAndId(username: self.username, id: self.personalUserID)
+                viewModel.setPersonalUserAndID(forName: self.username, forID: self.personalUserID)
                 fetchRestaurantsAfterJoiningParty(viewModel: viewModel) { result in
                     
                     switch(result) {

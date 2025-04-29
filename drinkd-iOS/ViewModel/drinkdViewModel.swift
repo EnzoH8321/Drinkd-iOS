@@ -65,7 +65,6 @@ class drinkdViewModel {
         case partyID, partyMaxVotes, partyName, partyTimestamp, partyURL
     }
 
-
     var locationFetcher = LocationFetcher()
     //Hidden API KEY
     let token: String = ProcessInfo.processInfo.environment["YELP_APIKEY"]!
@@ -75,23 +74,13 @@ class drinkdViewModel {
         locationFetcher.start()
     }
 
-    //
-    func updateRestaurantList() {
-        //		objectWillChange.send()
-        appendCardsToDecklist()
-
-    }
-
-
     //called when the create party button in the create party screen in pushed
     func createNewParty(setVotes partyVotes: Int? = nil, setName partyName: String? = nil) {
-        //		objectWillChange.send()
         createParty(setVotes: partyVotes, setName: partyName)
-        setCurrentToPartyTrue()
+        self.currentlyInParty = true
     }
 
     func JoinExistingParty(getCode partyCode: String) {
-        //		objectWillChange.send()
 
         let topBarsReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(partyCode)")
 
@@ -114,14 +103,14 @@ class drinkdViewModel {
                     for (key, valueProperty) in value {
                         switch key {
                         case FireBasePartyProps.partyID.rawValue:
-                            self.setFriendsPartyId(code: valueProperty as? String)
-
+//                            self.setFriendsPartyId(code: valueProperty as? String)
+                            self.friendPartyId = valueProperty as? String
                         case FireBasePartyProps.partyMaxVotes.rawValue:
                             self.joinParty(getVotes: valueProperty as? Int)
 
                         case FireBasePartyProps.partyName.rawValue:
-                            self.setPartyName(name: valueProperty as? String)
-
+//                            self.setPartyName(name: valueProperty as? String)
+                            self.partyName = valueProperty as? String
                         case FireBasePartyProps.partyURL.rawValue:
                             self.joinParty(getURL: valueProperty as? String)
 
@@ -130,33 +119,15 @@ class drinkdViewModel {
                         }
                     }
 
-                    self.setUserLevelToMember()
+                    self.setUserLevel(level: .member)
                     self.setPartyId()
-                    self.setCurrentToPartyTrue()
+                    self.currentlyInParty = true
                     self.queryPartyError = false
                 }
             }
 
 
         })
-    }
-
-    func whenCardIsDraggedFromView() {
-        //		objectWillChange.send()
-        removeCardFromDeck()
-    }
-
-    func whenStarIsTapped(getPoints: Int) {
-        addScoreToCard(points: getPoints)
-    }
-
-    func emptyTopBarList() {
-        emptyTheTopBarList()
-    }
-
-    func removeImageUrl() {
-        //		objectWillChange.send()
-        removeImageUrls()
     }
 
     func setDeviceType() {
@@ -170,13 +141,8 @@ class drinkdViewModel {
 
     }
 
-    func forModelSetUsernameAndId(username: String, id: Int) {
-        setPersonalUserAndID(forName: username, forID: id)
-    }
-
     //Checks if the user accepted location services.
     func checkIfUserDeniedTracking() {
-        //		objectWillChange.send()
         self.userDeniedLocationServices = locationFetcher.errorWithLocationAuth
     }
 
@@ -187,18 +153,11 @@ class drinkdViewModel {
         self.personalUserID = id
     }
 
-    func setToken(token: String) {
-        self.fcmToken = token
-    }
 
     func fetchEntireMessageList(messageList: [FireBaseMessage]) {
         chatMessageList = messageList
     }
 
-    //
-    func getLocalRestaurants() -> [YelpApiBusinessSearchProperties] {
-        return localRestaurants
-    }
     //Used when a party is joined
     func clearAllRestaurants() {
         self.localRestaurants.removeAll()
@@ -300,26 +259,6 @@ class drinkdViewModel {
         self.ref.child("parties").child(validFriendPartyId).child("tokens").updateChildValues([fcmToken: fcmToken])
     }
 
-    func setUserLevelToMember() {
-        self.setUserLevel(level: .member)
-    }
-
-    func setUserLevelToCreator() {
-        self.setUserLevel(level: .creator)
-    }
-
-    func setFriendsPartyId(code: String?) {
-        self.friendPartyId = code
-    }
-
-    func setPartyName(name: String?) {
-        self.partyName = name
-    }
-
-    func setCurrentToPartyTrue() {
-        self.currentlyInParty = true
-    }
-
     func setPartyId() {
         let partyIdString = String(Int.random(in: 100...20000))
         self.partyId = partyIdString
@@ -402,18 +341,6 @@ class drinkdViewModel {
         case .ipad:
             self.isPhone = false
         }
-    }
-
-    func setPartyMaxVotes(toVote vote: Int) {
-        self.partyMaxVotes = vote
-    }
-
-    func setPartyTimestamp(toTimeStamp timestamp: Int) {
-        self.partyTimestamp = timestamp
-    }
-
-    func setPartyURL(toURL url: String) {
-        self.partyURL = url
     }
 }
 

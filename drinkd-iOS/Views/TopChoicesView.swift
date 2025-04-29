@@ -49,7 +49,7 @@ struct TopChoicesView: View {
 		}
 		//Sets image url for each card to an empty string. 
 		.onDisappear(perform: {
-			viewModel.removeImageUrl()
+			viewModel.removeImageUrls()
 		})
 	}
 

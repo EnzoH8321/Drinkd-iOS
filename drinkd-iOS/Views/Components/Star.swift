@@ -31,7 +31,7 @@ struct Star: View {
 				 hasBeenTapped = true
 				}
 
-				viewModel.whenStarIsTapped(getPoints: starValue)
+				viewModel.addScoreToCard(points: starValue)
 			}
 
 	}
