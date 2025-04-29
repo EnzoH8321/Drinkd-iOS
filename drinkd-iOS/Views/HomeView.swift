@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
 	@EnvironmentObject var viewModel: drinkdViewModel
+    // Used to manually refresh view
     @State var refreshView = false
 
 	var body: some View {
@@ -29,6 +30,7 @@ struct HomeView: View {
 			}
             .onChange(of: viewModel.model.counter) { oldValue, newValue in
                 if newValue == 0 {
+                    // Used to Manually refresh view
                     refreshView.toggle()
                 }
             }
