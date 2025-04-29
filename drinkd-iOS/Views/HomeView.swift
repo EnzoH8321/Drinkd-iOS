@@ -14,42 +14,25 @@ struct HomeView: View {
 		GeometryReader{ proxy in
 
 			VStack {
-				ZStack {
-					//TODO: Find a way to refresh without having to toggle between card views
-					if (viewModel.isPhone && viewModel.toggleRefresh) {
+                ZStack {
+                    //TODO: Find a way to refresh without having to toggle between card views
+                    if (viewModel.toggleRefresh) {
 
-						ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
-							CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
-								.stacked(at: element, in: viewModel.restaurantList.count)
-
-						}
-
-					} else if (viewModel.isPhone && !viewModel.toggleRefresh) {
-
-						ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
-							CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
-								.stacked(at: element, in: viewModel.restaurantList.count)
-
-						}
-					}
-
-					if (!viewModel.isPhone && viewModel.toggleRefresh) {
-						ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
+                        ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
                             CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
-								.stacked(at: element, in: viewModel.restaurantList.count)
+                                .stacked(at: element, in: viewModel.restaurantList.count)
 
-						}
-					} else if (!viewModel.isPhone && !viewModel.toggleRefresh) {
+                        }
 
-						ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
+                    } else if (!viewModel.toggleRefresh) {
+
+                        ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
                             CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
-								.stacked(at: element, in: viewModel.restaurantList.count)
+                                .stacked(at: element, in: viewModel.restaurantList.count)
 
-						}
-
-					}
-
-				}
+                        }
+                    }
+                }
 			}
 		}
 
