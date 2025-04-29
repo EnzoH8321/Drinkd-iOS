@@ -35,14 +35,14 @@ struct HomeView: View {
 
 					if (!viewModel.isPhone && viewModel.toggleRefresh) {
 						ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
-							CardViewIpad(in: viewModel.restaurantList[element], forView: self.viewModel)
+                            CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
 								.stacked(at: element, in: viewModel.restaurantList.count)
 
 						}
 					} else if (!viewModel.isPhone && !viewModel.toggleRefresh) {
 
 						ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
-							CardViewIpad(in: viewModel.restaurantList[element], forView: self.viewModel)
+                            CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
 								.stacked(at: element, in: viewModel.restaurantList.count)
 
 						}

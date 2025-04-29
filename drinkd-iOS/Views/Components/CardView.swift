@@ -9,8 +9,8 @@
 
 import SwiftUI
 
-struct CardView: View { 
-    
+struct CardView: View {
+
     @State private var scrollDimensionminY = 0.0
     @State private var scrollDimensionmaxY = 0.0
     @State private var frame = CGRect(x: 0, y: 0, width: 0, height: 0)
@@ -86,6 +86,7 @@ struct CardView: View {
                     }
                     
                     RemoteImageLoader(url: "\(restaurantImage)")
+                        .frame(maxWidth: .infinity)
 
                     GeometryReader { geo in
 

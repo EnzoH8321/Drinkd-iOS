@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5407FD72271924D5008BC496 /* PartyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5407FD71271924D4008BC496 /* PartyCardView.swift */; };
-		5407FD76271F7F2B008BC496 /* CardView-iPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5407FD75271F7F28008BC496 /* CardView-iPad.swift */; };
 		5430E126276D1D8F00326A52 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5430E125276D1D8F00326A52 /* ChatView.swift */; };
 		5444B98F273EE09200FA6DA2 /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5444B98E273EE09100FA6DA2 /* SheetView.swift */; };
 		5444B991273EE99800FA6DA2 /* HowToView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5444B990273EE99800FA6DA2 /* HowToView.swift */; };
@@ -86,7 +85,6 @@
 		5407FD71271924D4008BC496 /* PartyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCardView.swift; sourceTree = "<group>"; };
 		5407FD73271DE924008BC496 /* drinkd-iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "drinkd-iOS.entitlements"; sourceTree = "<group>"; };
 		5407FD74271DE9F3008BC496 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		5407FD75271F7F28008BC496 /* CardView-iPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CardView-iPad.swift"; sourceTree = "<group>"; };
 		5430E125276D1D8F00326A52 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		5444B98E273EE09100FA6DA2 /* SheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
 		5444B990273EE99800FA6DA2 /* HowToView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToView.swift; sourceTree = "<group>"; };
@@ -332,7 +330,6 @@
 				54F9C84B26FD1ED6008FA516 /* ListCardView.swift */,
 				54B3E536270E140C0004ECC5 /* Star.swift */,
 				5407FD71271924D4008BC496 /* PartyCardView.swift */,
-				5407FD75271F7F28008BC496 /* CardView-iPad.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -541,7 +538,6 @@
 				54F9C84C26FD1ED6008FA516 /* ListCardView.swift in Sources */,
 				54C8A4B5277431EE0090D968 /* Extensions.swift in Sources */,
 				54F9C84A26FD1A59008FA516 /* HomeView.swift in Sources */,
-				5407FD76271F7F2B008BC496 /* CardView-iPad.swift in Sources */,
 				549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */,
 				54F9C81526FBB537008FA516 /* drinkd_iOS.xcdatamodeld in Sources */,
 				54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */,
@@ -790,8 +786,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -831,8 +826,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
