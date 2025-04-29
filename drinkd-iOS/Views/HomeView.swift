@@ -9,31 +9,29 @@ import SwiftUI
 
 struct HomeView: View {
 	@EnvironmentObject var viewModel: drinkdViewModel
+    @State var refreshView = false
 
 	var body: some View {
 		GeometryReader{ proxy in
 
 			VStack {
                 ZStack {
-                    //TODO: Find a way to refresh without having to toggle between card views
-                    if (viewModel.toggleRefresh) {
+                    //TODO: Find a way to refresh without having to toggle between card views.
 
-                        ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
-                            CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
-                                .stacked(at: element, in: viewModel.restaurantList.count)
+                    ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
+                        CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
+                            .stacked(at: element, in: viewModel.restaurantList.count)
 
-                        }
-
-                    } else if (!viewModel.toggleRefresh) {
-
-                        ForEach(0..<viewModel.restaurantList.count, id: \.self) { element in
-                            CardView(in: viewModel.restaurantList[element], forView: self.viewModel)
-                                .stacked(at: element, in: viewModel.restaurantList.count)
-
-                        }
                     }
+
                 }
+                .id(refreshView)
 			}
+            .onChange(of: viewModel.model.counter) { oldValue, newValue in
+                if newValue == 0 {
+                    refreshView.toggle()
+                }
+            }
 		}
 
 	}

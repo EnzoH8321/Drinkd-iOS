@@ -26,11 +26,6 @@ class drinkdViewModel: ObservableObject {
 		return model.fcmToken
 	}
 
-	//toggle refresh
-	var toggleRefresh: Bool {
-		return model.toggleRefresh
-	}
-
 	var userDeniedLocationServices = false
 
 	var isPhone: Bool {

@@ -60,9 +60,6 @@ struct drinkdModel {
 	private(set) var personalUserID = 0
 	private(set) var chatMessageList: [FireBaseMessage] = []
 
-	//refreshes deck in homeview
-	private(set) var toggleRefresh = true
-
 	//For chat
 	//TODO: Finish Chat Features
 	mutating func setPersonalUserAndID(forName name: String, forID id: Int) {
@@ -112,12 +109,6 @@ struct drinkdModel {
 	mutating func appendCardsToDecklist()  {
 	
 		if (counter == 0) {
-//			for element in 0..<localRestaurantsDefault.count {
-//				localRestaurants.append(localRestaurantsDefault[element])
-//			}
-			//Toggle to refresh the homeview
-			self.toggleRefresh.toggle()
-
 			counter = localRestaurantsDefault.count
 		}
 		self.counter -= 1
