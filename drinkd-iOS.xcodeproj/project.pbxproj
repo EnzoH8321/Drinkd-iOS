@@ -31,6 +31,7 @@
 		54B3E537270E140E0004ECC5 /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B3E536270E140C0004ECC5 /* Star.swift */; };
 		54B86718277522D2004D02A1 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B86717277522D2004D02A1 /* Errors.swift */; };
 		54BEE37427593A9300C82880 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BEE37327593A9300C82880 /* Networking.swift */; };
+		54C7BD0C2DC17D6800045D67 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 54C7BD0B2DC17D6800045D67 /* GoogleService-Info.plist */; };
 		54C8A4B5277431EE0090D968 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C8A4B4277431EE0090D968 /* Extensions.swift */; };
 		54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */; };
 		54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* MasterView.swift */; };
@@ -54,7 +55,6 @@
 		54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C858270257E1008FA516 /* SplashScreen.swift */; };
 		54F9C85B27037F2F008FA516 /* drinkdModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C85A27037F2F008FA516 /* drinkdModel.swift */; };
 		54F9C85D2703E52A008FA516 /* RemoteImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C85C2703E52A008FA516 /* RemoteImageLoader.swift */; };
-		54FE41A72707A93B0001C3C7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 54FE41A62707A93A0001C3C7 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +105,7 @@
 		54B3E536270E140C0004ECC5 /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
 		54B86717277522D2004D02A1 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		54BEE37327593A9300C82880 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+		54C7BD0B2DC17D6800045D67 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		54C8A4B4277431EE0090D968 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		54F9C80526FBB536008FA516 /* drinkd-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "drinkd-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSApp.swift; sourceTree = "<group>"; };
@@ -131,7 +132,6 @@
 		54F9C858270257E1008FA516 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 		54F9C85A27037F2F008FA516 /* drinkdModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkdModel.swift; sourceTree = "<group>"; };
 		54F9C85C2703E52A008FA516 /* RemoteImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageLoader.swift; sourceTree = "<group>"; };
-		54FE41A62707A93A0001C3C7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,9 +246,9 @@
 				54F9C83A26FBE151008FA516 /* Views */,
 				54F9C83726FBD95B008FA516 /* Model */,
 				54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */,
-				54FE41A62707A93A0001C3C7 /* GoogleService-Info.plist */,
 				54F9C80C26FBB537008FA516 /* Assets.xcassets */,
 				54F9C81126FBB537008FA516 /* Persistence.swift */,
+				54C7BD0B2DC17D6800045D67 /* GoogleService-Info.plist */,
 				54F9C81326FBB537008FA516 /* drinkd_iOS.xcdatamodeld */,
 				54F9C80E26FBB537008FA516 /* Preview Content */,
 			);
@@ -493,7 +493,7 @@
 			files = (
 				54F9C81026FBB537008FA516 /* Preview Assets.xcassets in Resources */,
 				54F9C80D26FBB537008FA516 /* Assets.xcassets in Resources */,
-				54FE41A72707A93B0001C3C7 /* GoogleService-Info.plist in Resources */,
+				54C7BD0C2DC17D6800045D67 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
