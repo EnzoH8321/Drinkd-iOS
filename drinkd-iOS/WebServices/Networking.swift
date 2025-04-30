@@ -9,14 +9,14 @@ import Foundation
 import Firebase
 
 protocol NetworkingProtocol {
-    func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
-    func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, latitude: Double, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
-    func fetchRestaurantsAfterJoiningParty(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
-    func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
-    func submitRestaurantScore(viewModel: drinkdViewModel)
-    func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
-    func removeMessagingObserver(viewModel: drinkdViewModel)
-    func sendMessage(forMessage message: FireBaseMessage, viewModel: drinkdViewModel )
+    func fetchRestaurantsOnStartUp(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
+    func fetchUsingCustomLocation(viewModel: PartyViewModel, longitude: Double, latitude: Double, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
+    func fetchRestaurantsAfterJoiningParty(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
+    func calculateTopThreeRestaurants(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
+    func submitRestaurantScore(viewModel: PartyViewModel)
+    func fetchExistingMessages(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
+    func removeMessagingObserver(viewModel: PartyViewModel)
+    func sendMessage(forMessage message: FireBaseMessage, viewModel: PartyViewModel )
     
 }
 @Observable
@@ -32,7 +32,7 @@ final class Networking {
         self.userDeniedLocationServices = locationFetcher.errorWithLocationAuth
     }
 
-    func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+    func fetchRestaurantsOnStartUp(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
         //TODO: Issue where during reload there is a possibility to do a 2x call. Fix issue
         //Checks to see if the function already ran to prevent duplicate calls
@@ -109,7 +109,7 @@ final class Networking {
     }
     //
     //Fetches a user defined location. Used when user disabled location services.
-    func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, latitude: Double, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+    func fetchUsingCustomLocation(viewModel: PartyViewModel, longitude: Double, latitude: Double, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
             completionHandler(.failure(.invalidURLError))
@@ -154,7 +154,7 @@ final class Networking {
     }
 
     //Fetch restaurant after joining party
-    func fetchRestaurantsAfterJoiningParty(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+    func fetchRestaurantsAfterJoiningParty(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
         guard let verifiedPartyURL = viewModel.partyURL else {
             print("No URL Found")
@@ -201,7 +201,7 @@ final class Networking {
         }.resume()
     }
 
-    func calculateTopThreeRestaurants(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+    func calculateTopThreeRestaurants(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
         let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("topBars")
 
@@ -260,7 +260,7 @@ final class Networking {
         })
     }
     //Submits user score to server
-    func submitRestaurantScore(viewModel: drinkdViewModel) {
+    func submitRestaurantScore(viewModel: PartyViewModel) {
 
 
         guard let barList = viewModel.topBarList["\(viewModel.currentCardIndex)"] else {
@@ -291,7 +291,7 @@ final class Networking {
     }
 
     //Fetches chat messages from server
-    func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+    func fetchExistingMessages(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
         let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages")
 
@@ -333,7 +333,6 @@ final class Networking {
                     }
                     completionHandler(.success(.connectionSuccess))
                     viewModel.chatMessageList = sortedMessageArray
-                    //                localReference.removeObserver(withHandle: dbHandle)
                 }
             }
         })
@@ -342,14 +341,14 @@ final class Networking {
     }
 
     //Removes Messaging observers
-    func removeMessagingObserver(viewModel: drinkdViewModel) {
+    func removeMessagingObserver(viewModel: PartyViewModel) {
         let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages")
 
         localReference.removeAllObservers()
     }
 
     //Sends a new message to the server
-    func sendMessage(forMessage message: FireBaseMessage, viewModel: drinkdViewModel ) {
+    func sendMessage(forMessage message: FireBaseMessage, viewModel: PartyViewModel ) {
 
         let localReference =  Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages")
 
@@ -369,7 +368,7 @@ final class Networking {
     }
 
     //Leave your current party. If you are the party leader, the party will be disbanded.
-    func leaveParty(viewModel: drinkdViewModel) {
+    func leaveParty(viewModel: PartyViewModel) {
 
 
         if (viewModel.isPartyLeader) {

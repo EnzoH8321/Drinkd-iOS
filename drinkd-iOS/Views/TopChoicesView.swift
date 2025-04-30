@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TopChoicesView: View {
 
-    @Environment(drinkdViewModel.self) var viewModel
+    @Environment(PartyViewModel.self) var viewModel
 
 	var body: some View {
 		GeometryReader { proxy in

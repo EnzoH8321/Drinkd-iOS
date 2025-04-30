@@ -11,7 +11,7 @@ import Firebase
 
 struct MasterView: View {
 
-    @Environment(drinkdViewModel.self) var viewModel
+    @Environment(PartyViewModel.self) var viewModel
 	@State private var selectedTab: Int = 1
 	//Firebase
 	var ref = Database.database().reference()

@@ -52,7 +52,7 @@
 		54F9C850270223DD008FA516 /* PartyView-Join.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84F270223DC008FA516 /* PartyView-Join.swift */; };
 		54F9C8522702283B008FA516 /* PartyView-Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C8512702283B008FA516 /* PartyView-Create.swift */; };
 		54F9C855270244B9008FA516 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C854270244B9008FA516 /* Location.swift */; };
-		54F9C8572702494E008FA516 /* drinkdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C8562702494E008FA516 /* drinkdViewModel.swift */; };
+		54F9C8572702494E008FA516 /* PartyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C8562702494E008FA516 /* PartyViewModel.swift */; };
 		54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C858270257E1008FA516 /* SplashScreen.swift */; };
 		54F9C85B27037F2F008FA516 /* drinkdModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C85A27037F2F008FA516 /* drinkdModel.swift */; };
 		54F9C85D2703E52A008FA516 /* RemoteImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C85C2703E52A008FA516 /* RemoteImageLoader.swift */; };
@@ -130,7 +130,7 @@
 		54F9C84F270223DC008FA516 /* PartyView-Join.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PartyView-Join.swift"; sourceTree = "<group>"; };
 		54F9C8512702283B008FA516 /* PartyView-Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PartyView-Create.swift"; sourceTree = "<group>"; };
 		54F9C854270244B9008FA516 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
-		54F9C8562702494E008FA516 /* drinkdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkdViewModel.swift; sourceTree = "<group>"; };
+		54F9C8562702494E008FA516 /* PartyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyViewModel.swift; sourceTree = "<group>"; };
 		54F9C858270257E1008FA516 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 		54F9C85A27037F2F008FA516 /* drinkdModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkdModel.swift; sourceTree = "<group>"; };
 		54F9C85C2703E52A008FA516 /* RemoteImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageLoader.swift; sourceTree = "<group>"; };
@@ -320,7 +320,7 @@
 		54F9C83D26FBF891008FA516 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				54F9C8562702494E008FA516 /* drinkdViewModel.swift */,
+				54F9C8562702494E008FA516 /* PartyViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -546,7 +546,7 @@
 				54F9C81526FBB537008FA516 /* drinkd_iOS.xcdatamodeld in Sources */,
 				54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */,
 				5407FD72271924D5008BC496 /* PartyCardView.swift in Sources */,
-				54F9C8572702494E008FA516 /* drinkdViewModel.swift in Sources */,
+				54F9C8572702494E008FA516 /* PartyViewModel.swift in Sources */,
 				54BEE37427593A9300C82880 /* Networking.swift in Sources */,
 				54B86718277522D2004D02A1 /* Errors.swift in Sources */,
 				54F9C85D2703E52A008FA516 /* RemoteImageLoader.swift in Sources */,

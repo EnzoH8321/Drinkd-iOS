@@ -52,7 +52,7 @@ struct PartyView_Join: View {
     
     private struct JoinPartyButton: View {
         
-        @Environment(drinkdViewModel.self) var viewModel
+        @Environment(PartyViewModel.self) var viewModel
 
         var partyCode: String
         var username: String

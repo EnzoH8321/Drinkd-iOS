@@ -46,7 +46,7 @@ struct drinkd_iOSApp: App {
 
 	let persistenceController = PersistenceController.shared
 
-	@State var viewModel = drinkdViewModel()
+	@State var viewModel = PartyViewModel()
     @State var showErrorAlert = false
 
 	var body: some Scene {

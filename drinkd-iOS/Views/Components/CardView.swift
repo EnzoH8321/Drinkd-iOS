@@ -16,7 +16,7 @@ struct CardView: View {
     @State private var frame = CGRect(x: 0, y: 0, width: 0, height: 0)
     @State private var offset = CGSize.zero
     @Binding var cardCounter: Int
-    @Environment(drinkdViewModel.self) var viewModel
+    @Environment(PartyViewModel.self) var viewModel
     @Environment(\.openURL) var openURL
 
     var restaurantTitle: String
@@ -37,7 +37,7 @@ struct CardView: View {
     
     
     //We use optionals because the API can return null for some properties
-    init(cardCounter: Binding<Int> ,in restaurantDetails: YelpApiBusinessSearchProperties, forView viewModel: drinkdViewModel) {
+    init(cardCounter: Binding<Int> ,in restaurantDetails: YelpApiBusinessSearchProperties, forView viewModel: PartyViewModel) {
 
         let verifiedRestaurantScore = restaurantDetails.rating ?? 0
         
@@ -278,7 +278,7 @@ struct CardView_Previews: PreviewProvider {
     
     static var previews: some View {
         
-        CardView(cardCounter: .constant(8), in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 5, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "$$", location: YelpApiBusinessDetails_Location(address1: "155 W 51st St", address2: "Suite 1-", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "650-339-0869", display_phone: "test", distance: 6565.56), forView: drinkdViewModel())
+        CardView(cardCounter: .constant(8), in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 5, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "$$", location: YelpApiBusinessDetails_Location(address1: "155 W 51st St", address2: "Suite 1-", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "650-339-0869", display_phone: "test", distance: 6565.56), forView: PartyViewModel())
     }
     
 }
@@ -287,7 +287,7 @@ struct CardView_Previews_Online: PreviewProvider {
     
     static var previews: some View {
         
-        let mockVM = drinkdViewModel()
+        let mockVM = PartyViewModel()
         mockVM.currentlyInParty = true
 
         return  CardView(cardCounter: Binding<Int>.constant(8), in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 5, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "454", location: YelpApiBusinessDetails_Location(address1: "4545", address2: "4545", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "test", display_phone: "test", distance: 6565.56), forView: mockVM).environment(mockVM)

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct PartyView: View {
 
-    @Environment(drinkdViewModel.self) var viewModel
+    @Environment(PartyViewModel.self) var viewModel
 
 	var body: some View {
 		NavigationView {

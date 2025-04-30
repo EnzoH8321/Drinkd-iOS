@@ -63,7 +63,7 @@ struct PartyView_Create: View {
     
     private struct CreatePartyButton: View {
         
-        @Environment(drinkdViewModel.self) var viewModel
+        @Environment(PartyViewModel.self) var viewModel
         @State private var showAlert: Bool = false
         
         var votes: Int

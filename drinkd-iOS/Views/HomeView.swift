@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @Environment(drinkdViewModel.self) var viewModel
+    @Environment(PartyViewModel.self) var viewModel
     // Used to manually refresh view
     @State var refreshView = false
     @State var cardCounter = 9
@@ -53,7 +53,7 @@ extension View {
 
 
 struct HomeView_Previews: PreviewProvider {
-	static let myEnvObject = drinkdViewModel()
+	static let myEnvObject = PartyViewModel()
 
 	static var previews: some View {
 		HomeView()

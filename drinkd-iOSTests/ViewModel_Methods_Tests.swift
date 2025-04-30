@@ -10,14 +10,14 @@ import XCTest
 
 class ViewModel_Methods_Tests: XCTestCase {
     
-    var sut: drinkdViewModel!
+    var sut: PartyViewModel!
     var model: drinkdModel!
     var locationFetcher: LocationFetcher!
     
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         try super.setUpWithError()
-        sut = drinkdViewModel()
+        sut = PartyViewModel()
         model = drinkdModel()
         locationFetcher = LocationFetcher()
        

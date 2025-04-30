@@ -9,7 +9,7 @@ import SwiftUI
 //TODO: Make Chat dynamic, update on the fly.
 struct ChatView: View {
 
-    @Environment(drinkdViewModel.self) var viewModel
+    @Environment(PartyViewModel.self) var viewModel
 	@State var messageString = ""
 
 	var body: some View {
@@ -72,7 +72,7 @@ struct ChatView: View {
 struct ChatView_Previews: PreviewProvider {
 
 	static var previews: some View {
-        let drinkd = drinkdViewModel()
+        let drinkd = PartyViewModel()
 		drinkd.chatMessageList = [FireBaseMessage(id: "34234", username: "Enzo", personalId: 35, message: "Hello Man, how are you doing? This is enzo. I am currently in LA. Why La you may as? well this is something", timestamp: 34, timestampString: "3434"), FireBaseMessage(id: "34234", username: "Enzo", personalId: 36, message: "Hello Man, how are you doing? This is enzo. I am currently in Alabama", timestamp: 34, timestampString: "3434")]
         drinkd.setPersonalUserAndID(forName: "Enzo", forID: 35)
 		return ChatView()

@@ -12,14 +12,14 @@ import CoreLocation
 class Networking_Methods_Tests: XCTestCase {
     
     
-    var sut: drinkdViewModel!
+    var sut: PartyViewModel!
     var networking: MockNetworkingClass!
     
     
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         try super.setUpWithError()
-        sut = drinkdViewModel()
+        sut = PartyViewModel()
         networking = MockNetworkingClass()
         
     }

@@ -10,7 +10,7 @@ import SwiftUI
 import Firebase
 
 @Observable
-class drinkdViewModel {
+class PartyViewModel {
 
     private enum TransactionTypes: String {
         case pickup

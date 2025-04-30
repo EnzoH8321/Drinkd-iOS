@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CustomLocationView: View {
 
-    @Environment(drinkdViewModel.self) var viewModel
+    @Environment(PartyViewModel.self) var viewModel
 
 	@State var latitude: String = ""
 	@State var longitude: String = ""

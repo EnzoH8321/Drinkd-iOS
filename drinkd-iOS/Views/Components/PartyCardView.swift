@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PartyCardView: View {
 
-    @Environment(drinkdViewModel.self) var viewModel
+    @Environment(PartyViewModel.self) var viewModel
 	@State private var showingChatView = false
 
 	var body: some View {

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Star: View {
-    @Environment(drinkdViewModel.self) var viewModel
+    @Environment(PartyViewModel.self) var viewModel
 	@State private var hasBeenTapped = false
 	@State private var rotationAmount = 0.0
 
