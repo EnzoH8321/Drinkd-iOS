@@ -4,13 +4,13 @@
 import Foundation
 
 public struct Party {
-    public let partyLeaderID: String
-    public let partyID: String
-    public let partyMaxVotes : Int
-    public let partyName: String
-    public let timestamp: Int
-    public let url: String
-
+    let partyLeaderID: String
+    let partyID: String
+    let partyMaxVotes : Int
+    let partyName: String
+    let timestamp: Int
+    let url: String
+    
     public init(partyLeaderID: String, partyID: String, partyMaxVotes: Int, partyName: String, timestamp: Int, url: String) {
         self.partyLeaderID = partyLeaderID
         self.partyID = partyID
