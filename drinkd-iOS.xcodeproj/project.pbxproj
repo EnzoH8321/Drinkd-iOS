@@ -32,6 +32,7 @@
 		54B86718277522D2004D02A1 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B86717277522D2004D02A1 /* Errors.swift */; };
 		54BEE37427593A9300C82880 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BEE37327593A9300C82880 /* Networking.swift */; };
 		54C7BD0C2DC17D6800045D67 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 54C7BD0B2DC17D6800045D67 /* GoogleService-Info.plist */; };
+		54C7BD0E2DC1D88D00045D67 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C7BD0D2DC1D88D00045D67 /* Constants.swift */; };
 		54C8A4B5277431EE0090D968 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C8A4B4277431EE0090D968 /* Extensions.swift */; };
 		54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */; };
 		54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* MasterView.swift */; };
@@ -106,6 +107,7 @@
 		54B86717277522D2004D02A1 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		54BEE37327593A9300C82880 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		54C7BD0B2DC17D6800045D67 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		54C7BD0D2DC1D88D00045D67 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		54C8A4B4277431EE0090D968 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		54F9C80526FBB536008FA516 /* drinkd-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "drinkd-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSApp.swift; sourceTree = "<group>"; };
@@ -340,6 +342,7 @@
 				54F9C84526FCF403008FA516 /* Styles.swift */,
 				54C8A4B4277431EE0090D968 /* Extensions.swift */,
 				54B86717277522D2004D02A1 /* Errors.swift */,
+				54C7BD0D2DC1D88D00045D67 /* Constants.swift */,
 			);
 			path = Globals;
 			sourceTree = "<group>";
@@ -534,6 +537,7 @@
 				54B3E537270E140E0004ECC5 /* Star.swift in Sources */,
 				54F9C81226FBB537008FA516 /* Persistence.swift in Sources */,
 				5430E126276D1D8F00326A52 /* ChatView.swift in Sources */,
+				54C7BD0E2DC1D88D00045D67 /* Constants.swift in Sources */,
 				5444B991273EE99800FA6DA2 /* HowToView.swift in Sources */,
 				54F9C84C26FD1ED6008FA516 /* ListCardView.swift in Sources */,
 				54C8A4B5277431EE0090D968 /* Extensions.swift in Sources */,

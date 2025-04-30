@@ -39,8 +39,6 @@ class drinkdViewModel {
     var topBarList: [String: restaurantScoreInfo] = [:]
     var currentScoreOfTopCard: Int = 0
     var topThreeRestaurantArray: [[String: FireBaseTopChoice]] = []
-    //Database ref
-    let ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
     //Represents Deck
     var localRestaurants: [YelpApiBusinessSearchProperties] = []
     //
@@ -62,9 +60,6 @@ class drinkdViewModel {
     }
 
     var locationFetcher = LocationFetcher()
-    //Hidden API KEY
-    let token: String = ProcessInfo.processInfo.environment["YELP_APIKEY"]!
-
 
     init() {
         locationFetcher.start()
@@ -206,7 +201,7 @@ class drinkdViewModel {
         }
 
         //TODO: Messages set to string, can this be improved?
-        self.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL, "tokens": [fcmToken: fcmToken]])
+        Constants.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL, "tokens": [fcmToken: fcmToken]])
         self.setUserLevel(level: .creator)
 
     }
@@ -223,7 +218,7 @@ class drinkdViewModel {
             self.partyURL = siteURL
         }
 
-        self.ref.child("parties").child(validFriendPartyId).child("tokens").updateChildValues([fcmToken: fcmToken])
+        Constants.ref.child("parties").child(validFriendPartyId).child("tokens").updateChildValues([fcmToken: fcmToken])
     }
 
     func addScoreToCard(points: Int) {

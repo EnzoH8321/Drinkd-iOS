@@ -58,7 +58,7 @@ func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @e
 
 	var request = URLRequest(url: url)
 	request.httpMethod = "GET"
-	request.setValue("Bearer \(viewModel.token)", forHTTPHeaderField: "Authorization")
+	request.setValue("Bearer \(Constants.token)", forHTTPHeaderField: "Authorization")
 
 
 	//URLSession
@@ -108,7 +108,7 @@ func fetchUsingCustomLocation(viewModel: drinkdViewModel, longitude: Double, lat
 
 	var request = URLRequest(url: url)
 	request.httpMethod = "GET"
-	request.setValue("Bearer \(viewModel.token)", forHTTPHeaderField: "Authorization")
+	request.setValue("Bearer \(Constants.token)", forHTTPHeaderField: "Authorization")
 
 	//URLSession
 	URLSession.shared.dataTask(with: request) { data, response, error in
@@ -160,7 +160,7 @@ func fetchRestaurantsAfterJoiningParty(viewModel: drinkdViewModel, completionHan
 
 	var request = URLRequest(url: verifiedURL)
 	request.httpMethod = "GET"
-	request.setValue("Bearer \(viewModel.token)", forHTTPHeaderField: "Authorization")
+	request.setValue("Bearer \(Constants.token)", forHTTPHeaderField: "Authorization")
 
 	//URLSession
 	URLSession.shared.dataTask(with: request) { data, response, error in
