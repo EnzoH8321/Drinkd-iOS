@@ -20,6 +20,7 @@ struct AppLauncher {
     static func main() throws {
         if NSClassFromString("XCTestCase") == nil {
             FirebaseApp.configure()
+            Networking.shared.locationFetcher.start()
             drinkd_iOSApp.main()
         } else {
             TestApp.main()
@@ -53,7 +54,7 @@ struct drinkd_iOSApp: App {
 			MasterView()
                 .alert(isPresented: $showErrorAlert) {
                     Alert(title: Text("Error Retrieving User Location"), primaryButton: .default(Text("Retry"), action: {
-                        viewModel.checkIfUserDeniedTracking()
+                        Networking.shared.updateUserDeniedLocationServices()
                         Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
 
                             switch(result) {
@@ -61,7 +62,7 @@ struct drinkd_iOSApp: App {
                                 print("Success, initial data fetch was successful")
                             case .failure(_):
                                 print("Failed, initial data fetch was unsuccessful")
-                                viewModel.checkIfUserDeniedTracking()
+                                Networking.shared.updateUserDeniedLocationServices()
                             }
 
                         }
@@ -73,7 +74,7 @@ struct drinkd_iOSApp: App {
 					//TODO: We have to add this because its the only way for ios 14 to actually fetch data
 					if (Constants.isPhone) {
 						if #available(iOS 13, *) {
-							viewModel.checkIfUserDeniedTracking()
+                            Networking.shared.updateUserDeniedLocationServices()
                             Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
 
 								switch(result) {
@@ -109,7 +110,7 @@ struct drinkd_iOSApp: App {
 							}
 
 						}
-						viewModel.checkIfUserDeniedTracking()
+                        Networking.shared.updateUserDeniedLocationServices()
 					}
 
 					if #available(iOS 14, *) {

@@ -26,9 +26,10 @@ final class Networking {
     private init() { }
 
     private(set) var userDeniedLocationServices = false
+    var locationFetcher = LocationFetcher()
 
-    func updateUserDeniedLocationServices(_ newValue: Bool) {
-        self.userDeniedLocationServices = newValue
+    func updateUserDeniedLocationServices() {
+        self.userDeniedLocationServices = locationFetcher.errorWithLocationAuth
     }
 
     func fetchRestaurantsOnStartUp(viewModel: drinkdViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
@@ -47,7 +48,7 @@ final class Networking {
         var latitude: Double = 0.0
 
         //If user location was found, continue
-        if let location = viewModel.locationFetcher.lastKnownLocation {
+        if let location = locationFetcher.lastKnownLocation {
             latitude = location.latitude
             longitude = location.longitude
         }

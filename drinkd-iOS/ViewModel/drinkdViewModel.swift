@@ -36,7 +36,6 @@ class drinkdViewModel {
     var isPartyLeader: Bool = false
     var topBarList: [String: restaurantScoreInfo] = [:]
     var currentScoreOfTopCard: Int = 0
-    var topThreeRestaurantArray: [[String: FireBaseTopChoice]] = []
     //Represents Deck
     var localRestaurants: [YelpApiBusinessSearchProperties] = []
     //
@@ -54,12 +53,6 @@ class drinkdViewModel {
 
     private enum FireBasePartyProps: String {
         case partyID, partyMaxVotes, partyName, partyTimestamp, partyURL
-    }
-
-    var locationFetcher = LocationFetcher()
-
-    init() {
-        locationFetcher.start()
     }
 
     //called when the create party button in the create party screen in pushed
@@ -116,11 +109,6 @@ class drinkdViewModel {
 
 
         })
-    }
-
-    //Checks if the user accepted location services.
-    func checkIfUserDeniedTracking() {        
-        Networking.shared.updateUserDeniedLocationServices(locationFetcher.errorWithLocationAuth)
     }
 
     //For chat
