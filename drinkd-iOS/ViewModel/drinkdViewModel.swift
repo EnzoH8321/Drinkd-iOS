@@ -50,7 +50,6 @@ class drinkdViewModel {
     var personalUserID = 0
     var chatMessageList: [FireBaseMessage] = []
     var queryPartyError = false
-    var userDeniedLocationServices = false
     var removeSplashScreen = true
 
     private enum FireBasePartyProps: String {
@@ -120,8 +119,8 @@ class drinkdViewModel {
     }
 
     //Checks if the user accepted location services.
-    func checkIfUserDeniedTracking() {
-        self.userDeniedLocationServices = locationFetcher.errorWithLocationAuth
+    func checkIfUserDeniedTracking() {        
+        Networking.shared.updateUserDeniedLocationServices(locationFetcher.errorWithLocationAuth)
     }
 
     //For chat

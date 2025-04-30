@@ -42,7 +42,7 @@ struct ChatView: View {
                             let timeStamp = Date().currentTimeMillis()
                             let message = FireBaseMessage(id: stringifiedUUID, username: viewModel.personalUserName, personalId: viewModel.personalUserID, message: messageString, timestamp: timeStamp, timestampString: Date().formatDate(forMilliseconds: timeStamp))
 
-                            sendMessage(forMessage: message, viewModel: viewModel)
+                            Networking.shared.sendMessage(forMessage: message, viewModel: viewModel)
                             //Scrolls to the last message after hitting the button if not empty
                             if (!viewModel.chatMessageList.isEmpty) {
                                 scrollView.scrollTo(viewModel.chatMessageList[viewModel.chatMessageList.endIndex - 1])
@@ -63,7 +63,7 @@ struct ChatView: View {
 			}
             .onDisappear {
                 //Removes the FB messaging observer
-                removeMessagingObserver(viewModel: viewModel)
+                Networking.shared.removeMessagingObserver(viewModel: viewModel)
             }
 		}
     }

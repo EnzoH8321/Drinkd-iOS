@@ -46,7 +46,7 @@ struct PartyCardView: View {
                             Button {
                                 showingChatView = true
 
-                                fetchExistingMessages(viewModel: viewModel) { result in
+                                Networking.shared.fetchExistingMessages(viewModel: viewModel) { result in
 
                                     switch(result) {
                                     case .success(_):
@@ -63,13 +63,13 @@ struct PartyCardView: View {
 							.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
                             //
                             Button {
-                                leaveParty(viewModel: viewModel)
+                                Networking.shared.leaveParty(viewModel: viewModel)
                             } label: {
 								Text("Leave Party")
                                     .bold()
 							}
 							.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
-                            
+
 						}
 					}
 					.frame(width: globalWidth)

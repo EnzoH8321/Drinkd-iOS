@@ -27,7 +27,7 @@ struct MasterView: View {
 
 					TabView(selection: $selectedTab) {
 						//
-						if (!viewModel.userDeniedLocationServices) {
+                        if (!Networking.shared.userDeniedLocationServices) {
 							HomeView()
 								.frame(width: globalWidth - 30 , height: globalHeight / 1.15)
 								.padding(.bottom, 30)
@@ -75,7 +75,7 @@ struct MasterView: View {
 						switch (tabVal) {
 						case 2 :
 							viewModel.removeImageUrls()
-							calculateTopThreeRestaurants(viewModel: viewModel) { result in
+                            Networking.shared.calculateTopThreeRestaurants(viewModel: viewModel) { result in
 								switch(result) {
 								case .success(_):
 									print("Success")

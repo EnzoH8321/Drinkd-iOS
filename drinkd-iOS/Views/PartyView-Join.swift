@@ -70,7 +70,7 @@ struct PartyView_Join: View {
                 
                 viewModel.JoinExistingParty(getCode: self.partyCode)
                 viewModel.setPersonalUserAndID(forName: self.username, forID: self.personalUserID)
-                fetchRestaurantsAfterJoiningParty(viewModel: viewModel) { result in
+                Networking.shared.fetchRestaurantsAfterJoiningParty(viewModel: viewModel) { result in
                     
                     switch(result) {
                     case .success( _):

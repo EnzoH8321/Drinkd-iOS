@@ -45,7 +45,7 @@ struct CustomLocationView: View {
 					print("Values are wrong")
 					return
 				}
-				fetchUsingCustomLocation(viewModel: viewModel,longitude: longitude, latitude: latitude) { result in
+                Networking.shared.fetchUsingCustomLocation(viewModel: viewModel,longitude: longitude, latitude: latitude) { result in
 
 					switch(result) {
 					case .success(_):

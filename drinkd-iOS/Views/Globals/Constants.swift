@@ -15,6 +15,6 @@ struct Constants {
     static let token: String = ProcessInfo.processInfo.environment["YELP_APIKEY"]!
 
     static var isPhone: Bool {
-        return UIDevice.current.userInterfaceIdiom == .phone
+        return UIDevice.current.userInterfaceIdiom == .phone        
     }
 }

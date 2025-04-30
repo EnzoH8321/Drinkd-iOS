@@ -54,7 +54,7 @@ struct drinkd_iOSApp: App {
                 .alert(isPresented: $showErrorAlert) {
                     Alert(title: Text("Error Retrieving User Location"), primaryButton: .default(Text("Retry"), action: {
                         viewModel.checkIfUserDeniedTracking()
-                        fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
+                        Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
 
                             switch(result) {
                             case .success(_):
@@ -74,7 +74,7 @@ struct drinkd_iOSApp: App {
 					if (Constants.isPhone) {
 						if #available(iOS 13, *) {
 							viewModel.checkIfUserDeniedTracking()
-							fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
+                            Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
 
 								switch(result) {
 								case .success(_):
@@ -83,7 +83,7 @@ struct drinkd_iOSApp: App {
 								case .failure(_):
 									print("Failed, initial data fetch was unsuccessful")
                                     //If it fails and user manually chooses to not share location, set the Alert and retry fetching the restaurants.
-                                    if (!viewModel.userDeniedLocationServices) {
+                                    if (!Networking.shared.userDeniedLocationServices) {
                                         showErrorAlert = true
                                     }
 								}
@@ -98,7 +98,7 @@ struct drinkd_iOSApp: App {
 
 					//TODO: We do this because on iPAD fetching on ios14 only works in on receive.... ipad ios 15 works normally
 					if (!Constants.isPhone) {
-						fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
+                        Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
 
 							switch(result) {
 							case .success(_):
@@ -133,7 +133,7 @@ struct drinkd_iOSApp: App {
 					}
 					//TODO: For ios 14 to fetch during first time startup, you must put this code here. After initial startup, ios 14 will never call this code again....
 					if (Constants.isPhone) {
-						fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
+                        Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
 
 							switch(result) {
 							case .success(_):
