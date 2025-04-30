@@ -332,7 +332,7 @@ final class Networking {
                         return $0.timestamp < $1.timestamp
                     }
                     completionHandler(.success(.connectionSuccess))
-                    viewModel.chatMessageList = sortedMessageArray
+                    viewModel.chatVM.chatMessageList = sortedMessageArray
                 }
             }
         })

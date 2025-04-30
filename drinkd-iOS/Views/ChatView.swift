@@ -22,8 +22,8 @@ struct ChatView: View {
                 ScrollViewReader { scrollView in
                     ScrollView {
                         VStack {
-                            ForEach(viewModel.chatMessageList, id: \.self) { messageObj in
-                                MessageView(username: messageObj.username, message: messageObj.message, messageChatID: messageObj.personalId, personalChatId: viewModel.personalUserID ,timestampString: messageObj.timestampString)
+                            ForEach(viewModel.chatVM.chatMessageList, id: \.self) { messageObj in
+                                MessageView(username: messageObj.username, message: messageObj.message, messageChatID: messageObj.personalId, personalChatId: viewModel.chatVM.personalUserID ,timestampString: messageObj.timestampString)
 
                             }
                         }
@@ -40,12 +40,12 @@ struct ChatView: View {
 
                             let stringifiedUUID = UUID().uuidString
                             let timeStamp = Date().currentTimeMillis()
-                            let message = FireBaseMessage(id: stringifiedUUID, username: viewModel.personalUserName, personalId: viewModel.personalUserID, message: messageString, timestamp: timeStamp, timestampString: Date().formatDate(forMilliseconds: timeStamp))
+                            let message = FireBaseMessage(id: stringifiedUUID, username: viewModel.chatVM.personalUserName, personalId: viewModel.chatVM.personalUserID, message: messageString, timestamp: timeStamp, timestampString: Date().formatDate(forMilliseconds: timeStamp))
 
                             Networking.shared.sendMessage(forMessage: message, viewModel: viewModel)
                             //Scrolls to the last message after hitting the button if not empty
-                            if (!viewModel.chatMessageList.isEmpty) {
-                                scrollView.scrollTo(viewModel.chatMessageList[viewModel.chatMessageList.endIndex - 1])
+                            if (!viewModel.chatVM.chatMessageList.isEmpty) {
+                                scrollView.scrollTo(viewModel.chatVM.chatMessageList[viewModel.chatVM.chatMessageList.endIndex - 1])
                             }
                             
                         }, label: {
@@ -73,8 +73,8 @@ struct ChatView_Previews: PreviewProvider {
 
 	static var previews: some View {
         let drinkd = PartyViewModel()
-		drinkd.chatMessageList = [FireBaseMessage(id: "34234", username: "Enzo", personalId: 35, message: "Hello Man, how are you doing? This is enzo. I am currently in LA. Why La you may as? well this is something", timestamp: 34, timestampString: "3434"), FireBaseMessage(id: "34234", username: "Enzo", personalId: 36, message: "Hello Man, how are you doing? This is enzo. I am currently in Alabama", timestamp: 34, timestampString: "3434")]
-        drinkd.setPersonalUserAndID(forName: "Enzo", forID: 35)
+        drinkd.chatVM.chatMessageList = [FireBaseMessage(id: "34234", username: "Enzo", personalId: 35, message: "Hello Man, how are you doing? This is enzo. I am currently in LA. Why La you may as? well this is something", timestamp: 34, timestampString: "3434"), FireBaseMessage(id: "34234", username: "Enzo", personalId: 36, message: "Hello Man, how are you doing? This is enzo. I am currently in Alabama", timestamp: 34, timestampString: "3434")]
+        drinkd.chatVM.setPersonalUserAndID(forName: "Enzo", forID: 35)
 		return ChatView()
 			.environment(drinkd)
 	}

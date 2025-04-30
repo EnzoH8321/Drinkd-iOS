@@ -44,10 +44,9 @@ class PartyViewModel {
     var firstChoice = FirebaseRestaurantInfo()
     var secondChoice = FirebaseRestaurantInfo()
     var thirdChoice = FirebaseRestaurantInfo()
-    //For chat
-    var personalUserName = ""
-    var personalUserID = 0
-    var chatMessageList: [FireBaseMessage] = []
+
+    var chatVM = ChatViewModel()
+    //
     var queryPartyError = false
     var removeSplashScreen = true
 
@@ -109,13 +108,6 @@ class PartyViewModel {
 
 
         })
-    }
-
-    //For chat
-    //TODO: Finish Chat Features
-    func setPersonalUserAndID(forName name: String, forID id: Int) {
-        self.personalUserName = name
-        self.personalUserID = id
     }
 
     //Used when a party is joined
