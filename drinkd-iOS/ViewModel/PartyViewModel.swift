@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import Firebase
+import drinkdSharedModels
 
 @Observable
 class PartyViewModel {
@@ -31,6 +32,7 @@ class PartyViewModel {
     var partyName: String?
     var partyTimestamp: Int?
     var partyURL: String?
+    var currentParty: Party?
     //Id for someone elses party
     var friendPartyId: String?
     var isPartyLeader: Bool = false

@@ -34,6 +34,7 @@
 		54C7BD0C2DC17D6800045D67 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 54C7BD0B2DC17D6800045D67 /* GoogleService-Info.plist */; };
 		54C7BD0E2DC1D88D00045D67 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C7BD0D2DC1D88D00045D67 /* Constants.swift */; };
 		54C7BD102DC2A2D300045D67 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C7BD0F2DC2A2D300045D67 /* ChatViewModel.swift */; };
+		54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */; };
 		54C8A4B5277431EE0090D968 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C8A4B4277431EE0090D968 /* Extensions.swift */; };
 		54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */; };
 		54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* MasterView.swift */; };
@@ -151,6 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5469AE882DBF0C7200A478F6 /* FirebaseMessaging in Frameworks */,
+				54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */,
 				5469AE842DBF0A9700A478F6 /* FirebaseDatabase in Frameworks */,
 				5469AE822DBF0A9700A478F6 /* FirebaseCore in Frameworks */,
 				5469AE862DBF0A9700A478F6 /* FirebaseFirestore in Frameworks */,
@@ -1024,6 +1026,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5469AE802DBF0A9700A478F6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
+		};
+		54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = drinkdSharedModels;
 		};
 /* End XCSwiftPackageProductDependency section */
 

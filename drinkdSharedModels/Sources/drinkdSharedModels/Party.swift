@@ -3,6 +3,11 @@
 
 import Foundation
 
-struct Party {
-
+public struct Party {
+    let partyLeader: String
+    let partyID: String
+    let partyMaxVotes : Int
+    let partyName: String
+    let timestamp: Int
+    let url: String
 }
