@@ -4,10 +4,10 @@
 import Foundation
 
 public struct Party {
-    let partyLeader: String
-    let partyID: String
-    let partyMaxVotes : Int
-    let partyName: String
-    let timestamp: Int
-    let url: String
+    public let partyLeaderID: String
+    public let partyID: String
+    public let partyMaxVotes : Int
+    public let partyName: String
+    public let timestamp: Int
+    public let url: String
 }
