@@ -13,4 +13,8 @@ struct Constants {
     static let ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
     //Hidden API KEY
     static let token: String = ProcessInfo.processInfo.environment["YELP_APIKEY"]!
+
+    static var isPhone: Bool {
+        return UIDevice.current.userInterfaceIdiom == .phone
+    }
 }

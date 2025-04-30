@@ -24,7 +24,6 @@ class drinkdViewModel {
     }
 
     var fcmToken: String = ""
-    var isPhone: Bool = true
     var currentCardIndex: Int = 9
     var currentlyInParty = false
     var partyId: String?
@@ -118,17 +117,6 @@ class drinkdViewModel {
 
 
         })
-    }
-
-    func setDeviceType() {
-        let isPhone =  UIDevice.current.userInterfaceIdiom == .phone
-
-        if (isPhone) {
-            findDeviceType(device: .phone)
-        } else {
-            findDeviceType(device: .ipad)
-        }
-
     }
 
     //Checks if the user accepted location services.
@@ -271,16 +259,6 @@ class drinkdViewModel {
         self.firstChoice.image_url = ""
         self.secondChoice.image_url = ""
         self.thirdChoice.image_url = ""
-    }
-
-    func findDeviceType(device: DeviceType) {
-
-        switch (device) {
-        case .phone:
-            self.isPhone = true
-        case .ipad:
-            self.isPhone = false
-        }
     }
 }
 

@@ -21,12 +21,12 @@ struct PartyView: View {
 						JoinOrCreatePartyButton(buttonName: "Join Party")
 					}
 					.padding(.bottom, 55)
-					.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+					.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 
 					NavigationLink(destination: PartyView_Create()) {
 						JoinOrCreatePartyButton(buttonName: "Create Party")
 					}
-					.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+					.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
                     Spacer()
 				}
 			} else {

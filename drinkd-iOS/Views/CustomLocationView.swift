@@ -59,7 +59,7 @@ struct CustomLocationView: View {
                 Text("Submit")
                     .bold()
             }
-			.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+			.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 			Spacer()
 		}
 	}

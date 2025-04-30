@@ -159,7 +159,7 @@ struct CardView: View {
                                                 openURL(url)
                                             }
                                             .bold()
-                                            .buttonStyle(viewModel.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
+                                            .buttonStyle(Constants.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
                                             .padding(.top, 20)
 
                                             Spacer()
@@ -196,7 +196,7 @@ struct CardView: View {
                             Spacer()
                         }
                         .bold()
-                        .buttonStyle(viewModel.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
+                        .buttonStyle(Constants.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
 
                         HStack {
                             Spacer()

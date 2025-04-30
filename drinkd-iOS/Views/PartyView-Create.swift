@@ -102,7 +102,7 @@ struct PartyView_Create: View {
             .alert(isPresented: $showAlert) {
                 Alert(title: Text("Error"), message: Text("Check for Valid Name or Vote Amount"))
             }
-            .buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+            .buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
         }
     }
     

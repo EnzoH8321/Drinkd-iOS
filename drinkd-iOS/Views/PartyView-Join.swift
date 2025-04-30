@@ -88,7 +88,7 @@ struct PartyView_Join: View {
             }.alert(isPresented: $viewModel.queryPartyError) {
                 Alert(title: Text("Error"), message: Text("Party Does not exist"))
             }
-            .buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+            .buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
         }
     }
     

@@ -60,7 +60,7 @@ struct PartyCardView: View {
                                 Text("Join Chat")
                                     .bold()
 							}
-							.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+							.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
                             //
                             Button {
                                 leaveParty(viewModel: viewModel)
@@ -68,7 +68,7 @@ struct PartyCardView: View {
 								Text("Leave Party")
                                     .bold()
 							}
-							.buttonStyle(viewModel.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+							.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
                             
 						}
 					}
