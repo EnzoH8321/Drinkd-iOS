@@ -11,6 +11,7 @@ struct HomeView: View {
     @Environment(drinkdViewModel.self) var viewModel
     // Used to manually refresh view
     @State var refreshView = false
+    @State var cardCounter = 9
 
 	var body: some View {
 		GeometryReader{ proxy in
@@ -20,7 +21,7 @@ struct HomeView: View {
                     //TODO: Find a way to refresh without having to toggle between card views.
 
                     ForEach(0..<viewModel.localRestaurants.count, id: \.self) { element in
-                        CardView(in: viewModel.localRestaurants[element], forView: self.viewModel)
+                        CardView(cardCounter: $cardCounter, in: viewModel.localRestaurants[element], forView: self.viewModel)
                             .stacked(at: element, in: viewModel.localRestaurants.count)
 
                     }
@@ -28,7 +29,7 @@ struct HomeView: View {
                 }
                 .id(refreshView)
 			}
-            .onChange(of: viewModel.counter) { oldValue, newValue in
+            .onChange(of: cardCounter) { oldValue, newValue in
                 if newValue == 0 {
                     // Used to Manually refresh view
                     refreshView.toggle()

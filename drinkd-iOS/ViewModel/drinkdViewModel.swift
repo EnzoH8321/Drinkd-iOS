@@ -25,7 +25,6 @@ class drinkdViewModel {
 
     var fcmToken: String = ""
     var isPhone: Bool = true
-    var counter: Int = 9
     var currentCardIndex: Int = 9
     var currentlyInParty = false
     var partyId: String?
@@ -169,14 +168,6 @@ class drinkdViewModel {
             localRestaurants.append(element)
             localRestaurantsDefault.append(element)
         }
-    }
-
-    func appendCardsToDecklist()  {
-
-        if (counter == 0) {
-            counter = localRestaurantsDefault.count
-        }
-        self.counter -= 1
     }
 
     func removeCardFromDeck() {
