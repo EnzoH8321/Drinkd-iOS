@@ -10,4 +10,13 @@ public struct Party {
     public let partyName: String
     public let timestamp: Int
     public let url: String
+
+    public init(partyLeaderID: String, partyID: String, partyMaxVotes: Int, partyName: String, timestamp: Int, url: String) {
+        self.partyLeaderID = partyLeaderID
+        self.partyID = partyID
+        self.partyMaxVotes = partyMaxVotes
+        self.partyName = partyName
+        self.timestamp = timestamp
+        self.url = url
+    }
 }
