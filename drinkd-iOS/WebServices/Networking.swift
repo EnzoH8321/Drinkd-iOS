@@ -322,7 +322,7 @@ func fetchExistingMessages(viewModel: drinkdViewModel, completionHandler: @escap
 					return $0.timestamp < $1.timestamp
 				}
 				completionHandler(.success(.connectionSuccess))
-				viewModel.fetchEntireMessageList(messageList: sortedMessageArray)
+				viewModel.chatMessageList = sortedMessageArray
 //				localReference.removeObserver(withHandle: dbHandle)
 			}
 		}

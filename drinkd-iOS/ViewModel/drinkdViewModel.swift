@@ -57,10 +57,6 @@ class drinkdViewModel {
     var userDeniedLocationServices = false
     var removeSplashScreen = true
 
-    private enum ErrorHanding: Error {
-        case businessArrayNotFound
-    }
-
     private enum FireBasePartyProps: String {
         case partyID, partyMaxVotes, partyName, partyTimestamp, partyURL
     }
@@ -120,7 +116,7 @@ class drinkdViewModel {
                     }
 
                     self.setUserLevel(level: .member)
-                    self.setPartyId()
+                    self.partyId = String(Int.random(in: 100...20000))
                     self.currentlyInParty = true
                     self.queryPartyError = false
                 }
@@ -151,11 +147,6 @@ class drinkdViewModel {
     func setPersonalUserAndID(forName name: String, forID id: Int) {
         self.personalUserName = name
         self.personalUserID = id
-    }
-
-
-    func fetchEntireMessageList(messageList: [FireBaseMessage]) {
-        chatMessageList = messageList
     }
 
     //Used when a party is joined
@@ -210,29 +201,7 @@ class drinkdViewModel {
         self.partyName = partyName
         self.partyTimestamp = Int(Date().timeIntervalSince1970 * 1000)
 
-
-        if let url = partyURL {
-            self.partyURL = url
-
-        }
-
-        guard let partyID = self.partyId else {
-            return
-        }
-
-        guard let partyMaxVotes = self.partyMaxVotes else {
-            return
-        }
-
-        guard let partyName = self.partyName else {
-            return
-        }
-
-        guard let partyTimestamp = self.partyTimestamp else {
-            return
-        }
-
-        guard let partyURL = self.partyURL else {
+        guard let partyID = self.partyId, let partyMaxVotes = self.partyMaxVotes, let partyName = self.partyName, let partyTimestamp = self.partyTimestamp, let partyURL = self.partyURL  else {
             return
         }
 
@@ -244,9 +213,7 @@ class drinkdViewModel {
 
     func joinParty( getVotes votes: Int? = nil,  getURL url: String? = nil) {
 
-        guard let validFriendPartyId = self.friendPartyId else {
-            return
-        }
+        guard let validFriendPartyId = self.friendPartyId else { return }
 
         if let partyVotes = votes {
             self.partyMaxVotes = partyVotes
@@ -259,11 +226,6 @@ class drinkdViewModel {
         self.ref.child("parties").child(validFriendPartyId).child("tokens").updateChildValues([fcmToken: fcmToken])
     }
 
-    func setPartyId() {
-        let partyIdString = String(Int.random(in: 100...20000))
-        self.partyId = partyIdString
-    }
-
     func addScoreToCard(points: Int) {
 
         if (points == currentScoreOfTopCard) {
@@ -273,14 +235,6 @@ class drinkdViewModel {
         self.currentScoreOfTopCard = points
 
         topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points, url: self.partyURL ?? "URL NOT FOUND")
-    }
-
-    func setCurrentTopCardScoreToZero() {
-        self.currentScoreOfTopCard = 0
-    }
-
-    func emptyTheTopBarList() {
-        self.topBarList.removeAll()
     }
 
     func appendTopThreeRestaurants(in array: [Dictionary<String, FireBaseTopChoice>.Element]) {
@@ -344,8 +298,3 @@ class drinkdViewModel {
     }
 }
 
-//struct drinkdViewModel_Previews: PreviewProvider {
-//	static var previews: some View {
-//		/*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
-//	}
-//}
