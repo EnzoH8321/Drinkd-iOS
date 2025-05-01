@@ -99,7 +99,7 @@ final class Networking {
                             viewModel.appendDeliveryOptions(in: JSONArray)
                         }
                         completionHandler(.success(.connectionSuccess))
-                        viewModel.createParty(setURL: url.absoluteString)
+                        viewModel.currentParty?.url = url.absoluteString
                         viewModel.removeSplashScreen = true
                         self.userDeniedLocationServices = false
                     }
@@ -141,7 +141,7 @@ final class Networking {
 
                         completionHandler(.success(.connectionSuccess))
                         viewModel.appendDeliveryOptions(in: JSONArray)
-                        viewModel.createParty(setURL: url.absoluteString)
+                        viewModel.currentParty?.url = url.absoluteString
                         viewModel.removeSplashScreen = true
                         self.userDeniedLocationServices = false
 
@@ -156,7 +156,7 @@ final class Networking {
     //Fetch restaurant after joining party
     func fetchRestaurantsAfterJoiningParty(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
-        guard let verifiedPartyURL = viewModel.partyURL else {
+        guard let verifiedPartyURL = viewModel.currentParty?.url else {
             print("No URL Found")
             completionHandler(.failure(.noURLFoundError))
             return
@@ -203,7 +203,7 @@ final class Networking {
 
     func calculateTopThreeRestaurants(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
-        let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("topBars")
+        let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.currentParty?.partyID : viewModel.friendPartyId)").child("topBars")
 
         var dbHandle = DatabaseHandle()
 
@@ -280,20 +280,20 @@ final class Networking {
 
         if (viewModel.isPartyLeader) {
 
-            localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.partyId)")
-            localReference.child("topBars").child(viewModel.partyId ?? "No Party ID not Found").child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
+            localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.currentParty?.partyID)")
+            localReference.child("topBars").child(viewModel.currentParty?.partyID ?? "No Party ID not Found").child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
 
         } else if (!viewModel.isPartyLeader) {
 
             localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.friendPartyId)")
-            localReference.child("topBars").child(viewModel.partyId ?? "No Party ID not Found" ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
+            localReference.child("topBars").child(viewModel.currentParty?.partyID ?? "No Party ID not Found" ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
         }
     }
 
     //Fetches chat messages from server
     func fetchExistingMessages(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
 
-        let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages")
+        let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.currentParty?.partyID : viewModel.friendPartyId)").child("messages")
 
         var dbHandle = DatabaseHandle()
 
@@ -342,7 +342,7 @@ final class Networking {
 
     //Removes Messaging observers
     func removeMessagingObserver(viewModel: PartyViewModel) {
-        let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages")
+        let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.currentParty?.partyID : viewModel.friendPartyId)").child("messages")
 
         localReference.removeAllObservers()
     }
@@ -350,7 +350,7 @@ final class Networking {
     //Sends a new message to the server
     func sendMessage(forMessage message: FireBaseMessage, viewModel: PartyViewModel ) {
 
-        let localReference =  Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages")
+        let localReference =  Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.currentParty?.partyID : viewModel.friendPartyId)").child("messages")
 
         localReference.child("\(message.id)").setValue(["id": message.id, "username": message.username, "personalId": message.personalId, "message": message.message, "timestamp": message.timestamp, "timestampString": Date().formatDate(forMilliseconds: message.timestamp)])
 
@@ -372,11 +372,11 @@ final class Networking {
 
 
         if (viewModel.isPartyLeader) {
-            let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.partyId)")
+            let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.currentParty?.partyID)")
             localReference.removeValue()
 
         } else if (!viewModel.isPartyLeader) {
-            let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.partyId)").child("topBars").child("\(viewModel.friendPartyId)")
+            let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.currentParty?.partyID)").child("topBars").child("\(viewModel.friendPartyId)")
             localReference.removeValue()
         }
 

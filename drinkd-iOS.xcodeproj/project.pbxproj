@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -35,6 +35,7 @@
 		54C7BD0E2DC1D88D00045D67 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C7BD0D2DC1D88D00045D67 /* Constants.swift */; };
 		54C7BD102DC2A2D300045D67 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C7BD0F2DC2A2D300045D67 /* ChatViewModel.swift */; };
 		54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */; };
+		54C7BD222DC2E22F00045D67 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 54C7BD212DC2E22F00045D67 /* drinkdSharedModels */; };
 		54C8A4B5277431EE0090D968 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C8A4B4277431EE0090D968 /* Extensions.swift */; };
 		54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */; };
 		54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* MasterView.swift */; };
@@ -156,6 +157,7 @@
 				5469AE842DBF0A9700A478F6 /* FirebaseDatabase in Frameworks */,
 				5469AE822DBF0A9700A478F6 /* FirebaseCore in Frameworks */,
 				5469AE862DBF0A9700A478F6 /* FirebaseFirestore in Frameworks */,
+				54C7BD222DC2E22F00045D67 /* drinkdSharedModels in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,6 +476,7 @@
 			mainGroup = 54F9C7FC26FBB536008FA516;
 			packageReferences = (
 				5469AE802DBF0A9700A478F6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				54C7BD202DC2E22F00045D67 /* XCLocalSwiftPackageReference "drinkdSharedModels" */,
 			);
 			productRefGroup = 54F9C80626FBB536008FA516 /* Products */;
 			projectDirPath = "";
@@ -995,6 +998,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		54C7BD202DC2E22F00045D67 /* XCLocalSwiftPackageReference "drinkdSharedModels" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = drinkdSharedModels;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		5469AE802DBF0A9700A478F6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1028,6 +1038,10 @@
 			productName = FirebaseMessaging;
 		};
 		54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = drinkdSharedModels;
+		};
+		54C7BD212DC2E22F00045D67 /* drinkdSharedModels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = drinkdSharedModels;
 		};

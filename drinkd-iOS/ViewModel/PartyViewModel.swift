@@ -27,11 +27,6 @@ class PartyViewModel {
     var fcmToken: String = ""
     var currentCardIndex: Int = 9
     var currentlyInParty = false
-    var partyId: String?
-    var partyMaxVotes: Int?
-    var partyName: String?
-    var partyTimestamp: Int?
-    var partyURL: String?
     var currentParty: Party?
     //Id for someone elses party
     var friendPartyId: String?
@@ -54,12 +49,6 @@ class PartyViewModel {
 
     private enum FireBasePartyProps: String {
         case partyID, partyMaxVotes, partyName, partyTimestamp, partyURL
-    }
-
-    //called when the create party button in the create party screen in pushed
-    func createNewParty(setVotes partyVotes: Int? = nil, setName partyName: String? = nil) {
-        createParty(setVotes: partyVotes, setName: partyName)
-        self.currentlyInParty = true
     }
 
     func JoinExistingParty(getCode partyCode: String) {
@@ -92,7 +81,8 @@ class PartyViewModel {
 
                         case FireBasePartyProps.partyName.rawValue:
 //                            self.setPartyName(name: valueProperty as? String)
-                            self.partyName = valueProperty as? String
+                            self.currentParty?.partyName = valueProperty as? String ?? "ERROR"
+
                         case FireBasePartyProps.partyURL.rawValue:
                             self.joinParty(getURL: valueProperty as? String)
 
@@ -102,7 +92,7 @@ class PartyViewModel {
                     }
 
                     self.setUserLevel(level: .member)
-                    self.partyId = String(Int.random(in: 100...20000))
+                    self.currentParty?.partyID = String(Int.random(in: 100...20000))
                     self.currentlyInParty = true
                     self.queryPartyError = false
                 }
@@ -148,22 +138,20 @@ class PartyViewModel {
         }
     }
 
-    func createParty(setVotes partyVotes: Int? = nil, setName partyName: String? = nil, setURL partyURL: String? = nil) {
+    func createParty(leaderID: String ,setVotes partyVotes: Int, setName partyName: String) {
 
         self.fcmToken = AppDelegate.fcmToken
-        self.partyId = String(Int.random(in: 100...20000))
-        self.partyMaxVotes = partyVotes
-        self.partyName = partyName
-        self.partyTimestamp = Int(Date().timeIntervalSince1970 * 1000)
+        currentParty?.partyID = String(Int.random(in: 100...20000))
+        self.currentParty?.partyMaxVotes = partyVotes
+        currentParty?.partyName = partyName
+        currentParty?.timestamp = Int(Date().timeIntervalSince1970 * 1000)
 
-        guard let partyID = self.partyId, let partyMaxVotes = self.partyMaxVotes, let partyName = self.partyName, let partyTimestamp = self.partyTimestamp, let partyURL = self.partyURL  else {
-            return
-        }
+        guard let party = self.currentParty else { return }
 
         //TODO: Messages set to string, can this be improved?
-        Constants.ref.child("parties").child(partyID).setValue(["partyTimestamp": partyTimestamp, "partyID": partyID, "partyMaxVotes": partyMaxVotes, "partyName": partyName, "partyURL": partyURL, "tokens": [fcmToken: fcmToken]])
+        Constants.ref.child("parties").child(party.partyID).setValue(["partyTimestamp": party.timestamp, "partyID": party.partyID, "partyMaxVotes": party.partyMaxVotes, "partyName": partyName, "partyURL": party.url, "tokens": [fcmToken: fcmToken]])
         self.setUserLevel(level: .creator)
-
+        self.currentlyInParty = true
     }
 
     func joinParty( getVotes votes: Int? = nil,  getURL url: String? = nil) {
@@ -171,11 +159,11 @@ class PartyViewModel {
         guard let validFriendPartyId = self.friendPartyId else { return }
 
         if let partyVotes = votes {
-            self.partyMaxVotes = partyVotes
+            currentParty?.partyMaxVotes = partyVotes
         }
 
         if let siteURL = url {
-            self.partyURL = siteURL
+            currentParty?.url = siteURL
         }
 
         Constants.ref.child("parties").child(validFriendPartyId).child("tokens").updateChildValues([fcmToken: fcmToken])
@@ -189,7 +177,7 @@ class PartyViewModel {
 
         self.currentScoreOfTopCard = points
 
-        topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points, url: self.partyURL ?? "URL NOT FOUND")
+        topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points, url: self.currentParty?.url ?? "URL NOT FOUND")
     }
 
     func appendTopThreeRestaurants(in array: [Dictionary<String, FireBaseTopChoice>.Element]) {
@@ -233,7 +221,7 @@ class PartyViewModel {
         self.firstChoice = FirebaseRestaurantInfo()
         self.secondChoice = FirebaseRestaurantInfo()
         self.thirdChoice = FirebaseRestaurantInfo()
-        self.partyId = ""
+        currentParty?.partyID = ""
     }
 
     func removeImageUrls(){

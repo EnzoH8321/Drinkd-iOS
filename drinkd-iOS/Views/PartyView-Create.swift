@@ -90,7 +90,7 @@ struct PartyView_Create: View {
                     return
                     
                 } else {
-                    viewModel.createNewParty(setVotes: self.votes, setName: self.partyName)
+                    viewModel.createParty(leaderID: String(personalUserID) ,setVotes: self.votes, setName: self.partyName)
                     viewModel.chatVM.setPersonalUserAndID(forName: self.userName, forID: self.personalUserID)
                     showAlert = false
                 }
