@@ -8,8 +8,24 @@
 
 import Foundation
 
+public enum TableTypes {
+    case parties
+
+    public var tableName: String {
+        switch self {
+        case .parties:
+            return "Parties"
+        }
+    }
+}
+
+public protocol SupaBaseTable {
+
+}
+
+
 // For tables
-public struct PartiesTable: Encodable, Sendable {
+public struct PartiesTable: Codable, Sendable, SupaBaseTable {
     let id: UUID
     let date_created: String
     let members: [UUID]

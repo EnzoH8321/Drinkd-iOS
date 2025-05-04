@@ -11,7 +11,7 @@ import drinkdSharedModels
 
 @Observable
 final class SupaBase {
-    let client = SupabaseClient(
+    private let client = SupabaseClient(
       supabaseURL: URL(string: "https://jdkdtahoqpsspesqyojb.supabase.co")!,
       supabaseKey: ProcessInfo.processInfo.environment["SUPABASE_KEY"]!
     )
@@ -20,10 +20,11 @@ final class SupaBase {
         let dateString = Date().ISO8601Format()
         let party = PartiesTable(id: UUID(), date_created: dateString, members: [], chat: UUID(), code: 345344)
         do {
-         let test =    try await client
+         let test =  try await client
               .from("Parties")
               .insert(party)
               .execute()
+              .value
 
             print("Success - \(test)")
         } catch {
@@ -31,5 +32,29 @@ final class SupaBase {
         }
     }
 
-    
+    func readDataFromTable(tableType: TableTypes) async {
+
+        do {
+            switch tableType {
+
+            case .parties:
+               let response = try await client
+                    .from(tableType.tableName)
+                    .select()
+                    .execute()
+
+
+                if let partiesArray = try? JSONDecoder().decode([PartiesTable].self, from: Data(response.data)) {
+                    print("parties array - \(partiesArray)")
+                } else {
+                    throw Error
+                }
+            }
+        } catch {
+            print("ERROR READING FROM TABLE")
+        }
+
+    }
+
+
 }

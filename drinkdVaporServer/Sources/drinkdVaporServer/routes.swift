@@ -9,7 +9,7 @@ app.get { req async in
     }
 
     app.get("test") { req async -> String in
-        await supabase.insertData()
+        await supabase.readDataFromTable(tableType: .parties)
        return "Hello, world!"
     }
 }
