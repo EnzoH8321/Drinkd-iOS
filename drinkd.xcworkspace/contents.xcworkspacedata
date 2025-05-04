@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:drinkdVaporServer">
+   </FileRef>
+   <FileRef
       location = "group:drinkdSharedModels">
    </FileRef>
    <FileRef
