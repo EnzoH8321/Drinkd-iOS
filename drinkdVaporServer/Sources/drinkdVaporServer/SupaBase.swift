@@ -32,28 +32,60 @@ final class SupaBase {
         }
     }
 
-    func readDataFromTable(tableType: TableTypes) async {
+    func readDataFromTable<T: SupaBaseTable>(tableType: TableTypes) async -> [T]? {
 
         do {
             switch tableType {
 
             case .parties:
-               let response = try await client
+                let response = try await client
                     .from(tableType.tableName)
                     .select()
                     .execute()
 
+                guard let partiesArray = try? JSONDecoder().decode([PartiesTable].self, from: Data(response.data)) else { throw Errors.SupaBase.Data.decodingError }
 
-                if let partiesArray = try? JSONDecoder().decode([PartiesTable].self, from: Data(response.data)) {
-                    print("parties array - \(partiesArray)")
-                } else {
-                    throw Error
-                }
+                return partiesArray as? [T]
+
             }
+
         } catch {
-            print("ERROR READING FROM TABLE")
+            print("Error - \(error)")
+            return nil
         }
 
+    }
+    // Upsert a record to a table
+    // Upsert inserts a new record if one does not exist, otherwise update it
+    func upsertDataToTable<T: SupaBaseTable>(tableType: TableTypes, data: T) async {
+
+        do {
+
+            switch tableType {
+            case .parties:
+
+                guard let partyData = data as? PartiesTable else { throw Errors.SupaBase.Data.castingError }
+
+                try await client.from(tableType.tableName).upsert(partyData).execute()
+            }
+
+        } catch {
+            print("Error - \(error)")
+        }
+
+    }
+
+    // Delete a record in a table
+    func deleteDataFromTable(fromTable: TableTypes, id: UUID) async {
+
+        do {
+            switch fromTable {
+            case .parties:
+                try await client.from(fromTable.tableName).delete().eq("id", value: id).execute()
+            }
+        } catch {
+            print("Error - \(error)")
+        }
     }
 
 
