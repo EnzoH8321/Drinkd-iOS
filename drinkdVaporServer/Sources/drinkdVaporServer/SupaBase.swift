@@ -32,35 +32,59 @@ final class SupaBase {
 
     }
 
-     func readDataFromTable<T: SupaBaseTable>(tableType: TableTypes) async -> [T]? {
+    func manuallyDeleteParty(leaderID: UUID, partyID: UUID) async {
+        // Check if the party still exists in the parties table & if the person deleting is the party leader
+        let parties = await getAllRecordsFromTable(tableType: .parties, dictionary: ["party_leader": "\(leaderID)"])
 
+        if parties.isEmpty {
+            print("No Parties Found")
+            return
+        }
+
+        if parties.count > 1 {
+            print("Party Leader is the leader of muiltiple parties")
+            return
+        }
+
+        // Happy Path
+        await deleteDataFromTable(fromTable: .parties, partyID: partyID, partyLeader: leaderID)
+
+    }
+
+    // Dictionary represents filters. [column name: value to filter for]
+    func getAllRecordsFromTable(tableType: TableTypes, dictionary: [String: String] = [:]) async -> [any SupaBaseTable] {
+
+        let columnsToFilterFor: String = dictionary.keys.map {"\($0), "}.joined()
+        
         do {
             switch tableType {
 
             case .parties:
                 let response = try await client
                     .from(tableType.tableName)
-                    .select()
+                    .select(dictionary.count == 0 ? "*" : columnsToFilterFor)
+                    .match(dictionary)
                     .execute()
 
                 guard let partiesArray = try? JSONDecoder().decode([PartiesTable].self, from: Data(response.data)) else { throw Errors.SupaBase.Data.decodingError }
 
-                return partiesArray as? [T]
+                return partiesArray
 
             case .users:
                 let response = try await client
                     .from(tableType.tableName)
-                    .select()
+                    .select(dictionary.count == 0 ? "*" : columnsToFilterFor)
+                    .match(dictionary)
                     .execute()
 
                 guard let usersArray = try? JSONDecoder().decode([UsersTable].self, from: Data(response.data)) else { throw Errors.SupaBase.Data.decodingError }
 
-                return usersArray as? [T]
+                return usersArray
             }
 
         } catch {
             print("Error - \(error)")
-            return nil
+            return []
         }
 
     }
@@ -89,13 +113,31 @@ final class SupaBase {
     }
 
     // Delete a record in a table
-     func deleteDataFromTable(fromTable: TableTypes, id: UUID) async {
+    func deleteDataFromTable(fromTable: TableTypes, partyID: UUID, partyLeader: UUID?) async {
 
-        do {
-            try await client.from(fromTable.tableName).delete().eq("id", value: id).execute()
-        } catch {
-            print("Error - \(error)")
+        switch fromTable {
+        case .parties:
+
+            guard let validLeaderID = partyLeader else {
+                print("Invalid Leader ID passed in")
+                return
+            }
+
+            do {
+                try await client.from(fromTable.tableName).delete().eq("party_leader", value: validLeaderID).execute()
+            } catch {
+                print("Error - \(error)")
+            }
+
+        case .users:
+            do {
+                try await client.from(fromTable.tableName).delete().eq("id", value: partyID).execute()
+            } catch {
+                print("Error - \(error)")
+            }
         }
+
+
     }
 
 
