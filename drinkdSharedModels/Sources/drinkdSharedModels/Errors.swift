@@ -16,9 +16,9 @@ public enum Errors: Error {
         }
         
         public enum Data: Error {
-            case decodingError
             case castingError
         }
+
     }
 
 }

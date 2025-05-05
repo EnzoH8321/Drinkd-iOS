@@ -29,11 +29,11 @@ public protocol SupaBaseTable {
 
 // For tables
 public struct PartiesTable: Codable, Sendable, SupaBaseTable {
-    let id: UUID
-    let date_created: String
-    let party_leader: UUID
-    let members: [UUID]
-    let code: Int
+    let id: UUID?
+    let date_created: String?
+    let party_leader: UUID?
+    let members: [UUID]?
+    let code: Int?
 
     public init(id: UUID, partyLeader: UUID, date_created: String, members: [UUID], code: Int) {
         self.id = id
