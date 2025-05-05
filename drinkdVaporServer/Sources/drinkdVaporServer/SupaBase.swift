@@ -34,7 +34,7 @@ final class SupaBase {
 
     func manuallyDeleteParty(leaderID: UUID, partyID: UUID) async {
         // Check if the party still exists in the parties table & if the person deleting is the party leader
-        let parties = await getAllRecordsFromTable(tableType: .parties, dictionary: ["party_leader": "\(leaderID)"])
+        let parties = await getAllRecordsFromTable(tableType: .parties, dictionary: ["party_leader": leaderID])
 
         if parties.isEmpty {
             print("No Parties Found")
@@ -52,10 +52,10 @@ final class SupaBase {
     }
 
     // Dictionary represents filters. [column name: value to filter for]
-    func getAllRecordsFromTable(tableType: TableTypes, dictionary: [String: String] = [:]) async -> [any SupaBaseTable] {
+    func getAllRecordsFromTable(tableType: TableTypes, dictionary: [String: any PostgrestFilterValue] = [:]) async -> [any SupaBaseTable] {
 
-        let columnsToFilterFor: String = dictionary.keys.map {"\($0), "}.joined()
-        
+        let columnsToFilterFor: String = dictionary.keys.map {"\($0)"}.joined(separator: "'")
+
         do {
             switch tableType {
 
@@ -66,7 +66,7 @@ final class SupaBase {
                     .match(dictionary)
                     .execute()
 
-                guard let partiesArray = try? JSONDecoder().decode([PartiesTable].self, from: Data(response.data)) else { throw Errors.SupaBase.Data.decodingError }
+                let partiesArray = try JSONDecoder().decode([PartiesTable].self, from: Data(response.data))
 
                 return partiesArray
 
@@ -77,7 +77,7 @@ final class SupaBase {
                     .match(dictionary)
                     .execute()
 
-                guard let usersArray = try? JSONDecoder().decode([UsersTable].self, from: Data(response.data)) else { throw Errors.SupaBase.Data.decodingError }
+                let usersArray = try JSONDecoder().decode([UsersTable].self, from: Data(response.data))
 
                 return usersArray
             }
