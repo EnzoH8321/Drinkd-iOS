@@ -1,5 +1,9 @@
-// The Swift Programming Language
-// https://docs.swift.org/swift-book
+//
+//  File.swift
+//  drinkdSharedModels
+//
+//  Created by Enzo Herrera on 5/4/25.
+//
 
 import Foundation
 
@@ -20,3 +24,5 @@ public struct Party {
         self.url = url
     }
 }
+
+
