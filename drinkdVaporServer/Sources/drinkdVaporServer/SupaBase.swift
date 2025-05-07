@@ -43,31 +43,25 @@ final class SupaBase {
     private func checkMatching(tableType: TableTypes, dictionary: [String: any PostgrestFilterValue] = [:]) async throws -> Bool {
 
         let columnsToFilterFor: String = dictionary.keys.map {"\($0)"}.joined(separator: "'")
+        let response = try await client
+            .from(tableType.tableName)
+            .select(dictionary.count == 0 ? "*" : columnsToFilterFor)
+            .match(dictionary)
+            .execute()
 
         do {
             switch tableType {
 
             case .parties:
-                let response = try await client
-                    .from(tableType.tableName)
-                    .select(dictionary.count == 0 ? "*" : columnsToFilterFor)
-                    .match(dictionary)
-                    .execute()
 
                 let partiesArray = try JSONDecoder().decode([PartiesTable].self, from: Data(response.data))
-
                 return partiesArray.count > 0 ? true : false
 
             case .users:
-                let response = try await client
-                    .from(tableType.tableName)
-                    .select(dictionary.count == 0 ? "*" : columnsToFilterFor)
-                    .match(dictionary)
-                    .execute()
 
                 let usersArray = try JSONDecoder().decode([UsersTable].self, from: Data(response.data))
-
                 return usersArray.count > 0 ? true : false
+
             }
 
         } catch {
@@ -84,13 +78,14 @@ final class SupaBase {
             switch tableType {
             case .parties:
 
-                guard let partyData = data as? PartiesTable else { throw Errors.SupaBase.Data.castingError }
+                guard let partyData = data as? PartiesTable else { throw Errors.SupaBase.castingError("Unable to convert data to PartiesTable") }
 
                 try await client.from(tableType.tableName).upsert(partyData).execute()
             case .users:
-                guard let usersData = data as? UsersTable else { throw Errors.SupaBase.Data.castingError }
+                guard let usersData = data as? UsersTable else { throw Errors.SupaBase.castingError("Unable to convert data to UsersTable") }
 
                 try await client.from(tableType.tableName).upsert(usersData).execute()
+
             }
 
         } catch {
@@ -129,21 +124,64 @@ final class SupaBase {
 
 
     }
+
+    func fetchRow(tableType: TableTypes, dictionary: [String: any PostgrestFilterValue] = [:]) async throws -> [any SupaBaseTable] {
+        let columnsToFilterFor: String = dictionary.keys.map {"\($0)"}.joined(separator: "'")
+        let response = try await client
+            .from(tableType.tableName)
+            .select(dictionary.count == 0 ? "*" : columnsToFilterFor)
+            .match(dictionary)
+            .execute()
+
+        do {
+            switch tableType {
+
+            case .parties:
+
+                let partiesArray = try JSONDecoder().decode([PartiesTable].self, from: Data(response.data))
+                return partiesArray
+
+            case .users:
+
+                let usersArray = try JSONDecoder().decode([UsersTable].self, from: Data(response.data))
+                return usersArray
+            }
+
+        } catch {
+            throw error
+        }
+    }
+
 }
 
-// Routes Calls
+//MARK: Specific - Parties Table
+extension SupaBase {
+    func addMemberToParty(partyID: UUID, userID: UUID) async throws {
+//        try await client.from(TableTypes.parties.tableName).update(<#T##values: Encodable & Sendable##Encodable & Sendable#>)
+    }
+}
+
+
+//MARK: Routes Calls
 extension SupaBase {
 
     /// Creates a Party
     func createAParty(leaderID: UUID, userName: String) async throws {
         do {
-            // Add to Users Table
-            let user = UsersTable(id: leaderID, username: userName, date_created: Date().ISO8601Format())
-            try await client.from(TableTypes.users.tableName).upsert(user).execute()
+
             // Add to Parties Table
-            let randomInt = Int.random(in: 100000..<999000)
-            let party = PartiesTable(id: UUID(), partyLeader: leaderID, date_created: Date().ISO8601Format(), members: [leaderID], code: randomInt)
+            let randomInt = Int.random(in: 100000..<999999)
+            let partyID = UUID()
+            let party = PartiesTable(id: partyID, partyLeader: leaderID, date_created: Date().ISO8601Format(), code: randomInt)
+            // Add to Party Members Table
             try await client.from(TableTypes.parties.tableName).upsert(party).execute()
+
+            // Add to Users Table
+            let user = UsersTable(id: leaderID, username: userName, date_created: Date().ISO8601Format(), memberOfParty: partyID)
+            try await client.from(TableTypes.users.tableName).upsert(user).execute()
+
+
+
         } catch {
             print("Error - \(error)")
             throw error
@@ -177,4 +215,74 @@ extension SupaBase {
             throw error
         }
     }
+
+    // Join a Party
+    // Only works if you are not party leader, a party leader cannot join a party
+    // Party Code should be six digits.
+    // User should not be in another party
+    func joinParty(username: String, partyCode: Int) async throws {
+//        let user = UsersTable(id: UUID(), username: username, date_created: Date().ISO8601Format(), memberOfParty: nil)
+        // Check that party code is six digits
+        if partyCode < 100000 || partyCode > 999999 {
+            throw Errors.SupaBase.invalidPartyCode
+        }
+
+        // Find party using the party code
+        do {
+
+            guard let row = try await fetchRow(tableType: .parties, dictionary: ["code": partyCode]) as? [PartiesTable] else {
+                throw Errors.SupaBase.castingError("Unable to cast row as parties table")
+            }
+
+            guard let partyTable = row.first else {
+                print("Row is Empty")
+                return
+            }
+
+            guard let validPartyID = partyTable.id else {
+                print("Invalid Party ID")
+                return
+            }
+
+
+
+            // Happy Path, party exists with that code, get party ID
+            let partyID = validPartyID
+            let userID = UUID()
+            let user = UsersTable(id: userID, username: username, date_created: Date().ISO8601Format(), memberOfParty: partyID)
+            // Add to users table. This user will have a foreign key that traces back to the party
+            try await upsertDataToTable(tableType: .users, data: user)
+
+
+
+        } catch {
+            print(error)
+        }
+
+//        // Check that the user joining is not the party leader of any parties
+//        let isPartyLeader = try await checkMatching(tableType: .parties, dictionary: ["party_leader": user.id])
+//
+//        if isPartyLeader {
+//            throw Errors.SupaBase.partyLeaderCannotJoinAParty
+//        }
+//
+//        // Check that the user is currently not a member of another party
+//        let isInAnotherParty = try await checkMatching(tableType: .parties, searchArrayFor: user.id)
+//
+//        if isInAnotherParty {
+//            throw Errors.SupaBase.userIsAlreadyInAParty
+//        }
+
+
+
+    }
+
+    // Creates a User
+    // Users are tied to parties
+    // User is created on the server.
+    // Only thing client should provide is the username
+    // When a person leaves a party, the user should be destroyed
+//    func createUser(username: String) -> UsersTable {
+//        return UsersTable(id: UUID(), username: username, date_created: Date().ISO8601Format(), memberOfParty: nil)
+//    }
 }

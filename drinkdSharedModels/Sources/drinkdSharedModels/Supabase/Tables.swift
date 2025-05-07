@@ -17,8 +17,7 @@ public enum TableTypes {
         case .parties:
             return "Parties"
         case .users:
-            return "Users"
-        }
+            return "Users"}
     }
 }
 
@@ -29,29 +28,29 @@ public protocol SupaBaseTable {
 
 // For tables
 public struct PartiesTable: Codable, Sendable, SupaBaseTable {
-    let id: UUID?
-    let date_created: String?
-    let party_leader: UUID?
-    let members: [UUID]?
-    let code: Int?
+    public let id: UUID?
+    public let date_created: String?
+    public let party_leader: UUID?
+    public let code: Int?
 
-    public init(id: UUID, partyLeader: UUID, date_created: String, members: [UUID], code: Int) {
+    public init(id: UUID, partyLeader: UUID, date_created: String, code: Int) {
         self.id = id
         self.party_leader = partyLeader
         self.date_created = date_created
-        self.members = members
         self.code = code
     }
 }
 
 public struct UsersTable: Codable, Sendable, SupaBaseTable {
-    let id: UUID
-    let date_created: String
-    let username: String
+    public let id: UUID
+    public let date_created: String
+    public let username: String
+    public let memberOfParty: UUID
 
-    public init(id: UUID, username: String, date_created: String) {
+    public init(id: UUID, username: String, date_created: String, memberOfParty: UUID) {
         self.id = id
         self.username = username
         self.date_created = date_created
+        self.memberOfParty = memberOfParty
     }
 }

@@ -11,14 +11,10 @@ public enum Errors: Error {
 
     public enum SupaBase: Error {
 
-        public enum Networking: Error {
-
-        }
-        
-        public enum Data: Error {
-            case castingError
-        }
-
+        case castingError(String)
+        case invalidPartyCode
+        case partyLeaderCannotJoinAParty
+        case userIsAlreadyInAParty
     }
 
 }
