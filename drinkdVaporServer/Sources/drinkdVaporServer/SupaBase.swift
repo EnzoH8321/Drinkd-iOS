@@ -81,16 +81,16 @@ final class SupaBase {
             switch tableType {
             case .parties:
 
-                guard let partyData = data as? PartiesTable else { throw Errors.SupaBase.castingError("Unable to convert data to PartiesTable") }
+                guard let partyData = data as? PartiesTable else { throw SharedErrors.SupaBase.castingError("Unable to convert data to PartiesTable") }
 
                 try await client.from(tableType.tableName).upsert(partyData).execute()
             case .users:
-                guard let usersData = data as? UsersTable else { throw Errors.SupaBase.castingError("Unable to convert data to UsersTable") }
+                guard let usersData = data as? UsersTable else { throw SharedErrors.SupaBase.castingError("Unable to convert data to UsersTable") }
 
                 try await client.from(tableType.tableName).upsert(usersData).execute()
 
             case .messages:
-                guard let messagesData = data as? MessagesTable else { throw Errors.SupaBase.castingError("Unable to convert data to MessagesTable")}
+                guard let messagesData = data as? MessagesTable else { throw SharedErrors.SupaBase.castingError("Unable to convert data to MessagesTable")}
 
                 try await client.from(tableType.tableName).upsert(messagesData).execute()
             }
@@ -182,7 +182,7 @@ extension SupaBase {
 extension SupaBase {
 
     /// Creates a Party
-    func createAParty(leaderID: UUID, userName: String) async throws {
+    func createAParty(leaderID: UUID, userName: String) async throws -> PartiesTable {
         do {
 
             // Add to Parties Table
@@ -196,8 +196,8 @@ extension SupaBase {
             let user = UsersTable(id: leaderID, username: userName, date_created: Date().ISO8601Format(), memberOfParty: partyID)
             try await client.from(TableTypes.users.tableName).upsert(user).execute()
 
-
-
+            
+            return party
         } catch {
             print("Error - \(error)")
             throw error
@@ -240,14 +240,14 @@ extension SupaBase {
 //        let user = UsersTable(id: UUID(), username: username, date_created: Date().ISO8601Format(), memberOfParty: nil)
         // Check that party code is six digits
         if partyCode < 100000 || partyCode > 999999 {
-            throw Errors.SupaBase.invalidPartyCode
+            throw SharedErrors.SupaBase.invalidPartyCode
         }
 
         // Find party using the party code
         do {
 
             guard let row = try await fetchRow(tableType: .parties, dictionary: ["code": partyCode]) as? [PartiesTable] else {
-                throw Errors.SupaBase.castingError("Unable to cast row as parties table")
+                throw SharedErrors.SupaBase.castingError("Unable to cast row as parties table")
             }
 
             guard let partyTable = row.first else {
@@ -281,7 +281,7 @@ extension SupaBase {
         do {
             // We need to get the party ID from the user row
             guard let users = try await fetchRow(tableType: .users, dictionary: ["id": userID]) as? [UsersTable] else {
-                throw Errors.SupaBase.castingError("Unable to cast row as users table")
+                throw SharedErrors.SupaBase.castingError("Unable to cast row as users table")
             }
 
             guard let user = users.first else {
