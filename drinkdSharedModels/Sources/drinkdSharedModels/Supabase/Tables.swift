@@ -11,13 +11,17 @@ import Foundation
 public enum TableTypes {
     case parties
     case users
+    case messages
 
     public var tableName: String {
         switch self {
         case .parties:
             return "Parties"
         case .users:
-            return "Users"}
+            return "Users"
+        case .messages:
+            return "Messages"
+        }
     }
 }
 
@@ -45,12 +49,28 @@ public struct UsersTable: Codable, Sendable, SupaBaseTable {
     public let id: UUID
     public let date_created: String
     public let username: String
-    public let memberOfParty: UUID
+    public let party_id: UUID
 
     public init(id: UUID, username: String, date_created: String, memberOfParty: UUID) {
         self.id = id
         self.username = username
         self.date_created = date_created
-        self.memberOfParty = memberOfParty
+        self.party_id = memberOfParty
+    }
+}
+
+public struct MessagesTable: Codable, Sendable, SupaBaseTable {
+    public let id: UUID
+    public let date_created: String
+    public let party_id: UUID
+    public let text: String
+    public let user_id: UUID
+
+    public init(id: UUID, partyId: UUID, date_created: String, text: String, userId: UUID) {
+        self.id = id
+        self.party_id = partyId
+        self.date_created = date_created
+        self.text = text
+        self.user_id = userId
     }
 }

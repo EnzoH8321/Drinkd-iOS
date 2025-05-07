@@ -62,6 +62,9 @@ final class SupaBase {
                 let usersArray = try JSONDecoder().decode([UsersTable].self, from: Data(response.data))
                 return usersArray.count > 0 ? true : false
 
+            case .messages:
+                let messagesArray = try JSONDecoder().decode([MessagesTable].self, from: Data(response.data))
+                return messagesArray.count > 0 ? true : false
             }
 
         } catch {
@@ -86,6 +89,10 @@ final class SupaBase {
 
                 try await client.from(tableType.tableName).upsert(usersData).execute()
 
+            case .messages:
+                guard let messagesData = data as? MessagesTable else { throw Errors.SupaBase.castingError("Unable to convert data to MessagesTable")}
+
+                try await client.from(tableType.tableName).upsert(messagesData).execute()
             }
 
         } catch {
@@ -120,6 +127,12 @@ final class SupaBase {
                 print("Error - \(error)")
                 throw error
             }
+        case .messages:
+            do {
+                try await client.from(fromTable.tableName).delete().eq("id", value: rowID).execute()
+            } catch {
+                throw error
+            }
         }
 
 
@@ -145,6 +158,9 @@ final class SupaBase {
 
                 let usersArray = try JSONDecoder().decode([UsersTable].self, from: Data(response.data))
                 return usersArray
+            case .messages:
+                let messagesArray = try JSONDecoder().decode([MessagesTable].self, from: Data(response.data))
+                return messagesArray
             }
 
         } catch {
@@ -258,20 +274,31 @@ extension SupaBase {
         } catch {
             print(error)
         }
+    }
 
-//        // Check that the user joining is not the party leader of any parties
-//        let isPartyLeader = try await checkMatching(tableType: .parties, dictionary: ["party_leader": user.id])
-//
-//        if isPartyLeader {
-//            throw Errors.SupaBase.partyLeaderCannotJoinAParty
-//        }
-//
-//        // Check that the user is currently not a member of another party
-//        let isInAnotherParty = try await checkMatching(tableType: .parties, searchArrayFor: user.id)
-//
-//        if isInAnotherParty {
-//            throw Errors.SupaBase.userIsAlreadyInAParty
-//        }
+    func sendMessage(userID: UUID, text: String) async throws {
+
+        do {
+            // We need to get the party ID from the user row
+            guard let users = try await fetchRow(tableType: .users, dictionary: ["id": userID]) as? [UsersTable] else {
+                throw Errors.SupaBase.castingError("Unable to cast row as users table")
+            }
+
+            guard let user = users.first else {
+                print("users are empty")
+                return
+            }
+
+            let partyID = user.party_id
+            let message = MessagesTable(id: UUID(), partyId: partyID, date_created: Date().ISO8601Format(), text: text, userId: userID)
+
+            // Add message to messages table
+            try await upsertDataToTable(tableType: .messages, data: message)
+
+        } catch {
+            throw error
+        }
+
 
 
 

@@ -15,6 +15,7 @@ public enum Errors: Error {
         case invalidPartyCode
         case partyLeaderCannotJoinAParty
         case userIsAlreadyInAParty
+       
     }
 
 }
