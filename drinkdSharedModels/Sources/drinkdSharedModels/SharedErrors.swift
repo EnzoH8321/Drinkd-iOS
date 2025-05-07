@@ -10,18 +10,23 @@ import Foundation
 public enum SharedErrors: Error, Codable {
 
     case supabase(SupaBase)
+    case general(General)
     case internalServerError(String)
+
 
     public enum SupaBase: Error, Codable {
 
-        case missingValue(String)
-        case castingError(String)
+
         case invalidPartyCode
         case partyLeaderCannotJoinAParty
         case userIsAlreadyInAParty
        
     }
 
+    public enum General: Error, Codable {
+        case missingValue(String)
+        case castingError(String)
+    }
 
 
 }
@@ -34,12 +39,11 @@ public struct ErrorWrapper: Codable {
 
     public init(errorType: some Error) {
 
-        if let error = errorType as? SharedErrors.SupaBase {
-            switch error {
-            case .missingValue(let string):
-                self.error = .supabase(.missingValue(string))
-            case .castingError(let string):
-                self.error = .supabase(.castingError(string))
+        switch errorType {
+        case let errorType as SharedErrors.SupaBase:
+
+            switch errorType {
+
             case .invalidPartyCode:
                 self.error = .supabase(.invalidPartyCode)
             case .partyLeaderCannotJoinAParty:
@@ -48,10 +52,19 @@ public struct ErrorWrapper: Codable {
                 self.error = .supabase(.userIsAlreadyInAParty)
             }
 
-        } else {
+        case let errorType as SharedErrors.General:
+
+            switch errorType {
+
+            case .missingValue(let string):
+                self.error = .general(.missingValue(string))
+            case .castingError(let string):
+                self.error = .general(.castingError(string))
+            }
+
+        default:
             self.error = .internalServerError(errorType.localizedDescription)
         }
-
 
     }
 }

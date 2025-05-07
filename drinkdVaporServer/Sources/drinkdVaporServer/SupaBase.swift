@@ -81,16 +81,16 @@ final class SupaBase {
             switch tableType {
             case .parties:
 
-                guard let partyData = data as? PartiesTable else { throw SharedErrors.SupaBase.castingError("Unable to convert data to PartiesTable") }
+                guard let partyData = data as? PartiesTable else { throw SharedErrors.General.castingError("Unable to convert data to PartiesTable") }
 
                 try await client.from(tableType.tableName).upsert(partyData).execute()
             case .users:
-                guard let usersData = data as? UsersTable else { throw SharedErrors.SupaBase.castingError("Unable to convert data to UsersTable") }
+                guard let usersData = data as? UsersTable else { throw SharedErrors.General.castingError("Unable to convert data to UsersTable") }
 
                 try await client.from(tableType.tableName).upsert(usersData).execute()
 
             case .messages:
-                guard let messagesData = data as? MessagesTable else { throw SharedErrors.SupaBase.castingError("Unable to convert data to MessagesTable")}
+                guard let messagesData = data as? MessagesTable else { throw SharedErrors.General.castingError("Unable to convert data to MessagesTable")}
 
                 try await client.from(tableType.tableName).upsert(messagesData).execute()
             }
@@ -247,7 +247,7 @@ extension SupaBase {
         do {
 
             guard let row = try await fetchRow(tableType: .parties, dictionary: ["code": partyCode]) as? [PartiesTable] else {
-                throw SharedErrors.SupaBase.castingError("Unable to cast row as parties table")
+                throw SharedErrors.General.castingError("Unable to cast row as parties table")
             }
 
             guard let partyTable = row.first else {
@@ -281,7 +281,7 @@ extension SupaBase {
         do {
             // We need to get the party ID from the user row
             guard let users = try await fetchRow(tableType: .users, dictionary: ["id": userID]) as? [UsersTable] else {
-                throw SharedErrors.SupaBase.castingError("Unable to cast row as users table")
+                throw SharedErrors.General.castingError("Unable to cast row as users table")
             }
 
             guard let user = users.first else {
