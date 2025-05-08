@@ -40,5 +40,32 @@ func routes(_ app: Application) throws {
 
     }
 
+    // Join Party
+    app.post("joinParty") { req async -> Response in
+
+        do {
+            guard let reqBody = req.body.data else { return Response(status: .badRequest) }
+            let partyRequest = try JSONDecoder().decode(JoinPartyRequest.self, from: reqBody)
+            let party = try await supabase.joinParty(username: partyRequest.username, partyCode: partyRequest.partyCode)
+
+            guard let partyID = party.id?.uuidString else { throw SharedErrors.General.missingValue("Missing id value")}
+            
+            let response = Response()
+            response.body = Response.Body(string: partyID)
+
+            return response
+
+        } catch {
+            let errorWrapperJSON = try! JSONEncoder().encode(ErrorWrapper(errorType: error))
+            let errorResponse = Response()
+            errorResponse.status = .internalServerError
+            errorResponse.headers.add(name: "Content-Type", value: "application/json")
+            errorResponse.body = Response.Body(data: errorWrapperJSON)
+
+            return errorResponse
+        }
+
+    }
+
 }
 

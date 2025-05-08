@@ -116,7 +116,6 @@ final class SupaBase {
             do {
                 try await client.from(fromTable.tableName).delete().eq("party_leader", value: validLeaderID).execute()
             } catch {
-                print("Error - \(error)")
                 throw error
             }
 
@@ -124,7 +123,6 @@ final class SupaBase {
             do {
                 try await client.from(fromTable.tableName).delete().eq("id", value: rowID).execute()
             } catch {
-                print("Error - \(error)")
                 throw error
             }
         case .messages:
@@ -142,7 +140,7 @@ final class SupaBase {
         let columnsToFilterFor: String = dictionary.keys.map {"\($0)"}.joined(separator: "'")
         let response = try await client
             .from(tableType.tableName)
-            .select(dictionary.count == 0 ? "*" : columnsToFilterFor)
+            .select()
             .match(dictionary)
             .execute()
 
@@ -236,7 +234,7 @@ extension SupaBase {
     // Only works if you are not party leader, a party leader cannot join a party
     // Party Code should be six digits.
     // User should not be in another party
-    func joinParty(username: String, partyCode: Int) async throws {
+    func joinParty(username: String, partyCode: Int) async throws -> PartiesTable {
 //        let user = UsersTable(id: UUID(), username: username, date_created: Date().ISO8601Format(), memberOfParty: nil)
         // Check that party code is six digits
         if partyCode < 100000 || partyCode > 999999 {
@@ -251,13 +249,11 @@ extension SupaBase {
             }
 
             guard let partyTable = row.first else {
-                print("Row is Empty")
-                return
+                throw SharedErrors.supabase(error: .rowIsEmpty)
             }
 
             guard let validPartyID = partyTable.id else {
-                print("Invalid Party ID")
-                return
+                throw SharedErrors.supabase(error: .dataNotFound)
             }
 
 
@@ -269,10 +265,10 @@ extension SupaBase {
             // Add to users table. This user will have a foreign key that traces back to the party
             try await upsertDataToTable(tableType: .users, data: user)
 
-
+            return partyTable
 
         } catch {
-            print(error)
+            throw error
         }
     }
 
