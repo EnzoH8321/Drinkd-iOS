@@ -168,14 +168,6 @@ final class SupaBase {
 
 }
 
-//MARK: Specific - Parties Table
-extension SupaBase {
-    func addMemberToParty(partyID: UUID, userID: UUID) async throws {
-//        try await client.from(TableTypes.parties.tableName).update(<#T##values: Encodable & Sendable##Encodable & Sendable#>)
-    }
-}
-
-
 //MARK: Routes Calls
 extension SupaBase {
 
@@ -225,7 +217,6 @@ extension SupaBase {
             }
 
         } catch {
-            print(error)
             throw error
         }
     }
@@ -234,7 +225,7 @@ extension SupaBase {
     // Only works if you are not party leader, a party leader cannot join a party
     // Party Code should be six digits.
     // User should not be in another party
-    func joinParty(username: String, partyCode: Int) async throws -> PartiesTable {
+    func joinParty(username: String, partyCode: Int) async throws -> (party: PartiesTable, user: UsersTable) {
 //        let user = UsersTable(id: UUID(), username: username, date_created: Date().ISO8601Format(), memberOfParty: nil)
         // Check that party code is six digits
         if partyCode < 100000 || partyCode > 999999 {
@@ -265,7 +256,7 @@ extension SupaBase {
             // Add to users table. This user will have a foreign key that traces back to the party
             try await upsertDataToTable(tableType: .users, data: user)
 
-            return partyTable
+            return (partyTable, user)
 
         } catch {
             throw error

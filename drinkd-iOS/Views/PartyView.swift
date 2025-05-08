@@ -57,7 +57,7 @@ struct JoinOrCreatePartyButton: View {
 struct PartyView_Previews: PreviewProvider {
 	static var previews: some View {
 		PartyView()
-			
+            .environment(PartyViewModel())
 
 	}
 }

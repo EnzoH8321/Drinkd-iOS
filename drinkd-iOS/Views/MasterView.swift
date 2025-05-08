@@ -102,6 +102,7 @@ struct MasterView: View {
 @available(iOS 15.0, *)
 struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
-		MasterView()			
+        MasterView()
+            .environment(PartyViewModel())
 	}
 }
