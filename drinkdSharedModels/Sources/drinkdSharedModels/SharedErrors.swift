@@ -28,6 +28,10 @@ public enum SharedErrors: Error, Codable {
         case castingError(String)
     }
 
+    public enum ClientNetworking: Error {
+        case invalidURL
+    }
+
 }
 
 // Converts Errors -> Codable

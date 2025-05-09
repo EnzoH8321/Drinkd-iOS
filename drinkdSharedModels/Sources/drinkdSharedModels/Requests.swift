@@ -6,11 +6,15 @@
 //
 import Foundation
 
-// For Client -> Vapor Seriver & vice versa
+// For Client -> Vapor Server & vice versa
 
 // Request to create a party
 public struct PartyRequest: Codable {
     public let username: String
+
+    public init(username: String) {
+        self.username = username
+    }
 }
 
 

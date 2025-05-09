@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import drinkdSharedModels
 import Firebase
 
 protocol NetworkingProtocol {
@@ -384,5 +385,40 @@ final class Networking {
 
     }
 
+
 }
 
+//MARK: Client -> Vapor Server code
+extension Networking {
+
+    func createParty(username: String) async throws -> RouteResponse {
+
+        do {
+            guard let url = URL(string: HTTP.post(.createParty).fullURLString) else { throw SharedErrors.ClientNetworking.invalidURL}
+            var urlRequest = URLRequest(url: url)
+            let partyData = try JSONEncoder().encode(PartyRequest(username: username))
+            urlRequest.httpMethod = "POST"
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.httpBody = partyData
+
+            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+            let httpResponse = response as! HTTPURLResponse
+
+            if httpResponse.statusCode < 200 || httpResponse.statusCode > 200 {
+                // Check if Error
+                let error = try JSONDecoder().decode(ErrorWrapper.self, from: data)
+                throw error.error
+            }
+
+            //Happy Path
+            let partyRequest = try JSONDecoder().decode(RouteResponse.self, from: data)
+            
+            return partyRequest
+
+        } catch {
+            throw error
+        }
+    }
+
+}

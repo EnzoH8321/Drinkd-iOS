@@ -21,9 +21,12 @@ func routes(_ app: Application) throws {
             let leaderID = UUID()
             let newParty = try await supabase.createAParty(leaderID: leaderID, userName: partyRequest.username)
 
-            guard let partyID = newParty.id?.uuidString else { throw SharedErrors.General.missingValue("Missing id value")}
+            guard let partyID = newParty.id else { throw SharedErrors.General.missingValue("Missing id value")}
             let response = Response()
-            response.body = Response.Body(string: partyID)
+            let routeResponseObject = RouteResponse(currentUserName: partyRequest.username, currentUserID: leaderID, currentPartyID: partyID)
+            let encodedResponse = try JSONEncoder().encode(routeResponseObject)
+
+            response.body = Response.Body(data: encodedResponse)
 
             return response
         } catch {
