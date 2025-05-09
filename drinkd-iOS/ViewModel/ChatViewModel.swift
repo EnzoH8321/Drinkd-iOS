@@ -10,12 +10,12 @@ import Foundation
 @Observable
 final class ChatViewModel {
     var personalUserName = ""
-    var personalUserID = 0
+    var personalUserID: UUID? 
     var chatMessageList: [FireBaseMessage] = []
 
     //For chat
     //TODO: Finish Chat Features
-    func setPersonalUserAndID(forName name: String, forID id: Int) {
+    func setPersonalUserAndID(forName name: String, forID id: UUID) {
         self.personalUserName = name
         self.personalUserID = id
     }

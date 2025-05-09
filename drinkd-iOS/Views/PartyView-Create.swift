@@ -12,12 +12,15 @@ struct PartyView_Create: View {
     @State private var partyName: String = ""
     @State private var winningVoteAmount: String = ""
     @State private var userName: String = ""
-    
+    @State private var showAlert: (state: Bool, message: String) = (false, "")
+    @Environment(PartyViewModel.self) var partyVM
+
     func formatStringtoInt(in textValue: String) -> Int {
         return Int(textValue) ?? 0
     }
     
     var body: some View {
+        @Bindable var partyVM = partyVM
         VStack {
             Text("Create Your Party")
                 .font(.title)
@@ -54,58 +57,39 @@ struct PartyView_Create: View {
                     .textFieldStyle(regularTextFieldStyle())
             }.padding()
             
-            CreatePartyButton(partyName: partyName, votes: winningVoteAmount, userName: userName)
+            Button {
+
+                let filteredPartyName = partyName.filter { "0123456789".contains($0) }
+                let nameLength = partyName.count
+
+                if ( nameLength > 15 || nameLength == 0 || filteredPartyName.count > 0 || userName.count > 20) {
+                    showAlert = (true, "Incorrect name length or party name")
+                    return
+
+                }
+
+                Task {
+                    do {
+                        let response = try await Networking.shared.createParty(username: userName)
+                        partyVM.chatVM.setPersonalUserAndID(forName: response.currentUserName, forID: response.currentUserID)
+                    } catch {
+                        showAlert = (true, error.localizedDescription)
+                    }
+                }
+
+            } label: {
+                Text("Create Party")
+                    .bold()
+            }
+            .alert(isPresented: $showAlert.state) {
+                Alert(title: Text("Error"), message: Text("Check for Valid Name or Vote Amount"))
+            }
+            .buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
             //
             Spacer()
         }
         .navigationBarTitleDisplayMode(.inline)
     }
-    
-    private struct CreatePartyButton: View {
-        
-        @Environment(PartyViewModel.self) var viewModel
-        @State private var showAlert: Bool = false
-        
-        var votes: Int
-        var partyName: String
-        var userName: String
-        var personalUserID = Int.random(in: 1...4563456495)
-        
-        init(partyName: String, votes: String, userName: String) {
-            self.partyName = partyName
-            self.votes = Int(votes) ?? 1
-            self.userName = userName
-        }
-        
-        var body: some View {
-            
-            Button {
-                
-                let filteredPartyName = partyName.filter { "0123456789".contains($0) }
-                
-                let nameLength = partyName.count
-                
-                if ( nameLength > 15 || nameLength == 0 || filteredPartyName.count > 0 || userName.count > 20) {
-                    showAlert = true
-                    return
-                    
-                } else {
-                    viewModel.createParty(leaderID: String(personalUserID) ,setVotes: self.votes, setName: self.partyName)
-                    viewModel.chatVM.setPersonalUserAndID(forName: self.userName, forID: self.personalUserID)
-                    showAlert = false
-                }
-                
-            } label: {
-                Text("Create Party")
-                    .bold()
-            }
-            .alert(isPresented: $showAlert) {
-                Alert(title: Text("Error"), message: Text("Check for Valid Name or Vote Amount"))
-            }
-            .buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
-        }
-    }
-    
 }
 
 
