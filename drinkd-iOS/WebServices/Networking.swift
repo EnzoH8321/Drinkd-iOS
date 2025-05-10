@@ -7,6 +7,7 @@
 
 import Foundation
 import drinkdSharedModels
+import Vapor
 import Firebase
 
 protocol NetworkingProtocol {
@@ -396,7 +397,8 @@ extension Networking {
         do {
             guard let url = URL(string: HTTP.post(.createParty).fullURLString) else { throw SharedErrors.ClientNetworking.invalidURL}
             var urlRequest = URLRequest(url: url)
-            let partyData = try JSONEncoder().encode(PartyRequest(username: username))
+            guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
+            let partyData = try JSONEncoder().encode(PartyRequest(username: username, userID: userID))
             urlRequest.httpMethod = "POST"
             urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
             urlRequest.httpBody = partyData

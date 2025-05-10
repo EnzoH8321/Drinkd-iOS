@@ -20,8 +20,13 @@ struct AppLauncher {
     static func main() throws {
         if NSClassFromString("XCTestCase") == nil {
             FirebaseApp.configure()
+            // Set user id on startup, if it does not already exist
+            if UserDefaultsWrapper.getUserID() == nil {
+                UserDefaultsWrapper.setUserIDOnStartup()
+            }
             Networking.shared.locationFetcher.start()
             drinkd_iOSApp.main()
+
         } else {
             TestApp.main()
         }

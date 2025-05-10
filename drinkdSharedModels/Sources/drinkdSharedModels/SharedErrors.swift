@@ -7,29 +7,68 @@
 
 import Foundation
 
-public enum SharedErrors: Error, Codable {
+public enum SharedErrors: Codable, LocalizedError {
 
     case supabase(error: SupaBase)
     case general(error: General)
     case internalServerError(error: String)
 
 
-    public enum SupaBase:  Error, Codable {
+    public enum SupaBase: String, LocalizedError, Codable {
 
         case invalidPartyCode
         case partyLeaderCannotJoinAParty
         case userIsAlreadyInAParty
+        case userIsAlreadyAPartyLeader
         case rowIsEmpty
         case dataNotFound
+
+        public var errorDescription: String? {
+            return self.rawValue
+        }
+
     }
 
-    public enum General: Error, Codable {
+    public enum General: LocalizedError, Codable {
         case missingValue(String)
         case castingError(String)
+        case userDefaultsError(String)
+
+        public var errorDescription: String? {
+            switch self {
+            case .missingValue(let string):
+                return "missingValue error - \(string)"
+            case .castingError(let string):
+                return "casting error - \(string)"
+            case .userDefaultsError(let string):
+                return "userDefaultsError - \(string)"
+            }
+        }
+
     }
 
-    public enum ClientNetworking: Error {
+    public enum ClientNetworking: String, LocalizedError {
         case invalidURL
+
+        public var errorDescription: String? {
+            switch self {
+            case .invalidURL:
+                return self.rawValue
+            }
+        }
+    }
+
+    public var errorDescription: String? {
+        switch self {
+        case .supabase(let error):
+            return error.localizedDescription
+        case .general(let error):
+            return error.localizedDescription
+        case .internalServerError(let error):
+            return error
+        }
+
+
     }
 
 }
@@ -57,6 +96,8 @@ public struct ErrorWrapper: Codable {
                 self.error = .supabase(error: .rowIsEmpty)
             case .dataNotFound:
                 self.error = .supabase(error: .dataNotFound)
+            case .userIsAlreadyAPartyLeader:
+                self.error = .supabase(error: .userIsAlreadyAPartyLeader)
             }
 
         case let errorType as SharedErrors.General:
@@ -67,6 +108,8 @@ public struct ErrorWrapper: Codable {
                 self.error = .general(error: .missingValue(string))
             case .castingError(let string):
                 self.error = .general(error: .castingError(string))
+            case .userDefaultsError(let string):
+                self.error = .general(error: .userDefaultsError(string))
             }
 
         default:

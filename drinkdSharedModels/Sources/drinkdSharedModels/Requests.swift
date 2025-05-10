@@ -11,9 +11,11 @@ import Foundation
 // Request to create a party
 public struct PartyRequest: Codable {
     public let username: String
+    public let userID: UUID
 
-    public init(username: String) {
+    public init(username: String, userID: UUID) {
         self.username = username
+        self.userID = userID
     }
 }
 
@@ -28,7 +30,7 @@ public struct LeavePartyRequest: Codable {
     public let partyID: UUID
 }
 
-
+// Server -> Client
 public struct RouteResponse: Codable {
     public let currentUserName: String
     public let currentUserID: UUID

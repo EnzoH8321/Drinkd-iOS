@@ -18,12 +18,13 @@ func routes(_ app: Application) throws {
         do {
             guard let reqBody = req.body.data else { return Response(status: .badRequest) }
             let partyRequest = try JSONDecoder().decode(PartyRequest.self, from: reqBody)
-            let leaderID = UUID()
-            let newParty = try await supabase.createAParty(leaderID: leaderID, userName: partyRequest.username)
+            
+            let newParty = try await supabase.createAParty(leaderID: partyRequest.userID, userName: partyRequest.username)
 
             guard let partyID = newParty.id else { throw SharedErrors.General.missingValue("Missing id value")}
             let response = Response()
-            let routeResponseObject = RouteResponse(currentUserName: partyRequest.username, currentUserID: leaderID, currentPartyID: partyID)
+            response.headers.add(name: "Content-Type", value: "application/json")
+            let routeResponseObject = RouteResponse(currentUserName: partyRequest.username, currentUserID: partyRequest.userID, currentPartyID: partyID)
             let encodedResponse = try JSONEncoder().encode(routeResponseObject)
 
             response.body = Response.Body(data: encodedResponse)

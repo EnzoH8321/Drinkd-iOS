@@ -60,6 +60,7 @@
 		54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C858270257E1008FA516 /* SplashScreen.swift */; };
 		54F9C85B27037F2F008FA516 /* drinkdModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C85A27037F2F008FA516 /* drinkdModel.swift */; };
 		54F9C85D2703E52A008FA516 /* RemoteImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C85C2703E52A008FA516 /* RemoteImageLoader.swift */; };
+		54FEF9492DD0012C00DCD0C6 /* UserDefaultsWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEF9482DD0012700DCD0C6 /* UserDefaultsWrapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,6 +140,7 @@
 		54F9C858270257E1008FA516 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 		54F9C85A27037F2F008FA516 /* drinkdModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkdModel.swift; sourceTree = "<group>"; };
 		54F9C85C2703E52A008FA516 /* RemoteImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageLoader.swift; sourceTree = "<group>"; };
+		54FEF9482DD0012700DCD0C6 /* UserDefaultsWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsWrapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -328,6 +330,7 @@
 		54F9C83D26FBF891008FA516 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				54FEF9482DD0012700DCD0C6 /* UserDefaultsWrapper.swift */,
 				54F9C8562702494E008FA516 /* PartyViewModel.swift */,
 				54C7BD0F2DC2A2D300045D67 /* ChatViewModel.swift */,
 			);
@@ -555,6 +558,7 @@
 				54C8A4B5277431EE0090D968 /* Extensions.swift in Sources */,
 				54F9C84A26FD1A59008FA516 /* HomeView.swift in Sources */,
 				549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */,
+				54FEF9492DD0012C00DCD0C6 /* UserDefaultsWrapper.swift in Sources */,
 				54F9C81526FBB537008FA516 /* drinkd_iOS.xcdatamodeld in Sources */,
 				54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */,
 				5407FD72271924D5008BC496 /* PartyCardView.swift in Sources */,

@@ -175,6 +175,13 @@ extension SupaBase {
     func createAParty(leaderID: UUID, userName: String) async throws -> PartiesTable {
         do {
 
+            // Check that user is not already a party leader
+            let isMemberOfAnotherParty = try await fetchRow(tableType: .parties, dictionary: ["party_leader": "\(leaderID)"]).count > 0
+
+            if isMemberOfAnotherParty {
+                throw SharedErrors.supabase(error: .userIsAlreadyAPartyLeader)
+            }
+
             // Add to Parties Table
             let randomInt = Int.random(in: 100000..<999999)
             let partyID = UUID()

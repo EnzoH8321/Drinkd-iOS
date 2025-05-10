@@ -60,18 +60,18 @@ struct PartyView_Create: View {
             Button {
 
                 let filteredPartyName = partyName.filter { "0123456789".contains($0) }
-                let nameLength = partyName.count
+                let partyNameLength = partyName.count
 
-                if ( nameLength > 15 || nameLength == 0 || filteredPartyName.count > 0 || userName.count > 20) {
+                if ( partyNameLength > 15 || partyNameLength == 0 || filteredPartyName.count > 0 || userName.count > 20) {
                     showAlert = (true, "Incorrect name length or party name")
                     return
-
                 }
 
                 Task {
                     do {
                         let response = try await Networking.shared.createParty(username: userName)
                         partyVM.chatVM.setPersonalUserAndID(forName: response.currentUserName, forID: response.currentUserID)
+//                        showAlert = (false, "")
                     } catch {
                         showAlert = (true, error.localizedDescription)
                     }
@@ -82,7 +82,7 @@ struct PartyView_Create: View {
                     .bold()
             }
             .alert(isPresented: $showAlert.state) {
-                Alert(title: Text("Error"), message: Text("Check for Valid Name or Vote Amount"))
+                Alert(title: Text("Error"), message: Text(showAlert.message))
             }
             .buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
             //
