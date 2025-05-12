@@ -8,8 +8,18 @@ import Foundation
 
 // For Client -> Vapor Server & vice versa
 
+public enum RequestTypes {
+    case createParty
+    case joinParty
+    case leaveParty
+}
+
+public protocol PartyRequest {
+
+}
+
 // Request to create a party
-public struct PartyRequest: Codable {
+public struct CreatePartyRequest: Codable, PartyRequest {
     public let username: String
     public let userID: UUID
 
@@ -20,14 +30,24 @@ public struct PartyRequest: Codable {
 }
 
 
-public struct JoinPartyRequest: Codable {
+public struct JoinPartyRequest: Codable, PartyRequest {
     public let username: String
     public let partyCode: Int
+
+    public init(username: String, partyCode: Int) {
+        self.username = username
+        self.partyCode = partyCode
+    }
 }
 
-public struct LeavePartyRequest: Codable {
+public struct LeavePartyRequest: Codable, PartyRequest  {
     public let userID: UUID
     public let partyID: UUID
+
+    public init(userID: UUID, partyID: UUID) {
+        self.userID = userID
+        self.partyID = partyID
+    }
 }
 
 // Server -> Client

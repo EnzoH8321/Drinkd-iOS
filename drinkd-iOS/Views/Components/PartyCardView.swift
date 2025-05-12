@@ -63,7 +63,7 @@ struct PartyCardView: View {
 							.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
                             //
                             Button {
-                                Networking.shared.leaveParty(viewModel: viewModel)
+//                                Networking.shared.leaveParty(viewModel: viewModel)
                             } label: {
 								Text("Leave Party")
                                     .bold()

@@ -370,21 +370,21 @@ final class Networking {
     }
 
     //Leave your current party. If you are the party leader, the party will be disbanded.
-    func leaveParty(viewModel: PartyViewModel) {
-
-
-        if (viewModel.isPartyLeader) {
-            let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.currentParty?.partyID)")
-            localReference.removeValue()
-
-        } else if (!viewModel.isPartyLeader) {
-            let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.currentParty?.partyID)").child("topBars").child("\(viewModel.friendPartyId)")
-            localReference.removeValue()
-        }
-
-        viewModel.leaveParty()
-
-    }
+//    func leaveParty(viewModel: PartyViewModel) {
+//
+//
+//        if (viewModel.isPartyLeader) {
+//            let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.currentParty?.partyID)")
+//            localReference.removeValue()
+//
+//        } else if (!viewModel.isPartyLeader) {
+//            let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.currentParty?.partyID)").child("topBars").child("\(viewModel.friendPartyId)")
+//            localReference.removeValue()
+//        }
+//
+//        viewModel.leaveParty()
+//
+//    }
 
 
 }
@@ -398,7 +398,7 @@ extension Networking {
             guard let url = URL(string: HTTP.post(.createParty).fullURLString) else { throw SharedErrors.ClientNetworking.invalidURL}
             var urlRequest = URLRequest(url: url)
             guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
-            let partyData = try JSONEncoder().encode(PartyRequest(username: username, userID: userID))
+            let partyData = try JSONEncoder().encode(CreatePartyRequest(username: username, userID: userID))
             urlRequest.httpMethod = "POST"
             urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
             urlRequest.httpBody = partyData
@@ -421,6 +421,64 @@ extension Networking {
         } catch {
             throw error
         }
+    }
+
+    func leaveParty(partyID: UUID) async throws -> RouteResponse {
+        do {
+            guard let url = URL(string: HTTP.post(.leaveParty).fullURLString) else { throw SharedErrors.ClientNetworking.invalidURL }
+            var urlRequest = URLRequest(url: url)
+            guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
+            let partyRequest = try JSONEncoder().encode(LeavePartyRequest(userID: userID, partyID: partyID))
+            urlRequest.httpMethod = "POST"
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.httpBody = partyRequest
+
+            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+            let httpResponse = response as! HTTPURLResponse
+
+            if httpResponse.statusCode < 200 || httpResponse.statusCode > 200 {
+                // Check if Error
+                let error = try JSONDecoder().decode(ErrorWrapper.self, from: data)
+                throw error.error
+            }
+
+            //Happy Path
+            let routeResponse = try JSONDecoder().decode(RouteResponse.self, from: data)
+
+            return routeResponse
+
+        } catch {
+            throw error
+        }
+    }
+
+    private func createPostRequest(reqType: RequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil) throws -> URLRequest {
+        guard let url = URL(string: url) else { throw SharedErrors.ClientNetworking.invalidURL }
+        var urlRequest = URLRequest(url: url)
+        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
+        var data: Data? = nil
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.httpBody = data
+
+        switch reqType {
+        case .createParty:
+            if let userName = userName {
+                data = try JSONEncoder().encode(CreatePartyRequest(username: userName, userID: userID))
+            }
+        case .joinParty:
+            if let partyCode = partyCode, let userName = userName {
+                data = try JSONEncoder().encode(JoinPartyRequest(username: userName, partyCode: partyCode))
+            }
+        case .leaveParty:
+            if let partyID = partyID {
+                data = try JSONEncoder().encode(LeavePartyRequest(userID: userID, partyID: partyID))
+            }
+        }
+
+        return urlRequest
+
     }
 
 }

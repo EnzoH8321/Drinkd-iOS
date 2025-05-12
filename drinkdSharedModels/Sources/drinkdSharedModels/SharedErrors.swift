@@ -34,6 +34,7 @@ public enum SharedErrors: Codable, LocalizedError {
         case castingError(String)
         case userDefaultsError(String)
 
+
         public var errorDescription: String? {
             switch self {
             case .missingValue(let string):

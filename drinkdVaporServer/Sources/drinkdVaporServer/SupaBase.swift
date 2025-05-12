@@ -297,13 +297,4 @@ extension SupaBase {
 
 
     }
-
-    // Creates a User
-    // Users are tied to parties
-    // User is created on the server.
-    // Only thing client should provide is the username
-    // When a person leaves a party, the user should be destroyed
-//    func createUser(username: String) -> UsersTable {
-//        return UsersTable(id: UUID(), username: username, date_created: Date().ISO8601Format(), memberOfParty: nil)
-//    }
 }

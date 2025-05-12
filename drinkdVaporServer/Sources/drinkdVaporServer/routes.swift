@@ -17,7 +17,7 @@ func routes(_ app: Application) throws {
     app.post("createParty") { req async -> Response in
         do {
             guard let reqBody = req.body.data else { return Response(status: .badRequest) }
-            let partyRequest = try JSONDecoder().decode(PartyRequest.self, from: reqBody)
+            let partyRequest = try JSONDecoder().decode(CreatePartyRequest.self, from: reqBody)
             
             let newParty = try await supabase.createAParty(leaderID: partyRequest.userID, userName: partyRequest.username)
 
