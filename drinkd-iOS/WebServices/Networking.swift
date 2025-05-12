@@ -395,13 +395,9 @@ extension Networking {
     func createParty(username: String) async throws -> RouteResponse {
 
         do {
-            guard let url = URL(string: HTTP.post(.createParty).fullURLString) else { throw SharedErrors.ClientNetworking.invalidURL}
-            var urlRequest = URLRequest(url: url)
-            guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
-            let partyData = try JSONEncoder().encode(CreatePartyRequest(username: username, userID: userID))
-            urlRequest.httpMethod = "POST"
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            urlRequest.httpBody = partyData
+
+            let urlString = HTTP.post(.createParty).fullURLString
+            let urlRequest = try createPostRequest(reqType: .createParty, url: urlString, userName: username)
 
             let (data, response) = try await URLSession.shared.data(for: urlRequest)
 
@@ -457,23 +453,21 @@ extension Networking {
         guard let url = URL(string: url) else { throw SharedErrors.ClientNetworking.invalidURL }
         var urlRequest = URLRequest(url: url)
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
-        var data: Data? = nil
         urlRequest.httpMethod = "POST"
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        urlRequest.httpBody = data
 
         switch reqType {
         case .createParty:
             if let userName = userName {
-                data = try JSONEncoder().encode(CreatePartyRequest(username: userName, userID: userID))
+                urlRequest.httpBody = try JSONEncoder().encode(CreatePartyRequest(username: userName, userID: userID))
             }
         case .joinParty:
             if let partyCode = partyCode, let userName = userName {
-                data = try JSONEncoder().encode(JoinPartyRequest(username: userName, partyCode: partyCode))
+                urlRequest.httpBody = try JSONEncoder().encode(JoinPartyRequest(username: userName, partyCode: partyCode))
             }
         case .leaveParty:
             if let partyID = partyID {
-                data = try JSONEncoder().encode(LeavePartyRequest(userID: userID, partyID: partyID))
+                urlRequest.httpBody = try JSONEncoder().encode(LeavePartyRequest(userID: userID, partyID: partyID))
             }
         }
 
