@@ -11,6 +11,7 @@ struct PartyCardView: View {
 
     @Environment(PartyViewModel.self) var viewModel
 	@State private var showingChatView = false
+    @State private var showAlert: (state: Bool, message: String) = (false, "")
 
 	var body: some View {
 		GeometryReader { proxy in
@@ -63,7 +64,17 @@ struct PartyCardView: View {
 							.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
                             //
                             Button {
-//                                Networking.shared.leaveParty(viewModel: viewModel)
+                                Task {
+                                    do {
+                                        try await Networking.shared.leaveParty()
+                                        viewModel.leaveParty()
+                                    } catch {
+                                        showAlert = (true, error.localizedDescription)
+                                    }
+
+                                }
+
+
                             } label: {
 								Text("Leave Party")
                                     .bold()
@@ -75,8 +86,9 @@ struct PartyCardView: View {
 					.frame(width: globalWidth)
 					Spacer()
 				}
-			
-
+                .alert(isPresented: $showAlert.state) {
+                    Alert(title: Text("Error"), message: Text(showAlert.message))
+                }
 
 		}
 

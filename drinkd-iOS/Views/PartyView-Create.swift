@@ -71,7 +71,7 @@ struct PartyView_Create: View {
                     do {
                         let response = try await Networking.shared.createParty(username: userName)
                         partyVM.chatVM.setPersonalUserAndID(forName: response.currentUserName, forID: response.currentUserID)
-//                        showAlert = (false, "")
+                        partyVM.currentlyInParty = true
                     } catch {
                         showAlert = (true, error.localizedDescription)
                     }

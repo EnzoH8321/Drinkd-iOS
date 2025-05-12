@@ -221,6 +221,7 @@ class PartyViewModel {
         self.firstChoice = FirebaseRestaurantInfo()
         self.secondChoice = FirebaseRestaurantInfo()
         self.thirdChoice = FirebaseRestaurantInfo()
+        currentParty = nil
         currentParty?.partyID = ""
     }
 

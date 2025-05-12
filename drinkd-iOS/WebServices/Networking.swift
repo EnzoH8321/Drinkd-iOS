@@ -368,25 +368,6 @@ final class Networking {
 
 
     }
-
-    //Leave your current party. If you are the party leader, the party will be disbanded.
-//    func leaveParty(viewModel: PartyViewModel) {
-//
-//
-//        if (viewModel.isPartyLeader) {
-//            let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.currentParty?.partyID)")
-//            localReference.removeValue()
-//
-//        } else if (!viewModel.isPartyLeader) {
-//            let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.currentParty?.partyID)").child("topBars").child("\(viewModel.friendPartyId)")
-//            localReference.removeValue()
-//        }
-//
-//        viewModel.leaveParty()
-//
-//    }
-
-
 }
 
 //MARK: Client -> Vapor Server code
@@ -398,51 +379,18 @@ extension Networking {
 
             let urlString = HTTP.post(.createParty).fullURLString
             let urlRequest = try createPostRequest(reqType: .createParty, url: urlString, userName: username)
-
-            let (data, response) = try await URLSession.shared.data(for: urlRequest)
-
-            let httpResponse = response as! HTTPURLResponse
-
-            if httpResponse.statusCode < 200 || httpResponse.statusCode > 200 {
-                // Check if Error
-                let error = try JSONDecoder().decode(ErrorWrapper.self, from: data)
-                throw error.error
-            }
-
-            //Happy Path
-            let partyRequest = try JSONDecoder().decode(RouteResponse.self, from: data)
-            
-            return partyRequest
-
+            return try await postData(urlReq: urlRequest)
         } catch {
             throw error
         }
     }
 
-    func leaveParty(partyID: UUID) async throws -> RouteResponse {
+    func leaveParty() async throws -> RouteResponse {
         do {
-            guard let url = URL(string: HTTP.post(.leaveParty).fullURLString) else { throw SharedErrors.ClientNetworking.invalidURL }
-            var urlRequest = URLRequest(url: url)
-            guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
-            let partyRequest = try JSONEncoder().encode(LeavePartyRequest(userID: userID, partyID: partyID))
-            urlRequest.httpMethod = "POST"
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            urlRequest.httpBody = partyRequest
+            let urlString = HTTP.post(.leaveParty).fullURLString
+            let urlRequest = try createPostRequest(reqType: .leaveParty, url: urlString)
 
-            let (data, response) = try await URLSession.shared.data(for: urlRequest)
-
-            let httpResponse = response as! HTTPURLResponse
-
-            if httpResponse.statusCode < 200 || httpResponse.statusCode > 200 {
-                // Check if Error
-                let error = try JSONDecoder().decode(ErrorWrapper.self, from: data)
-                throw error.error
-            }
-
-            //Happy Path
-            let routeResponse = try JSONDecoder().decode(RouteResponse.self, from: data)
-
-            return routeResponse
+            return try await postData(urlReq: urlRequest)
 
         } catch {
             throw error
@@ -466,13 +414,31 @@ extension Networking {
                 urlRequest.httpBody = try JSONEncoder().encode(JoinPartyRequest(username: userName, partyCode: partyCode))
             }
         case .leaveParty:
-            if let partyID = partyID {
-                urlRequest.httpBody = try JSONEncoder().encode(LeavePartyRequest(userID: userID, partyID: partyID))
-            }
+            urlRequest.httpBody = try JSONEncoder().encode(LeavePartyRequest(userID: userID))
         }
 
         return urlRequest
+    }
 
+
+    private func postData(urlReq: URLRequest) async throws -> RouteResponse {
+        do {
+            let (data, response) = try await URLSession.shared.data(for: urlReq)
+            let httpResponse = response as! HTTPURLResponse
+
+            if httpResponse.statusCode < 200 || httpResponse.statusCode > 200 {
+                // Check if Error
+                let error = try JSONDecoder().decode(ErrorWrapper.self, from: data)
+                throw error.error
+            }
+
+            //Happy Path
+            let partyRequest = try JSONDecoder().decode(RouteResponse.self, from: data)
+
+            return partyRequest
+        } catch {
+            throw error
+        }
     }
 
 }

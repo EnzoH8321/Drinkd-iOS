@@ -42,11 +42,9 @@ public struct JoinPartyRequest: Codable, PartyRequest {
 
 public struct LeavePartyRequest: Codable, PartyRequest  {
     public let userID: UUID
-    public let partyID: UUID
 
-    public init(userID: UUID, partyID: UUID) {
+    public init(userID: UUID) {
         self.userID = userID
-        self.partyID = partyID
     }
 }
 

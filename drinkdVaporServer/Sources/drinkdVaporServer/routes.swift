@@ -66,8 +66,26 @@ func routes(_ app: Application) throws {
         do {
             guard let reqBody = req.body.data else { return Response(status: .badRequest) }
             let partyRequest = try JSONDecoder().decode(LeavePartyRequest.self, from: reqBody)
-            try await supabase.leaveParty(userID: partyRequest.userID, partyID: partyRequest.partyID)
-            return Response(status: .ok)
+
+            guard let userData = try await supabase.fetchRow(tableType: .users, dictionary: ["id": "\(partyRequest.userID)"]).first as? UsersTable else {
+                throw SharedErrors.supabase(error: .rowIsEmpty)
+            }
+            guard let partyData = try await supabase.fetchRow(tableType: .parties, dictionary: ["party_leader": "\(partyRequest.userID)"]).first as? PartiesTable else {
+                throw SharedErrors.supabase(error: .rowIsEmpty)
+            }
+
+            guard let partyID = partyData.id else { throw SharedErrors.General.missingValue("Missing id value")}
+
+            try await supabase.leaveParty(userID: partyRequest.userID, partyID: partyID)
+
+            let routeResponseObject = RouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: partyID)
+            let responseJSON = try JSONEncoder().encode(routeResponseObject)
+
+            let response = Response()
+            response.body = Response.Body(data: responseJSON)
+
+            return response
+
         } catch {
             return createErrorResponse(error: error)
         }
