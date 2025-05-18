@@ -23,10 +23,6 @@
 		54562886278EAE2D00CA6005 /* MockTopThreeChoices.json in Resources */ = {isa = PBXBuildFile; fileRef = 54562885278EAE2D00CA6005 /* MockTopThreeChoices.json */; };
 		5456288A278F63C600CA6005 /* MockDatabaseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562889278F63C600CA6005 /* MockDatabaseObject.swift */; };
 		54631E5F27D87522008CE6B8 /* ViewModel_Methods_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54631E5E27D87522008CE6B8 /* ViewModel_Methods_Tests.swift */; };
-		5469AE822DBF0A9700A478F6 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 5469AE812DBF0A9700A478F6 /* FirebaseCore */; };
-		5469AE842DBF0A9700A478F6 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 5469AE832DBF0A9700A478F6 /* FirebaseDatabase */; };
-		5469AE862DBF0A9700A478F6 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5469AE852DBF0A9700A478F6 /* FirebaseFirestore */; };
-		5469AE882DBF0C7200A478F6 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 5469AE872DBF0C7200A478F6 /* FirebaseMessaging */; };
 		5496D19B276D188E000C732A /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5496D19A276D188E000C732A /* MessageView.swift */; };
 		549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549BFC462728CFBA00F96F48 /* CustomLocationView.swift */; };
 		54B3E537270E140E0004ECC5 /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B3E536270E140C0004ECC5 /* Star.swift */; };
@@ -155,11 +151,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5469AE882DBF0C7200A478F6 /* FirebaseMessaging in Frameworks */,
 				54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */,
-				5469AE842DBF0A9700A478F6 /* FirebaseDatabase in Frameworks */,
-				5469AE822DBF0A9700A478F6 /* FirebaseCore in Frameworks */,
-				5469AE862DBF0A9700A478F6 /* FirebaseFirestore in Frameworks */,
 				54267D642DCD229600621162 /* Vapor in Frameworks */,
 				54C7BD222DC2E22F00045D67 /* drinkdSharedModels in Frameworks */,
 			);
@@ -480,7 +472,6 @@
 			);
 			mainGroup = 54F9C7FC26FBB536008FA516;
 			packageReferences = (
-				5469AE802DBF0A9700A478F6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				54C7BD202DC2E22F00045D67 /* XCLocalSwiftPackageReference "drinkdSharedModels" */,
 				54267D622DCD229600621162 /* XCRemoteSwiftPackageReference "vapor" */,
 			);
@@ -1021,14 +1012,6 @@
 				minimumVersion = 4.110.1;
 			};
 		};
-		5469AE802DBF0A9700A478F6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 11.12.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1036,26 +1019,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 54267D622DCD229600621162 /* XCRemoteSwiftPackageReference "vapor" */;
 			productName = Vapor;
-		};
-		5469AE812DBF0A9700A478F6 /* FirebaseCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5469AE802DBF0A9700A478F6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCore;
-		};
-		5469AE832DBF0A9700A478F6 /* FirebaseDatabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5469AE802DBF0A9700A478F6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseDatabase;
-		};
-		5469AE852DBF0A9700A478F6 /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5469AE802DBF0A9700A478F6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestore;
-		};
-		5469AE872DBF0C7200A478F6 /* FirebaseMessaging */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5469AE802DBF0A9700A478F6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseMessaging;
 		};
 		54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */ = {
 			isa = XCSwiftPackageProductDependency;

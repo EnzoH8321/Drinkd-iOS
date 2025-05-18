@@ -6,11 +6,10 @@
 //
 
 import Foundation
-import Firebase
+import SwiftUI
 
 struct Constants {
-    //Database ref
-    static let ref = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference()
+
     //Hidden API KEY
     static let token: String = ProcessInfo.processInfo.environment["YELP_APIKEY"]!
 

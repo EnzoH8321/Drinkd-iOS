@@ -184,7 +184,7 @@ struct CardView: View {
                             Spacer()
                             // Submit Button
                             Button("Submit") {
-                                Networking.shared.submitRestaurantScore(viewModel: viewModel)
+//                                Networking.shared.submitRestaurantScore(viewModel: viewModel)
                             }
 
                             // More Info Button

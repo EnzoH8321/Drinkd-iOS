@@ -6,15 +6,13 @@
 //
 
 import SwiftUI
-import Firebase
-
 
 struct MasterView: View {
 
     @Environment(PartyViewModel.self) var viewModel
 	@State private var selectedTab: Int = 1
 	//Firebase
-	var ref = Database.database().reference()
+//	var ref = Database.database().reference()
 
 	var body: some View {
 
@@ -75,14 +73,14 @@ struct MasterView: View {
 						switch (tabVal) {
 						case 2 :
 							viewModel.removeImageUrls()
-                            Networking.shared.calculateTopThreeRestaurants(viewModel: viewModel) { result in
-								switch(result) {
-								case .success(_):
-									print("Success")
-								case .failure(_):
-									print("Failure")
-								}
-							}
+//                            Networking.shared.calculateTopThreeRestaurants(viewModel: viewModel) { result in
+//								switch(result) {
+//								case .success(_):
+//									print("Success")
+//								case .failure(_):
+//									print("Failure")
+//								}
+//							}
 						default:
 							break
 						}

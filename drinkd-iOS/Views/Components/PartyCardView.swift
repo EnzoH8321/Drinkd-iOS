@@ -47,16 +47,16 @@ struct PartyCardView: View {
                             Button {
                                 showingChatView = true
 
-                                Networking.shared.fetchExistingMessages(viewModel: viewModel) { result in
-
-                                    switch(result) {
-                                    case .success(_):
-                                        print("Success")
-                                    case .failure(_):
-                                        print("Failure")
-                                    }
-
-                                }
+//                                Networking.shared.fetchExistingMessages(viewModel: viewModel) { result in
+//
+//                                    switch(result) {
+//                                    case .success(_):
+//                                        print("Success")
+//                                    case .failure(_):
+//                                        print("Failure")
+//                                    }
+//
+//                                }
                             } label: {
                                 Text("Join Chat")
                                     .bold()

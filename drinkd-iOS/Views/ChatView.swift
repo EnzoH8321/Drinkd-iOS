@@ -63,7 +63,7 @@ struct ChatView: View {
 			}
             .onDisappear {
                 //Removes the FB messaging observer
-                Networking.shared.removeMessagingObserver(viewModel: viewModel)
+//                Networking.shared.removeMessagingObserver(viewModel: viewModel)
             }
 		}
     }

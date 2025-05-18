@@ -7,8 +7,6 @@
 
 import SwiftUI
 import UIKit
-import Firebase
-import FirebaseMessaging
 import AppTrackingTransparency
 import UserNotifications
 
@@ -19,7 +17,6 @@ struct AppLauncher {
 
     static func main() throws {
         if NSClassFromString("XCTestCase") == nil {
-            FirebaseApp.configure()
             // Set user id on startup, if it does not already exist
             if UserDefaultsWrapper.getUserID() == nil {
                 UserDefaultsWrapper.setUserIDOnStartup()
@@ -36,7 +33,7 @@ struct AppLauncher {
 struct TestApp: App {
     
     init() {
-        FirebaseApp.configure()
+
     }
 
     var body: some Scene {
@@ -159,13 +156,11 @@ struct drinkd_iOSApp: App {
 }
 
 //The first one is executed once the app finished launching. We are configuring Firebase, then asking the user for permission to send them push notifications.
-class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, ObservableObject {
+class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, ObservableObject {
 	let gcmMessageIDKey = "gcm.message_id"
 	static var fcmToken: String = "TestTOKEN"
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-
-		Messaging.messaging().delegate = self
 
 		if #available(iOS 10.0, *) {
 			//FOR IOS 10 DISPLAY NOTIFICATION
@@ -193,13 +188,13 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 	}
 
 	//The messaging() function inside of this extension will print the device token. It'll be useful when we'll be sending a test notification through the Firebase Cloud Messaging Console to our device.
-	func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-		let deviceToken: [String: String] = ["token": fcmToken ?? "TOKEN NOT FOUND"]
-
-		AppDelegate.fcmToken = deviceToken["token"] ?? "NO TOKEN"
-
-		print("Device token: ", deviceToken) // This token can be used for testing notifications on FCM
-	}
+//	func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+//		let deviceToken: [String: String] = ["token": fcmToken ?? "TOKEN NOT FOUND"]
+//
+//		AppDelegate.fcmToken = deviceToken["token"] ?? "NO TOKEN"
+//
+//		print("Device token: ", deviceToken) // This token can be used for testing notifications on FCM
+//	}
 
 }
 
