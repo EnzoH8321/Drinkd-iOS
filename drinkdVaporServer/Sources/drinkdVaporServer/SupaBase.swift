@@ -30,7 +30,7 @@ final class SupaBase {
             }
 
         } catch {
-            print("Unable to Delete Party due to error - \(error)")
+            Log.supabase.setCrit("Unable to Delete Party due to error - \(error)")
             throw error
         }
     }
