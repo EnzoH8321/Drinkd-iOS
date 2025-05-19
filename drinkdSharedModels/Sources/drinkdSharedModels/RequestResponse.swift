@@ -12,12 +12,14 @@ public enum RequestTypes {
     case createParty
     case joinParty
     case leaveParty
+    case sendMessage
 }
 
 public protocol PartyRequest {
 
 }
 
+// Requests are Client - Server
 // Request to create a party
 public struct CreatePartyRequest: Codable, PartyRequest {
     public let username: String
@@ -45,6 +47,19 @@ public struct LeavePartyRequest: Codable, PartyRequest  {
 
     public init(userID: UUID) {
         self.userID = userID
+    }
+}
+
+
+public struct SendMessageRequest: Codable, PartyRequest {
+    public let userID: UUID
+    public let partyID: UUID
+    public let message: String
+
+    public init(userID: UUID, partyID: UUID, message: String) {
+        self.userID = userID
+        self.partyID = partyID
+        self.message = message
     }
 }
 

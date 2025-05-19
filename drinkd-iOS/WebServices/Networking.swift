@@ -378,25 +378,28 @@ extension Networking {
 
             let urlString = HTTP.post(.createParty).fullURLString
             let urlRequest = try createPostRequest(reqType: .createParty, url: urlString, userName: username)
-            return try await postData(urlReq: urlRequest)
+            let response =  try await postData(urlReq: urlRequest)
+            UserDefaultsWrapper.setPartyID(id: response.currentPartyID)
+            return response
         } catch {
             throw error
         }
     }
 
     func leaveParty() async throws -> RouteResponse {
-        do {
+
             let urlString = HTTP.post(.leaveParty).fullURLString
             let urlRequest = try createPostRequest(reqType: .leaveParty, url: urlString)
 
             return try await postData(urlReq: urlRequest)
-
-        } catch {
-            throw error
-        }
     }
 
-    private func createPostRequest(reqType: RequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil) throws -> URLRequest {
+    func sendMessage(message: String) async throws {
+        let urlString = HTTP.post(.sendMessage).fullURLString
+        let urlReq = try createPostRequest(reqType: .sendMessage, url: urlString)
+    }
+
+    private func createPostRequest(reqType: RequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil) throws -> URLRequest {
         guard let url = URL(string: url) else { throw SharedErrors.ClientNetworking.invalidURL }
         var urlRequest = URLRequest(url: url)
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
@@ -414,6 +417,10 @@ extension Networking {
             }
         case .leaveParty:
             urlRequest.httpBody = try JSONEncoder().encode(LeavePartyRequest(userID: userID))
+        case .sendMessage:
+            if let message = message, let partyID = partyID {
+                urlRequest.httpBody = try JSONEncoder().encode(SendMessageRequest(userID: userID, partyID: partyID, message: message))
+            }
         }
 
         return urlRequest

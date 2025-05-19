@@ -54,7 +54,7 @@
 		54F9C855270244B9008FA516 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C854270244B9008FA516 /* Location.swift */; };
 		54F9C8572702494E008FA516 /* PartyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C8562702494E008FA516 /* PartyViewModel.swift */; };
 		54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C858270257E1008FA516 /* SplashScreen.swift */; };
-		54F9C85B27037F2F008FA516 /* drinkdModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C85A27037F2F008FA516 /* drinkdModel.swift */; };
+		54F9C85B27037F2F008FA516 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C85A27037F2F008FA516 /* Models.swift */; };
 		54F9C85D2703E52A008FA516 /* RemoteImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C85C2703E52A008FA516 /* RemoteImageLoader.swift */; };
 		54FEF9492DD0012C00DCD0C6 /* UserDefaultsWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEF9482DD0012700DCD0C6 /* UserDefaultsWrapper.swift */; };
 /* End PBXBuildFile section */
@@ -134,7 +134,7 @@
 		54F9C854270244B9008FA516 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		54F9C8562702494E008FA516 /* PartyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyViewModel.swift; sourceTree = "<group>"; };
 		54F9C858270257E1008FA516 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
-		54F9C85A27037F2F008FA516 /* drinkdModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkdModel.swift; sourceTree = "<group>"; };
+		54F9C85A27037F2F008FA516 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		54F9C85C2703E52A008FA516 /* RemoteImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageLoader.swift; sourceTree = "<group>"; };
 		54FEF9482DD0012700DCD0C6 /* UserDefaultsWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsWrapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -293,7 +293,7 @@
 			isa = PBXGroup;
 			children = (
 				54562858278A250000CA6005 /* API Models */,
-				54F9C85A27037F2F008FA516 /* drinkdModel.swift */,
+				54F9C85A27037F2F008FA516 /* Models.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -557,7 +557,7 @@
 				54BEE37427593A9300C82880 /* Networking.swift in Sources */,
 				54B86718277522D2004D02A1 /* Errors.swift in Sources */,
 				54F9C85D2703E52A008FA516 /* RemoteImageLoader.swift in Sources */,
-				54F9C85B27037F2F008FA516 /* drinkdModel.swift in Sources */,
+				54F9C85B27037F2F008FA516 /* Models.swift in Sources */,
 				5456285A278A252200CA6005 /* FireBaseAPIModels.swift in Sources */,
 				54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */,
 				54F9C83926FBD986008FA516 /* YelpAPIModels.swift in Sources */,

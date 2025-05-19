@@ -92,6 +92,21 @@ func routes(_ app: Application) throws {
 
     }
 
+    // Send Message
+    app.post("sendMessage") { req async -> Response in
+
+        do {
+            guard let reqBody = req.body.data else { return Response(status: .badRequest) }
+            let msgReq = try JSONDecoder().decode(SendMessageRequest.self, from: reqBody)
+
+            try await supabase.sendMessage(userID: msgReq.userID, partyID: msgReq.partyID, text: msgReq.message)
+
+        } catch {
+            return createErrorResponse(error: error)
+        }
+
+    }
+
 }
 
 fileprivate func createErrorResponse(error: any Error) -> Response {

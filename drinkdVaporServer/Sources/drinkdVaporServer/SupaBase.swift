@@ -76,30 +76,44 @@ final class SupaBase {
     // Upsert inserts a new row if one does not exist, otherwise update it
     private func upsertDataToTable<T: SupaBaseTable>(tableType: TableTypes, data: T) async throws {
 
-        do {
 
-            switch tableType {
-            case .parties:
+        switch tableType {
+        case .parties:
 
-                guard let partyData = data as? PartiesTable else { throw SharedErrors.General.castingError("Unable to convert data to PartiesTable") }
+            guard let partyData = data as? PartiesTable else { throw SharedErrors.General.castingError("Unable to convert data to PartiesTable") }
 
-                try await client.from(tableType.tableName).upsert(partyData).execute()
-            case .users:
-                guard let usersData = data as? UsersTable else { throw SharedErrors.General.castingError("Unable to convert data to UsersTable") }
+            try await client.from(tableType.tableName).upsert(partyData).execute()
+        case .users:
+            guard let usersData = data as? UsersTable else { throw SharedErrors.General.castingError("Unable to convert data to UsersTable") }
 
-                try await client.from(tableType.tableName).upsert(usersData).execute()
+            try await client.from(tableType.tableName).upsert(usersData).execute()
 
-            case .messages:
-                guard let messagesData = data as? MessagesTable else { throw SharedErrors.General.castingError("Unable to convert data to MessagesTable")}
+        case .messages:
+            guard let messagesData = data as? MessagesTable else { throw SharedErrors.General.castingError("Unable to convert data to MessagesTable")}
 
-                try await client.from(tableType.tableName).upsert(messagesData).execute()
-            }
-
-        } catch {
-            print("Error - \(error)")
-            throw error
+            try await client.from(tableType.tableName).upsert(messagesData).execute()
         }
 
+
+
+    }
+
+    // Insert a row to a table
+    private func insertRowToTable<T: SupaBaseTable>(tableType: TableTypes, data: T) async throws {
+        switch tableType {
+        case .parties:
+            guard let partyData = data as? PartiesTable else { throw SharedErrors.General.castingError("Unable to convert data to PartiesTable") }
+
+            try await client.from(tableType.tableName).insert(partyData).execute()
+        case .users:
+            guard let usersData = data as? UsersTable else { throw SharedErrors.General.castingError("Unable to convert data to UsersTable") }
+
+            try await client.from(tableType.tableName).insert(usersData).execute()
+        case .messages:
+            guard let messagesData = data as? MessagesTable else { throw SharedErrors.General.castingError("Unable to convert data to MessagesTable")}
+
+            try await client.from(tableType.tableName).insert(messagesData).execute()
+        }
     }
 
     // Delete a row in a table
@@ -233,67 +247,55 @@ extension SupaBase {
     // Party Code should be six digits.
     // User should not be in another party
     func joinParty(username: String, partyCode: Int) async throws -> (party: PartiesTable, user: UsersTable) {
-//        let user = UsersTable(id: UUID(), username: username, date_created: Date().ISO8601Format(), memberOfParty: nil)
+        //        let user = UsersTable(id: UUID(), username: username, date_created: Date().ISO8601Format(), memberOfParty: nil)
         // Check that party code is six digits
         if partyCode < 100000 || partyCode > 999999 {
             throw SharedErrors.SupaBase.invalidPartyCode
         }
 
         // Find party using the party code
-        do {
-
-            guard let row = try await fetchRow(tableType: .parties, dictionary: ["code": partyCode]) as? [PartiesTable] else {
-                throw SharedErrors.General.castingError("Unable to cast row as parties table")
-            }
-
-            guard let partyTable = row.first else {
-                throw SharedErrors.supabase(error: .rowIsEmpty)
-            }
-
-            guard let validPartyID = partyTable.id else {
-                throw SharedErrors.supabase(error: .dataNotFound)
-            }
-
-
-
-            // Happy Path, party exists with that code, get party ID
-            let partyID = validPartyID
-            let userID = UUID()
-            let user = UsersTable(id: userID, username: username, date_created: Date().ISO8601Format(), memberOfParty: partyID)
-            // Add to users table. This user will have a foreign key that traces back to the party
-            try await upsertDataToTable(tableType: .users, data: user)
-
-            return (partyTable, user)
-
-        } catch {
-            throw error
+        guard let row = try await fetchRow(tableType: .parties, dictionary: ["code": partyCode]) as? [PartiesTable] else {
+            throw SharedErrors.General.castingError("Unable to cast row as parties table")
         }
+
+        guard let partyTable = row.first else {
+            throw SharedErrors.supabase(error: .rowIsEmpty)
+        }
+
+        guard let validPartyID = partyTable.id else {
+            throw SharedErrors.supabase(error: .dataNotFound)
+        }
+
+
+
+        // Happy Path, party exists with that code, get party ID
+        let partyID = validPartyID
+        let userID = UUID()
+        let user = UsersTable(id: userID, username: username, date_created: Date().ISO8601Format(), memberOfParty: partyID)
+        // Add to users table. This user will have a foreign key that traces back to the party
+        try await upsertDataToTable(tableType: .users, data: user)
+
+        return (partyTable, user)
     }
 
-    func sendMessage(userID: UUID, text: String) async throws {
+    func sendMessage(userID: UUID, partyID: UUID, text: String) async throws {
 
-        do {
+
             // We need to get the party ID from the user row
-            guard let users = try await fetchRow(tableType: .users, dictionary: ["id": userID]) as? [UsersTable] else {
-                throw SharedErrors.General.castingError("Unable to cast row as users table")
-            }
-
-            guard let user = users.first else {
-                print("users are empty")
-                return
-            }
-
-            let partyID = user.party_id
+//            guard let users = try await fetchRow(tableType: .users, dictionary: ["id": userID]) as? [UsersTable] else {
+//                throw SharedErrors.General.castingError("Unable to cast row as users table")
+//            }
+//
+//            guard let user = users.first else {
+//                print("users are empty")
+//                return
+//            }
+//
+//            let partyID = user.party_id
             let message = MessagesTable(id: UUID(), partyId: partyID, date_created: Date().ISO8601Format(), text: text, userId: userID)
 
             // Add message to messages table
             try await upsertDataToTable(tableType: .messages, data: message)
-
-        } catch {
-            throw error
-        }
-
-
 
 
     }
