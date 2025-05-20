@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
-//TODO: Make Chat dynamic, update on the fly.
+import drinkdSharedModels
+
 struct ChatView: View {
 
     @Environment(PartyViewModel.self) var viewModel
 	@State var messageString = ""
+    @State private var showAlert: (state: Bool, message: String) = (false, "")
 
 	var body: some View {
 
@@ -33,21 +35,18 @@ struct ChatView: View {
                         Spacer()
                         TextField("Enter Text Here", text: $messageString)
                             .textFieldStyle(regularTextFieldStyle())
-//                            .frame(width: globalWidth * 0.75)
-//                            .padding(.leading, 8)
                         
                         Button(action: {
 
-//                            let stringifiedUUID = UUID().uuidString
-//                            let timeStamp = Date().currentTimeMillis()
-//                            let message = FireBaseMessage(id: stringifiedUUID, username: viewModel.chatVM.personalUserName, personalId: viewModel.chatVM.personalUserID, message: messageString, timestamp: timeStamp, timestampString: Date().formatDate(forMilliseconds: timeStamp))
-//
-//                            Networking.shared.sendMessage(forMessage: message, viewModel: viewModel)
-//                            //Scrolls to the last message after hitting the button if not empty
-//                            if (!viewModel.chatVM.chatMessageList.isEmpty) {
-//                                scrollView.scrollTo(viewModel.chatVM.chatMessageList[viewModel.chatVM.chatMessageList.endIndex - 1])
-//                            }
-                            
+                            Task {
+                                do {
+                                    guard let partyID = UserDefaultsWrapper.getPartyID() else { throw SharedErrors.general(error: .missingValue("Unable to get party id"))}
+                                    try await Networking.shared.sendMessage(message: messageString, partyID: partyID)
+                                } catch {
+                                   showAlert = (true, error.localizedDescription)
+                                }
+                            }
+
                         }, label: {
                             Image(systemName: "plus")
                                 .resizable()
@@ -61,6 +60,9 @@ struct ChatView: View {
                 }
 				
 			}
+            .alert(isPresented: $showAlert.state) {
+                Alert(title: Text("Error"), message: Text(showAlert.message))
+            }
             .onDisappear {
                 //Removes the FB messaging observer
 //                Networking.shared.removeMessagingObserver(viewModel: viewModel)

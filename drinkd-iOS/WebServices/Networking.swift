@@ -394,9 +394,11 @@ extension Networking {
             return try await postData(urlReq: urlRequest)
     }
 
-    func sendMessage(message: String) async throws {
+    func sendMessage(message: String, partyID: UUID) async throws -> RouteResponse {
         let urlString = HTTP.post(.sendMessage).fullURLString
-        let urlReq = try createPostRequest(reqType: .sendMessage, url: urlString)
+        let urlReq = try createPostRequest(reqType: .sendMessage, url: urlString, partyID: partyID, message: message)
+
+        return try await postData(urlReq: urlReq)
     }
 
     private func createPostRequest(reqType: RequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil) throws -> URLRequest {
@@ -417,6 +419,7 @@ extension Networking {
             }
         case .leaveParty:
             urlRequest.httpBody = try JSONEncoder().encode(LeavePartyRequest(userID: userID))
+
         case .sendMessage:
             if let message = message, let partyID = partyID {
                 urlRequest.httpBody = try JSONEncoder().encode(SendMessageRequest(userID: userID, partyID: partyID, message: message))

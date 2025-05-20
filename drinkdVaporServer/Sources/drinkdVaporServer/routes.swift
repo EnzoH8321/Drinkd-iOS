@@ -99,8 +99,19 @@ func routes(_ app: Application) throws {
             guard let reqBody = req.body.data else { return Response(status: .badRequest) }
             let msgReq = try JSONDecoder().decode(SendMessageRequest.self, from: reqBody)
 
+            guard let userData = try await supabase.fetchRow(tableType: .users, dictionary: ["id": "\(msgReq.userID)"]).first as? UsersTable else {
+                throw SharedErrors.supabase(error: .rowIsEmpty)
+            }
+
+            let routeResponseObject = RouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: msgReq.partyID)
+            let responseJSON = try JSONEncoder().encode(routeResponseObject)
+
             try await supabase.sendMessage(userID: msgReq.userID, partyID: msgReq.partyID, text: msgReq.message)
 
+            let response = Response()
+            response.body = Response.Body(data: responseJSON)
+
+            return response
         } catch {
             return createErrorResponse(error: error)
         }
