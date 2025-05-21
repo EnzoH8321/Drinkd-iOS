@@ -5,7 +5,7 @@ let package = Package(
     name: "drinkdVaporServer",
     platforms: [
        .macOS(.v15),
-       .iOS(.v15)
+       .iOS(.v17)
     ],
     dependencies: [
         // 💧 A server-side Swift web framework.

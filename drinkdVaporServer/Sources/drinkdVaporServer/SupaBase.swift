@@ -280,18 +280,6 @@ extension SupaBase {
 
     func sendMessage(userID: UUID, partyID: UUID, text: String) async throws {
 
-
-            // We need to get the party ID from the user row
-//            guard let users = try await fetchRow(tableType: .users, dictionary: ["id": userID]) as? [UsersTable] else {
-//                throw SharedErrors.General.castingError("Unable to cast row as users table")
-//            }
-//
-//            guard let user = users.first else {
-//                print("users are empty")
-//                return
-//            }
-//
-//            let partyID = user.party_id
             let message = MessagesTable(id: UUID(), partyId: partyID, date_created: Date().ISO8601Format(), text: text, userId: userID)
 
             // Add message to messages table
@@ -300,3 +288,32 @@ extension SupaBase {
 
     }
 }
+
+//MARK: RealTime DB
+extension SupaBase {
+    // Creates channel and uses it to listen for changes
+    // Will listen to changes
+    func listenForBroadcasts() async {
+
+        // Check if the channel already exists
+        let channel = client.channel("Messages")
+
+
+        let changeStream = channel.postgresChange(
+            AnyAction.self,
+            schema: "public",
+            table: "Messages"
+        )
+
+        await channel.subscribe()
+
+        for await change in changeStream {
+            switch change {
+            case .delete(let action): print("🤖 Deleted: \(action.oldRecord)")
+            case .insert(let action): print("🤖 Inserted: \(action.record)")
+            case .update(let action): print("🤖 Updated: \(action.oldRecord) with \(action.record)")
+            }
+        }
+    }
+}
+
