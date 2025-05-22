@@ -10,9 +10,9 @@ import OSLog
 
 public final class Log {
     /// Using your bundle identifier is a great way to ensure a unique identifier.
-    private static let subsystem = Bundle.main.bundleIdentifier!
+    private static let subsystem = Bundle.main.bundleIdentifier
 
-    public static let supabase = Logger(subsystem: subsystem, category: "Supabase")
+    public static let supabase = Logger(subsystem: subsystem ?? "Error locating Subsystem", category: "Supabase")
 
     public static func setFault(_ msg: String) {
 

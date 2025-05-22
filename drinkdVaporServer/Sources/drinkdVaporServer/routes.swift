@@ -1,9 +1,9 @@
 import Vapor
 import drinkdSharedModels
 
-func routes(_ app: Application) throws {
+func routes(_ app: Application, supabase: SupaBase) throws {
 
-    let supabase = SupaBase()
+//    let supabase = SupaBase()
     let testUserID = UUID(uuidString: "4B18F13A-E8C6-4E6B-A187-25517F20D35D")!
     let testPartyID = UUID(uuidString: "5b04fdcf-3e83-468e-b933-b8aed5abee79")!
 
@@ -28,6 +28,9 @@ func routes(_ app: Application) throws {
             let encodedResponse = try JSONEncoder().encode(routeResponseObject)
 
             response.body = Response.Body(data: encodedResponse)
+
+            // Create a message channel
+            await supabase.createReadMessageChannel(partyID: partyID)
 
             return response
         } catch {
@@ -110,6 +113,9 @@ func routes(_ app: Application) throws {
 
             let response = Response()
             response.body = Response.Body(data: responseJSON)
+
+            // Broadcast message
+            await supabase.broadcastMessage(msgReq.message, partyID: msgReq.partyID)
 
             return response
         } catch {

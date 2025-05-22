@@ -11,6 +11,9 @@ import drinkdSharedModels
 
 @Observable
 final class SupaBase {
+    // [channel name: channel]
+    var channels: [String: RealtimeChannelV2] = [:]
+
     private let client = SupabaseClient(
         supabaseURL: URL(string: "https://jdkdtahoqpsspesqyojb.supabase.co")!,
         supabaseKey: ProcessInfo.processInfo.environment["SUPABASE_KEY"]!
@@ -291,29 +294,47 @@ extension SupaBase {
 
 //MARK: RealTime DB
 extension SupaBase {
-    // Creates channel and uses it to listen for changes
-    // Will listen to changes
-    func listenForBroadcasts() async {
+    // Creates channel, partyID should be the channel identifier
+    func createReadMessageChannel(partyID: UUID) async {
 
-        // Check if the channel already exists
-        let channel = client.channel("Messages")
+        let channel = client.channel(partyID.uuidString) {
+            $0.broadcast.receiveOwnBroadcasts = true
+        }
 
-
-        let changeStream = channel.postgresChange(
-            AnyAction.self,
-            schema: "public",
-            table: "Messages"
-        )
+        let broadcastStream = channel.broadcastStream(event: "newMessage")
 
         await channel.subscribe()
 
-        for await change in changeStream {
-            switch change {
-            case .delete(let action): print("🤖 Deleted: \(action.oldRecord)")
-            case .insert(let action): print("🤖 Inserted: \(action.record)")
-            case .update(let action): print("🤖 Updated: \(action.oldRecord) with \(action.record)")
+        channels[partyID.uuidString] = channel
+        print(partyID)
+
+        Task {
+          for await message in broadcastStream {
+            print("This message - \(message)")
+          }
+        }
+
+    }
+
+    func broadcastMessage(_ message: String, partyID: UUID) async {
+
+        if let channel = channels[partyID.uuidString] {
+
+            do {
+
+                try await channel.broadcast(
+                    event: "newMessage",
+                    message: [
+                        "message": message
+                    ]
+                )
+
+            } catch {
+                print(error)
             }
+
         }
     }
 }
+
 
