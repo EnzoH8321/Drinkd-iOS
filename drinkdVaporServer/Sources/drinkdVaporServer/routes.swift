@@ -3,15 +3,6 @@ import drinkdSharedModels
 
 func routes(_ app: Application, supabase: SupaBase) throws {
 
-//    let supabase = SupaBase()
-    let testUserID = UUID(uuidString: "4B18F13A-E8C6-4E6B-A187-25517F20D35D")!
-    let testPartyID = UUID(uuidString: "5b04fdcf-3e83-468e-b933-b8aed5abee79")!
-
-    app.get { req async in
-        "It works!"
-    }
-
-
     // If successful, return a party ID
     // If unsuccessful, return an error string
     app.post("createParty") { req async -> Response in
@@ -30,7 +21,10 @@ func routes(_ app: Application, supabase: SupaBase) throws {
             response.body = Response.Body(data: encodedResponse)
 
             // Create a message channel
-            await supabase.createReadMessageChannel(partyID: partyID)
+            await supabase.rdbCreateChannel(partyID: partyID)
+
+            // Create web socket
+            await createWebSocket(app: app, partyID: partyID, supabase: supabase)
 
             return response
         } catch {
@@ -115,7 +109,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
             response.body = Response.Body(data: responseJSON)
 
             // Broadcast message
-            await supabase.broadcastMessage(msgReq.message, partyID: msgReq.partyID)
+            await supabase.rdbSendMessage(msgReq.message, partyID: msgReq.partyID)
 
             return response
         } catch {
@@ -134,4 +128,32 @@ fileprivate func createErrorResponse(error: any Error) -> Response {
     errorResponse.body = Response.Body(data: errorWrapperJSON)
 
     return errorResponse
+}
+
+fileprivate func createWebSocket(app: Application, partyID: UUID, supabase: SupaBase) async {
+    // route should be ws_partyID
+    // ex ws_34534dfgdf
+
+    let route = "testWS"
+    let channel = supabase.channels[partyID.uuidString]
+
+    if let validChannel = channel {
+        let messages = await supabase.rdbReadMessage(channel: validChannel.broadcastStream(event: "newMessage"))
+        
+        guard let lastMessage = messages.last else {
+            print("NO LAST MESSAGE")
+            return
+        }
+
+        app.webSocket("\(route)") { req, ws in
+            print(ws)
+            ws.send(lastMessage)
+        }
+
+    } else {
+        print("INVALID CHANNEL")
+    }
+
+
+
 }

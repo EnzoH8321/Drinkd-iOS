@@ -450,4 +450,23 @@ extension Networking {
         }
     }
 
+    private func connectToWebsocket() async {
+
+        do {
+
+            try await WebSocket.connect(to: "ws://localhost:8080/testWS") { ws in
+                // Connected WebSocket.
+                print(ws)
+                ws.onText { ws, text in
+                    print("NEW MESSAGE IS -\(text)")
+                }
+            }
+
+
+        } catch {
+            print(error)
+        }
+
+    }
+
 }

@@ -288,14 +288,14 @@ extension SupaBase {
             // Add message to messages table
             try await upsertDataToTable(tableType: .messages, data: message)
 
-
     }
 }
 
 //MARK: RealTime DB
 extension SupaBase {
     // Creates channel, partyID should be the channel identifier
-    func createReadMessageChannel(partyID: UUID) async {
+    // Only use when creating party
+    func rdbCreateChannel(partyID: UUID) async {
 
         let channel = client.channel(partyID.uuidString) {
             $0.broadcast.receiveOwnBroadcasts = true
@@ -306,17 +306,34 @@ extension SupaBase {
         await channel.subscribe()
 
         channels[partyID.uuidString] = channel
-        print(partyID)
-
-        Task {
-          for await message in broadcastStream {
-            print("This message - \(message)")
-          }
-        }
 
     }
 
-    func broadcastMessage(_ message: String, partyID: UUID) async {
+    func rdbReadMessage(channel: AsyncStream<JSONObject>) async -> [String] {
+
+        var messageArray: [String] = []
+
+        Task {
+            for await jsonObj in channel {
+
+                guard let payload = jsonObj["payload"]?.value as? [String: Any] else {
+                    print("Unable to parse payload")
+                    return
+                }
+
+                guard let message = payload["message"] as? String else {
+                    print("Unable to parse message")
+                    return
+                }
+
+                messageArray.append("This message - \(message)")
+            }
+        }
+
+        return messageArray
+    }
+
+    func rdbSendMessage(_ message: String, partyID: UUID) async {
 
         if let channel = channels[partyID.uuidString] {
 
