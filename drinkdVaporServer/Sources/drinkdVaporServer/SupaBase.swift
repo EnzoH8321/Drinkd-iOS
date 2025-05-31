@@ -309,7 +309,7 @@ extension SupaBase {
 
     }
 
-    func rdbReadMessage(channel: AsyncStream<JSONObject>) async -> [String] {
+    func rdbGetMessages(channel: AsyncStream<JSONObject>) async -> [String] {
 
         var messageArray: [String] = []
 

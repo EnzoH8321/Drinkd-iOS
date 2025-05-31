@@ -12,7 +12,7 @@ final class UserDefaultsWrapper {
     static let shared = UserDefaultsWrapper()
     private init() {}
 
-    static let defaults = UserDefaults.standard
+    private static let defaults = UserDefaults.standard
 
     // User ID
     static func setUserIDOnStartup() {

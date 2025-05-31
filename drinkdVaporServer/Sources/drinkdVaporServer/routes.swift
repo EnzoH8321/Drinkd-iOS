@@ -24,7 +24,9 @@ func routes(_ app: Application, supabase: SupaBase) throws {
             await supabase.rdbCreateChannel(partyID: partyID)
 
             // Create web socket
-            await createWebSocket(app: app, partyID: partyID, supabase: supabase)
+//            await createWebSocket(app: app, partyID: partyID, supabase: supabase)
+
+
 
             return response
         } catch {
@@ -118,6 +120,54 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
     }
 
+    app.webSocket("testWS", ":partyID") { req, ws in
+
+
+
+
+        guard let partyID = req.parameters.get("partyID") else {
+            print("Party ID not found")
+            return
+        }
+
+        // Get Channel
+        guard let channel = supabase.channels[partyID] else {
+            print("Channel not found")
+            return
+        }
+
+        // Get Broadcast stream
+        let stream = channel.broadcastStream(event: "newMessage")
+        var messageArray: [String] = []
+
+        Task {
+
+            // Get latest Messages
+            for await jsonObj in stream {
+
+                guard let payload = jsonObj["payload"]?.value as? [String: Any] else {
+                    print("Unable to parse payload")
+                    return
+                }
+
+                guard let message = payload["message"] as? String else {
+                    print("Unable to parse message")
+                    return
+                }
+
+                messageArray.append("This message - \(message)")
+                print("msg array - \(messageArray)")
+            }
+
+            print("TASK DONE")
+        }
+
+        print("ws - message array \(messageArray)")
+         ws.send("Socket COnnected")
+
+    }
+
+
 }
 
 fileprivate func createErrorResponse(error: any Error) -> Response {
@@ -137,22 +187,27 @@ fileprivate func createWebSocket(app: Application, partyID: UUID, supabase: Supa
     let route = "testWS"
     let channel = supabase.channels[partyID.uuidString]
 
-    if let validChannel = channel {
-        let messages = await supabase.rdbReadMessage(channel: validChannel.broadcastStream(event: "newMessage"))
-        
-        guard let lastMessage = messages.last else {
-            print("NO LAST MESSAGE")
-            return
-        }
-
-        app.webSocket("\(route)") { req, ws in
-            print(ws)
-            ws.send(lastMessage)
-        }
-
-    } else {
-        print("INVALID CHANNEL")
+    app.webSocket("testWS") { req, ws in
+        print("socket -> \(ws)")
+        ws.send("Socket COnnected")
     }
+
+//    if let validChannel = channel {
+////        let messages = await supabase.rdbReadMessage(channel: validChannel.broadcastStream(event: "newMessage"))
+////        
+////        guard let lastMessage = messages.last else {
+////            print("NO LAST MESSAGE")
+////            return
+////        }
+//
+//        app.webSocket("testWS") { req, ws in
+//            print("socket -> \(ws)")
+//            ws.send("Socket COnnected")
+//        }
+//
+//    } else {
+//        print("INVALID CHANNEL")
+//    }
 
 
 

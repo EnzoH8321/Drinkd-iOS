@@ -380,6 +380,7 @@ extension Networking {
             let urlRequest = try createPostRequest(reqType: .createParty, url: urlString, userName: username)
             let response =  try await postData(urlReq: urlRequest)
             UserDefaultsWrapper.setPartyID(id: response.currentPartyID)
+//            await connectToWebsocket()
             return response
         } catch {
             throw error
@@ -450,11 +451,11 @@ extension Networking {
         }
     }
 
-    private func connectToWebsocket() async {
+    func connectToWebsocket(partyID: UUID) async {
 
         do {
 
-            try await WebSocket.connect(to: "ws://localhost:8080/testWS") { ws in
+            try await WebSocket.connect(to: "ws://localhost:8080/testWS/\(partyID.uuidString)") { ws in
                 // Connected WebSocket.
                 print(ws)
                 ws.onText { ws, text in

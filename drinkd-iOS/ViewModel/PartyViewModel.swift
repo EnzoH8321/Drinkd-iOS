@@ -50,55 +50,6 @@ class PartyViewModel {
         case partyID, partyMaxVotes, partyName, partyTimestamp, partyURL
     }
 
-    func JoinExistingParty(getCode partyCode: String) {
-
-        //Reads data at a path and listens for changes
-//        topBarsReference.getData(completion: { error, snapshot in
-//
-//            if let validSnapshot = snapshot {
-//                if(!validSnapshot.exists()) {
-//                    self.queryPartyError = true
-//                    print("Party does not exist")
-//                    print(self.queryPartyError)
-//                    return
-//                } else {
-//
-//                    //Organizes values into a usable swift object
-//                    guard let value = validSnapshot.value as? [String: AnyObject] else {
-//                        print("Value cannot be unwrapped to a Swift readable format ")
-//                        return
-//                    }
-//                    for (key, valueProperty) in value {
-//                        switch key {
-//                        case FireBasePartyProps.partyID.rawValue:
-////                            self.setFriendsPartyId(code: valueProperty as? String)
-//                            self.friendPartyId = valueProperty as? String
-//                        case FireBasePartyProps.partyMaxVotes.rawValue:
-//                            self.joinParty(getVotes: valueProperty as? Int)
-//
-//                        case FireBasePartyProps.partyName.rawValue:
-////                            self.setPartyName(name: valueProperty as? String)
-//                            self.currentParty?.partyName = valueProperty as? String ?? "ERROR"
-//
-//                        case FireBasePartyProps.partyURL.rawValue:
-//                            self.joinParty(getURL: valueProperty as? String)
-//
-//                        default:
-//                            continue
-//                        }
-//                    }
-//
-//                    self.setUserLevel(level: .member)
-//                    self.currentParty?.partyID = String(Int.random(in: 100...20000))
-//                    self.currentlyInParty = true
-//                    self.queryPartyError = false
-//                }
-//            }
-//
-//
-//        })
-    }
-
     //Used when a party is joined
     func clearAllRestaurants() {
         self.localRestaurants.removeAll()

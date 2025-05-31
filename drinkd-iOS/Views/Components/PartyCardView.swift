@@ -45,18 +45,16 @@ struct PartyCardView: View {
 							NavigationLink(isActive: $showingChatView, destination: {ChatView()}, label: {EmptyView()})
 
                             Button {
-                                showingChatView = true
 
-//                                Networking.shared.fetchExistingMessages(viewModel: viewModel) { result in
-//
-//                                    switch(result) {
-//                                    case .success(_):
-//                                        print("Success")
-//                                    case .failure(_):
-//                                        print("Failure")
-//                                    }
-//
-//                                }
+                                Task {
+                                    guard let partyID = UserDefaultsWrapper.getPartyID() else {
+                                        print("Unable to get Party ID")
+                                        return
+                                    }
+                                    await Networking.shared.connectToWebsocket(partyID: partyID)
+                                    showingChatView = true
+                                }
+
                             } label: {
                                 Text("Join Chat")
                                     .bold()
