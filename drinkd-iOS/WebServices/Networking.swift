@@ -451,21 +451,21 @@ extension Networking {
         }
     }
 
-    func connectToWebsocket(partyID: UUID) async {
+    func connectToWebsocket(partyVM: PartyViewModel, partyID: UUID) async {
 
         do {
 
             try await WebSocket.connect(to: "ws://localhost:8080/testWS/\(partyID.uuidString)") { ws in
+                Log.networking.info("WebSocket connected to url - ws://localhost:8080/testWS/\(partyID.uuidString)")
                 // Connected WebSocket.
-                print(ws)
                 ws.onText { ws, text in
                     print("NEW MESSAGE IS -\(text)")
+                    partyVM.chatVM.chatMessageList.append(text)
                 }
             }
 
-
         } catch {
-            print(error)
+            Log.networking.fault("Error connecting to WebSocket - \(error)")
         }
 
     }

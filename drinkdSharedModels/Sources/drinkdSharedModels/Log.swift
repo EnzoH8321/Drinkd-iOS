@@ -14,6 +14,8 @@ public final class Log {
 
     public static let supabase = Logger(subsystem: subsystem ?? "Error locating Subsystem", category: "Supabase")
 
+    public static let networking = Logger(subsystem: subsystem ?? "Error locating Subsystem", category: "Networking")
+
     public static func setFault(_ msg: String) {
 
     }

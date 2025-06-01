@@ -11,7 +11,7 @@ import Foundation
 final class ChatViewModel {
     var personalUserName = ""
     var personalUserID: UUID? 
-    var chatMessageList: [FireBaseMessage] = []
+    var chatMessageList: [String] = []
 
     //For chat
     //TODO: Finish Chat Features

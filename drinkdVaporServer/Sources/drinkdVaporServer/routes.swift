@@ -122,9 +122,6 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
     app.webSocket("testWS", ":partyID") { req, ws in
 
-
-
-
         guard let partyID = req.parameters.get("partyID") else {
             print("Party ID not found")
             return
@@ -157,13 +154,18 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                 messageArray.append("This message - \(message)")
                 print("msg array - \(messageArray)")
+                print("Message - \(message)")
+
+                do {
+                    try await ws.send(message)
+                } catch {
+                    print("Error sending ws message - \(message)")
+                }
+
             }
 
             print("TASK DONE")
         }
-
-        print("ws - message array \(messageArray)")
-         ws.send("Socket COnnected")
 
     }
 

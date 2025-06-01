@@ -347,7 +347,7 @@ extension SupaBase {
                 )
 
             } catch {
-                print(error)
+                Log.supabase.fault("Error in rdbSendMessage - \(error)")
             }
 
         }
