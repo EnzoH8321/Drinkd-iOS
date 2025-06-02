@@ -458,9 +458,14 @@ extension Networking {
             try await WebSocket.connect(to: "ws://localhost:8080/testWS/\(partyID.uuidString)") { ws in
                 Log.networking.info("WebSocket connected to url - ws://localhost:8080/testWS/\(partyID.uuidString)")
                 // Connected WebSocket.
-                ws.onText { ws, text in
-                    print("NEW MESSAGE IS -\(text)")
-                    partyVM.chatVM.chatMessageList.append(text)
+                ws.onBinary { ws, binary in
+                    let data = Data(buffer: binary)
+                    do {
+                        let message = try JSONDecoder().decode(WSMessage.self, from: data)
+                        partyVM.chatVM.chatMessageList.append(message)
+                    } catch {
+                        Log.networking.fault("Error decoding websocket binary data - \(error)")
+                    }
                 }
             }
 

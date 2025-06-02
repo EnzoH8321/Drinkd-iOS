@@ -16,13 +16,13 @@ public final class Log {
 
     public static let networking = Logger(subsystem: subsystem ?? "Error locating Subsystem", category: "Networking")
 
-    public static func setFault(_ msg: String) {
+    public static let routes = Logger(subsystem: subsystem ?? "Error locating Subsystem", category: "Routes")
 
-    }
+
 }
 
 extension Logger {
-    public func setCrit(_ msg: String) {
-        self.critical("\(msg)")
-    }
+//    public func setCrit(_ msg: String) {
+//        self.critical("\(msg)")
+//    }
 }

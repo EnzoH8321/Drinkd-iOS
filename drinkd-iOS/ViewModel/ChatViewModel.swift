@@ -6,12 +6,13 @@
 //
 
 import Foundation
+import drinkdSharedModels
 
 @Observable
 final class ChatViewModel {
     var personalUserName = ""
     var personalUserID: UUID? 
-    var chatMessageList: [String] = []
+    var chatMessageList: [WSMessage] = []
 
     //For chat
     //TODO: Finish Chat Features

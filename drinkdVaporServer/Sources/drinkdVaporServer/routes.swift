@@ -153,13 +153,20 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                 }
 
                 messageArray.append("This message - \(message)")
-                print("msg array - \(messageArray)")
-                print("Message - \(message)")
+
+
 
                 do {
-                    try await ws.send(message)
+                    let wsMessage = WSMessage(text: message)
+                    let data = try JSONEncoder().encode(wsMessage)
+                    let byteArray: [UInt8] = data.withUnsafeBytes { bytes in
+                        return Array(bytes)
+                    }
+
+                    try await ws.send(byteArray)
                 } catch {
-                    print("Error sending ws message - \(message)")
+//                    print("Error sending ws message - \(message)")
+                    Log.routes.fault("Error sending ws message - \(message)")
                 }
 
             }
