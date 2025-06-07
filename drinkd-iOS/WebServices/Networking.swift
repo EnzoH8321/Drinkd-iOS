@@ -219,10 +219,11 @@ extension Networking {
         }
     }
 
-    func leaveParty() async throws -> RouteResponse {
+    func leaveParty(partyVM: PartyViewModel, partyID: UUID) async throws -> RouteResponse {
 
         let urlString = HTTP.post(.leaveParty).fullURLString
         let urlRequest = try createPostRequest(reqType: .leaveParty, url: urlString)
+        await cancelWSConnection(partyVM: partyVM, partyID: partyID)
         return try await postData(urlReq: urlRequest)
     }
 
@@ -287,16 +288,36 @@ extension Networking {
 
             try await WebSocket.connect(to: "ws://localhost:8080/testWS/\(username)/\(partyID.uuidString)") { ws in
                 Log.networking.info("WebSocket connected to url - ws://localhost:8080/testWS/\(username)/\(partyID.uuidString)")
-                // Connected WebSocket.
-                ws.onBinary { ws, binary in
-                    let data = Data(buffer: binary)
-                    do {
-                        let message = try JSONDecoder().decode(WSMessage.self, from: data)
-                        partyVM.chatMessageList.append(message)
-                    } catch {
-                        Log.networking.fault("Error decoding websocket binary data - \(error)")
+
+                partyVM.currentWebsocket = ws
+
+                if let validWS = partyVM.currentWebsocket {
+                    // Connected WebSocket.
+                    validWS.onBinary { ws, binary in
+                        let data = Data(buffer: binary)
+                        do {
+                            let message = try JSONDecoder().decode(WSMessage.self, from: data)
+                            partyVM.chatMessageList.append(message)
+                        } catch {
+                            Log.networking.fault("Error decoding websocket binary data - \(error)")
+                        }
                     }
+
+                    // Check if the websocket connection has closed
+                    validWS.onClose.whenComplete { result in
+                        switch result {
+                        case .success(let success):
+                            Log.routes.debug("Successfully closed websocket connection for PARTYID: \(partyID)")
+                        case .failure(let failure):
+                            Log.routes.fault("Unable to close websocket connection - \(failure)")
+                        }
+                    }
+                } else {
+                    Log.routes.fault("PartyVM websocket is nil")
                 }
+
+
+
             }
 
         } catch {
@@ -304,5 +325,24 @@ extension Networking {
         }
 
     }
+
+    func cancelWSConnection(partyVM: PartyViewModel, partyID: UUID) async {
+        do {
+
+            guard let vm = partyVM.currentWebsocket else {
+                Log.networking.fault("PartyVM websocket is nil")
+                return
+            }
+
+            try await vm.close()
+
+            partyVM.currentWebsocket = nil
+
+        } catch {
+            Log.networking.fault("Error closing WebSocket - \(error)")
+        }
+    }
+
+
 
 }

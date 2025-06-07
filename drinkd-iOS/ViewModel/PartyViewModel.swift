@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import drinkdSharedModels
+import Vapor
 
 @Observable
 class PartyViewModel {
@@ -48,6 +49,9 @@ class PartyViewModel {
     //
     var queryPartyError = false
     var removeSplashScreen = true
+
+    // WebSocket
+    var currentWebsocket: WebSocket? = nil
 
     private enum FireBasePartyProps: String {
         case partyID, partyMaxVotes, partyName, partyTimestamp, partyURL

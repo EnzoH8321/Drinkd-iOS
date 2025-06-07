@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import drinkdSharedModels
 
 struct PartyCardView: View {
 
@@ -64,7 +65,8 @@ struct PartyCardView: View {
                             Button {
                                 Task {
                                     do {
-                                        try await Networking.shared.leaveParty()
+                                        guard let partyID = UserDefaultsWrapper.getPartyID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to get the party ID"))}
+                                        try await Networking.shared.leaveParty(partyVM: viewModel, partyID: partyID)
                                         viewModel.leaveParty()
                                     } catch {
                                         showAlert = (true, error.localizedDescription)

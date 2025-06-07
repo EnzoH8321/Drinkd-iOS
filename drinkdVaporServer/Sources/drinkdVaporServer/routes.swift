@@ -132,6 +132,24 @@ func routes(_ app: Application, supabase: SupaBase) throws {
             return
         }
 
+        // Check if the websocket connection has closed
+        ws.onClose.whenComplete { result in
+            switch result {
+            case .success(let success):
+                Log.routes.debug("Successfully closed websocket connection for PARTYID: \(partyID)")
+            case .failure(let failure):
+                Log.routes.fault("Unable to close websocket connection - \(failure)")
+            }
+        }
+
+//        if let closeWS = req.parameters.get("closeWS") {
+//            if closeWS == "CloseWS" {
+//                Task {
+//                    try await ws.close()
+//                }
+//            }
+//        }
+
         // Get Channel
         guard let channel = supabase.channels[partyID] else {
             Log.routes.fault("Channel not found")
