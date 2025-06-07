@@ -201,172 +201,6 @@ final class Networking {
 
         }.resume()
     }
-
-//    func calculateTopThreeRestaurants(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
-//
-//        let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.currentParty?.partyID : viewModel.friendPartyId)").child("topBars")
-//
-//        var dbHandle = DatabaseHandle()
-//
-//        dbHandle = localReference.observe(DataEventType.value, with: { snapshot in
-//
-//            if (!snapshot.exists()) {
-//                completionHandler(.failure(.databaseRefNotFoundError))
-//                return
-//
-//            } else {
-//
-//                DispatchQueue.main.async {
-//
-//
-//                    let decoder = JSONDecoder()
-//                    var testArray: [String: FireBaseTopChoice] = [:]
-//
-//                    guard let codableData = try? JSONSerialization.data(withJSONObject: snapshot.value as Any) else {
-//                        completionHandler(.failure(.serializationError))
-//                        return
-//                    }
-//
-//                    guard let data = try? decoder.decode(FireBaseMaster.self, from: codableData) else {
-//                        completionHandler(.failure(.decodingError))
-//                        return
-//                    }
-//
-//                    for element in data.models {
-//                        for dictionaryElement in element.value.models {
-//
-//                            if (testArray.contains { key, value in key == dictionaryElement.key}) {
-//                                testArray[dictionaryElement.key]?.score += dictionaryElement.value.score
-//                            } else {
-//                                testArray[dictionaryElement.key] = dictionaryElement.value
-//                            }
-//
-//                        }
-//                    }
-//
-//                    let sortedDict = testArray.sorted {
-//                        if ($0.value.score == $1.value.score) {
-//                            return $0.key > $1.key
-//                        } else {
-//                            return $0.value.score > $1.value.score
-//                        }
-//                    }
-//
-//                    let array = Array(sortedDict)
-//                    viewModel.appendTopThreeRestaurants(in: array)
-//                    completionHandler(.success(.connectionSuccess))
-//                    localReference.removeObserver(withHandle: dbHandle)
-//                }
-//            }
-//        })
-//    }
-    //Submits user score to server
-//    func submitRestaurantScore(viewModel: PartyViewModel) {
-//
-//
-//        guard let barList = viewModel.topBarList["\(viewModel.currentCardIndex)"] else {
-//            return print("No restaurant with this key")
-//        }
-//
-//        //Verifies name in case it contains illegal characters
-//        let unverifiedName = barList.name
-//        let score: Int = barList.score
-//        let name: String = unverifiedName.replacingOccurrences(of: "[\\[\\].#$]", with: "", options: .regularExpression, range: nil)
-//
-//        let currentURLOfTopCard: String = viewModel.localRestaurantsDefault[viewModel.currentCardIndex].url ?? "NO URL FOUND"
-//        //Adds id of card for
-//        let currentIDOfTopCard: String = viewModel.localRestaurantsDefault[viewModel.currentCardIndex].id ?? "NO ID FOUND"
-//        let currentImageURLTopCard: String = viewModel.localRestaurantsDefault[viewModel.currentCardIndex].image_url ?? "NO IMAGE URL FOUND"
-//        var localReference: DatabaseReference
-//
-//        if (viewModel.isPartyLeader) {
-//
-//            localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.currentParty?.partyID)")
-//            localReference.child("topBars").child(viewModel.currentParty?.partyID ?? "No Party ID not Found").child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
-//
-//        } else if (!viewModel.isPartyLeader) {
-//
-//            localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.friendPartyId)")
-//            localReference.child("topBars").child(viewModel.currentParty?.partyID ?? "No Party ID not Found" ).child(name).setValue(["score": score, "url": currentURLOfTopCard, "id": currentIDOfTopCard, "image_url": currentImageURLTopCard ])
-//        }
-//    }
-
-    //Fetches chat messages from server
-//    func fetchExistingMessages(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
-//
-//        let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.currentParty?.partyID : viewModel.friendPartyId)").child("messages")
-//
-//        var dbHandle = DatabaseHandle()
-//
-//        dbHandle =  localReference.observe(DataEventType.value, with: { snapshot in
-//
-//            if (!snapshot.exists()) {
-//                completionHandler(.failure(.databaseRefNotFoundError))
-//                return
-//            } else {
-//
-//                DispatchQueue.main.async {
-//
-//                    var messagesArray: [FireBaseMessage] = []
-//
-//                    for messageObj in snapshot.children {
-//
-//                        let messageData = messageObj as! DataSnapshot
-//
-//                        guard let serializedMessageObj = try? JSONSerialization.data(withJSONObject: messageData.value as Any) else {
-//                            completionHandler(.failure(.serializationError))
-//                            return
-//                        }
-//
-//                        guard let decodedMessageObj = try? JSONDecoder().decode(FireBaseMessage.self, from: serializedMessageObj) else {
-//                            completionHandler(.failure(.decodingError))
-//                            return
-//                        }
-//
-//                        let finalMessageObj = FireBaseMessage(id: decodedMessageObj.id, username: decodedMessageObj.username, personalId: decodedMessageObj.personalId, message: decodedMessageObj.message, timestamp: decodedMessageObj.timestamp, timestampString: Date().formatDate(forMilliseconds: decodedMessageObj.timestamp))
-//
-//                        messagesArray.append(finalMessageObj)
-//                    }
-//
-//                    //Sorts Messages by timestamp
-//                    let sortedMessageArray = messagesArray.sorted {
-//                        return $0.timestamp < $1.timestamp
-//                    }
-//                    completionHandler(.success(.connectionSuccess))
-//                    viewModel.chatVM.chatMessageList = sortedMessageArray
-//                }
-//            }
-//        })
-//
-//
-//    }
-
-    //Removes Messaging observers
-//    func removeMessagingObserver(viewModel: PartyViewModel) {
-//        let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.currentParty?.partyID : viewModel.friendPartyId)").child("messages")
-//
-//        localReference.removeAllObservers()
-//    }
-
-    //Sends a new message to the server
-//    func sendMessage(forMessage message: FireBaseMessage, viewModel: PartyViewModel ) {
-//
-//        let localReference =  Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.currentParty?.partyID : viewModel.friendPartyId)").child("messages")
-//
-//        localReference.child("\(message.id)").setValue(["id": message.id, "username": message.username, "personalId": message.personalId, "message": message.message, "timestamp": message.timestamp, "timestampString": Date().formatDate(forMilliseconds: message.timestamp)])
-//
-//        fetchExistingMessages(viewModel: viewModel) { result in
-//
-//            switch(result) {
-//            case .success(_):
-//                print("Success")
-//            case .failure(_):
-//                print("Failure")
-//            }
-//        }
-//
-//
-//    }
 }
 
 //MARK: Client -> Vapor Server code
@@ -375,12 +209,10 @@ extension Networking {
     func createParty(username: String) async throws -> RouteResponse {
 
         do {
-
             let urlString = HTTP.post(.createParty).fullURLString
             let urlRequest = try createPostRequest(reqType: .createParty, url: urlString, userName: username)
             let response =  try await postData(urlReq: urlRequest)
             UserDefaultsWrapper.setPartyID(id: response.currentPartyID)
-//            await connectToWebsocket()
             return response
         } catch {
             throw error
@@ -389,16 +221,14 @@ extension Networking {
 
     func leaveParty() async throws -> RouteResponse {
 
-            let urlString = HTTP.post(.leaveParty).fullURLString
-            let urlRequest = try createPostRequest(reqType: .leaveParty, url: urlString)
-
-            return try await postData(urlReq: urlRequest)
+        let urlString = HTTP.post(.leaveParty).fullURLString
+        let urlRequest = try createPostRequest(reqType: .leaveParty, url: urlString)
+        return try await postData(urlReq: urlRequest)
     }
 
     func sendMessage(message: String, partyID: UUID) async throws -> RouteResponse {
         let urlString = HTTP.post(.sendMessage).fullURLString
         let urlReq = try createPostRequest(reqType: .sendMessage, url: urlString, partyID: partyID, message: message)
-
         return try await postData(urlReq: urlReq)
     }
 
