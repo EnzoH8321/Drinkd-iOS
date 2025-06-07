@@ -51,7 +51,7 @@ struct PartyCardView: View {
                                         print("Unable to get Party ID")
                                         return
                                     }
-                                    await Networking.shared.connectToWebsocket(partyVM: viewModel, partyID: partyID)
+                                    await Networking.shared.connectToWebsocket(partyVM: viewModel, username: viewModel.personalUserName, partyID: partyID)
                                     showingChatView = true
                                 }
 

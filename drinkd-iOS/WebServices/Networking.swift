@@ -451,18 +451,18 @@ extension Networking {
         }
     }
 
-    func connectToWebsocket(partyVM: PartyViewModel, partyID: UUID) async {
+    func connectToWebsocket(partyVM: PartyViewModel, username: String, partyID: UUID) async {
 
         do {
 
-            try await WebSocket.connect(to: "ws://localhost:8080/testWS/\(partyID.uuidString)") { ws in
-                Log.networking.info("WebSocket connected to url - ws://localhost:8080/testWS/\(partyID.uuidString)")
+            try await WebSocket.connect(to: "ws://localhost:8080/testWS/\(username)/\(partyID.uuidString)") { ws in
+                Log.networking.info("WebSocket connected to url - ws://localhost:8080/testWS/\(username)/\(partyID.uuidString)")
                 // Connected WebSocket.
                 ws.onBinary { ws, binary in
                     let data = Data(buffer: binary)
                     do {
                         let message = try JSONDecoder().decode(WSMessage.self, from: data)
-                        partyVM.chatVM.chatMessageList.append(message)
+                        partyVM.chatMessageList.append(message)
                     } catch {
                         Log.networking.fault("Error decoding websocket binary data - \(error)")
                     }

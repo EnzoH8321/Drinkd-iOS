@@ -70,7 +70,7 @@ struct PartyView_Create: View {
                 Task {
                     do {
                         let response = try await Networking.shared.createParty(username: userName)
-                        partyVM.chatVM.setPersonalUserAndID(forName: response.currentUserName, forID: response.currentUserID)
+                        partyVM.setPersonalUserAndID(forName: response.currentUserName, forID: response.currentUserID)
                         partyVM.currentlyInParty = true
                     } catch {
                         showAlert = (true, error.localizedDescription)

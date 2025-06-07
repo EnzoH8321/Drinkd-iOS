@@ -23,6 +23,9 @@ class PartyViewModel {
         case member
     }
 
+    var personalUserName = ""
+    var personalUserID: UUID?
+
     var fcmToken: String = ""
     var currentCardIndex: Int = 9
     var currentlyInParty = false
@@ -41,7 +44,7 @@ class PartyViewModel {
     var secondChoice = FirebaseRestaurantInfo()
     var thirdChoice = FirebaseRestaurantInfo()
 
-    var chatVM = ChatViewModel()
+    var chatMessageList: [WSMessage] = []
     //
     var queryPartyError = false
     var removeSplashScreen = true
@@ -177,6 +180,13 @@ class PartyViewModel {
         self.firstChoice.image_url = ""
         self.secondChoice.image_url = ""
         self.thirdChoice.image_url = ""
+    }
+
+    //For chat
+    //TODO: Finish Chat Features
+    func setPersonalUserAndID(forName name: String, forID id: UUID) {
+        self.personalUserName = name
+        self.personalUserID = id
     }
 }
 
