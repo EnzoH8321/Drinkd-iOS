@@ -192,36 +192,3 @@ fileprivate func createErrorResponse(error: any Error) -> Response {
 
     return errorResponse
 }
-
-fileprivate func createWebSocket(app: Application, partyID: UUID, supabase: SupaBase) async {
-    // route should be ws_partyID
-    // ex ws_34534dfgdf
-
-    let route = "testWS"
-    let channel = supabase.channels[partyID.uuidString]
-
-    app.webSocket("testWS") { req, ws in
-        print("socket -> \(ws)")
-        ws.send("Socket COnnected")
-    }
-
-//    if let validChannel = channel {
-////        let messages = await supabase.rdbReadMessage(channel: validChannel.broadcastStream(event: "newMessage"))
-////        
-////        guard let lastMessage = messages.last else {
-////            print("NO LAST MESSAGE")
-////            return
-////        }
-//
-//        app.webSocket("testWS") { req, ws in
-//            print("socket -> \(ws)")
-//            ws.send("Socket COnnected")
-//        }
-//
-//    } else {
-//        print("INVALID CHANNEL")
-//    }
-
-
-
-}
