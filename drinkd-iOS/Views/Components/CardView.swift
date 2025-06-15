@@ -8,6 +8,7 @@
 //245,31,32
 
 import SwiftUI
+import drinkdSharedModels
 
 struct CardView: View {
 
@@ -18,6 +19,7 @@ struct CardView: View {
     @Binding var cardCounter: Int
     @Environment(PartyViewModel.self) var viewModel
     @Environment(\.openURL) var openURL
+    @State private var showError: (status: Bool, message: String) = (false, "")
 
     var restaurantTitle: String
     var restaurantCategories: String
@@ -185,6 +187,30 @@ struct CardView: View {
                             // Submit Button
                             Button("Submit") {
 //                                Networking.shared.submitRestaurantScore(viewModel: viewModel)
+                                guard let partyID = UserDefaultsWrapper.getPartyID() else {
+                                    showError.message = "Could not find party ID"
+                                    showError.status.toggle()
+                                    return
+                                }
+                                guard let userID = viewModel.personalUserID else {
+                                    showError.message = "Could not find userID"
+                                    showError.status.toggle()
+                                    return
+                                }
+                                let username = viewModel.personalUserName
+                                let restaurantName = restaurantTitle
+                                let rating = viewModel.currentScoreOfTopCard
+
+                                Task {
+                                    do {
+                                        try await Networking.shared.addRating(partyID: partyID, userID: userID, username: username, restaurantName: restaurantName, rating: rating)
+                                    } catch {
+                                        showError.message = error.localizedDescription
+                                        showError.status.toggle()
+                                    }
+
+                                }
+
                             }
 
                             // More Info Button
@@ -209,12 +235,16 @@ struct CardView: View {
                             }
                             .scaledToFit()
                             .frame(height: 50, alignment: .center)
+
                             Spacer()
                         }
                     }
                 }
                 .padding(.all, 12)
             }
+            .alert(isPresented: $showError.status, content: {
+                Alert(title: Text("Error"), message: Text("Error - \(showError.message)"))
+            })
             .rotationEffect(.degrees(Double(offset.width / 5 )))
             .offset(x: offset.width * 5, y: 0)
             .opacity(2 - Double(abs(offset.width / 50)))
@@ -274,23 +304,23 @@ extension CardView {
     }
 }
 
-struct CardView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        
-        CardView(cardCounter: .constant(8), in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 5, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "$$", location: YelpApiBusinessDetails_Location(address1: "155 W 51st St", address2: "Suite 1-", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "650-339-0869", display_phone: "test", distance: 6565.56), forView: PartyViewModel())
-    }
-    
-}
+//struct CardView_Previews: PreviewProvider {
+//    
+//    static var previews: some View {
+//        
+//        CardView(cardCounter: .constant(8), in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 5, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "$$", location: YelpApiBusinessDetails_Location(address1: "155 W 51st St", address2: "Suite 1-", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "650-339-0869", display_phone: "test", distance: 6565.56), forView: PartyViewModel())
+//    }
+//    
+//}
 
-struct CardView_Previews_Online: PreviewProvider {
-    
-    static var previews: some View {
-        
-        let mockVM = PartyViewModel()
-        mockVM.currentlyInParty = true
-
-        return  CardView(cardCounter: Binding<Int>.constant(8), in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 5, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "454", location: YelpApiBusinessDetails_Location(address1: "4545", address2: "4545", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "test", display_phone: "test", distance: 6565.56), forView: mockVM).environment(mockVM)
-    }
-    
-}
+//struct CardView_Previews_Online: PreviewProvider {
+//    
+//    static var previews: some View {
+//        
+//        let mockVM = PartyViewModel()
+//        mockVM.currentlyInParty = true
+//
+//        return  CardView(cardCounter: Binding<Int>.constant(8), in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 5, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "454", location: YelpApiBusinessDetails_Location(address1: "4545", address2: "4545", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "test", display_phone: "test", distance: 6565.56), forView: mockVM).environment(mockVM)
+//    }
+//    
+//}

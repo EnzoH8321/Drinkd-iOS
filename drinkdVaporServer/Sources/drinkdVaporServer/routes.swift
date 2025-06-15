@@ -120,6 +120,29 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
     }
 
+    // Update Rating
+    app.post("updateRating") { req async -> Response in
+
+        do {
+            guard let reqBody = req.body.data else { return Response(status: .badRequest) }
+            let msgReq = try JSONDecoder().decode(UpdateRatingRequest.self, from: reqBody)
+
+            try await supabase.updateRestaurantRating(msgReq)
+
+            let routeResponseObj = RouteResponse(currentUserName: msgReq.userName, currentUserID: msgReq.userID, currentPartyID: msgReq.partyID)
+            let responseJSON = try JSONEncoder().encode(routeResponseObj)
+
+            let response = Response()
+            response.body = Response.Body(data: responseJSON)
+
+            return response
+
+        } catch {
+            return createErrorResponse(error: error)
+        }
+    }
+
+    // MARK: WebSocket
     app.webSocket("testWS", ":username",":partyID") { req, ws in
 
         guard let partyID = req.parameters.get("partyID") else {

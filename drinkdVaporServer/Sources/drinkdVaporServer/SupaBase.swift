@@ -68,6 +68,9 @@ final class SupaBase {
             case .messages:
                 let messagesArray = try JSONDecoder().decode([MessagesTable].self, from: Data(response.data))
                 return messagesArray.count > 0 ? true : false
+            case .ratedRestaurants:
+                let restaurantArray = try JSONDecoder().decode([RatedRestaurantsTable].self, from: Data(response.data))
+                return restaurantArray.count > 0 ? true : false
             }
 
         } catch {
@@ -95,9 +98,12 @@ final class SupaBase {
             guard let messagesData = data as? MessagesTable else { throw SharedErrors.General.castingError("Unable to convert data to MessagesTable")}
 
             try await client.from(tableType.tableName).upsert(messagesData).execute()
+
+        case .ratedRestaurants:
+            guard let restaurantData = data as? RatedRestaurantsTable else { throw SharedErrors.General.castingError("Unable to convert data to RatedRestaurantsTable")}
+            
+            try await client.from(tableType.tableName).upsert(restaurantData).execute()
         }
-
-
 
     }
 
@@ -116,6 +122,9 @@ final class SupaBase {
             guard let messagesData = data as? MessagesTable else { throw SharedErrors.General.castingError("Unable to convert data to MessagesTable")}
 
             try await client.from(tableType.tableName).insert(messagesData).execute()
+        case .ratedRestaurants:
+            guard let restaurantData = data as? RatedRestaurantsTable else { throw SharedErrors.General.castingError("Unable to convert data to MessagesTable")}
+            try await client.from(tableType.tableName).insert(restaurantData).execute()
         }
     }
 
@@ -136,21 +145,13 @@ final class SupaBase {
                 throw error
             }
 
-        case .users:
-            do {
-                try await client.from(fromTable.tableName).delete().eq("id", value: rowID).execute()
-            } catch {
-                throw error
-            }
-        case .messages:
+        case .users, .messages,.ratedRestaurants:
             do {
                 try await client.from(fromTable.tableName).delete().eq("id", value: rowID).execute()
             } catch {
                 throw error
             }
         }
-
-
     }
 
     func fetchRow(tableType: TableTypes, dictionary: [String: any PostgrestFilterValue] = [:]) async throws -> [any SupaBaseTable] {
@@ -176,6 +177,9 @@ final class SupaBase {
             case .messages:
                 let messagesArray = try JSONDecoder().decode([MessagesTable].self, from: Data(response.data))
                 return messagesArray
+            case .ratedRestaurants:
+                let restaurantsArray = try JSONDecoder().decode([RatedRestaurantsTable].self, from: Data(response.data))
+                return restaurantsArray
             }
 
         } catch {
@@ -281,12 +285,23 @@ extension SupaBase {
         return (partyTable, user)
     }
 
+    // Update Restaurant rating
+    func updateRestaurantRating(_ req: UpdateRatingRequest) async throws {
+
+        // Check if the user already rated this restaurant
+        let existingRestaurant = try await self.fetchRow(tableType: .ratedRestaurants, dictionary: ["user_id": req.userID, "restaurant_name": req.restaurantName]).first as? RatedRestaurantsTable
+
+        let id = existingRestaurant != nil ? existingRestaurant!.id : UUID()
+        let restaurant = RatedRestaurantsTable(id: id ,partyID: req.partyID, userID: req.userID, userName: req.userName, restaurantName: req.restaurantName, rating: req.rating)
+
+        try await upsertDataToTable(tableType: .ratedRestaurants, data: restaurant)
+    }
+
     func sendMessage(userID: UUID, partyID: UUID, text: String) async throws {
 
-            let message = MessagesTable(id: UUID(), partyId: partyID, date_created: Date().ISO8601Format(), text: text, userId: userID)
-
-            // Add message to messages table
-            try await upsertDataToTable(tableType: .messages, data: message)
+        let message = MessagesTable(id: UUID(), partyId: partyID, date_created: Date().ISO8601Format(), text: text, userId: userID)
+        // Add message to messages table
+        try await upsertDataToTable(tableType: .messages, data: message)
 
     }
 }

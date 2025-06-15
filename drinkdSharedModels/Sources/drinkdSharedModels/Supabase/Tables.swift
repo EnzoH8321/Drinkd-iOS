@@ -12,6 +12,7 @@ public enum TableTypes {
     case parties
     case users
     case messages
+    case ratedRestaurants
 
     public var tableName: String {
         switch self {
@@ -21,6 +22,8 @@ public enum TableTypes {
             return "Users"
         case .messages:
             return "Messages"
+        case .ratedRestaurants:
+            return "RatedRestaurants"
         }
     }
 }
@@ -72,5 +75,25 @@ public struct MessagesTable: Codable, Sendable, SupaBaseTable {
         self.date_created = date_created
         self.text = text
         self.user_id = userId
+    }
+}
+
+public struct RatedRestaurantsTable: Codable, Sendable, SupaBaseTable {
+    public let id: UUID
+    public let party_id: UUID
+    public let user_id: UUID
+    public let username: String
+    public let restaurant_name: String
+    public let rating: Int
+
+
+
+    public init(id: UUID, partyID: UUID, userID: UUID, userName: String, restaurantName: String, rating: Int) {
+       self.id = id
+        self.party_id = partyID
+        self.user_id = userID
+        self.username = userName
+        self.restaurant_name = restaurantName
+        self.rating = rating
     }
 }

@@ -57,13 +57,13 @@ final class Networking {
         //If defaults are used, then the user location could not be found
         if (longitude == 0.0 || latitude == 0.0) {
             completionHandler(.failure(.noUserLocationFoundError))
-            print("ERROR - NO USER LOCATION FOUND ")
+            Log.networking.fault("ERROR - NO USER LOCATION FOUND ")
             return
         }
 
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
             completionHandler(.failure(.invalidURLError))
-            print("ERROR - INVALID URL")
+            Log.networking.fault("ERROR - INVALID URL")
             return
         }
 
@@ -77,7 +77,7 @@ final class Networking {
 
             if error != nil {
                 completionHandler(.failure(.generalNetworkError))
-                print("ERROR - GENERAL NETWORK ERROR")
+                Log.networking.fault("GENERAL NETWORK ERROR - \(error)")
                 return
             }
 
@@ -86,7 +86,7 @@ final class Networking {
 
                 guard let JSONDecoderValue = try? JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData) else {
                     completionHandler(.failure(.decodingError))
-                    print("ERROR - DECODING ERROR")
+                    Log.networking.fault("ERROR - DECODING ERROR")
                     return
                 }
                 //If you are here, the network should have fetched the data correctly.
@@ -233,7 +233,7 @@ extension Networking {
         return try await postData(urlReq: urlReq)
     }
 
-    private func createPostRequest(reqType: RequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil) throws -> URLRequest {
+    private func createPostRequest(reqType: RequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil) throws -> URLRequest {
         guard let url = URL(string: url) else { throw SharedErrors.ClientNetworking.invalidURL }
         var urlRequest = URLRequest(url: url)
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
@@ -256,6 +256,10 @@ extension Networking {
             if let message = message, let partyID = partyID {
                 urlRequest.httpBody = try JSONEncoder().encode(SendMessageRequest(userID: userID, partyID: partyID, message: message))
             }
+        case .updateRating:
+            if let partyID = partyID, let userName = userName, let userID = UserDefaultsWrapper.getUserID(), let restaurantName = restaurantName, let rating = rating  {
+                urlRequest.httpBody = try JSONEncoder().encode(UpdateRatingRequest(partyID: partyID, userID: userID, userName: userName, restaurantName: restaurantName, rating: rating))
+            }
         }
 
         return urlRequest
@@ -263,7 +267,7 @@ extension Networking {
 
 
     private func postData(urlReq: URLRequest) async throws -> RouteResponse {
-        do {
+
             let (data, response) = try await URLSession.shared.data(for: urlReq)
             let httpResponse = response as! HTTPURLResponse
 
@@ -277,10 +281,23 @@ extension Networking {
             let partyRequest = try JSONDecoder().decode(RouteResponse.self, from: data)
 
             return partyRequest
+       
+    }
+
+    func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int) async throws -> RouteResponse {
+        do {
+            let urlString = HTTP.post(.updateRating).fullURLString
+            let urlReq = try createPostRequest(reqType: .updateRating, url: urlString, partyID: partyID, userName: username, restaurantName: restaurantName, rating: rating)
+            let response = try await postData(urlReq: urlReq)
+            return response
         } catch {
+            Log.networking.fault("\(error)")
             throw error
         }
     }
+
+
+    //MARK: WebSocket code
 
     func connectToWebsocket(partyVM: PartyViewModel, username: String, partyID: UUID) async {
 
@@ -315,8 +332,6 @@ extension Networking {
                 } else {
                     Log.routes.fault("PartyVM websocket is nil")
                 }
-
-
 
             }
 

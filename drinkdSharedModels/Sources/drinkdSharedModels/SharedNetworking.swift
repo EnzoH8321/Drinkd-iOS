@@ -23,6 +23,7 @@ public enum HTTP {
         case joinParty
         case leaveParty
         case sendMessage
+        case updateRating
     }
 
     public var fullURLString: String {
