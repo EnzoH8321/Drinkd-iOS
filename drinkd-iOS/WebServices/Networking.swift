@@ -208,15 +208,11 @@ extension Networking {
 
     func createParty(username: String) async throws -> RouteResponse {
 
-        do {
-            let urlString = HTTP.post(.createParty).fullURLString
-            let urlRequest = try createPostRequest(reqType: .createParty, url: urlString, userName: username)
-            let response =  try await postData(urlReq: urlRequest)
-            UserDefaultsWrapper.setPartyID(id: response.currentPartyID)
-            return response
-        } catch {
-            throw error
-        }
+        let urlString = HTTP.post(.createParty).fullURLString
+        let urlRequest = try createPostRequest(reqType: .createParty, url: urlString, userName: username)
+        let response =  try await postData(urlReq: urlRequest)
+        UserDefaultsWrapper.setPartyID(id: response.currentPartyID)
+        return response
     }
 
     func leaveParty(partyVM: PartyViewModel, partyID: UUID) async throws -> RouteResponse {
@@ -234,32 +230,39 @@ extension Networking {
     }
 
     private func createPostRequest(reqType: RequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil) throws -> URLRequest {
+
         guard let url = URL(string: url) else { throw SharedErrors.ClientNetworking.invalidURL }
         var urlRequest = URLRequest(url: url)
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
         urlRequest.httpMethod = "POST"
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        switch reqType {
-        case .createParty:
-            if let userName = userName {
-                urlRequest.httpBody = try JSONEncoder().encode(CreatePartyRequest(username: userName, userID: userID))
-            }
-        case .joinParty:
-            if let partyCode = partyCode, let userName = userName {
-                urlRequest.httpBody = try JSONEncoder().encode(JoinPartyRequest(username: userName, partyCode: partyCode))
-            }
-        case .leaveParty:
-            urlRequest.httpBody = try JSONEncoder().encode(LeavePartyRequest(userID: userID))
 
-        case .sendMessage:
-            if let message = message, let partyID = partyID {
-                urlRequest.httpBody = try JSONEncoder().encode(SendMessageRequest(userID: userID, partyID: partyID, message: message))
+        do {
+            switch reqType {
+            case .createParty:
+                if let userName = userName {
+                    urlRequest.httpBody = try JSONEncoder().encode(CreatePartyRequest(username: userName, userID: userID))
+                }
+            case .joinParty:
+                if let partyCode = partyCode, let userName = userName {
+                    urlRequest.httpBody = try JSONEncoder().encode(JoinPartyRequest(username: userName, partyCode: partyCode))
+                }
+            case .leaveParty:
+                urlRequest.httpBody = try JSONEncoder().encode(LeavePartyRequest(userID: userID))
+
+            case .sendMessage:
+                if let message = message, let partyID = partyID {
+                    urlRequest.httpBody = try JSONEncoder().encode(SendMessageRequest(userID: userID, partyID: partyID, message: message))
+                }
+            case .updateRating:
+                if let partyID = partyID, let userName = userName, let userID = UserDefaultsWrapper.getUserID(), let restaurantName = restaurantName, let rating = rating  {
+                    urlRequest.httpBody = try JSONEncoder().encode(UpdateRatingRequest(partyID: partyID, userID: userID, userName: userName, restaurantName: restaurantName, rating: rating))
+                }
             }
-        case .updateRating:
-            if let partyID = partyID, let userName = userName, let userID = UserDefaultsWrapper.getUserID(), let restaurantName = restaurantName, let rating = rating  {
-                urlRequest.httpBody = try JSONEncoder().encode(UpdateRatingRequest(partyID: partyID, userID: userID, userName: userName, restaurantName: restaurantName, rating: rating))
-            }
+        } catch {
+            Log.networking.fault("Error encoding JSON - \(error)")
+            throw error
         }
 
         return urlRequest
@@ -268,6 +271,7 @@ extension Networking {
 
     private func postData(urlReq: URLRequest) async throws -> RouteResponse {
 
+        do {
             let (data, response) = try await URLSession.shared.data(for: urlReq)
             let httpResponse = response as! HTTPURLResponse
 
@@ -281,19 +285,19 @@ extension Networking {
             let partyRequest = try JSONDecoder().decode(RouteResponse.self, from: data)
 
             return partyRequest
-       
+        } catch {
+            Log.networking.fault("Error posting data: \(error)")
+            throw error
+        }
+
     }
 
     func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int) async throws -> RouteResponse {
-        do {
-            let urlString = HTTP.post(.updateRating).fullURLString
-            let urlReq = try createPostRequest(reqType: .updateRating, url: urlString, partyID: partyID, userName: username, restaurantName: restaurantName, rating: rating)
-            let response = try await postData(urlReq: urlReq)
-            return response
-        } catch {
-            Log.networking.fault("\(error)")
-            throw error
-        }
+
+        let urlString = HTTP.post(.updateRating).fullURLString
+        let urlReq = try createPostRequest(reqType: .updateRating, url: urlString, partyID: partyID, userName: username, restaurantName: restaurantName, rating: rating)
+        let response = try await postData(urlReq: urlReq)
+        return response
     }
 
 
