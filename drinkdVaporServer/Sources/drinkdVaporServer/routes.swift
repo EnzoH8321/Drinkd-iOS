@@ -23,16 +23,11 @@ func routes(_ app: Application, supabase: SupaBase) throws {
             // Create a message channel
             await supabase.rdbCreateChannel(partyID: partyID)
 
-            // Create web socket
-//            await createWebSocket(app: app, partyID: partyID, supabase: supabase)
-
-
-
             return response
         } catch {
+            Log.routes.warning("Error on createParty route - \(error)")
             return createErrorResponse(error: error)
         }
-
 
     }
 
@@ -55,6 +50,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
             return response
 
         } catch {
+            Log.routes.warning("Error on joinParty route - \(error)")
             return createErrorResponse(error: error)
         }
     }
@@ -86,6 +82,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
             return response
 
         } catch {
+            Log.routes.warning("Error on leaveParty route - \(error)")
             return createErrorResponse(error: error)
         }
 
@@ -115,6 +112,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
             return response
         } catch {
+            Log.routes.warning("Error on leaveParty route - \(error)")
             return createErrorResponse(error: error)
         }
 
@@ -138,6 +136,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
             return response
 
         } catch {
+            Log.routes.warning("Error on updateRating route - \(error)")
             return createErrorResponse(error: error)
         }
     }

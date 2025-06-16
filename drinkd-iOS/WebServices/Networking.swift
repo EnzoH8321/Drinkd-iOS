@@ -229,6 +229,14 @@ extension Networking {
         return try await postData(urlReq: urlReq)
     }
 
+    func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int) async throws -> RouteResponse {
+
+        let urlString = HTTP.post(.updateRating).fullURLString
+        let urlReq = try createPostRequest(reqType: .updateRating, url: urlString, partyID: partyID, userName: username, restaurantName: restaurantName, rating: rating)
+        let response = try await postData(urlReq: urlReq)
+        return response
+    }
+
     private func createPostRequest(reqType: RequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil) throws -> URLRequest {
 
         guard let url = URL(string: url) else { throw SharedErrors.ClientNetworking.invalidURL }
@@ -292,15 +300,6 @@ extension Networking {
 
     }
 
-    func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int) async throws -> RouteResponse {
-
-        let urlString = HTTP.post(.updateRating).fullURLString
-        let urlReq = try createPostRequest(reqType: .updateRating, url: urlString, partyID: partyID, userName: username, restaurantName: restaurantName, rating: rating)
-        let response = try await postData(urlReq: urlReq)
-        return response
-    }
-
-
     //MARK: WebSocket code
 
     func connectToWebsocket(partyVM: PartyViewModel, username: String, partyID: UUID) async {
@@ -361,7 +360,5 @@ extension Networking {
             Log.networking.fault("Error closing WebSocket - \(error)")
         }
     }
-
-
 
 }
