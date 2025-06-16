@@ -208,10 +208,10 @@ final class SupaBase {
 extension SupaBase {
 
     /// Creates a Party
-    func createAParty(leaderID: UUID, userName: String) async throws -> PartiesTable {
+    func createAParty(_ req: CreatePartyRequest) async throws -> PartiesTable {
 
         // Check that user is not already a party leader
-        let isMemberOfAnotherParty = try await fetchRow(tableType: .parties, dictionary: ["party_leader": "\(leaderID)"]).count > 0
+        let isMemberOfAnotherParty = try await fetchRow(tableType: .parties, dictionary: ["party_leader": "\(req.userID)"]).count > 0
 
         if isMemberOfAnotherParty {
             throw SharedErrors.supabase(error: .userIsAlreadyAPartyLeader)
@@ -220,12 +220,12 @@ extension SupaBase {
         // Add to Parties Table
         let randomInt = Int.random(in: 100000..<999999)
         let partyID = UUID()
-        let party = PartiesTable(id: partyID, partyLeader: leaderID, date_created: Date().ISO8601Format(), code: randomInt)
+        let party = PartiesTable(id: partyID, partyLeader: req.userID, date_created: Date().ISO8601Format(), code: randomInt)
         // Add to Party Members Table
         try await client.from(TableTypes.parties.tableName).upsert(party).execute()
 
         // Add to Users Table
-        let user = UsersTable(id: leaderID, username: userName, date_created: Date().ISO8601Format(), memberOfParty: partyID)
+        let user = UsersTable(id: req.userID, username: req.username, date_created: Date().ISO8601Format(), memberOfParty: partyID)
         try await client.from(TableTypes.users.tableName).upsert(user).execute()
 
 
@@ -233,22 +233,22 @@ extension SupaBase {
     }
 
     // Leave a party
-    func leaveParty(userID: UUID, partyID: UUID) async throws {
+    func leaveParty(_ req: LeavePartyRequest, partyID: UUID) async throws {
 
         // Check if party leader
-        let isPartyLeader = try await checkMatching(tableType: .parties, dictionary: ["party_leader": userID])
+        let isPartyLeader = try await checkMatching(tableType: .parties, dictionary: ["party_leader": req.userID])
 
         // Path for leader
         if isPartyLeader {
             // Delete Party
-            try await manuallyDeleteParty(userID: userID, partyID: partyID)
+            try await manuallyDeleteParty(userID: req.userID, partyID: partyID)
             // Delete User
             // For users, the row id is the user id
-            try await deleteDataFromTable(fromTable: .users, rowID: userID)
+            try await deleteDataFromTable(fromTable: .users, rowID: req.userID)
 
         } else {
             // Path for Guest
-            try await deleteDataFromTable(fromTable: .users, rowID: userID)
+            try await deleteDataFromTable(fromTable: .users, rowID: req.userID)
 
         }
 
@@ -258,15 +258,15 @@ extension SupaBase {
     // Only works if you are not party leader, a party leader cannot join a party
     // Party Code should be six digits.
     // User should not be in another party
-    func joinParty(username: String, partyCode: Int) async throws -> (party: PartiesTable, user: UsersTable) {
+    func joinParty(_ req: JoinPartyRequest) async throws -> (party: PartiesTable, user: UsersTable) {
         //        let user = UsersTable(id: UUID(), username: username, date_created: Date().ISO8601Format(), memberOfParty: nil)
         // Check that party code is six digits
-        if partyCode < 100000 || partyCode > 999999 {
+        if req.partyCode < 100000 || req.partyCode > 999999 {
             throw SharedErrors.SupaBase.invalidPartyCode
         }
 
         // Find party using the party code
-        guard let row = try await fetchRow(tableType: .parties, dictionary: ["code": partyCode]) as? [PartiesTable] else {
+        guard let row = try await fetchRow(tableType: .parties, dictionary: ["code": req.partyCode]) as? [PartiesTable] else {
             throw SharedErrors.General.castingError("Unable to cast row as parties table")
         }
 
@@ -279,11 +279,10 @@ extension SupaBase {
         }
 
 
-
         // Happy Path, party exists with that code, get party ID
         let partyID = validPartyID
         let userID = UUID()
-        let user = UsersTable(id: userID, username: username, date_created: Date().ISO8601Format(), memberOfParty: partyID)
+        let user = UsersTable(id: userID, username: req.username, date_created: Date().ISO8601Format(), memberOfParty: partyID)
         // Add to users table. This user will have a foreign key that traces back to the party
         try await upsertDataToTable(tableType: .users, data: user)
 
@@ -302,9 +301,9 @@ extension SupaBase {
         try await upsertDataToTable(tableType: .ratedRestaurants, data: restaurant)
     }
 
-    func sendMessage(userID: UUID, partyID: UUID, text: String) async throws {
+    func sendMessage(_ req: SendMessageRequest) async throws {
 
-        let message = MessagesTable(id: UUID(), partyId: partyID, date_created: Date().ISO8601Format(), text: text, userId: userID)
+        let message = MessagesTable(id: UUID(), partyId: req.partyID, date_created: Date().ISO8601Format(), text: req.message, userId: req.userID)
         // Add message to messages table
         try await upsertDataToTable(tableType: .messages, data: message)
 

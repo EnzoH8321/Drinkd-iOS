@@ -10,7 +10,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
             guard let reqBody = req.body.data else { return Response(status: .badRequest) }
             let partyRequest = try JSONDecoder().decode(CreatePartyRequest.self, from: reqBody)
             
-            let newParty = try await supabase.createAParty(leaderID: partyRequest.userID, userName: partyRequest.username)
+            let newParty = try await supabase.createAParty(partyRequest)
 
             guard let partyID = newParty.id else { throw SharedErrors.General.missingValue("Missing id value")}
             let response = Response()
@@ -37,7 +37,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
         do {
             guard let reqBody = req.body.data else { return Response(status: .badRequest) }
             let partyRequest = try JSONDecoder().decode(JoinPartyRequest.self, from: reqBody)
-            let (party, user) = try await supabase.joinParty(username: partyRequest.username, partyCode: partyRequest.partyCode)
+            let (party, user) = try await supabase.joinParty(partyRequest)
 
             guard let partyID = party.id else { throw SharedErrors.General.missingValue("Missing id value")}
 
@@ -71,7 +71,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
             guard let partyID = partyData.id else { throw SharedErrors.General.missingValue("Missing id value")}
 
-            try await supabase.leaveParty(userID: partyRequest.userID, partyID: partyID)
+            try await supabase.leaveParty(partyRequest, partyID: partyID)
 
             let routeResponseObject = RouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: partyID)
             let responseJSON = try JSONEncoder().encode(routeResponseObject)
@@ -102,7 +102,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
             let routeResponseObject = RouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: msgReq.partyID)
             let responseJSON = try JSONEncoder().encode(routeResponseObject)
 
-            try await supabase.sendMessage(userID: msgReq.userID, partyID: msgReq.partyID, text: msgReq.message)
+            try await supabase.sendMessage(msgReq)
 
             let response = Response()
             response.body = Response.Body(data: responseJSON)
