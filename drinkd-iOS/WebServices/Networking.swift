@@ -203,10 +203,10 @@ final class Networking {
     }
 }
 
-//MARK: Client -> Vapor Server code
+//MARK: Client -> Vapor Server
 extension Networking {
 
-    func createParty(username: String) async throws -> RouteResponse {
+    func createParty(username: String) async throws -> PostRouteResponse {
 
         let urlString = HTTP.post(.createParty).fullURLString
         let urlRequest = try createPostRequest(reqType: .createParty, url: urlString, userName: username)
@@ -215,7 +215,7 @@ extension Networking {
         return response
     }
 
-    func leaveParty(partyVM: PartyViewModel, partyID: UUID) async throws -> RouteResponse {
+    func leaveParty(partyVM: PartyViewModel, partyID: UUID) async throws -> PostRouteResponse {
 
         let urlString = HTTP.post(.leaveParty).fullURLString
         let urlRequest = try createPostRequest(reqType: .leaveParty, url: urlString)
@@ -223,13 +223,13 @@ extension Networking {
         return try await postData(urlReq: urlRequest)
     }
 
-    func sendMessage(message: String, partyID: UUID) async throws -> RouteResponse {
+    func sendMessage(message: String, partyID: UUID) async throws -> PostRouteResponse {
         let urlString = HTTP.post(.sendMessage).fullURLString
         let urlReq = try createPostRequest(reqType: .sendMessage, url: urlString, partyID: partyID, message: message)
         return try await postData(urlReq: urlReq)
     }
 
-    func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int) async throws -> RouteResponse {
+    func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int) async throws -> PostRouteResponse {
 
         let urlString = HTTP.post(.updateRating).fullURLString
         let urlReq = try createPostRequest(reqType: .updateRating, url: urlString, partyID: partyID, userName: username, restaurantName: restaurantName, rating: rating)
@@ -237,68 +237,14 @@ extension Networking {
         return response
     }
 
-    private func createPostRequest(reqType: RequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil) throws -> URLRequest {
-
-        guard let url = URL(string: url) else { throw SharedErrors.ClientNetworking.invalidURL }
-        var urlRequest = URLRequest(url: url)
-        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
-        urlRequest.httpMethod = "POST"
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-
-        do {
-            switch reqType {
-            case .createParty:
-                if let userName = userName {
-                    urlRequest.httpBody = try JSONEncoder().encode(CreatePartyRequest(username: userName, userID: userID))
-                }
-            case .joinParty:
-                if let partyCode = partyCode, let userName = userName {
-                    urlRequest.httpBody = try JSONEncoder().encode(JoinPartyRequest(username: userName, partyCode: partyCode))
-                }
-            case .leaveParty:
-                urlRequest.httpBody = try JSONEncoder().encode(LeavePartyRequest(userID: userID))
-
-            case .sendMessage:
-                if let message = message, let partyID = partyID {
-                    urlRequest.httpBody = try JSONEncoder().encode(SendMessageRequest(userID: userID, partyID: partyID, message: message))
-                }
-            case .updateRating:
-                if let partyID = partyID, let userName = userName, let userID = UserDefaultsWrapper.getUserID(), let restaurantName = restaurantName, let rating = rating  {
-                    urlRequest.httpBody = try JSONEncoder().encode(UpdateRatingRequest(partyID: partyID, userID: userID, userName: userName, restaurantName: restaurantName, rating: rating))
-                }
-            }
-        } catch {
-            Log.networking.fault("Error encoding JSON - \(error)")
-            throw error
-        }
-
-        return urlRequest
+    func getTopRestaurants(partyID: UUID) async throws -> TopRestaurantResponse {
+        let urlString = HTTP.post(.updateRating).fullURLString
+        let urlReq = try createGetRequest(reqType: .topRestaurants, url: urlString, partyID: partyID)
+        let response = try await getData(urlReq: urlReq)
+        return response
     }
 
 
-    private func postData(urlReq: URLRequest) async throws -> RouteResponse {
-
-        do {
-            let (data, response) = try await URLSession.shared.data(for: urlReq)
-            let httpResponse = response as! HTTPURLResponse
-
-            if httpResponse.statusCode < 200 || httpResponse.statusCode > 200 {
-                // Check if Error
-                let error = try JSONDecoder().decode(ErrorWrapper.self, from: data)
-                throw error.error
-            }
-
-            //Happy Path
-            let partyRequest = try JSONDecoder().decode(RouteResponse.self, from: data)
-
-            return partyRequest
-        } catch {
-            Log.networking.fault("Error posting data: \(error)")
-            throw error
-        }
-
-    }
 
     //MARK: WebSocket code
 
@@ -359,6 +305,122 @@ extension Networking {
         } catch {
             Log.networking.fault("Error closing WebSocket - \(error)")
         }
+    }
+
+}
+
+//MARK: Utilities
+extension Networking {
+
+    private func createPostRequest(reqType: PostRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil) throws -> URLRequest {
+
+        guard let url = URL(string: url) else { throw SharedErrors.ClientNetworking.invalidURL }
+        var urlRequest = URLRequest(url: url)
+        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+
+        do {
+            switch reqType {
+            case .createParty:
+                if let userName = userName {
+                    urlRequest.httpBody = try JSONEncoder().encode(CreatePartyRequest(username: userName, userID: userID))
+                }
+            case .joinParty:
+                if let partyCode = partyCode, let userName = userName {
+                    urlRequest.httpBody = try JSONEncoder().encode(JoinPartyRequest(username: userName, partyCode: partyCode))
+                }
+            case .leaveParty:
+                urlRequest.httpBody = try JSONEncoder().encode(LeavePartyRequest(userID: userID))
+
+            case .sendMessage:
+                if let message = message, let partyID = partyID {
+                    urlRequest.httpBody = try JSONEncoder().encode(SendMessageRequest(userID: userID, partyID: partyID, message: message))
+                }
+            case .updateRating:
+                if let partyID = partyID, let userName = userName, let userID = UserDefaultsWrapper.getUserID(), let restaurantName = restaurantName, let rating = rating  {
+                    urlRequest.httpBody = try JSONEncoder().encode(UpdateRatingRequest(partyID: partyID, userID: userID, userName: userName, restaurantName: restaurantName, rating: rating))
+                }
+            }
+        } catch {
+            Log.networking.fault("Error encoding JSON - \(error)")
+            throw error
+        }
+
+        return urlRequest
+    }
+
+    private func createGetRequest(reqType: GetRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil , userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil ) throws -> URLRequest {
+
+
+        guard let url = URL(string: url) else { throw SharedErrors.ClientNetworking.invalidURL }
+        var urlRequest = URLRequest(url: url)
+        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
+        urlRequest.httpMethod = "GET"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        do {
+
+            switch reqType {
+            case .topRestaurants:
+                if let partyID = partyID {
+                    urlRequest.httpBody = try JSONEncoder().encode(TopRestaurantsRequest(partyID: partyID))
+                }
+            }
+
+        } catch {
+            Log.networking.fault("Error encoding JSON - \(error)")
+            throw error
+        }
+
+        return urlRequest
+    }
+
+    private func getData(urlReq: URLRequest) async throws -> TopRestaurantResponse {
+        do {
+            let (data, response) = try await URLSession.shared.data(for: urlReq)
+            let httpResponse = response as! HTTPURLResponse
+
+            if httpResponse.statusCode < 200 || httpResponse.statusCode > 200 {
+                // Check if Error
+                let error = try JSONDecoder().decode(ErrorWrapper.self, from: data)
+                throw error.error
+            }
+
+            //Happy Path
+            let decodedResponse = try JSONDecoder().decode(TopRestaurantResponse.self, from: data)
+
+            return decodedResponse
+
+        } catch {
+            Log.networking.fault("Error posting data: \(error)")
+            throw error
+        }
+    }
+
+
+    private func postData(urlReq: URLRequest) async throws -> PostRouteResponse {
+
+        do {
+            let (data, response) = try await URLSession.shared.data(for: urlReq)
+            let httpResponse = response as! HTTPURLResponse
+
+            if httpResponse.statusCode < 200 || httpResponse.statusCode > 200 {
+                // Check if Error
+                let error = try JSONDecoder().decode(ErrorWrapper.self, from: data)
+                throw error.error
+            }
+
+            //Happy Path
+            let partyRequest = try JSONDecoder().decode(PostRouteResponse.self, from: data)
+
+            return partyRequest
+        } catch {
+            Log.networking.fault("Error posting data: \(error)")
+            throw error
+        }
+
     }
 
 }

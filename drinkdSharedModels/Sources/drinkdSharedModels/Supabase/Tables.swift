@@ -78,13 +78,13 @@ public struct MessagesTable: Codable, Sendable, SupaBaseTable {
     }
 }
 
-public struct RatedRestaurantsTable: Codable, Sendable, SupaBaseTable {
+public struct RatedRestaurantsTable: Codable, Sendable, SupaBaseTable, Hashable {
     public let id: UUID
     public let party_id: UUID
     public let user_id: UUID
     public let username: String
     public let restaurant_name: String
-    public let rating: Int
+    public var rating: Int
 
 
 

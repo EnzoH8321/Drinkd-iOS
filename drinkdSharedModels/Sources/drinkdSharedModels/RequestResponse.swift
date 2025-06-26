@@ -8,12 +8,16 @@ import Foundation
 
 // For Client -> Vapor Server & vice versa
 
-public enum RequestTypes {
+public enum PostRequestTypes {
     case createParty
     case joinParty
     case leaveParty
     case sendMessage
     case updateRating
+}
+
+public enum GetRequestTypes {
+    case topRestaurants
 }
 
 public protocol PartyRequest {
@@ -80,8 +84,18 @@ public struct UpdateRatingRequest: Codable, PartyRequest {
     }
 }
 
-// Server -> Client
-public struct RouteResponse: Codable {
+public struct TopRestaurantsRequest: Codable, PartyRequest {
+    public let partyID: UUID
+
+    public init(partyID: UUID) {
+        self.partyID = partyID
+    }
+}
+
+// Used on the client, response from the server
+
+
+public struct PostRouteResponse: Codable {
     public let currentUserName: String
     public let currentUserID: UUID
     public let currentPartyID: UUID
@@ -90,5 +104,13 @@ public struct RouteResponse: Codable {
         self.currentUserName = currentUserName
         self.currentUserID = currentUserID
         self.currentPartyID = currentPartyID
+    }
+}
+
+public struct TopRestaurantResponse: Codable {
+    public let restaurants: [RatedRestaurantsTable]
+
+    public init(restaurants: [RatedRestaurantsTable]) {
+        self.restaurants = restaurants
     }
 }

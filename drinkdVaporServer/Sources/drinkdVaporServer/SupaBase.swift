@@ -168,7 +168,7 @@ final class SupaBase {
         }
     }
 
-    func fetchRow(tableType: TableTypes, dictionary: [String: any PostgrestFilterValue] = [:]) async throws -> [any SupaBaseTable] {
+    func fetchRows(tableType: TableTypes, dictionary: [String: any PostgrestFilterValue] = [:]) async throws -> [any SupaBaseTable] {
         let columnsToFilterFor: String = dictionary.keys.map {"\($0)"}.joined(separator: "'")
         let response = try await client
             .from(tableType.tableName)
@@ -211,7 +211,7 @@ extension SupaBase {
     func createAParty(_ req: CreatePartyRequest) async throws -> PartiesTable {
 
         // Check that user is not already a party leader
-        let isMemberOfAnotherParty = try await fetchRow(tableType: .parties, dictionary: ["party_leader": "\(req.userID)"]).count > 0
+        let isMemberOfAnotherParty = try await fetchRows(tableType: .parties, dictionary: ["party_leader": "\(req.userID)"]).count > 0
 
         if isMemberOfAnotherParty {
             throw SharedErrors.supabase(error: .userIsAlreadyAPartyLeader)
@@ -266,7 +266,7 @@ extension SupaBase {
         }
 
         // Find party using the party code
-        guard let row = try await fetchRow(tableType: .parties, dictionary: ["code": req.partyCode]) as? [PartiesTable] else {
+        guard let row = try await fetchRows(tableType: .parties, dictionary: ["code": req.partyCode]) as? [PartiesTable] else {
             throw SharedErrors.General.castingError("Unable to cast row as parties table")
         }
 
@@ -293,7 +293,7 @@ extension SupaBase {
     func updateRestaurantRating(_ req: UpdateRatingRequest) async throws {
 
         // Check if the user already rated this restaurant
-        let existingRestaurant = try await self.fetchRow(tableType: .ratedRestaurants, dictionary: ["user_id": req.userID, "restaurant_name": req.restaurantName]).first as? RatedRestaurantsTable
+        let existingRestaurant = try await self.fetchRows(tableType: .ratedRestaurants, dictionary: ["user_id": req.userID, "restaurant_name": req.restaurantName]).first as? RatedRestaurantsTable
 
         let id = existingRestaurant != nil ? existingRestaurant!.id : UUID()
         let restaurant = RatedRestaurantsTable(id: id ,partyID: req.partyID, userID: req.userID, userName: req.userName, restaurantName: req.restaurantName, rating: req.rating)
@@ -307,6 +307,46 @@ extension SupaBase {
         // Add message to messages table
         try await upsertDataToTable(tableType: .messages, data: message)
 
+    }
+
+    // Gets an array of the Top three choices.
+    func getTopChoices(_ req: TopRestaurantsRequest) async throws -> [RatedRestaurantsTable] {
+        let partyID = req.partyID
+        var sorted: [RatedRestaurantsTable] = []
+
+        guard let restaurants = try await fetchRows(tableType: .ratedRestaurants, dictionary: ["id": partyID]) as? [RatedRestaurantsTable] else {
+            throw SharedErrors.supabase(error: .dataNotFound)
+        }
+
+
+      // Loop through restaurants, adding them to the dict.
+        for restaurant in restaurants {
+
+            guard let existingIndex = sorted.firstIndex(where: { $0.id == restaurant.id }) else {
+                // If the restaurant doesn't exist, add it
+                //                restaurantDict[restaurant] = restaurant.rating
+                sorted.append(restaurant)
+                continue
+            }
+
+            // Here if the restaurant already exists
+            // Sums up the ratings
+            sorted[existingIndex].rating += restaurant.rating
+        }
+
+        // Sort by score & restaurant name
+        sorted = sorted.sorted {
+            if $0.rating == $1.rating {
+                return $0.restaurant_name > $1.restaurant_name  // Secondary sort
+            }
+            return $0.rating > $1.rating  // Primary sort
+        }
+
+        // Remove everything after third place
+        // TODO: Deal with ties. There could be multiple first second etc.
+        sorted.removeSubrange(3...)
+
+        return sorted
     }
 }
 

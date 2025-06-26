@@ -11,10 +11,6 @@ public struct WSMessage: Codable, Hashable {
     public let username: String
     public let timestamp: Date
 
-//    public init(text: String) {
-//        self.text = text
-//    }
-
     public init(text: String, username: String, timestamp: Date) {
         self.text = text
         self.username = username
