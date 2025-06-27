@@ -7,6 +7,7 @@
 
 import Foundation
 import Vapor
+import drinkdSharedModels
 
 final class RouteHelper {
 
@@ -15,6 +16,16 @@ final class RouteHelper {
         let response = Response()
         response.body = Response.Body(data: data)
         return response
+    }
+
+    static func createErrorResponse(error: any Error) -> Response {
+        let errorWrapperJSON = try! JSONEncoder().encode(ErrorWrapper(errorType: error))
+        let errorResponse = Response()
+        errorResponse.status = .internalServerError
+        errorResponse.headers.add(name: "Content-Type", value: "application/json")
+        errorResponse.body = Response.Body(data: errorWrapperJSON)
+
+        return errorResponse
     }
 
 }

@@ -28,7 +28,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     return response
                 } catch {
                     Log.routes.warning("Error on createParty route - \(error)")
-                    return createErrorResponse(error: error)
+                    return RouteHelper.createErrorResponse(error: error)
                 }
 
             }
@@ -49,7 +49,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                 } catch {
                     Log.routes.warning("Error on joinParty route - \(error)")
-                    return createErrorResponse(error: error)
+                    return RouteHelper.createErrorResponse(error: error)
                 }
             }
 
@@ -78,7 +78,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                 } catch {
                     Log.routes.warning("Error on leaveParty route - \(error)")
-                    return createErrorResponse(error: error)
+                    return RouteHelper.createErrorResponse(error: error)
                 }
 
             }
@@ -106,7 +106,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     return try RouteHelper.createResponse(data: routeResponseObject)
                 } catch {
                     Log.routes.warning("Error on leaveParty route - \(error)")
-                    return createErrorResponse(error: error)
+                    return RouteHelper.createErrorResponse(error: error)
                 }
 
             }
@@ -127,7 +127,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                 } catch {
                     Log.routes.warning("Error on updateRating route - \(error)")
-                    return createErrorResponse(error: error)
+                    return RouteHelper.createErrorResponse(error: error)
                 }
             }
 
@@ -152,7 +152,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     return try RouteHelper.createResponse(data: responseObj)
                 } catch {
                     Log.routes.warning("Error on topChoices route - \(error)")
-                    return createErrorResponse(error: error)
+                    return RouteHelper.createErrorResponse(error: error)
                 }
 
             }
@@ -231,14 +231,4 @@ func routes(_ app: Application, supabase: SupaBase) throws {
     }
 
 
-}
-
-fileprivate func createErrorResponse(error: any Error) -> Response {
-    let errorWrapperJSON = try! JSONEncoder().encode(ErrorWrapper(errorType: error))
-    let errorResponse = Response()
-    errorResponse.status = .internalServerError
-    errorResponse.headers.add(name: "Content-Type", value: "application/json")
-    errorResponse.body = Response.Body(data: errorWrapperJSON)
-
-    return errorResponse
 }
