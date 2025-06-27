@@ -12,11 +12,11 @@ public final class SharedNetworking {
 }
 
 public enum HTTP {
-    case get
+    case get(GetRoutes)
     case post(PostRoutes)
     case delete
 
-     private var baseURLString: String { "http://127.0.0.1:8080/" }
+    private var baseURLString: String { "http://127.0.0.1:8080/" }
 
     public enum PostRoutes: String, CaseIterable {
         case createParty
@@ -28,7 +28,7 @@ public enum HTTP {
     }
 
     public enum GetRoutes: String, CaseIterable {
-        case topChoices
+        case topRestaurants
     }
 
     public var fullURLString: String {

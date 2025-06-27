@@ -238,7 +238,7 @@ extension Networking {
     }
 
     func getTopRestaurants(partyID: UUID) async throws -> TopRestaurantResponse {
-        let urlString = HTTP.post(.updateRating).fullURLString
+        let urlString = HTTP.get(.topRestaurants).fullURLString
         let urlReq = try createGetRequest(reqType: .topRestaurants, url: urlString, partyID: partyID)
         let response = try await getData(urlReq: urlReq)
         return response

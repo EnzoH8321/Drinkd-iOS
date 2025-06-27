@@ -157,7 +157,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
     for route in HTTP.GetRoutes.allCases {
         switch route {
 
-        case .topChoices:
+        case .topRestaurants:
             app.get("topChoices") { req async -> Response in
 
                 do {
