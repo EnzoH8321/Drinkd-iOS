@@ -209,8 +209,8 @@ extension Networking {
     func createParty(username: String) async throws -> PostRouteResponse {
 
         let urlString = HTTP.post(.createParty).fullURLString
-        let urlRequest = try createPostRequest(reqType: .createParty, url: urlString, userName: username)
-        let response =  try await postData(urlReq: urlRequest)
+        let urlRequest = try postURLReq(reqType: .createParty, url: urlString, userName: username)
+        let response =  try await postCall(urlReq: urlRequest)
         UserDefaultsWrapper.setPartyID(id: response.currentPartyID)
         return response
     }
@@ -218,30 +218,28 @@ extension Networking {
     func leaveParty(partyVM: PartyViewModel, partyID: UUID) async throws -> PostRouteResponse {
 
         let urlString = HTTP.post(.leaveParty).fullURLString
-        let urlRequest = try createPostRequest(reqType: .leaveParty, url: urlString)
+        let urlRequest = try postURLReq(reqType: .leaveParty, url: urlString)
         await cancelWSConnection(partyVM: partyVM, partyID: partyID)
-        return try await postData(urlReq: urlRequest)
+        return try await postCall(urlReq: urlRequest)
     }
 
     func sendMessage(message: String, partyID: UUID) async throws -> PostRouteResponse {
         let urlString = HTTP.post(.sendMessage).fullURLString
-        let urlReq = try createPostRequest(reqType: .sendMessage, url: urlString, partyID: partyID, message: message)
-        return try await postData(urlReq: urlReq)
+        let urlReq = try postURLReq(reqType: .sendMessage, url: urlString, partyID: partyID, message: message)
+        return try await postCall(urlReq: urlReq)
     }
 
     func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int) async throws -> PostRouteResponse {
 
         let urlString = HTTP.post(.updateRating).fullURLString
-        let urlReq = try createPostRequest(reqType: .updateRating, url: urlString, partyID: partyID, userName: username, restaurantName: restaurantName, rating: rating)
-        let response = try await postData(urlReq: urlReq)
-        return response
+        let urlReq = try postURLReq(reqType: .updateRating, url: urlString, partyID: partyID, userName: username, restaurantName: restaurantName, rating: rating)
+        return try await postCall(urlReq: urlReq)
     }
 
     func getTopRestaurants(partyID: UUID) async throws -> TopRestaurantResponse {
         let urlString = HTTP.get(.topRestaurants).fullURLString
-        let urlReq = try createGetRequest(reqType: .topRestaurants, url: urlString, partyID: partyID)
-        let response = try await getData(urlReq: urlReq)
-        return response
+        let urlReq = try getURLReq(reqType: .topRestaurants, url: urlString, partyID: partyID)
+        return try await getCall(urlReq: urlReq)
     }
 
 
@@ -312,7 +310,7 @@ extension Networking {
 //MARK: Utilities
 extension Networking {
 
-    private func createPostRequest(reqType: PostRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil) throws -> URLRequest {
+    private func postURLReq(reqType: PostRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil) throws -> URLRequest {
 
         guard let url = URL(string: url) else { throw SharedErrors.ClientNetworking.invalidURL }
         var urlRequest = URLRequest(url: url)
@@ -351,7 +349,7 @@ extension Networking {
         return urlRequest
     }
 
-    private func createGetRequest(reqType: GetRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil , userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil ) throws -> URLRequest {
+    private func getURLReq(reqType: GetRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil , userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil ) throws -> URLRequest {
 
 
         guard let url = URL(string: url) else { throw SharedErrors.ClientNetworking.invalidURL }
@@ -377,7 +375,7 @@ extension Networking {
         return urlRequest
     }
 
-    private func getData(urlReq: URLRequest) async throws -> TopRestaurantResponse {
+    private func getCall(urlReq: URLRequest) async throws -> TopRestaurantResponse {
         do {
             let (data, response) = try await URLSession.shared.data(for: urlReq)
             let httpResponse = response as! HTTPURLResponse
@@ -400,7 +398,7 @@ extension Networking {
     }
 
 
-    private func postData(urlReq: URLRequest) async throws -> PostRouteResponse {
+    private func postCall(urlReq: URLRequest) async throws -> PostRouteResponse {
 
         do {
             let (data, response) = try await URLSession.shared.data(for: urlReq)
