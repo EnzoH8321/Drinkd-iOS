@@ -242,8 +242,6 @@ extension Networking {
         return try await getCall(urlReq: urlReq)
     }
 
-
-
     //MARK: WebSocket code
 
     func connectToWebsocket(partyVM: PartyViewModel, username: String, partyID: UUID) async {

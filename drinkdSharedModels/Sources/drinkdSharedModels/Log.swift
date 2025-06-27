@@ -20,9 +20,3 @@ public final class Log {
 
 
 }
-
-extension Logger {
-//    public func setCrit(_ msg: String) {
-//        self.critical("\(msg)")
-//    }
-}

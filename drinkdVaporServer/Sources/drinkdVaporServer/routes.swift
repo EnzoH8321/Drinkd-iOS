@@ -18,15 +18,12 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     let newParty = try await supabase.createAParty(partyRequest)
 
                     guard let partyID = newParty.id else { throw SharedErrors.General.missingValue("Missing id value")}
-                    let response = Response()
-                    response.headers.add(name: "Content-Type", value: "application/json")
-                    let routeResponseObject = PostRouteResponse(currentUserName: partyRequest.username, currentUserID: partyRequest.userID, currentPartyID: partyID)
-                    let encodedResponse = try JSONEncoder().encode(routeResponseObject)
-
-                    response.body = Response.Body(data: encodedResponse)
-
                     // Create a message channel
                     await supabase.rdbCreateChannel(partyID: partyID)
+
+                    let routeResponseObject = PostRouteResponse(currentUserName: partyRequest.username, currentUserID: partyRequest.userID, currentPartyID: partyID)
+                    let response = try RouteHelper.createResponse(data: routeResponseObject)
+                    response.headers.add(name: "Content-Type", value: "application/json")
 
                     return response
                 } catch {
@@ -48,12 +45,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     guard let partyID = party.id else { throw SharedErrors.General.missingValue("Missing id value")}
 
                     let routeResponseObject = PostRouteResponse(currentUserName: user.username, currentUserID: user.id, currentPartyID: partyID)
-                    let responseJSON = try JSONEncoder().encode(routeResponseObject)
-
-                    let response = Response()
-                    response.body = Response.Body(data: responseJSON)
-
-                    return response
+                    return try RouteHelper.createResponse(data: routeResponseObject)
 
                 } catch {
                     Log.routes.warning("Error on joinParty route - \(error)")
@@ -67,26 +59,22 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                 do {
                     guard let reqBody = req.body.data else { return Response(status: .badRequest) }
+
                     let partyRequest = try JSONDecoder().decode(LeavePartyRequest.self, from: reqBody)
 
-                    guard let userData = try await supabase.fetchRows(tableType: .users, dictionary: ["id": "\(partyRequest.userID)"]).first as? UsersTable else {
-                        throw SharedErrors.supabase(error: .rowIsEmpty)
-                    }
-                    guard let partyData = try await supabase.fetchRows(tableType: .parties, dictionary: ["party_leader": "\(partyRequest.userID)"]).first as? PartiesTable else {
-                        throw SharedErrors.supabase(error: .rowIsEmpty)
-                    }
+                    let (userData, partyData) = try await (
+                        supabase.fetchRows(tableType: .users, dictionary: ["id": "\(partyRequest.userID)"]).first as? UsersTable,
+                        supabase.fetchRows(tableType: .parties, dictionary: ["party_leader": "\(partyRequest.userID)"]).first as? PartiesTable
+                    )
+
+                    guard let userData, let partyData else { throw SharedErrors.supabase(error: .rowIsEmpty) }
 
                     guard let partyID = partyData.id else { throw SharedErrors.General.missingValue("Missing id value")}
 
                     try await supabase.leaveParty(partyRequest, partyID: partyID)
 
                     let routeResponseObject = PostRouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: partyID)
-                    let responseJSON = try JSONEncoder().encode(routeResponseObject)
-
-                    let response = Response()
-                    response.body = Response.Body(data: responseJSON)
-
-                    return response
+                    return try RouteHelper.createResponse(data: routeResponseObject)
 
                 } catch {
                     Log.routes.warning("Error on leaveParty route - \(error)")
@@ -108,17 +96,14 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     }
 
                     let routeResponseObject = PostRouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: msgReq.partyID)
-                    let responseJSON = try JSONEncoder().encode(routeResponseObject)
 
+                    // Send Message
                     try await supabase.sendMessage(msgReq)
-
-                    let response = Response()
-                    response.body = Response.Body(data: responseJSON)
 
                     // Broadcast message
                     await supabase.rdbSendMessage(msgReq.message, partyID: msgReq.partyID)
 
-                    return response
+                    return try RouteHelper.createResponse(data: routeResponseObject)
                 } catch {
                     Log.routes.warning("Error on leaveParty route - \(error)")
                     return createErrorResponse(error: error)
@@ -137,12 +122,8 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     try await supabase.updateRestaurantRating(msgReq)
 
                     let routeResponseObj = PostRouteResponse(currentUserName: msgReq.userName, currentUserID: msgReq.userID, currentPartyID: msgReq.partyID)
-                    let responseJSON = try JSONEncoder().encode(routeResponseObj)
 
-                    let response = Response()
-                    response.body = Response.Body(data: responseJSON)
-
-                    return response
+                    return try RouteHelper.createResponse(data: routeResponseObj)
 
                 } catch {
                     Log.routes.warning("Error on updateRating route - \(error)")
@@ -164,17 +145,11 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     guard let reqBody = req.body.data else { return Response(status: .badRequest) }
                     let msgReq = try JSONDecoder().decode(TopRestaurantsRequest.self, from: reqBody)
 
-
                     let topRestaurants: [RatedRestaurantsTable] = try await supabase.getTopChoices(msgReq)
 
                     let responseObj = TopRestaurantResponse(restaurants: topRestaurants)
 
-                    let responseJSON = try JSONEncoder().encode(responseObj)
-
-                    let response = Response()
-                    response.body = Response.Body(data: responseJSON)
-
-                    return response
+                    return try RouteHelper.createResponse(data: responseObj)
                 } catch {
                     Log.routes.warning("Error on topChoices route - \(error)")
                     return createErrorResponse(error: error)
