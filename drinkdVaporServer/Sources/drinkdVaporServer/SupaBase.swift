@@ -27,10 +27,8 @@ final class SupaBase {
             // Check if the party still exists in the parties table & if the person deleting is the party leader
             let matches = try await checkMatching(tableType: .parties, dictionary: ["party_leader": userID])
 
-            if matches {
-                // Happy Path
-                try await deleteDataFromTable(fromTable: .parties, rowID: partyID, userID: userID)
-            }
+            // Happy Path
+            if matches { try await deleteDataFromTable(fromTable: .parties, rowID: partyID, userID: userID) }
 
         } catch {
             Log.supabase.fault("Unable to Delete Party due to error: \(error)")
@@ -56,21 +54,13 @@ final class SupaBase {
             switch tableType {
 
             case .parties:
-
-                let partiesArray = try JSONDecoder().decode([PartiesTable].self, from: Data(response.data))
-                return partiesArray.count > 0 ? true : false
-
+                return try JSONDecoder().decode([PartiesTable].self, from: Data(response.data)).isEmpty ? false : true
             case .users:
-
-                let usersArray = try JSONDecoder().decode([UsersTable].self, from: Data(response.data))
-                return usersArray.count > 0 ? true : false
-
+                return try JSONDecoder().decode([UsersTable].self, from: Data(response.data)).isEmpty ? false : true
             case .messages:
-                let messagesArray = try JSONDecoder().decode([MessagesTable].self, from: Data(response.data))
-                return messagesArray.count > 0 ? true : false
+                return try JSONDecoder().decode([MessagesTable].self, from: Data(response.data)).isEmpty ? false : true
             case .ratedRestaurants:
-                let restaurantArray = try JSONDecoder().decode([RatedRestaurantsTable].self, from: Data(response.data))
-                return restaurantArray.count > 0 ? true : false
+                return try JSONDecoder().decode([RatedRestaurantsTable].self, from: Data(response.data)).isEmpty ? false : true
             }
 
         } catch {
@@ -146,13 +136,13 @@ final class SupaBase {
         switch fromTable {
         case .parties:
 
-            guard let validLeaderID = userID else {
-                print("Invalid Leader ID passed in")
-                return
+            guard let userID = userID else {
+                Log.supabase.fault("Invalid Leader ID passed in")
+                throw SharedErrors.supabase(error: .dataNotFound)
             }
 
             do {
-                try await client.from(fromTable.tableName).delete().eq("party_leader", value: validLeaderID).execute()
+                try await client.from(fromTable.tableName).delete().eq("party_leader", value: userID).execute()
             } catch {
                 Log.supabase.fault("deleteDataFromTable failed: \(error)")
                 throw error
