@@ -45,7 +45,7 @@ class PartyViewModel {
 
     var chatMessageList: [WSMessage] = []
     //
-    var queryPartyError = false
+//    var queryPartyError = false
     var removeSplashScreen = true
 
     // WebSocket
