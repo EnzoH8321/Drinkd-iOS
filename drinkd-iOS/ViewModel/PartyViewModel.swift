@@ -88,35 +88,6 @@ class PartyViewModel {
         }
     }
 
-    func createParty(leaderID: String ,setVotes partyVotes: Int, setName partyName: String) {
-
-        self.fcmToken = AppDelegate.fcmToken
-        currentParty?.partyID = String(Int.random(in: 100...20000))
-        self.currentParty?.partyMaxVotes = partyVotes
-        currentParty?.partyName = partyName
-        currentParty?.timestamp = Int(Date().timeIntervalSince1970 * 1000)
-
-        guard let party = self.currentParty else { return }
-
-        //TODO: Messages set to string, can this be improved?
-        self.setUserLevel(level: .creator)
-        self.currentlyInParty = true
-    }
-
-    func joinParty( getVotes votes: Int? = nil,  getURL url: String? = nil) {
-
-        guard let validFriendPartyId = self.friendPartyId else { return }
-
-        if let partyVotes = votes {
-            currentParty?.partyMaxVotes = partyVotes
-        }
-
-        if let siteURL = url {
-            currentParty?.url = siteURL
-        }
-
-    }
-
     func addScoreToCard(points: Int) {
 
         if (points == currentScoreOfTopCard) {
