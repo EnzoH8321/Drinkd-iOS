@@ -51,17 +51,6 @@ public enum SharedErrors: Codable, LocalizedError {
 
     }
 
-    public enum ClientNetworking: String, LocalizedError {
-        case invalidURL
-
-        public var errorDescription: String? {
-            switch self {
-            case .invalidURL:
-                return self.rawValue
-            }
-        }
-    }
-
     public var errorDescription: String? {
         switch self {
         case .supabase(let error):

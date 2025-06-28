@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum NetworkErrors: Error {
+enum NetworkErrors:  String ,LocalizedError {
 	case serializationError
 	case decodingError
 	case noUserLocationFoundError
@@ -15,6 +15,10 @@ enum NetworkErrors: Error {
 	case noURLFoundError
 	case generalNetworkError
 	case databaseRefNotFoundError
+
+    var errorDescription: String? {
+        return self.rawValue
+    }
 }
 
 enum NetworkSuccess {

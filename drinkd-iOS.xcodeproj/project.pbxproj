@@ -295,6 +295,7 @@
 			children = (
 				54562858278A250000CA6005 /* API Models */,
 				54F9C85A27037F2F008FA516 /* Models.swift */,
+				54B86717277522D2004D02A1 /* Errors.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -344,7 +345,6 @@
 			children = (
 				54F9C84526FCF403008FA516 /* Styles.swift */,
 				54C8A4B4277431EE0090D968 /* Extensions.swift */,
-				54B86717277522D2004D02A1 /* Errors.swift */,
 				54C7BD0D2DC1D88D00045D67 /* Constants.swift */,
 			);
 			path = Globals;

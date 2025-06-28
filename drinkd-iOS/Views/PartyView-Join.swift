@@ -47,18 +47,7 @@ struct PartyView_Join: View {
             .padding()
 
             Button {
-
-                Networking.shared.fetchRestaurantsAfterJoiningParty(viewModel: viewModel) { result in
-
-                    switch(result) {
-                    case .success( _):
-                        print("Success")
-                    case .failure( let error):
-                        showAlert.state.toggle()
-                        showAlert.message = error.localizedDescription
-                    }
-
-                }
+                fetchRestaurantsAfterJoiningParty()
             } label: {
 
                 Text("Join Party")
@@ -72,6 +61,20 @@ struct PartyView_Join: View {
             Spacer()
         }
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private func fetchRestaurantsAfterJoiningParty() {
+        Networking.shared.fetchRestaurantsAfterJoiningParty(viewModel: viewModel) { result in
+
+            switch(result) {
+            case .success( _):
+                print("Success")
+            case .failure( let error):
+                showAlert.state.toggle()
+                showAlert.message = error.localizedDescription
+            }
+
+        }
     }
 
 }

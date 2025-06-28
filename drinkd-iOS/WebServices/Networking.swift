@@ -310,7 +310,7 @@ extension Networking {
 
     private func postURLReq(reqType: PostRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil, imageURL: String? = nil) throws -> URLRequest {
 
-        guard let url = URL(string: url) else { throw SharedErrors.ClientNetworking.invalidURL }
+        guard let url = URL(string: url) else { throw NetworkErrors.invalidURLError }
         var urlRequest = URLRequest(url: url)
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
         urlRequest.httpMethod = "POST"
@@ -350,7 +350,7 @@ extension Networking {
     private func getURLReq(reqType: GetRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil , userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil ) throws -> URLRequest {
 
 
-        guard let url = URL(string: url) else { throw SharedErrors.ClientNetworking.invalidURL }
+        guard let url = URL(string: url) else { throw NetworkErrors.invalidURLError }
         var urlRequest = URLRequest(url: url)
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
         urlRequest.httpMethod = "GET"
