@@ -139,13 +139,14 @@ func routes(_ app: Application, supabase: SupaBase) throws {
         switch route {
 
         case .topRestaurants:
-            app.get("topChoices") { req async -> Response in
+            app.get("topRestaurants") { req async -> Response in
 
                 do {
-                    guard let reqBody = req.body.data else { return Response(status: .badRequest) }
-                    let msgReq = try JSONDecoder().decode(TopRestaurantsRequest.self, from: reqBody)
+                    guard let path = req.url.query else { return Response(status: .badRequest) }
+                    let pathComponents = path.components(separatedBy: "=")
+                    guard let partyID = pathComponents.count == 2 ? pathComponents[1] : nil else { throw SharedErrors.general(error: .generalError("Unable to parse partyID"))}
 
-                    let topRestaurants: [RatedRestaurantsTable] = try await supabase.getTopChoices(msgReq)
+                    let topRestaurants: [RatedRestaurantsTable] = try await supabase.getTopChoices(partyID: partyID)
 
                     let responseObj = TopRestaurantResponse(restaurants: topRestaurants)
 

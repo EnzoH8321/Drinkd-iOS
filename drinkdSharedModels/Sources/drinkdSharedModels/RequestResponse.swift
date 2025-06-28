@@ -84,13 +84,13 @@ public struct UpdateRatingRequest: Codable, PartyRequest {
     }
 }
 
-public struct TopRestaurantsRequest: Codable, PartyRequest {
-    public let partyID: UUID
-
-    public init(partyID: UUID) {
-        self.partyID = partyID
-    }
-}
+//public struct TopRestaurantsRequest: Codable, PartyRequest {
+//    public let partyID: UUID
+//
+//    public init(partyID: UUID) {
+//        self.partyID = partyID
+//    }
+//}
 
 // Used on the client, response from the server
 

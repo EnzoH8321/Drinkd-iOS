@@ -33,8 +33,8 @@ public enum HTTP {
 
     public var fullURLString: String {
         switch self {
-        case .get:
-            return baseURLString
+        case .get(let getRoutes):
+            return baseURLString + getRoutes.rawValue
         case .post(let postRoutes):
            return baseURLString + postRoutes.rawValue
         case .delete:

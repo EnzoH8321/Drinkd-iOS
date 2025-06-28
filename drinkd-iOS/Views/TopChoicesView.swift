@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import drinkdSharedModels
 
 struct TopChoicesView: View {
 
     @Environment(PartyViewModel.self) var viewModel
+//    @State private var topRestaurants: [RatedRestaurantsTable] = []
 
 	var body: some View {
 		GeometryReader { proxy in
@@ -47,7 +49,20 @@ struct TopChoicesView: View {
 			}
 			.frame(width: globalWidth)
 		}
-		//Sets image url for each card to an empty string. 
+        .task {
+            do {
+                guard let partyID = UserDefaultsWrapper.getPartyID() else {
+                    Log.userDefaults.fault("Party ID not found in UserDefaults")
+                    return
+                }
+                let topRestaurants = try await Networking.shared.getTopRestaurants(partyID: partyID).restaurants
+                
+            } catch {
+                Log.general.fault("Error - \(error)")
+            }
+        }
+
+		//Sets image url for each card to an empty string.
 		.onDisappear(perform: {
 			viewModel.removeImageUrls()
 		})

@@ -9,7 +9,7 @@ import Foundation
 import drinkdSharedModels
 
 final class UserDefaultsWrapper {
-    static let shared = UserDefaultsWrapper()
+//    static let shared = UserDefaultsWrapper()
     private init() {}
 
     private static let defaults = UserDefaults.standard

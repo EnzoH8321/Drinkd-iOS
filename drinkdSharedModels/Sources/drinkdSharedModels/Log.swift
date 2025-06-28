@@ -18,5 +18,7 @@ public final class Log {
 
     public static let routes = Logger(subsystem: subsystem ?? "Error locating Subsystem", category: "Routes")
 
+    public static let userDefaults = Logger(subsystem: subsystem ?? "Error locating Subsystem", category: "User Defaults")
 
+    public static let general = Logger(subsystem: subsystem ?? "Error locating Subsystem", category: "General")
 }

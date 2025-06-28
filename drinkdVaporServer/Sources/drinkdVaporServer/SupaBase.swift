@@ -300,12 +300,16 @@ extension SupaBase {
     }
 
     // Gets an array of the Top three choices.
-    func getTopChoices(_ req: TopRestaurantsRequest) async throws -> [RatedRestaurantsTable] {
-        let partyID = req.partyID
+    func getTopChoices(partyID: String) async throws -> [RatedRestaurantsTable] {
         var sorted: [RatedRestaurantsTable] = []
 
         guard let restaurants = try await fetchRows(tableType: .ratedRestaurants, dictionary: ["id": partyID]) as? [RatedRestaurantsTable] else {
             throw SharedErrors.supabase(error: .dataNotFound)
+        }
+
+        if restaurants.isEmpty {
+            Log.general.info("Empty restaurants array")
+            return []
         }
 
 

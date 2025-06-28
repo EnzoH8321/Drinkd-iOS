@@ -33,6 +33,7 @@ public enum SharedErrors: Codable, LocalizedError {
         case missingValue(String)
         case castingError(String)
         case userDefaultsError(String)
+        case generalError(String)
 
 
         public var errorDescription: String? {
@@ -43,6 +44,8 @@ public enum SharedErrors: Codable, LocalizedError {
                 return "casting error - \(string)"
             case .userDefaultsError(let string):
                 return "userDefaultsError - \(string)"
+            case .generalError(let string):
+                return "general error - \(string)"
             }
         }
 
@@ -110,6 +113,8 @@ public struct ErrorWrapper: Codable {
             case .castingError(let string):
                 self.error = .general(error: .castingError(string))
             case .userDefaultsError(let string):
+                self.error = .general(error: .userDefaultsError(string))
+            case .generalError(let string):
                 self.error = .general(error: .userDefaultsError(string))
             }
 

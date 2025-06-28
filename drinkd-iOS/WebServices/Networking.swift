@@ -354,15 +354,20 @@ extension Networking {
         var urlRequest = URLRequest(url: url)
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
         urlRequest.httpMethod = "GET"
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         do {
 
             switch reqType {
             case .topRestaurants:
-                if let partyID = partyID {
-                    urlRequest.httpBody = try JSONEncoder().encode(TopRestaurantsRequest(partyID: partyID))
+
+                if let partyID = partyID, var components = URLComponents(string: url.absoluteString) {
+                    components.queryItems = [URLQueryItem(name: "partyID", value: partyID.uuidString)]
+                    urlRequest.url = components.url
+                } else {
+                    Log.networking.fault("Unable to create URLComponents or PartyID")
                 }
+
             }
 
         } catch {
