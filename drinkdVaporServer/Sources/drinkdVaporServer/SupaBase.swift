@@ -286,7 +286,7 @@ extension SupaBase {
         let existingRestaurant = try await self.fetchRows(tableType: .ratedRestaurants, dictionary: ["user_id": req.userID, "restaurant_name": req.restaurantName]).first as? RatedRestaurantsTable
 
         let id = existingRestaurant != nil ? existingRestaurant!.id : UUID()
-        let restaurant = RatedRestaurantsTable(id: id ,partyID: req.partyID, userID: req.userID, userName: req.userName, restaurantName: req.restaurantName, rating: req.rating)
+        let restaurant = RatedRestaurantsTable(id: id ,partyID: req.partyID, userID: req.userID, userName: req.userName, restaurantName: req.restaurantName, rating: req.rating, imageURL: req.imageURL)
 
         try await upsertDataToTable(tableType: .ratedRestaurants, data: restaurant)
     }
@@ -303,7 +303,7 @@ extension SupaBase {
     func getTopChoices(partyID: String) async throws -> [RatedRestaurantsTable] {
         var sorted: [RatedRestaurantsTable] = []
 
-        guard let restaurants = try await fetchRows(tableType: .ratedRestaurants, dictionary: ["id": partyID]) as? [RatedRestaurantsTable] else {
+        guard let restaurants = try await fetchRows(tableType: .ratedRestaurants, dictionary: ["party_id": partyID]) as? [RatedRestaurantsTable] else {
             throw SharedErrors.supabase(error: .dataNotFound)
         }
 

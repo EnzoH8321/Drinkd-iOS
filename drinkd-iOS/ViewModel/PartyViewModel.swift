@@ -40,10 +40,9 @@ class PartyViewModel {
     var localRestaurants: [YelpApiBusinessSearchProperties] = []
     //
     var localRestaurantsDefault: [YelpApiBusinessSearchProperties] = []
-    //For top choices view
-    var firstChoice = FirebaseRestaurantInfo()
-    var secondChoice = FirebaseRestaurantInfo()
-    var thirdChoice = FirebaseRestaurantInfo()
+
+    // Top Restaurants
+    var topRestaurants: [RatedRestaurantsTable] = []
 
     var chatMessageList: [WSMessage] = []
     //
@@ -52,10 +51,6 @@ class PartyViewModel {
 
     // WebSocket
     var currentWebsocket: WebSocket? = nil
-
-    private enum FireBasePartyProps: String {
-        case partyID, partyMaxVotes, partyName, partyTimestamp, partyURL
-    }
 
     //Used when a party is joined
     func clearAllRestaurants() {
@@ -104,7 +99,6 @@ class PartyViewModel {
         guard let party = self.currentParty else { return }
 
         //TODO: Messages set to string, can this be improved?
-//        Constants.ref.child("parties").child(party.partyID).setValue(["partyTimestamp": party.timestamp, "partyID": party.partyID, "partyMaxVotes": party.partyMaxVotes, "partyName": partyName, "partyURL": party.url, "tokens": [fcmToken: fcmToken]])
         self.setUserLevel(level: .creator)
         self.currentlyInParty = true
     }
@@ -121,7 +115,6 @@ class PartyViewModel {
             currentParty?.url = siteURL
         }
 
-//        Constants.ref.child("parties").child(validFriendPartyId).child("tokens").updateChildValues([fcmToken: fcmToken])
     }
 
     func addScoreToCard(points: Int) {
@@ -135,33 +128,6 @@ class PartyViewModel {
         topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points, url: self.currentParty?.url ?? "URL NOT FOUND")
     }
 
-    func appendTopThreeRestaurants(in array: [Dictionary<String, FireBaseTopChoice>.Element]) {
-        //Empties Elements
-        firstChoice = FirebaseRestaurantInfo()
-        secondChoice = FirebaseRestaurantInfo()
-        thirdChoice = FirebaseRestaurantInfo()
-
-        for element in 0..<array.count {
-
-            switch (element) {
-            case 0:
-                let firstElementValues = array[0].value
-                let firstElementKey = array[0].key
-                firstChoice = FirebaseRestaurantInfo(name: firstElementKey, score: firstElementValues.score, url: firstElementValues.url, image_url: firstElementValues.image_url)
-            case 1:
-                let secondElementValues = array[1].value
-                let secondIndexKey = array[1].key
-                secondChoice = FirebaseRestaurantInfo(name: secondIndexKey, score: secondElementValues.score, url: secondElementValues.url, image_url: secondElementValues.image_url)
-            case 2:
-                let thirdElementValues = array[2].value
-                let thirdKey = array[2].key
-                thirdChoice = FirebaseRestaurantInfo(name: thirdKey, score: thirdElementValues.score, url: thirdElementValues.url, image_url: thirdElementValues.image_url)
-            default:
-                break
-            }
-        }
-    }
-
     private func setUserLevel(level: userLevel) {
         switch (level) {
         case .member:
@@ -173,17 +139,9 @@ class PartyViewModel {
 
     func leaveParty() {
         self.currentlyInParty = false
-        self.firstChoice = FirebaseRestaurantInfo()
-        self.secondChoice = FirebaseRestaurantInfo()
-        self.thirdChoice = FirebaseRestaurantInfo()
+        self.topRestaurants.removeAll()
         currentParty = nil
         currentParty?.partyID = ""
-    }
-
-    func removeImageUrls(){
-        self.firstChoice.image_url = ""
-        self.secondChoice.image_url = ""
-        self.thirdChoice.image_url = ""
     }
 
     //For chat

@@ -11,7 +11,6 @@ import drinkdSharedModels
 struct TopChoicesView: View {
 
     @Environment(PartyViewModel.self) var viewModel
-//    @State private var topRestaurants: [RatedRestaurantsTable] = []
 
 	var body: some View {
 		GeometryReader { proxy in
@@ -21,31 +20,36 @@ struct TopChoicesView: View {
 
 			VStack(alignment: .center) {
 
-				if (viewModel.currentlyInParty && viewModel.firstChoice.image_url != "") {
-					ListCardView(restaurantInfo: self.viewModel.firstChoice, placementImage: 1)
-						.frame(width: abs(globalWidth - 20))
-						.frame(maxHeight: globalHeight / 3)
+                if !viewModel.topRestaurants.isEmpty {
 
-					if (viewModel.currentlyInParty && viewModel.secondChoice.image_url != "") {
-						ListCardView(restaurantInfo: self.viewModel.secondChoice, placementImage: 2)
-							.frame(width: abs(globalWidth - 20))
+                    if (viewModel.currentlyInParty && viewModel.topRestaurants[0].image_url != "") {
+                        ListCardView(restaurantInfo: viewModel.topRestaurants[0], placementImage: 1)
+                            .frame(width: abs(globalWidth - 20))
                             .frame(maxHeight: globalHeight / 3)
-						if (viewModel.currentlyInParty && viewModel.thirdChoice.image_url != "") {
 
-							ListCardView(restaurantInfo: self.viewModel.thirdChoice, placementImage: 3)
-								.frame(width: abs(globalWidth - 20))
+                        if (viewModel.currentlyInParty && viewModel.topRestaurants[1].image_url != "") {
+                            ListCardView(restaurantInfo: viewModel.topRestaurants[1], placementImage: 2)
+                                .frame(width: abs(globalWidth - 20))
                                 .frame(maxHeight: globalHeight / 3)
-								.padding([.bottom], 10)
-						}
-					}
+                            if (viewModel.currentlyInParty && viewModel.topRestaurants[2].image_url != "") {
 
-				} else {
-					Spacer()
-					Text("Please Join a Party to see the Top Choices!")
-						.font(.largeTitle)
-                        .padding()
-					Spacer()
-				}
+                                ListCardView(restaurantInfo: viewModel.topRestaurants[2], placementImage: 3)
+                                    .frame(width: abs(globalWidth - 20))
+                                    .frame(maxHeight: globalHeight / 3)
+                                    .padding([.bottom], 10)
+                            }
+                        }
+
+                    } else {
+                        Spacer()
+                        Text("Please Join a Party to see the Top Choices!")
+                            .font(.largeTitle)
+                            .padding()
+                        Spacer()
+                    }
+                }
+
+
 			}
 			.frame(width: globalWidth)
 		}
@@ -55,17 +59,13 @@ struct TopChoicesView: View {
                     Log.userDefaults.fault("Party ID not found in UserDefaults")
                     return
                 }
-                let topRestaurants = try await Networking.shared.getTopRestaurants(partyID: partyID).restaurants
+                viewModel.topRestaurants = try await Networking.shared.getTopRestaurants(partyID: partyID).restaurants
                 
             } catch {
                 Log.general.fault("Error - \(error)")
             }
         }
 
-		//Sets image url for each card to an empty string.
-		.onDisappear(perform: {
-			viewModel.removeImageUrls()
-		})
 	}
 
 }

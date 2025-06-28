@@ -229,10 +229,10 @@ extension Networking {
         return try await postCall(urlReq: urlReq)
     }
 
-    func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int) async throws -> PostRouteResponse {
+    func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int, imageURL: String) async throws -> PostRouteResponse {
 
         let urlString = HTTP.post(.updateRating).fullURLString
-        let urlReq = try postURLReq(reqType: .updateRating, url: urlString, partyID: partyID, userName: username, restaurantName: restaurantName, rating: rating)
+        let urlReq = try postURLReq(reqType: .updateRating, url: urlString, partyID: partyID, userName: username, restaurantName: restaurantName, rating: rating, imageURL: imageURL)
         return try await postCall(urlReq: urlReq)
     }
 
@@ -308,7 +308,7 @@ extension Networking {
 //MARK: Utilities
 extension Networking {
 
-    private func postURLReq(reqType: PostRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil) throws -> URLRequest {
+    private func postURLReq(reqType: PostRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil, imageURL: String? = nil) throws -> URLRequest {
 
         guard let url = URL(string: url) else { throw SharedErrors.ClientNetworking.invalidURL }
         var urlRequest = URLRequest(url: url)
@@ -335,8 +335,8 @@ extension Networking {
                     urlRequest.httpBody = try JSONEncoder().encode(SendMessageRequest(userID: userID, partyID: partyID, message: message))
                 }
             case .updateRating:
-                if let partyID = partyID, let userName = userName, let userID = UserDefaultsWrapper.getUserID(), let restaurantName = restaurantName, let rating = rating  {
-                    urlRequest.httpBody = try JSONEncoder().encode(UpdateRatingRequest(partyID: partyID, userID: userID, userName: userName, restaurantName: restaurantName, rating: rating))
+                if let partyID = partyID, let userName = userName, let userID = UserDefaultsWrapper.getUserID(), let restaurantName = restaurantName, let rating = rating, let imageuRL = imageURL  {
+                    urlRequest.httpBody = try JSONEncoder().encode(UpdateRatingRequest(partyID: partyID, userID: userID, userName: userName, restaurantName: restaurantName, rating: rating, imageURL: imageuRL))
                 }
             }
         } catch {

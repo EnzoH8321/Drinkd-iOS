@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Foundation
+import drinkdSharedModels
 
 //Allows you to sepcify which corner will have the radius
 struct CornerRadiusStyle: ViewModifier {
@@ -38,10 +39,10 @@ extension View {
 //
 struct ListCardView: View {
 
-	var restaurantInfo: FirebaseRestaurantInfo
+	var restaurantInfo: RatedRestaurantsTable
 	var placementImage: String
 
-	init(restaurantInfo: FirebaseRestaurantInfo, placementImage: Int) {
+	init(restaurantInfo: RatedRestaurantsTable, placementImage: Int) {
 		self.restaurantInfo = restaurantInfo
 
 		switch (placementImage) {
@@ -81,11 +82,11 @@ struct ListCardView: View {
 							.frame(width: 50)
                         Spacer()
 						VStack(alignment: .leading) {
-							Text("\(restaurantInfo.name)")
+							Text("\(restaurantInfo.restaurant_name)")
                                 .font(.title2)
                                 .bold()
                             
-							Text("Votes: \(restaurantInfo.score)")
+							Text("Votes: \(restaurantInfo.rating)")
                                 .font(.headline)
                                 
                         }
@@ -101,8 +102,8 @@ struct ListCardView: View {
 	}
 }
 
-struct ListCardView_Previews: PreviewProvider {
-	static var previews: some View {
-		ListCardView(restaurantInfo: FirebaseRestaurantInfo(name: "TEST", score: 10, url: "https://www.yelp.com/biz/gary-danko-san-francisco?adjust_creative=wpr6gw4FnptTrk1CeT8POg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_lookup&utm_source=wpr6gw4FnptTrk1CeT8POg", image_url: "WavvLdfdP6g8aZTtbBQHTw"), placementImage: 1)
-	}
-}
+//struct ListCardView_Previews: PreviewProvider {
+//	static var previews: some View {
+//		ListCardView(restaurantInfo: FirebaseRestaurantInfo(name: "TEST", score: 10, url: "https://www.yelp.com/biz/gary-danko-san-francisco?adjust_creative=wpr6gw4FnptTrk1CeT8POg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_lookup&utm_source=wpr6gw4FnptTrk1CeT8POg", image_url: "WavvLdfdP6g8aZTtbBQHTw"), placementImage: 1)
+//	}
+//}

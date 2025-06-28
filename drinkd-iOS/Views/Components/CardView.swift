@@ -25,7 +25,7 @@ struct CardView: View {
     var restaurantCategories: String
     var restaurantScore: Int
     var restaurantPrice: String
-    var restaurantImage: String
+    var restaurantImageURL: String
     var restaurantCity: String
     var restaurantAddress1: String
     var restaurantAddress2: String?
@@ -47,7 +47,7 @@ struct CardView: View {
         self.restaurantCategories = restaurantDetails.categories?[0].title ?? "None"
         self.restaurantScore =  verifiedRestaurantScore > 5 ? 5 : Int(verifiedRestaurantScore)
         self.restaurantPrice = restaurantDetails.price ?? "Not Found"
-        self.restaurantImage = restaurantDetails.image_url ?? "Not Found"
+        self.restaurantImageURL = restaurantDetails.image_url ?? "Not Found"
         self.restaurantCity = restaurantDetails.location?.city ?? "Not Found"
         self.restaurantAddress1 = restaurantDetails.location?.address1 ?? "Not Found"
         self.restaurantAddress2 = restaurantDetails.location?.address2 ?? ""
@@ -97,7 +97,7 @@ struct CardView: View {
                             .font(.title3)
                     }
                     
-                    RemoteImageLoader(url: "\(restaurantImage)")
+                    RemoteImageLoader(url: "\(restaurantImageURL)")
                         .frame(maxWidth: .infinity)
 
                     GeometryReader { geo in
@@ -203,7 +203,7 @@ struct CardView: View {
 
                                 Task {
                                     do {
-                                        try await Networking.shared.addRating(partyID: partyID, userID: userID, username: username, restaurantName: restaurantName, rating: rating)
+                                        try await Networking.shared.addRating(partyID: partyID, userID: userID, username: username, restaurantName: restaurantName, rating: rating, imageURL: restaurantImageURL)
                                     } catch {
                                         showError.message = error.localizedDescription
                                         showError.status.toggle()

@@ -74,13 +74,15 @@ public struct UpdateRatingRequest: Codable, PartyRequest {
     public let userName: String
     public let restaurantName: String
     public let rating: Int
+    public let imageURL: String
 
-   public init(partyID: UUID, userID: UUID, userName: String, restaurantName: String, rating: Int) {
+    public init(partyID: UUID, userID: UUID, userName: String, restaurantName: String, rating: Int, imageURL: String) {
         self.partyID = partyID
         self.userID = userID
         self.userName = userName
         self.restaurantName = restaurantName
         self.rating = rating
+        self.imageURL = imageURL
     }
 }
 

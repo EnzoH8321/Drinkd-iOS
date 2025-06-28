@@ -85,15 +85,16 @@ public struct RatedRestaurantsTable: Codable, Sendable, SupaBaseTable, Hashable 
     public let username: String
     public let restaurant_name: String
     public var rating: Int
+    public var image_url: String
 
 
-
-    public init(id: UUID, partyID: UUID, userID: UUID, userName: String, restaurantName: String, rating: Int) {
+    public init(id: UUID, partyID: UUID, userID: UUID, userName: String, restaurantName: String, rating: Int, imageURL: String) {
        self.id = id
         self.party_id = partyID
         self.user_id = userID
         self.username = userName
         self.restaurant_name = restaurantName
         self.rating = rating
+        self.image_url = imageURL
     }
 }
