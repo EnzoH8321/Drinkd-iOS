@@ -12,6 +12,18 @@ struct TopChoicesView: View {
 
     @Environment(PartyViewModel.self) var viewModel
 
+    private var firstChoice: RatedRestaurantsTable? {
+        return viewModel.topRestaurants[0]
+    }
+
+    private var secondChoice: RatedRestaurantsTable? {
+        return viewModel.topRestaurants[1]
+    }
+
+    private var thirdChoice: RatedRestaurantsTable? {
+        return viewModel.topRestaurants[2]
+    }
+
 	var body: some View {
 		GeometryReader { proxy in
 
@@ -20,33 +32,45 @@ struct TopChoicesView: View {
 
 			VStack(alignment: .center) {
 
-                if !viewModel.topRestaurants.isEmpty {
+                if viewModel.currentlyInParty {
 
-                    if (viewModel.currentlyInParty && viewModel.topRestaurants[0].image_url != "") {
-                        ListCardView(restaurantInfo: viewModel.topRestaurants[0], placementImage: 1)
-                            .frame(width: abs(globalWidth - 20))
-                            .frame(maxHeight: globalHeight / 3)
+                    if !viewModel.topRestaurants.isEmpty {
 
-                        if (viewModel.currentlyInParty && viewModel.topRestaurants[1].image_url != "") {
-                            ListCardView(restaurantInfo: viewModel.topRestaurants[1], placementImage: 2)
+                        if let firstChoice = firstChoice {
+                            ListCardView(restaurantInfo: firstChoice, placementImage: 1)
                                 .frame(width: abs(globalWidth - 20))
                                 .frame(maxHeight: globalHeight / 3)
-                            if (viewModel.currentlyInParty && viewModel.topRestaurants[2].image_url != "") {
+                        }
 
-                                ListCardView(restaurantInfo: viewModel.topRestaurants[2], placementImage: 3)
-                                    .frame(width: abs(globalWidth - 20))
-                                    .frame(maxHeight: globalHeight / 3)
-                                    .padding([.bottom], 10)
-                            }
+                        if let secondChoice = secondChoice {
+                            ListCardView(restaurantInfo: secondChoice, placementImage: 2)
+                                .frame(width: abs(globalWidth - 20))
+                                .frame(maxHeight: globalHeight / 3)
+                        }
+
+                        if let thirdChoice = thirdChoice {
+
+                            ListCardView(restaurantInfo: thirdChoice, placementImage: 3)
+                                .frame(width: abs(globalWidth - 20))
+                                .frame(maxHeight: globalHeight / 3)
+                                .padding([.bottom], 10)
                         }
 
                     } else {
                         Spacer()
-                        Text("Please Join a Party to see the Top Choices!")
+                        Text("No one has voted for a restaurant yet!")
                             .font(.largeTitle)
                             .padding()
                         Spacer()
                     }
+
+
+                } else {
+                    Spacer()
+                    Text("Please Join a Party to see the Top Choices!")
+                        .font(.largeTitle)
+                        .padding()
+                    Spacer()
                 }
 
 

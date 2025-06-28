@@ -336,9 +336,12 @@ extension SupaBase {
             return $0.rating > $1.rating  // Primary sort
         }
 
-        // Remove everything after third place
+        // Remove everything after third place if there are more than 3 restaurants
         // TODO: Deal with ties. There could be multiple first second etc.
-        sorted.removeSubrange(3...)
+        if sorted.count > 3 {
+            sorted.removeSubrange(3...)
+        }
+
 
         return sorted
     }
