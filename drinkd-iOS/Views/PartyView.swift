@@ -18,13 +18,17 @@ struct PartyView: View {
 				VStack {
                     Spacer()
 					NavigationLink(destination: PartyView_Join()) {
-						JoinOrCreatePartyButton(buttonName: "Join Party")
+
+                        Text("Join Party")
+                            .bold()
 					}
 					.padding(.bottom, 55)
 					.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
 
 					NavigationLink(destination: PartyView_Create()) {
-						JoinOrCreatePartyButton(buttonName: "Create Party")
+
+                        Text("Create Party")
+                            .bold()
 					}
 					.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
                     Spacer()
@@ -39,20 +43,6 @@ struct PartyView: View {
 
 	}
 }
-
-//Used in the PartyView. Not a button to fit in with the navigation view requirements
-struct JoinOrCreatePartyButton: View {
-
-	let buttonName: String
-
-	var body: some View {
-		Text("\(buttonName)")
-            .bold()
-	}
-}
-
-
-
 
 struct PartyView_Previews: PreviewProvider {
 	static var previews: some View {

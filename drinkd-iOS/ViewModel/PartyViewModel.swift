@@ -27,7 +27,6 @@ class PartyViewModel {
     var personalUserName = ""
     var personalUserID: UUID?
 
-    var fcmToken: String = ""
     var currentCardIndex: Int = 9
     var currentlyInParty = false
     var currentParty: Party?
