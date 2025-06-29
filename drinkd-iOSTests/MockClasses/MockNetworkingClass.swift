@@ -15,7 +15,7 @@ class MockNetworkingClass: NetworkingProtocol {
     
     var mockDB = MockDatabaseObject()
     
-    func fetchRestaurantsOnStartUp(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+    func fetchRestaurantsOnStartUp(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void) {
         
         //TODO: Issue where during reload there is a possibility to do a 2x call. Fix issue
         //Checks to see if the function already ran to prevent duplicate calls
@@ -92,7 +92,7 @@ class MockNetworkingClass: NetworkingProtocol {
         }.resume()
     }
     
-    func fetchUsingCustomLocation(viewModel: PartyViewModel, longitude: Double, latitude: Double, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+    func fetchUsingCustomLocation(viewModel: PartyViewModel, longitude: Double, latitude: Double, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void) {
         
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
             completionHandler(.failure(.invalidURLError))
@@ -138,7 +138,7 @@ class MockNetworkingClass: NetworkingProtocol {
         
     }
     
-    func fetchRestaurantsAfterJoiningParty(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+    func fetchRestaurantsAfterJoiningParty(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void) {
         
         guard let verifiedPartyURL = viewModel.partyURL else {
             print("No URL Found")
@@ -190,7 +190,7 @@ class MockNetworkingClass: NetworkingProtocol {
         }.resume()
     }
     
-    func calculateTopThreeRestaurants(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+    func calculateTopThreeRestaurants(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void) {
         
         
         guard let url = Bundle(for: type(of: self)).url(forResource: "MockTopThreeChoices", withExtension: "json") else {
@@ -272,7 +272,7 @@ class MockNetworkingClass: NetworkingProtocol {
         
     }
     
-    func fetchExistingMessages(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+    func fetchExistingMessages(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void) {
         
         let localReference = Database.database(url: "https://drinkd-dev-default-rtdb.firebaseio.com/").reference(withPath: "parties/\(viewModel.isPartyLeader ? viewModel.partyId : viewModel.friendPartyId)").child("messages")
         

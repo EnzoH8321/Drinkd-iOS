@@ -56,7 +56,9 @@ struct TopChoicesView: View {
                                 .padding([.bottom], 10)
                         }
 
-                    } else {
+                    }
+                    // If no restaurant has any votes
+                    else {
                         Spacer()
                         Text("No one has voted for a restaurant yet!")
                             .font(.largeTitle)
@@ -65,7 +67,9 @@ struct TopChoicesView: View {
                     }
 
 
-                } else {
+                }
+                // If user is not in a party
+                else {
                     Spacer()
                     Text("Please Join a Party to see the Top Choices!")
                         .font(.largeTitle)

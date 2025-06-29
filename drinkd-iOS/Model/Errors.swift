@@ -6,8 +6,8 @@
 //
 
 import Foundation
-
-enum NetworkErrors:  String ,LocalizedError {
+// Client specific network errors
+enum ClientNetworkErrors:  String ,LocalizedError {
 	case serializationError
 	case decodingError
 	case noUserLocationFoundError

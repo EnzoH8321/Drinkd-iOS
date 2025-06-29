@@ -10,12 +10,12 @@ import drinkdSharedModels
 import Vapor
 
 protocol NetworkingProtocol {
-    func fetchRestaurantsOnStartUp(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
-    func fetchUsingCustomLocation(viewModel: PartyViewModel, longitude: Double, latitude: Double, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
-    func fetchRestaurantsAfterJoiningParty(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
-    func calculateTopThreeRestaurants(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
+    func fetchRestaurantsOnStartUp(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void)
+    func fetchUsingCustomLocation(viewModel: PartyViewModel, longitude: Double, latitude: Double, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void)
+    func fetchRestaurantsAfterJoiningParty(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void)
+    func calculateTopThreeRestaurants(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void)
     func submitRestaurantScore(viewModel: PartyViewModel)
-    func fetchExistingMessages(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void)
+    func fetchExistingMessages(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void)
     func removeMessagingObserver(viewModel: PartyViewModel)
     func sendMessage(forMessage message: FireBaseMessage, viewModel: PartyViewModel )
     
@@ -33,7 +33,7 @@ final class Networking {
         self.userDeniedLocationServices = locationFetcher.errorWithLocationAuth
     }
 
-    func fetchRestaurantsOnStartUp(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+    func fetchRestaurantsOnStartUp(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void) {
 
         //TODO: Issue where during reload there is a possibility to do a 2x call. Fix issue
         //Checks to see if the function already ran to prevent duplicate calls
@@ -110,7 +110,7 @@ final class Networking {
     }
     //
     //Fetches a user defined location. Used when user disabled location services.
-    func fetchUsingCustomLocation(viewModel: PartyViewModel, longitude: Double, latitude: Double, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+    func fetchUsingCustomLocation(viewModel: PartyViewModel, longitude: Double, latitude: Double, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void) {
 
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
             completionHandler(.failure(.invalidURLError))
@@ -155,7 +155,7 @@ final class Networking {
     }
 
     //Fetch restaurant after joining party
-    func fetchRestaurantsAfterJoiningParty(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, NetworkErrors>) -> Void) {
+    func fetchRestaurantsAfterJoiningParty(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void) {
 
         guard let verifiedPartyURL = viewModel.currentParty?.url else {
             print("No URL Found")
@@ -310,7 +310,7 @@ extension Networking {
 
     private func postURLReq(reqType: PostRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil, imageURL: String? = nil) throws -> URLRequest {
 
-        guard let url = URL(string: url) else { throw NetworkErrors.invalidURLError }
+        guard let url = URL(string: url) else { throw ClientNetworkErrors.invalidURLError }
         var urlRequest = URLRequest(url: url)
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
         urlRequest.httpMethod = "POST"
@@ -350,7 +350,7 @@ extension Networking {
     private func getURLReq(reqType: GetRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil , userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil ) throws -> URLRequest {
 
 
-        guard let url = URL(string: url) else { throw NetworkErrors.invalidURLError }
+        guard let url = URL(string: url) else { throw ClientNetworkErrors.invalidURLError }
         var urlRequest = URLRequest(url: url)
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
         urlRequest.httpMethod = "GET"

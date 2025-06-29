@@ -15,10 +15,6 @@ struct PartyView_Create: View {
     @State private var showAlert: (state: Bool, message: String) = (false, "")
     @Environment(PartyViewModel.self) var partyVM
 
-    func formatStringtoInt(in textValue: String) -> Int {
-        return Int(textValue) ?? 0
-    }
-    
     var body: some View {
         @Bindable var partyVM = partyVM
         VStack {

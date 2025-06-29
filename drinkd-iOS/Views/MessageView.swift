@@ -16,7 +16,7 @@ struct MessageView: View {
     var timestampString: String
     
     //Check to see if the message was written by the user.
-    var isMyMessage: Bool {
+    private var isMyMessage: Bool {
         if (messageChatID == personalChatId) {
             return true
         } else {
