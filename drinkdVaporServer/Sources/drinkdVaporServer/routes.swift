@@ -157,6 +157,26 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                 }
 
             }
+        case .rejoinParty:
+            app.get("rejoinParty") { req async -> Response in
+
+                do {
+                    guard let path = req.url.query else { return Response(status: .badRequest) }
+                    let pathComponents = path.components(separatedBy: "=")
+                    guard let userID = pathComponents.count == 2 ? pathComponents[1] : nil else { throw SharedErrors.general(error: .generalError("Unable to parse User ID"))}
+
+                    // Get Party ID associated with the user
+                    let partyID = try await supabase.rejoinParty(userID: userID)
+
+                    let responseObj = RejoinPartyResponse(partyID: partyID)
+
+                    return try RouteHelper.createResponse(data: responseObj)
+
+                } catch {
+                    Log.routes.warning("Error on topChoices route - \(error)")
+                    return RouteHelper.createErrorResponse(error: error)
+                }
+            }
         }
     }
 

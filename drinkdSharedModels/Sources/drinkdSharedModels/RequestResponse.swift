@@ -116,3 +116,11 @@ public struct TopRestaurantResponse: Codable {
         self.restaurants = restaurants
     }
 }
+
+public struct RejoinPartyResponse: Codable {
+    public let partyID: UUID
+
+    public init(partyID: UUID) {
+        self.partyID = partyID
+    }
+}
