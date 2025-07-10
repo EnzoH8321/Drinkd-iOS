@@ -9,15 +9,15 @@ import SwiftUI
 import Foundation
 import drinkdSharedModels
 
-//Allows you to sepcify which corner will have the radius
+//Allows you to specify which corner will have the radius
 private struct CornerRadiusStyle: ViewModifier {
-	var radius: CGFloat
-	var corners: UIRectCorner
+	let radius: CGFloat
+	let corners: UIRectCorner
 
-	struct CornerRadiusShape: Shape {
+	private struct CornerRadiusShape: Shape {
 
-		var radius = CGFloat.infinity
-		var corners = UIRectCorner.allCorners
+        let radius: CGFloat
+        let corners: UIRectCorner
 
 		func path(in rect: CGRect) -> Path {
 			let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
@@ -30,6 +30,7 @@ private struct CornerRadiusStyle: ViewModifier {
 			.clipShape(CornerRadiusShape(radius: radius, corners: corners))
 	}
 }
+
 //Extends the custom struct to the View
 extension View {
 	func cornerRadius(radius: CGFloat, corners: UIRectCorner) -> some View {
@@ -39,8 +40,8 @@ extension View {
 //
 struct ListCardView: View {
 
-	var restaurantInfo: RatedRestaurantsTable
-	var placementImage: String
+	let restaurantInfo: RatedRestaurantsTable
+	let placementImage: String
 
 	init(restaurantInfo: RatedRestaurantsTable, placementImage: Int) {
 		self.restaurantInfo = restaurantInfo
