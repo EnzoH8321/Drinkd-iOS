@@ -59,6 +59,14 @@ struct ListCardView: View {
 		
 	}
 
+    private var image: Image {
+        guard let imageData = restaurantInfo.imageData,  let uiImage = UIImage(data: imageData) else {
+            return Image(systemName: "multiply.circle")
+        }
+
+       return Image(uiImage: uiImage)
+    }
+
 	var body: some View {
 
 		GeometryReader { proxy in
@@ -72,7 +80,9 @@ struct ListCardView: View {
 					.shadow(radius: AppShadow.lowShadowRadius)
 				HStack {
 
-                    RemoteImageLoader(url: "\(restaurantInfo.image_url)", aspectRatio: .fill)
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
                         .frame(width: globalWidth * 0.50, height: globalHeight)
                         .cornerRadius(radius: CardSpecificStyle.cornerRadius, corners: [.topLeft, .bottomLeft])
 

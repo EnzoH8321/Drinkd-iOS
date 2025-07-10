@@ -239,7 +239,15 @@ extension Networking {
     func getTopRestaurants(partyID: UUID) async throws -> TopRestaurantResponse {
         let urlString = HTTP.get(.topRestaurants).fullURLString
         let urlReq = try getURLReq(reqType: .topRestaurants, url: urlString, partyID: partyID)
-        return try await getCall(urlReq: urlReq)
+        var restaurantResponse = try await getCall(urlReq: urlReq)
+
+        for i in restaurantResponse.restaurants.indices {
+            let url = URL(string: restaurantResponse.restaurants[i].image_url)!
+            let (data, _) = try await URLSession.shared.data(from: url)
+            restaurantResponse.restaurants[i].imageData = data
+        }
+
+        return restaurantResponse
     }
 
     //MARK: WebSocket code

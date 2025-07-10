@@ -110,7 +110,7 @@ public struct PostRouteResponse: Codable {
 }
 
 public struct TopRestaurantResponse: Codable {
-    public let restaurants: [RatedRestaurantsTable]
+    public var restaurants: [RatedRestaurantsTable]
 
     public init(restaurants: [RatedRestaurantsTable]) {
         self.restaurants = restaurants
