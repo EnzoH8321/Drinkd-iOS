@@ -10,7 +10,7 @@ import Foundation
 import drinkdSharedModels
 
 //Allows you to sepcify which corner will have the radius
-struct CornerRadiusStyle: ViewModifier {
+private struct CornerRadiusStyle: ViewModifier {
 	var radius: CGFloat
 	var corners: UIRectCorner
 
@@ -71,16 +71,19 @@ struct ListCardView: View {
 					.shadow(radius: AppShadow.lowShadowRadius)
 				HStack {
 
-					RemoteImageLoader(url: "\(restaurantInfo.image_url)")
+                    RemoteImageLoader(url: "\(restaurantInfo.image_url)", aspectRatio: .fill)
+                        .frame(width: globalWidth * 0.50, height: globalHeight)
                         .cornerRadius(radius: CardSpecificStyle.cornerRadius, corners: [.topLeft, .bottomLeft])
 
-                    VStack() {
-                        Spacer()
+                    Spacer()
+
+                    VStack {
+
 						Image(systemName: self.placementImage)
 							.resizable()
-							.scaledToFit()
+                            .aspectRatio(contentMode: .fit)
 							.frame(width: 50)
-                        Spacer()
+
 						VStack(alignment: .leading) {
 							Text("\(restaurantInfo.restaurant_name)")
                                 .font(.title2)
@@ -94,6 +97,8 @@ struct ListCardView: View {
 						Spacer()
 					}
                     .padding()
+                    .frame(width: globalWidth * 0.50)
+
 				}
 			}
 			.frame(width: globalWidth, height: globalHeight, alignment: .center)
@@ -102,8 +107,16 @@ struct ListCardView: View {
 	}
 }
 
-//struct ListCardView_Previews: PreviewProvider {
-//	static var previews: some View {
-//		ListCardView(restaurantInfo: FirebaseRestaurantInfo(name: "TEST", score: 10, url: "https://www.yelp.com/biz/gary-danko-san-francisco?adjust_creative=wpr6gw4FnptTrk1CeT8POg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_lookup&utm_source=wpr6gw4FnptTrk1CeT8POg", image_url: "WavvLdfdP6g8aZTtbBQHTw"), placementImage: 1)
-//	}
-//}
+
+#Preview {
+    let ratedRestaurant = RatedRestaurantsTable(id: UUID(), partyID: UUID(), userID: UUID(), userName: "TestUsername", restaurantName: "Pabu Izakaya", rating: 5, imageURL: "https://www.yelp.com/biz/gary-danko-san-francisco?adjust_creative=wpr6gw4FnptTrk1CeT8POg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_lookup&utm_source=wpr6gw4FnptTrk1CeT8POg")
+
+    let ratedRestaurant2 = RatedRestaurantsTable(id: UUID(), partyID: UUID(), userID: UUID(), userName: "TestUsername", restaurantName: "Sotto Mare", rating: 5, imageURL: "https://www.yelp.com/biz/gary-danko-san-francisco?adjust_creative=wpr6gw4FnptTrk1CeT8POg&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_lookup&utm_source=wpr6gw4FnptTrk1CeT8POg")
+
+    VStack {
+        ListCardView(restaurantInfo: ratedRestaurant, placementImage: 1)
+        ListCardView(restaurantInfo: ratedRestaurant2, placementImage: 2)
+        ListCardView(restaurantInfo: ratedRestaurant, placementImage: 3)
+    }
+
+}

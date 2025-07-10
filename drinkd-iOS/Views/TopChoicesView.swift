@@ -17,11 +17,11 @@ struct TopChoicesView: View {
     }
 
     private var secondChoice: RatedRestaurantsTable? {
-        return viewModel.topRestaurants[1]
+        return viewModel.topRestaurants.indices.contains(1) ? viewModel.topRestaurants[1] : nil
     }
 
     private var thirdChoice: RatedRestaurantsTable? {
-        return viewModel.topRestaurants[2]
+        return viewModel.topRestaurants.indices.contains(2) ? viewModel.topRestaurants[2] : nil
     }
 
 	var body: some View {

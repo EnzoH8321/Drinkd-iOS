@@ -37,17 +37,19 @@ struct RemoteImageLoader: View {
 	}
 
 	@StateObject private var loader: Loader
-	var loading: Image
-	var failure: Image
+    let loading: Image
+	let failure: Image
+    let aspectRatio: ContentMode
 
 	var body: some View {
 		selectImage()
 			.resizable()
-            .aspectRatio(contentMode: .fit)
+            .aspectRatio(contentMode: aspectRatio)
 	}
 
-	init(url: String, loading: Image = Image(systemName: "photo"), failure: Image = Image(systemName: "multiply.circle")) {
+    init(url: String, aspectRatio: ContentMode = .fit, loading: Image = Image(systemName: "photo"), failure: Image = Image(systemName: "multiply.circle")) {
 
+        self.aspectRatio = aspectRatio
 		_loader = StateObject(wrappedValue: Loader(url: url))
 		self.loading = loading
 		self.failure = failure
