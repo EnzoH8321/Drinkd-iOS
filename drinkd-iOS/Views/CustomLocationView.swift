@@ -11,62 +11,85 @@ struct CustomLocationView: View {
 
     @Environment(PartyViewModel.self) var viewModel
 
-	@State var latitude: String = ""
-	@State var longitude: String = ""
+	@State private var latitude: String = ""
+	@State private var longitude: String = ""
+    @State private var showAlert: (message: String, state: Bool) = ("", false)
 
 	var body: some View {
-		VStack {
-			Text("You have disabled location services. Please provide custom coordinates for Drinkd to use by entering a latitude and longitude below. For a more streamlined experience, please enable location services.")
-				.font(.title3)
-            
+        VStack {
+            Text("You have disabled location services. Please provide custom coordinates for Drinkd to use by entering a latitude and longitude below. For a more streamlined experience, please enable location services.")
+                .font(.title3)
+
             VStack(alignment: .leading) {
-                Text("Please enter the latitude below")
-                    .bold()
-                    .padding(.top, 8)
-                TextField("Latitude", text: $latitude)
-                    .textFieldStyle(regularTextFieldStyle())
-            }.padding()
-			
-            VStack(alignment: .leading) {
-                Text("Please enter the longitude below")
-                    .bold()
-                    .padding(.top, 8)
-                TextField("Longitude", text: $longitude)
-                    .textFieldStyle(regularTextFieldStyle())
-            }.padding()
-            
-			
-			Button {
-				//If 0.0 they are nil
-				let latitude = Double(self.latitude) ?? 0.0
-				let longitude = Double(self.longitude) ?? 0.0
 
-				if (latitude == 0.0 || longitude == 0.0) {
-					print("Values are wrong")
-					return
-				}
-                Networking.shared.fetchUsingCustomLocation(viewModel: viewModel,longitude: longitude, latitude: latitude) { result in
+                Group {
+                    Text("Please enter the latitude below")
+                        .bold()
+                        .padding(.top, 8)
+                    TextField("Latitude", text: $latitude)
+                }
 
-					switch(result) {
-					case .success(_):
-						print("Success")
-					case .failure(_):
-						print("Failure")
-					}
 
-				}
+                Group {
+                    Text("Please enter the longitude below")
+                        .bold()
+                        .padding(.top, 8)
+                    TextField("Longitude", text: $longitude)
+                }
+
+            }
+            .padding()
+            .textFieldStyle(regularTextFieldStyle())
+            .keyboardType(.decimalPad)
+
+            Button {
+
+                guard let latitude = Double(self.latitude), let longitude = Double(self.longitude) else {
+                    showAlert.state.toggle()
+                    return
+                }
+
+                Task {
+                    do {
+                        try await Networking.shared.fetchUsingCustomLocation(viewModel: viewModel,longitude: longitude, latitude: latitude)
+                    } catch {
+                        showAlert.message = error.localizedDescription
+                        showAlert.state.toggle()
+                    }
+                }
+
             } label: {
                 Text("Submit")
                     .bold()
             }
-			.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
-			Spacer()
-		}
+            .buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+
+            Button {
+                // Create the URL that deep links to your app's custom settings.
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    Task {
+                        // Ask the system to open that URL.
+                        await UIApplication.shared.open(url)
+                    }
+
+                }
+            } label: {
+                Text("Enable Location Services")
+                    .bold()
+            }
+            .buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+
+
+            Spacer()
+        }
+        .alert("Error:", isPresented: $showAlert.state, actions: {}, message: {
+            Text(showAlert.message)
+        })
+        .padding()
 	}
 }
 
-struct CustomLocationView_Previews: PreviewProvider {
-	static var previews: some View {
-		CustomLocationView()			
-	}
+#Preview {
+    CustomLocationView()
+        .environment(PartyViewModel())
 }

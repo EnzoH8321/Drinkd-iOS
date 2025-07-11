@@ -54,11 +54,14 @@ public enum SharedErrors: Codable, LocalizedError {
 
     public enum Yelp: LocalizedError, Codable {
         case missingProperty(String)
+        case invalidHTTPStatus(String)
 
         public var errorDescription: String? {
             switch self {
             case .missingProperty(let string):
                 return "missingProperty error - \(string)"
+            case .invalidHTTPStatus(let string):
+                return "invalidHTTPStatus error - \(string)"
             }
         }
     }

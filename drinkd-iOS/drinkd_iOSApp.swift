@@ -48,26 +48,10 @@ struct drinkd_iOSApp: App {
 	let persistenceController = PersistenceController.shared
 
 	@State var viewModel = PartyViewModel()
-    @State var showErrorAlert = false
 
 	var body: some Scene {
 		WindowGroup {
 			MasterView()
-                .alert(isPresented: $showErrorAlert) {
-                    Alert(title: Text("Error Retrieving User Location"), primaryButton: .default(Text("Retry"), action: {
-                        Networking.shared.updateUserDeniedLocationServices()
-                        Task {
-                            do {
-                                try await Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel)
-                            } catch {
-                                Log.general.fault("Error fetching restaurant data on startup: \(error)")
-                                Networking.shared.updateUserDeniedLocationServices()
-                            }
-
-                        }
-
-                    }), secondaryButton: .cancel())
-                }
 				.environment(\.managedObjectContext, persistenceController.container.viewContext)
 				.environment(viewModel)
 				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in

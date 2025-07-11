@@ -101,10 +101,10 @@ final class Networking {
     }
     //
     //Fetches a user defined location. Used when user disabled location services.
-    func fetchUsingCustomLocation(viewModel: PartyViewModel, longitude: Double, latitude: Double, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void) {
+    func fetchUsingCustomLocation(viewModel: PartyViewModel, longitude: Double, latitude: Double) async throws {
 
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
-            completionHandler(.failure(.invalidURLError))
+            throw ClientNetworkErrors.invalidURLError
             return
         }
 
@@ -112,36 +112,34 @@ final class Networking {
         request.httpMethod = "GET"
         request.setValue("Bearer \(Constants.token)", forHTTPHeaderField: "Authorization")
 
-        //URLSession
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        let (data, response) = try await URLSession.shared.data(for: request)
 
-            if error != nil {
-                completionHandler(.failure(.generalNetworkError))
-                return
+        if let httpResponse = response as? HTTPURLResponse {
+            let statusCode = httpResponse.statusCode
+            
+            // Check for errors
+            if !(200...299).contains(statusCode) {
+                throw SharedErrors.yelp(error: .invalidHTTPStatus("Invalid HTTP Status Code - \(statusCode)"))
+            }
+        }
+
+
+
+        guard let JSONDecoderValue = try? JSONDecoder().decode(YelpApiBusinessSearch.self, from: data) else {
+            throw ClientNetworkErrors.decodingError
+        }
+
+        if let JSONArray = JSONDecoderValue.businesses {
+
+            await MainActor.run {
+                viewModel.updateLocalRestaurants(in: JSONArray)
+                viewModel.currentParty?.url = url.absoluteString
+                viewModel.removeSplashScreen = true
+                self.userDeniedLocationServices = false
             }
 
-            //If URLSession returns data, below code block will execute
-            if let verifiedData = data {
 
-                guard let JSONDecoderValue = try? JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData) else {
-                    completionHandler(.failure(.decodingError))
-                    return
-                }
-
-                if let JSONArray = JSONDecoderValue.businesses {
-                    DispatchQueue.main.async {
-
-                        completionHandler(.success(.connectionSuccess))
-                        viewModel.updateLocalRestaurants(in: JSONArray)
-                        viewModel.currentParty?.url = url.absoluteString
-                        viewModel.removeSplashScreen = true
-                        self.userDeniedLocationServices = false
-
-                    }
-                }
-            }
-
-        }.resume()
+        }
 
     }
 
