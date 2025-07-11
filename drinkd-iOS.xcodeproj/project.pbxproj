@@ -12,7 +12,6 @@
 		5430E126276D1D8F00326A52 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5430E125276D1D8F00326A52 /* ChatView.swift */; };
 		5444B98F273EE09200FA6DA2 /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5444B98E273EE09100FA6DA2 /* SheetView.swift */; };
 		5444B991273EE99800FA6DA2 /* HowToView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5444B990273EE99800FA6DA2 /* HowToView.swift */; };
-		5456285A278A252200CA6005 /* FireBaseAPIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562859278A252200CA6005 /* FireBaseAPIModels.swift */; };
 		5456285C278A5FE400CA6005 /* MockJSON.json in Resources */ = {isa = PBXBuildFile; fileRef = 5456285B278A5FE400CA6005 /* MockJSON.json */; };
 		54562864278A62BF00CA6005 /* drinkd_iOS_NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562863278A62BF00CA6005 /* drinkd_iOS_NetworkingTests.swift */; };
 		54562871278DFAF600CA6005 /* Model_Methods_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562870278DFAF600CA6005 /* Model_Methods_Tests.swift */; };
@@ -88,7 +87,6 @@
 		5430E125276D1D8F00326A52 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		5444B98E273EE09100FA6DA2 /* SheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
 		5444B990273EE99800FA6DA2 /* HowToView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToView.swift; sourceTree = "<group>"; };
-		54562859278A252200CA6005 /* FireBaseAPIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireBaseAPIModels.swift; sourceTree = "<group>"; };
 		5456285B278A5FE400CA6005 /* MockJSON.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockJSON.json; sourceTree = "<group>"; };
 		54562861278A62BF00CA6005 /* drinkd-iOS-NetworkingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "drinkd-iOS-NetworkingTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54562863278A62BF00CA6005 /* drinkd_iOS_NetworkingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOS_NetworkingTests.swift; sourceTree = "<group>"; };
@@ -178,7 +176,6 @@
 			isa = PBXGroup;
 			children = (
 				54F9C83826FBD986008FA516 /* YelpAPIModels.swift */,
-				54562859278A252200CA6005 /* FireBaseAPIModels.swift */,
 			);
 			path = "API Models";
 			sourceTree = "<group>";
@@ -558,7 +555,6 @@
 				54B86718277522D2004D02A1 /* Errors.swift in Sources */,
 				54F9C85D2703E52A008FA516 /* RemoteImageLoader.swift in Sources */,
 				54F9C85B27037F2F008FA516 /* Models.swift in Sources */,
-				5456285A278A252200CA6005 /* FireBaseAPIModels.swift in Sources */,
 				54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */,
 				54F9C83926FBD986008FA516 /* YelpAPIModels.swift in Sources */,
 				54F9C84826FD1A05008FA516 /* TopChoicesView.swift in Sources */,

@@ -17,9 +17,7 @@ protocol NetworkingProtocol {
     func calculateTopThreeRestaurants(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void)
     func submitRestaurantScore(viewModel: PartyViewModel)
     func fetchExistingMessages(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void)
-    func removeMessagingObserver(viewModel: PartyViewModel)
-    func sendMessage(forMessage message: FireBaseMessage, viewModel: PartyViewModel )
-    
+    func removeMessagingObserver(viewModel: PartyViewModel)    
 }
 @Observable
 final class Networking {

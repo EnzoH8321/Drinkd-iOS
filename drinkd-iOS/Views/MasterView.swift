@@ -11,8 +11,6 @@ struct MasterView: View {
 
     @Environment(PartyViewModel.self) var viewModel
 	@State private var selectedTab: Int = 1
-	//Firebase
-//	var ref = Database.database().reference()
 
 	var body: some View {
 

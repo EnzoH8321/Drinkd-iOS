@@ -70,53 +70,32 @@ struct drinkd_iOSApp: App {
                 }
 				.environment(\.managedObjectContext, persistenceController.container.viewContext)
 				.environment(viewModel)
-			//TODO: From some reason, on receive glitches on iOS 14. Not called for some reason. During INIT OF IOS 14, you do have to put api call here or else it does not automatically do a call :(
 				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
 
-					//TODO: We do this because on iPAD fetching on ios14 only works in on receive.... ipad ios 15 works normally
-					if (!Constants.isPhone) {
-                        Task {
-                            do {
-                                try await Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel)
-                            } catch {
-                                Log.general.fault("Error fetching onReceive: \(error)")
+                    Task {
+                        do {
+                            let status = await ATTrackingManager.requestTrackingAuthorization()
+
+                            switch status {
+                            case .notDetermined:
+                                Log.general.info("Not Determined")
+                            case .restricted:
+                                Log.general.info("Restricted Tracking")
+                            case .denied:
+                                Log.general.info("User has Denied Tracking")
+                            case .authorized:
+                                Log.general.info("User has Authorized Tracking")
+                            @unknown default:
+                                fatalError()
                             }
+
+                            try await Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel)
+                        } catch {
+                            Log.general.fault("Error fetching onReceive: \(error)")
                         }
-
-                        Networking.shared.updateUserDeniedLocationServices()
-					}
-
-					if #available(iOS 14, *) {
-
-						ATTrackingManager.requestTrackingAuthorization { status in
-							switch (status) {
-							case .authorized:
-								print("User has Authorized Tracking")
-							case .notDetermined:
-								print("Not Determined")
-							case .restricted:
-								print("Restricted Tracking")
-
-							case .denied:
-								print("User has Denied Tracking")
-
-							@unknown default:
-								print("Unknown")
-							}
-						}
-					}
-					//TODO: For ios 14 to fetch during first time startup, you must put this code here. After initial startup, ios 14 will never call this code again....
-                    if (Constants.isPhone) {
-
-                        Task {
-                            do {
-                                try await Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel)
-                            } catch {
-                                Log.general.fault("Error fetching onReceive: \(error)")
-                            }
-                        }
-
                     }
+
+                    Networking.shared.updateUserDeniedLocationServices()
 
 				}
 		}
