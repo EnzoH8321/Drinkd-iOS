@@ -9,8 +9,7 @@ import SwiftUI
 import UIKit
 import AppTrackingTransparency
 import UserNotifications
-
-
+import drinkdSharedModels
 
 @main
 struct AppLauncher {
@@ -57,61 +56,33 @@ struct drinkd_iOSApp: App {
                 .alert(isPresented: $showErrorAlert) {
                     Alert(title: Text("Error Retrieving User Location"), primaryButton: .default(Text("Retry"), action: {
                         Networking.shared.updateUserDeniedLocationServices()
-                        Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
-
-                            switch(result) {
-                            case .success(_):
-                                print("Success, initial data fetch was successful")
-                            case .failure(_):
-                                print("Failed, initial data fetch was unsuccessful")
+                        Task {
+                            do {
+                                try await Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel)
+                            } catch {
+                                Log.general.fault("Error fetching restaurant data on startup: \(error)")
                                 Networking.shared.updateUserDeniedLocationServices()
                             }
 
                         }
+
                     }), secondaryButton: .cancel())
                 }
 				.environment(\.managedObjectContext, persistenceController.container.viewContext)
 				.environment(viewModel)
-				.onAppear {
-					//TODO: We have to add this because its the only way for ios 14 to actually fetch data
-					if (Constants.isPhone) {
-						if #available(iOS 13, *) {
-                            Networking.shared.updateUserDeniedLocationServices()
-                            Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
-
-								switch(result) {
-								case .success(_):
-									print("Success, initial data fetch was successful")
-                            
-								case .failure(_):
-									print("Failed, initial data fetch was unsuccessful")
-                                    //If it fails and user manually chooses to not share location, set the Alert and retry fetching the restaurants.
-                                    if (!Networking.shared.userDeniedLocationServices) {
-                                        showErrorAlert = true
-                                    }
-								}
-							}
-						}
-					}
-
-				}
-                
 			//TODO: From some reason, on receive glitches on iOS 14. Not called for some reason. During INIT OF IOS 14, you do have to put api call here or else it does not automatically do a call :(
 				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
 
 					//TODO: We do this because on iPAD fetching on ios14 only works in on receive.... ipad ios 15 works normally
 					if (!Constants.isPhone) {
-                        Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
+                        Task {
+                            do {
+                                try await Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel)
+                            } catch {
+                                Log.general.fault("Error fetching onReceive: \(error)")
+                            }
+                        }
 
-							switch(result) {
-							case .success(_):
-								print("Success")
-                                self.showErrorAlert = false
-							case .failure(_):
-								print("Failed")
-							}
-
-						}
                         Networking.shared.updateUserDeniedLocationServices()
 					}
 
@@ -135,21 +106,18 @@ struct drinkd_iOSApp: App {
 						}
 					}
 					//TODO: For ios 14 to fetch during first time startup, you must put this code here. After initial startup, ios 14 will never call this code again....
-					if (Constants.isPhone) {
-                        Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel) { result in
+                    if (Constants.isPhone) {
 
-							switch(result) {
-							case .success(_):
-								print("Success")
-                                self.showErrorAlert = false
-							case .failure(_):
-								print("Failed")
-							}
+                        Task {
+                            do {
+                                try await Networking.shared.fetchRestaurantsOnStartUp(viewModel: viewModel)
+                            } catch {
+                                Log.general.fault("Error fetching onReceive: \(error)")
+                            }
+                        }
 
-						}
-					}
+                    }
 
-					
 				}
 		}
 	}

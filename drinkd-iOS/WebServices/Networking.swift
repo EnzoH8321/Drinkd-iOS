@@ -8,6 +8,7 @@
 import Foundation
 import drinkdSharedModels
 import Vapor
+import SwiftUI
 
 protocol NetworkingProtocol {
     func fetchRestaurantsOnStartUp(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void)
@@ -33,7 +34,7 @@ final class Networking {
         self.userDeniedLocationServices = locationFetcher.errorWithLocationAuth
     }
 
-    func fetchRestaurantsOnStartUp(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void) {
+    func fetchRestaurantsOnStartUp(viewModel: PartyViewModel) async throws {
 
         //TODO: Issue where during reload there is a possibility to do a 2x call. Fix issue
         //Checks to see if the function already ran to prevent duplicate calls
@@ -56,13 +57,13 @@ final class Networking {
 
         //If defaults are used, then the user location could not be found
         if (longitude == 0.0 || latitude == 0.0) {
-            completionHandler(.failure(.noUserLocationFoundError))
+            throw ClientNetworkErrors.noUserLocationFoundError
             Log.networking.fault("ERROR - NO USER LOCATION FOUND ")
             return
         }
 
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
-            completionHandler(.failure(.invalidURLError))
+            throw ClientNetworkErrors.invalidURLError
             Log.networking.fault("ERROR - INVALID URL")
             return
         }
@@ -71,42 +72,34 @@ final class Networking {
         request.httpMethod = "GET"
         request.setValue("Bearer \(Constants.token)", forHTTPHeaderField: "Authorization")
 
+        
 
-        //URLSession
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        let (data, response) = try await URLSession.shared.data(for: request)
 
-            if error != nil {
-                completionHandler(.failure(.generalNetworkError))
-                Log.networking.fault("GENERAL NETWORK ERROR - \(error)")
-                return
+         let businessSearch = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: data)
+
+        guard var businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
+
+        for i in businesses.indices {
+            guard let imageStr = businesses[i].image_url else { continue }
+            guard let url = URL(string: imageStr) else { continue }
+            let (data, response) = try await URLSession.shared.data(from: url)
+            businesses[i].imageData = data
+        }
+
+        await MainActor.run {
+
+            //Checks to see if the function already ran to prevent duplicate calls
+            //TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
+            if (viewModel.localRestaurants.count <= 0) {
+                viewModel.updateLocalRestaurants(in: businesses)
             }
 
-            //If URLSession returns data, below code block will execute
-            if let verifiedData = data {
+            viewModel.currentParty?.url = url.absoluteString
+            viewModel.removeSplashScreen = true
+            self.userDeniedLocationServices = false
+        }
 
-                guard let JSONDecoderValue = try? JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData) else {
-                    completionHandler(.failure(.decodingError))
-                    Log.networking.fault("ERROR - DECODING ERROR")
-                    return
-                }
-                //If you are here, the network should have fetched the data correctly.
-                if let JSONArray = JSONDecoderValue.businesses {
-                    DispatchQueue.main.async {
-
-                        //                    viewModel.objectWillChange.send()
-                        //Checks to see if the function already ran to prevent duplicate calls
-                        //TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
-                        if (viewModel.localRestaurants.count <= 0) {
-                            viewModel.appendDeliveryOptions(in: JSONArray)
-                        }
-                        completionHandler(.success(.connectionSuccess))
-                        viewModel.currentParty?.url = url.absoluteString
-                        viewModel.removeSplashScreen = true
-                        self.userDeniedLocationServices = false
-                    }
-                }
-            }
-        }.resume()
     }
     //
     //Fetches a user defined location. Used when user disabled location services.
@@ -141,7 +134,7 @@ final class Networking {
                     DispatchQueue.main.async {
 
                         completionHandler(.success(.connectionSuccess))
-                        viewModel.appendDeliveryOptions(in: JSONArray)
+                        viewModel.updateLocalRestaurants(in: JSONArray)
                         viewModel.currentParty?.url = url.absoluteString
                         viewModel.removeSplashScreen = true
                         self.userDeniedLocationServices = false
@@ -194,7 +187,7 @@ final class Networking {
 
                         completionHandler(.success(.connectionSuccess))
                         viewModel.clearAllRestaurants()
-                        viewModel.appendDeliveryOptions(in: JSONArray)
+                        viewModel.updateLocalRestaurants(in: JSONArray)
                     }
                 }
             }

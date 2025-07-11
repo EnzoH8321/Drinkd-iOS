@@ -58,7 +58,7 @@ class PartyViewModel {
     }
 
     //Checks to see if the transaction array exists. if it does, parse it and fill the needed transaction properties
-    func appendDeliveryOptions(in restaurants: [YelpApiBusinessSearchProperties]) {
+    func updateLocalRestaurants(in restaurants: [YelpApiBusinessSearchProperties]) {
 
         for var element in restaurants {
             let transactionArray = element.transactions ?? [""]
