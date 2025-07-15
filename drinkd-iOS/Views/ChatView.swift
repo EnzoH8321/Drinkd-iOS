@@ -60,10 +60,6 @@ struct ChatView: View {
             .alert(isPresented: $showAlert.state) {
                 Alert(title: Text("Error"), message: Text(showAlert.message))
             }
-            .onDisappear {
-                //Removes the FB messaging observer
-//                Networking.shared.removeMessagingObserver(viewModel: viewModel)
-            }
 		}
     }
 }

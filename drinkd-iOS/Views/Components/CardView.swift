@@ -97,8 +97,16 @@ struct CardView: View {
                             .font(.title3)
                     }
                     
-                    RemoteImageLoader(url: "\(restaurantImageURL)")
-                        .frame(maxWidth: .infinity)
+
+                    AsyncImage(url: URL(string: restaurantImageURL)) { image in
+
+                        guard let image = image.image else {
+                            return Image(systemName: "multiply.circle")
+                                .resizable()
+                        }
+
+                        return image.resizable()
+                    }
 
                     GeometryReader { geo in
 
@@ -107,9 +115,6 @@ struct CardView: View {
                         let frame = geo.frame(in: CoordinateSpace.global)
 
                         VStack(alignment: .leading) {
-                            Text("About")
-                                .font(.title2)
-                                .bold()
 
                             ScrollView {
 
@@ -125,7 +130,6 @@ struct CardView: View {
                                             subheadline: "\(restaurantPhoneNumber)",
                                             imageName: "phone")
                                     .onTapGesture {
-
                                         UIApplication.shared.open(URL(string: "tel:\(restaurantPhoneNumber)")!)
                                     }
 
@@ -155,9 +159,7 @@ struct CardView: View {
 
                                             // More Info Button
                                             Button("More Info") {
-                                                guard let url = URL(string: "\(restaurantURL)") else {
-                                                    return print("BAD URL")
-                                                }
+                                                guard let url = URL(string: "\(restaurantURL)") else { return Log.general.error("Bad Restaurant URL") }
                                                 openURL(url)
                                             }
                                             .bold()
@@ -188,7 +190,7 @@ struct CardView: View {
                             Button("Submit") {
 //                                Networking.shared.submitRestaurantScore(viewModel: viewModel)
                                 guard let partyID = UserDefaultsWrapper.getPartyID() else {
-                                    showError.message = "Could not find party ID"
+                                    showError.message = "Could not find partyID"
                                     showError.status.toggle()
                                     return
                                 }

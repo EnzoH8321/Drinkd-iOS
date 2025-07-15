@@ -117,16 +117,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 
 		completionHandler(UIBackgroundFetchResult.newData)
 	}
-
-	//The messaging() function inside of this extension will print the device token. It'll be useful when we'll be sending a test notification through the Firebase Cloud Messaging Console to our device.
-//	func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-//		let deviceToken: [String: String] = ["token": fcmToken ?? "TOKEN NOT FOUND"]
-//
-//		AppDelegate.fcmToken = deviceToken["token"] ?? "NO TOKEN"
-//
-//		print("Device token: ", deviceToken) // This token can be used for testing notifications on FCM
-//	}
-
 }
 
 
