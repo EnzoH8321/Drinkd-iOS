@@ -21,7 +21,7 @@ struct HomeView: View {
                     //TODO: Find a way to refresh without having to toggle between card views.
 
                     ForEach(0..<viewModel.localRestaurants.count, id: \.self) { element in
-                        CardView(cardCounter: $cardCounter, in: viewModel.localRestaurants[element], forView: self.viewModel)
+                        CardView(cardCounter: $cardCounter, in: viewModel.localRestaurants[element])
                             .stacked(at: element, in: viewModel.localRestaurants.count)
 
                     }
