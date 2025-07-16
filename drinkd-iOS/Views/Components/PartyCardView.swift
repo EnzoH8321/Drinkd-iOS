@@ -19,6 +19,35 @@ struct PartyCardView: View {
     private var partyName: String { viewModel.currentParty?.partyName ?? "" }
     private var partyVotes: Int { viewModel.currentParty?.partyMaxVotes ?? 0 }
 
+    private func joinChat()  {
+        path.append("chat")
+
+        Task {
+            guard let partyID = UserDefaultsWrapper.getPartyID() else {
+                print("Unable to get Party ID")
+                return
+            }
+
+            // Only connect to the websocket once.
+            if viewModel.currentWebsocket == nil {
+                await Networking.shared.connectToWebsocket(partyVM: viewModel, username: viewModel.personalUserName, partyID: partyID)
+            }
+        }
+    }
+
+    private func leaveParty() {
+        viewModel.leaveParty()
+        Task {
+            do {
+                guard let partyID = UserDefaultsWrapper.getPartyID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to get the party ID"))}
+                try await Networking.shared.leaveParty(partyVM: viewModel, partyID: partyID)
+            } catch {
+                showAlert = (true, error.localizedDescription)
+            }
+
+        }
+    }
+
     var body: some View {
         GeometryReader { proxy in
 
@@ -50,21 +79,7 @@ struct PartyCardView: View {
                                 .font(.title2)
 
                             Button {
-                                path.append("chat")
-                                Task {
-
-                                    guard let partyID = UserDefaultsWrapper.getPartyID() else {
-                                        print("Unable to get Party ID")
-                                        return
-                                    }
-
-                                    // Only connect to the websocket once.
-                                    if viewModel.currentWebsocket == nil {
-                                        await Networking.shared.connectToWebsocket(partyVM: viewModel, username: viewModel.personalUserName, partyID: partyID)
-                                    }
-
-                                }
-
+                                joinChat()
                             } label: {
                                 Text("Join Chat")
                                     .bold()
@@ -73,18 +88,7 @@ struct PartyCardView: View {
 
                             //
                             Button {
-                                Task {
-                                    do {
-                                        guard let partyID = UserDefaultsWrapper.getPartyID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to get the party ID"))}
-                                        try await Networking.shared.leaveParty(partyVM: viewModel, partyID: partyID)
-                                        viewModel.leaveParty()
-                                    } catch {
-                                        showAlert = (true, error.localizedDescription)
-                                    }
-
-                                }
-
-
+                                leaveParty()
                             } label: {
                                 Text("Leave Party")
                                     .bold()
@@ -111,11 +115,6 @@ struct PartyCardView: View {
     }
 }
 
-//#Preview("Not in Party") {
-//    PartyCardView()
-//        .environment(PartyViewModel())
-//}
-
 #Preview("In a Party") {
     let partyVM = PartyViewModel()
     partyVM.currentlyInParty = true
@@ -124,8 +123,3 @@ struct PartyCardView: View {
         .environment(partyVM)
 }
 
-//struct PartyCardView_Previews: PreviewProvider {
-//	static var previews: some View {
-//		PartyCardView()			
-//	}
-//}
