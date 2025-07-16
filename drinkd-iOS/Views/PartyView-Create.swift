@@ -30,7 +30,7 @@ struct PartyView_Create: View {
                     .padding([.bottom], 8)
                 
                 TextField("Username", text: $userName)
-                    .textFieldStyle(regularTextFieldStyle())
+                    .textFieldStyle(Styles.regularTextFieldStyle())
             }.padding()
             
             VStack(alignment: .leading, spacing: 1) {
@@ -40,7 +40,7 @@ struct PartyView_Create: View {
                     .padding([.bottom], 8)
                 
                 TextField("Party Name(Max 15 Characters, No Numbers)", text: $partyName )
-                    .textFieldStyle(regularTextFieldStyle())
+                    .textFieldStyle(Styles.regularTextFieldStyle())
             }.padding()
             
             VStack(alignment: .leading, spacing: 1) {
@@ -50,7 +50,7 @@ struct PartyView_Create: View {
                     .padding([.bottom], 8)
                 
                 TextField("Votes", text: $winningVoteAmount)
-                    .textFieldStyle(regularTextFieldStyle())
+                    .textFieldStyle(Styles.regularTextFieldStyle())
             }.padding()
             
             Button {
@@ -80,7 +80,7 @@ struct PartyView_Create: View {
             .alert(isPresented: $showAlert.state) {
                 Alert(title: Text("Error"), message: Text(showAlert.message))
             }
-            .buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+            .buttonStyle(Styles.DefaultAppButton())
             //
             Spacer()
         }

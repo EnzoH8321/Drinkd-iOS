@@ -163,7 +163,7 @@ struct CardView: View {
                                                 openURL(url)
                                             }
                                             .bold()
-                                            .buttonStyle(Constants.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
+                                            .buttonStyle(Styles.CardInfoButton())
                                             .padding(.top, 20)
 
                                             Spacer()
@@ -171,7 +171,7 @@ struct CardView: View {
 
                                     }
                                 }
-                                .labeledContentStyle(LabeledContentCardStyling())
+                                .labeledContentStyle(Styles.LabeledContentCardStyling())
                             }
 
                         }
@@ -225,7 +225,7 @@ struct CardView: View {
                             Spacer()
                         }
                         .bold()
-                        .buttonStyle(Constants.isPhone ? CardInfoButton(deviceType: .phone) : CardInfoButton(deviceType: .ipad))
+                        .buttonStyle(Styles.CardInfoButton())
 
                         HStack {
                             Spacer()
@@ -302,7 +302,7 @@ extension CardView {
                         .font(.subheadline)
                 }
             }
-            .labeledContentStyle(LabeledContentCardStyling())
+            .labeledContentStyle(Styles.LabeledContentCardStyling())
         }
     }
 }

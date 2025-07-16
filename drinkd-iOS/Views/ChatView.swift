@@ -31,7 +31,7 @@ struct ChatView: View {
                     HStack {
                         Spacer()
                         TextField("Enter Text Here", text: $messageString)
-                            .textFieldStyle(regularTextFieldStyle())
+                            .textFieldStyle(Styles.regularTextFieldStyle())
                         
                         Button(action: {
 

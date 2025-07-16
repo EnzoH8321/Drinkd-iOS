@@ -39,7 +39,7 @@ struct CustomLocationView: View {
 
             }
             .padding()
-            .textFieldStyle(regularTextFieldStyle())
+            .textFieldStyle(Styles.regularTextFieldStyle())
             .keyboardType(.decimalPad)
 
             Button {
@@ -62,7 +62,7 @@ struct CustomLocationView: View {
                 Text("Submit")
                     .bold()
             }
-            .buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+            .buttonStyle(Styles.DefaultAppButton())
 
             Button {
                 // Create the URL that deep links to your app's custom settings.
@@ -77,7 +77,7 @@ struct CustomLocationView: View {
                 Text("Enable Location Services")
                     .bold()
             }
-            .buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+            .buttonStyle(Styles.DefaultAppButton())
 
 
             Spacer()

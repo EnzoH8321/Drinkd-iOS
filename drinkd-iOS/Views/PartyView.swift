@@ -23,14 +23,14 @@ struct PartyView: View {
                             .bold()
 					}
 					.padding(.bottom, 55)
-					.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+					.buttonStyle(Styles.DefaultAppButton())
 
 					NavigationLink(destination: PartyView_Create()) {
 
                         Text("Create Party")
                             .bold()
 					}
-					.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+					.buttonStyle(Styles.DefaultAppButton())
                     Spacer()
 				}
 			} else {

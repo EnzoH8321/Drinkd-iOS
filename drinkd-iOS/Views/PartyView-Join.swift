@@ -32,7 +32,7 @@ struct PartyView_Join: View {
                     .padding([.bottom], 8)
 
                 TextField("Enter a username here", text: $personalUsername)
-                    .textFieldStyle(regularTextFieldStyle())
+                    .textFieldStyle(Styles.regularTextFieldStyle())
             }
             .padding()
             // Enter a Party ID
@@ -42,7 +42,7 @@ struct PartyView_Join: View {
                     .bold()
                     .padding([.bottom], 8)
                 TextField("Party ID", text: $partyCode)
-                    .textFieldStyle(regularTextFieldStyle())
+                    .textFieldStyle(Styles.regularTextFieldStyle())
             }
             .padding()
 
@@ -56,7 +56,7 @@ struct PartyView_Join: View {
             }.alert(isPresented: $showAlert.state) {
                 Alert(title: Text("Error"), message: Text(showAlert.message))
             }
-            .buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+            .buttonStyle(Styles.DefaultAppButton())
 
             Spacer()
         }

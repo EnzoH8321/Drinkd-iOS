@@ -60,7 +60,7 @@ struct PartyCardView: View {
                                 Text("Join Chat")
                                     .bold()
 							}
-							.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+                            .buttonStyle(Styles.DefaultAppButton())
                             //
                             Button {
                                 Task {
@@ -79,7 +79,7 @@ struct PartyCardView: View {
 								Text("Leave Party")
                                     .bold()
 							}
-							.buttonStyle(Constants.isPhone ? DefaultAppButton(deviceType: .phone) : DefaultAppButton(deviceType: .ipad))
+							.buttonStyle(Styles.DefaultAppButton())
 
 						}
 					}
