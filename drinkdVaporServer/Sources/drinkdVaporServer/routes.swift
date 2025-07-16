@@ -181,7 +181,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
     }
 
     // MARK: WebSocket
-    app.webSocket("testWS", ":username",":partyID") { req, ws in
+    app.webSocket("testWS", ":username", ":userID", ":partyID", ) { req, ws in
 
         guard let partyID = req.parameters.get("partyID") else {
             Log.routes.fault("Party ID not found")
@@ -190,6 +190,11 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
         guard let username = req.parameters.get("username") else {
             Log.routes.fault("Username not found")
+            return
+        }
+
+        guard let userID =  UUID(uuidString: req.parameters.get("userID") ?? "")  else {
+            Log.routes.fault("userID not found")
             return
         }
 
@@ -233,7 +238,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                 let timestamp = Date.now
 
                 do {
-                    let wsMessage = WSMessage(text: message, username: username, timestamp: timestamp)
+                    let wsMessage = WSMessage(text: message, username: username, timestamp: timestamp, userID: userID)
                     let data = try JSONEncoder().encode(wsMessage)
                     let byteArray: [UInt8] = data.withUnsafeBytes { bytes in
                         return Array(bytes)

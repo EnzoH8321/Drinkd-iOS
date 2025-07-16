@@ -23,7 +23,7 @@ struct ChatView: View {
                     ScrollView {
                         VStack {
                             ForEach(viewModel.chatMessageList, id: \.self) { messageObj in
-                                MessageView(username: "USERNAME", message: messageObj.text, messageChatID: 12345, personalChatId: 101, timestampString: "TIMESTAMP")
+                                MessageView(username: messageObj.username, message: messageObj.text, messageUserID: messageObj.userID, timestampString: "\(messageObj.timestamp)")
                             }
                         }
                     }
