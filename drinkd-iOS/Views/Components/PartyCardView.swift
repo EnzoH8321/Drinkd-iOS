@@ -11,93 +11,109 @@ import drinkdSharedModels
 struct PartyCardView: View {
 
     @Environment(PartyViewModel.self) var viewModel
-	@State private var showingChatView = false
+    @State private var showingChatView = false
     @State private var showAlert: (state: Bool, message: String) = (false, "")
 
-	var body: some View {
-		GeometryReader { proxy in
+    private var partyID: String { viewModel.currentParty?.partyID ?? "" }
+    private var friendPartyID: String { viewModel.friendPartyId ?? "" }
+    private var partyName: String { viewModel.currentParty?.partyName ?? "" }
+    private var partyVotes: Int { viewModel.currentParty?.partyMaxVotes ?? 0 }
 
-			let globalWidth = proxy.frame(in: .global).width
-            
-				VStack {
-					ZStack {
-						RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
-							.fill(Color.white)
-							.shadow(radius: AppShadow.lowShadowRadius)
-							.frame(width: abs(globalWidth - 50))
+    var body: some View {
+        GeometryReader { proxy in
 
-						VStack {
-							Text("Party ID:")
-								.font(.largeTitle)
+            let globalWidth = proxy.frame(in: .global).width
 
-                            Text("\(viewModel.isPartyLeader ? viewModel.currentParty?.partyID : viewModel.friendPartyId)")
-								.font(.title2)
+            VStack {
+                ZStack {
+                    RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
+                        .fill(Color.white)
+                        .shadow(radius: AppShadow.lowShadowRadius)
+                        .frame(width: abs(globalWidth - 50))
 
-							Text("Partyname:")
-								.font(.largeTitle)
-                            Text("\(viewModel.currentParty?.partyName)")
-								.font(.title2)
+                    VStack {
 
-							Text("Votes to Win")
-								.font(.largeTitle)
-                            Text("\(viewModel.currentParty?.partyMaxVotes)")
-								.font(.title2)
+                        Text("Party ID:")
+                            .font(.largeTitle)
 
-							NavigationLink(isActive: $showingChatView, destination: {ChatView()}, label: {EmptyView()})
+                        Text("\(viewModel.isPartyLeader ? partyID : friendPartyID)")
+                            .font(.title2)
 
-                            Button {
+                        Text("Partyname:")
+                            .font(.largeTitle)
+                        Text("\(partyName)")
+                            .font(.title2)
 
-                                Task {
-                                    guard let partyID = UserDefaultsWrapper.getPartyID() else {
-                                        print("Unable to get Party ID")
-                                        return
-                                    }
-                                    await Networking.shared.connectToWebsocket(partyVM: viewModel, username: viewModel.personalUserName, partyID: partyID)
-                                    showingChatView = true
+                        Text("Votes to Win")
+                            .font(.largeTitle)
+                        Text("\(partyVotes)")
+                            .font(.title2)
+
+
+                        NavigationLink(isActive: $showingChatView, destination: {ChatView()}, label: {EmptyView()})
+
+                        Button {
+
+                            Task {
+                                guard let partyID = UserDefaultsWrapper.getPartyID() else {
+                                    print("Unable to get Party ID")
+                                    return
+                                }
+                                await Networking.shared.connectToWebsocket(partyVM: viewModel, username: viewModel.personalUserName, partyID: partyID)
+                                showingChatView = true
+                            }
+
+                        } label: {
+                            Text("Join Chat")
+                                .bold()
+                        }
+                        .buttonStyle(Styles.DefaultAppButton())
+
+                        //
+                        Button {
+                            Task {
+                                do {
+                                    guard let partyID = UserDefaultsWrapper.getPartyID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to get the party ID"))}
+                                    try await Networking.shared.leaveParty(partyVM: viewModel, partyID: partyID)
+                                    viewModel.leaveParty()
+                                } catch {
+                                    showAlert = (true, error.localizedDescription)
                                 }
 
-                            } label: {
-                                Text("Join Chat")
-                                    .bold()
-							}
-                            .buttonStyle(Styles.DefaultAppButton())
-                            //
-                            Button {
-                                Task {
-                                    do {
-                                        guard let partyID = UserDefaultsWrapper.getPartyID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to get the party ID"))}
-                                        try await Networking.shared.leaveParty(partyVM: viewModel, partyID: partyID)
-                                        viewModel.leaveParty()
-                                    } catch {
-                                        showAlert = (true, error.localizedDescription)
-                                    }
-
-                                }
+                            }
 
 
-                            } label: {
-								Text("Leave Party")
-                                    .bold()
-							}
-							.buttonStyle(Styles.DefaultAppButton())
+                        } label: {
+                            Text("Leave Party")
+                                .bold()
+                        }
+                        .buttonStyle(Styles.DefaultAppButton())
 
-						}
-					}
-					.frame(width: globalWidth)
-					Spacer()
-				}
-                .alert(isPresented: $showAlert.state) {
-                    Alert(title: Text("Error"), message: Text(showAlert.message))
+                    }
                 }
+                .frame(width: globalWidth)
+                Spacer()
+            }
+            .alert(isPresented: $showAlert.state) {
+                Alert(title: Text("Error"), message: Text(showAlert.message))
+            }
 
-		}
+        }
 
-	}
+    }
 }
 
-#Preview {
-    PartyCardView()
-        .environment(PartyViewModel())
+//#Preview("Not in Party") {
+//    PartyCardView()
+//        .environment(PartyViewModel())
+//}
+
+#Preview("In a Party") {
+    let partyVM = PartyViewModel()
+    partyVM.currentlyInParty = true
+
+     return PartyCardView()
+        .environment(partyVM)
 }
 
 //struct PartyCardView_Previews: PreviewProvider {
