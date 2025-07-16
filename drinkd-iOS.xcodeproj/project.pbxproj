@@ -36,7 +36,6 @@
 		54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* MasterView.swift */; };
 		54F9C80D26FBB537008FA516 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80C26FBB537008FA516 /* Assets.xcassets */; };
 		54F9C81026FBB537008FA516 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80F26FBB537008FA516 /* Preview Assets.xcassets */; };
-		54F9C81226FBB537008FA516 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C81126FBB537008FA516 /* Persistence.swift */; };
 		54F9C81526FBB537008FA516 /* drinkd_iOS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C81326FBB537008FA516 /* drinkd_iOS.xcdatamodeld */; };
 		54F9C82926FBB538008FA516 /* drinkd_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C82826FBB538008FA516 /* drinkd_iOSUITests.swift */; };
 		54F9C82B26FBB538008FA516 /* drinkd_iOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C82A26FBB538008FA516 /* drinkd_iOSUITestsLaunchTests.swift */; };
@@ -111,7 +110,6 @@
 		54F9C80A26FBB536008FA516 /* MasterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterView.swift; sourceTree = "<group>"; };
 		54F9C80C26FBB537008FA516 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		54F9C80F26FBB537008FA516 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		54F9C81126FBB537008FA516 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		54F9C81426FBB537008FA516 /* drinkd_iOS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = drinkd_iOS.xcdatamodel; sourceTree = "<group>"; };
 		54F9C81A26FBB538008FA516 /* drinkd-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "drinkd-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F9C82426FBB538008FA516 /* drinkd-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "drinkd-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -249,7 +247,6 @@
 				54F9C83726FBD95B008FA516 /* Model */,
 				54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */,
 				54F9C80C26FBB537008FA516 /* Assets.xcassets */,
-				54F9C81126FBB537008FA516 /* Persistence.swift */,
 				54C7BD0B2DC17D6800045D67 /* GoogleService-Info.plist */,
 				54F9C81326FBB537008FA516 /* drinkd_iOS.xcdatamodeld */,
 				54F9C80E26FBB537008FA516 /* Preview Content */,
@@ -539,7 +536,6 @@
 				54F9C855270244B9008FA516 /* Location.swift in Sources */,
 				54F9C84626FCF403008FA516 /* Styles.swift in Sources */,
 				54B3E537270E140E0004ECC5 /* Star.swift in Sources */,
-				54F9C81226FBB537008FA516 /* Persistence.swift in Sources */,
 				5430E126276D1D8F00326A52 /* ChatView.swift in Sources */,
 				54C7BD0E2DC1D88D00045D67 /* Constants.swift in Sources */,
 				5444B991273EE99800FA6DA2 /* HowToView.swift in Sources */,
