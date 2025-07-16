@@ -27,7 +27,6 @@
 		54B3E537270E140E0004ECC5 /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B3E536270E140C0004ECC5 /* Star.swift */; };
 		54B86718277522D2004D02A1 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B86717277522D2004D02A1 /* Errors.swift */; };
 		54BEE37427593A9300C82880 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BEE37327593A9300C82880 /* Networking.swift */; };
-		54C7BD0C2DC17D6800045D67 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 54C7BD0B2DC17D6800045D67 /* GoogleService-Info.plist */; };
 		54C7BD0E2DC1D88D00045D67 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C7BD0D2DC1D88D00045D67 /* Constants.swift */; };
 		54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */; };
 		54C7BD222DC2E22F00045D67 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 54C7BD212DC2E22F00045D67 /* drinkdSharedModels */; };
@@ -102,7 +101,6 @@
 		54B3E536270E140C0004ECC5 /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
 		54B86717277522D2004D02A1 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		54BEE37327593A9300C82880 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
-		54C7BD0B2DC17D6800045D67 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		54C7BD0D2DC1D88D00045D67 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		54C8A4B4277431EE0090D968 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		54F9C80526FBB536008FA516 /* drinkd-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "drinkd-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -247,7 +245,6 @@
 				54F9C83726FBD95B008FA516 /* Model */,
 				54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */,
 				54F9C80C26FBB537008FA516 /* Assets.xcassets */,
-				54C7BD0B2DC17D6800045D67 /* GoogleService-Info.plist */,
 				54F9C81326FBB537008FA516 /* drinkd_iOS.xcdatamodeld */,
 				54F9C80E26FBB537008FA516 /* Preview Content */,
 			);
@@ -497,7 +494,6 @@
 			files = (
 				54F9C81026FBB537008FA516 /* Preview Assets.xcassets in Resources */,
 				54F9C80D26FBB537008FA516 /* Assets.xcassets in Resources */,
-				54C7BD0C2DC17D6800045D67 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

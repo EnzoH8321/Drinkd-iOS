@@ -50,7 +50,6 @@ struct drinkd_iOSApp: App {
 	var body: some Scene {
 		WindowGroup {
 			MasterView()
-//				.environment(\.managedObjectContext, persistenceController.container.viewContext)
 				.environment(viewModel)
 				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
 
