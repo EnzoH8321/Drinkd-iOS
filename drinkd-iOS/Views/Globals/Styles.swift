@@ -22,11 +22,6 @@ enum AppShadow {
 enum CardSpecificStyle {
 	static let cornerRadius = CGFloat(25)
 }
-//For Device Type
-enum DeviceType: String {
-	case phone
-	case ipad
-}
 
 //Button
 enum ButtonSyling {
@@ -40,10 +35,6 @@ enum ButtonSyling {
 }
 
 struct Styles {
-
-//    static var isPhone: Bool {
-//        return Constants.isPhone
-//    }
 
      struct DefaultAppButton: ButtonStyle {
 
@@ -81,15 +72,13 @@ struct Styles {
 
     struct noPartyYelpButtonStyle: ButtonStyle {
 
-        let deviceType: DeviceType
-
         func makeBody(configuration: Configuration) -> some View {
             configuration
                 .label
-                .font(deviceType == .phone ? .body : .title2)
+                .font(Constants.isPhone ? .body : .title2)
                 .foregroundColor(ButtonSyling.buttonTextColor)
-                .padding(deviceType == .phone ? 0 : 15)
-                .frame(height: deviceType == .phone ? 5 : ButtonSyling.frameHeight + CGFloat(40))
+                .padding(Constants.isPhone ? 0 : 15)
+                .frame(height: Constants.isPhone ? 5 : ButtonSyling.frameHeight + CGFloat(40))
                 .padding()
                 .background(AppColors.primaryColor)
                 .clipShape(ButtonSyling.clipShape)
