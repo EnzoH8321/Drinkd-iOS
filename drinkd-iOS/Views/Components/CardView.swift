@@ -205,6 +205,7 @@ struct CardView: View {
 
                                 Task {
                                     do {
+                                        if rating == 0 { return }
                                         try await Networking.shared.addRating(partyID: partyID, userID: userID, username: username, restaurantName: restaurantName, rating: rating, imageURL: restaurantImageURL)
                                     } catch {
                                         showError.message = error.localizedDescription

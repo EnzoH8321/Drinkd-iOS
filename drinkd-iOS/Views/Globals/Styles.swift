@@ -28,11 +28,6 @@ enum DeviceType: String {
 	case ipad
 }
 
-enum UserPrivacyChoice {
-	case userApprovedTracking
-	case userDeniedTracking
-}
-
 //Button
 enum ButtonSyling {
 	static let frameHeight = CGFloat(5)

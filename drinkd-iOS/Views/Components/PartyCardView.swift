@@ -95,8 +95,13 @@ struct PartyCardView: View {
 	}
 }
 
-struct PartyCardView_Previews: PreviewProvider {
-	static var previews: some View {
-		PartyCardView()			
-	}
+#Preview {
+    PartyCardView()
+        .environment(PartyViewModel())
 }
+
+//struct PartyCardView_Previews: PreviewProvider {
+//	static var previews: some View {
+//		PartyCardView()			
+//	}
+//}
