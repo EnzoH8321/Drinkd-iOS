@@ -148,7 +148,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                     let topRestaurants: [RatedRestaurantsTable] = try await supabase.getTopChoices(partyID: partyID)
 
-                    let responseObj = TopRestaurantResponse(restaurants: topRestaurants)
+                    let responseObj = GetRouteResponse(restaurants: topRestaurants, partyID: nil)
 
                     return try RouteHelper.createResponse(data: responseObj)
                 } catch {
@@ -167,8 +167,8 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                     // Get Party ID associated with the user
                     let partyID = try await supabase.rejoinParty(userID: userID)
-
-                    let responseObj = RejoinPartyResponse(partyID: partyID)
+                    
+                    let responseObj = GetRouteResponse(restaurants: [], partyID: partyID)
 
                     return try RouteHelper.createResponse(data: responseObj)
 

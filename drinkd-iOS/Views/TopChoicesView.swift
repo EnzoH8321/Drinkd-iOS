@@ -87,8 +87,14 @@ struct TopChoicesView: View {
                     Log.userDefaults.fault("Party ID not found in UserDefaults")
                     return
                 }
-                viewModel.topRestaurants = try await Networking.shared.getTopRestaurants(partyID: partyID).restaurants
-                
+
+                guard let restaurants =  try await Networking.shared.getTopRestaurants(partyID: partyID).restaurants else {
+                    Log.general.fault("No restaurants found for partyID: \(partyID)")
+                    return
+                }
+
+                viewModel.topRestaurants = restaurants
+
             } catch {
                 Log.general.fault("Error - \(error)")
             }

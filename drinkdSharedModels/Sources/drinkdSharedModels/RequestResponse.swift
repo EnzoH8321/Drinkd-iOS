@@ -16,9 +16,9 @@ public enum PostRequestTypes {
     case updateRating
 }
 
-public enum GetRequestTypes {
-    case topRestaurants
-}
+//public enum GetRequestTypes {
+//    case topRestaurants
+//}
 
 public protocol PartyRequest {
 
@@ -101,18 +101,28 @@ public struct PostRouteResponse: Codable {
     }
 }
 
-public struct TopRestaurantResponse: Codable {
-    public var restaurants: [RatedRestaurantsTable]
+public struct GetRouteResponse: Codable {
+    public var restaurants: [RatedRestaurantsTable]?
+    public let partyID: UUID?
 
-    public init(restaurants: [RatedRestaurantsTable]) {
+    public init(restaurants: [RatedRestaurantsTable]?, partyID: UUID?) {
         self.restaurants = restaurants
-    }
-}
-
-public struct RejoinPartyResponse: Codable {
-    public let partyID: UUID
-
-    public init(partyID: UUID) {
         self.partyID = partyID
     }
 }
+
+//public struct TopRestaurantResponse: Codable {
+//    public var restaurants: [RatedRestaurantsTable]
+//
+//    public init(restaurants: [RatedRestaurantsTable]) {
+//        self.restaurants = restaurants
+//    }
+//}
+//
+//public struct RejoinPartyResponse: Codable {
+//    public let partyID: UUID
+//
+//    public init(partyID: UUID) {
+//        self.partyID = partyID
+//    }
+//}

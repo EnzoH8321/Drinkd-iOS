@@ -64,17 +64,17 @@ struct PartyView_Join: View {
     }
 
     private func fetchRestaurantsAfterJoiningParty() {
-        Networking.shared.fetchRestaurantsAfterJoiningParty(viewModel: viewModel) { result in
 
-            switch(result) {
-            case .success( _):
-                print("Success")
-            case .failure( let error):
+        Task {
+            do {
+                try await Networking.shared.fetchRestaurantsAfterJoiningParty(viewModel: viewModel)
+            } catch {
                 showAlert.state.toggle()
                 showAlert.message = error.localizedDescription
             }
 
         }
+
     }
 
 }

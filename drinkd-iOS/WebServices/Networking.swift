@@ -144,51 +144,52 @@ final class Networking {
     }
 
     //Fetch restaurant after joining party
-    func fetchRestaurantsAfterJoiningParty(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void) {
+    func fetchRestaurantsAfterJoiningParty(viewModel: PartyViewModel) async throws {
 
         guard let verifiedPartyURL = viewModel.currentParty?.url else {
             print("No URL Found")
-            completionHandler(.failure(.noURLFoundError))
-            return
+            throw ClientNetworkErrors.noURLFoundError
         }
 
         guard let verifiedURL = URL(string: verifiedPartyURL) else {
             print("Could not convert string to URL")
-            completionHandler(.failure(.invalidURLError))
-            return
+            throw ClientNetworkErrors.invalidURLError
         }
 
         var request = URLRequest(url: verifiedURL)
         request.httpMethod = "GET"
         request.setValue("Bearer \(Constants.token)", forHTTPHeaderField: "Authorization")
 
-        //URLSession
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        let (data, response) = try await URLSession.shared.data(for: request)
 
-            if error != nil {
-                completionHandler(.failure(.generalNetworkError))
-                return
+        //If URLSession returns data, below code block will execute
+
+
+        guard let JSONDecoderValue = try? JSONDecoder().decode(YelpApiBusinessSearch.self, from: data) else {
+            throw ClientNetworkErrors.decodingError
+        }
+
+        if let JSONArray = JSONDecoderValue.businesses {
+            await MainActor.run {
+                viewModel.clearAllRestaurants()
+                viewModel.updateLocalRestaurants(in: JSONArray)
             }
+        }
 
-            //If URLSession returns data, below code block will execute
-            if let verifiedData = data {
+    }
 
-                guard let JSONDecoderValue = try? JSONDecoder().decode(YelpApiBusinessSearch.self, from: verifiedData) else {
-                    completionHandler(.failure(.decodingError))
-                    return
-                }
+    // Fetch party info
+    func rejoinParty(viewModel: PartyViewModel) async throws {
+        // Check VM if the user is already in a party
+        guard !viewModel.currentlyInParty else { return }
+        let urlString = HTTP.get(.rejoinParty).fullURLString
+        let urlReq = try getURLReq(reqType: .rejoinParty, url: "")
 
-                if let JSONArray = JSONDecoderValue.businesses {
-                    DispatchQueue.main.async {
+        let response = try await getCall(urlReq: urlReq)
 
-                        completionHandler(.success(.connectionSuccess))
-                        viewModel.clearAllRestaurants()
-                        viewModel.updateLocalRestaurants(in: JSONArray)
-                    }
-                }
-            }
+        // Update viewModel.currentParty
+        
 
-        }.resume()
     }
 }
 
@@ -225,15 +226,17 @@ extension Networking {
         return try await postCall(urlReq: urlReq)
     }
 
-    func getTopRestaurants(partyID: UUID) async throws -> TopRestaurantResponse {
+    func getTopRestaurants(partyID: UUID) async throws -> GetRouteResponse {
         let urlString = HTTP.get(.topRestaurants).fullURLString
         let urlReq = try getURLReq(reqType: .topRestaurants, url: urlString, partyID: partyID)
         var restaurantResponse = try await getCall(urlReq: urlReq)
 
-        for i in restaurantResponse.restaurants.indices {
-            let url = URL(string: restaurantResponse.restaurants[i].image_url)!
+        guard let restaurants = restaurantResponse.restaurants else { throw SharedErrors.general(error: .missingValue("GetRouteResponse.restaurants is nil"))}
+
+        for i in restaurants.indices {
+            let url = URL(string: restaurants[i].image_url)!
             let (data, _) = try await URLSession.shared.data(from: url)
-            restaurantResponse.restaurants[i].imageData = data
+            restaurantResponse.restaurants?[i].imageData = data
         }
 
         return restaurantResponse
@@ -344,7 +347,7 @@ extension Networking {
         return urlRequest
     }
 
-    private func getURLReq(reqType: GetRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil , userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil ) throws -> URLRequest {
+    private func getURLReq(reqType: HTTP.GetRoutes, url: String, partyID: UUID? = nil, userID: UUID? = nil, partyCode: Int? = nil , userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil ) throws -> URLRequest {
 
 
         guard let url = URL(string: url) else { throw ClientNetworkErrors.invalidURLError }
@@ -365,6 +368,13 @@ extension Networking {
                     Log.networking.fault("Unable to create URLComponents or PartyID")
                 }
 
+            case .rejoinParty:
+                if var components = URLComponents(string: url.absoluteString) {
+                    components.queryItems = [URLQueryItem(name: "userID", value: userID.uuidString)]
+                    urlRequest.url = components.url
+                } else {
+                    Log.networking.fault("Unable to create URLComponents")
+                }
             }
 
         } catch {
@@ -375,7 +385,7 @@ extension Networking {
         return urlRequest
     }
 
-    private func getCall(urlReq: URLRequest) async throws -> TopRestaurantResponse {
+    private func getCall(urlReq: URLRequest) async throws -> GetRouteResponse {
         do {
             let (data, response) = try await URLSession.shared.data(for: urlReq)
             let httpResponse = response as! HTTPURLResponse
@@ -387,7 +397,7 @@ extension Networking {
             }
 
             //Happy Path
-            let decodedResponse = try JSONDecoder().decode(TopRestaurantResponse.self, from: data)
+            let decodedResponse = try JSONDecoder().decode(GetRouteResponse.self, from: data)
 
             return decodedResponse
 
