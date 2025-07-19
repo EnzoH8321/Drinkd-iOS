@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import drinkdSharedModels
 
 //@available(iOS 15.0, *)
 struct PartyView_Create: View {
@@ -65,10 +66,12 @@ struct PartyView_Create: View {
 
                 Task {
                     do {
-                        let response = try await Networking.shared.createParty(username: userName)
+                        let urlString = try Networking.shared.createYelpBusinessURLString()
+                        let response = try await Networking.shared.createParty(username: userName, partyName: partyName ,restaurantsURL: urlString)
                         partyVM.setPersonalUserAndID(forName: response.currentUserName, forID: response.currentUserID)
                         partyVM.currentlyInParty = true
                     } catch {
+                        Log.networking.fault("Error - \(error)")
                         showAlert = (true, error.localizedDescription)
                     }
                 }

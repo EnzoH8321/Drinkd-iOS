@@ -39,13 +39,19 @@ public struct PartiesTable: Codable, Sendable, SupaBaseTable {
     public let date_created: String?
     public let party_leader: UUID?
     public let code: Int?
+    public let party_name: String
+    // Yelp URL
+    public let restaurants_url: String
 
-    public init(id: UUID, partyLeader: UUID, date_created: String, code: Int) {
+    public init(id: UUID, party_name: String ,partyLeader: UUID, date_created: String, code: Int, restaurants_url: String) {
         self.id = id
         self.party_leader = partyLeader
         self.date_created = date_created
         self.code = code
+        self.restaurants_url = restaurants_url
+        self.party_name = party_name
     }
+
 }
 
 public struct UsersTable: Codable, Sendable, SupaBaseTable {

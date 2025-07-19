@@ -210,7 +210,7 @@ extension SupaBase {
         // Add to Parties Table
         let randomInt = Int.random(in: 100000..<999999)
         let partyID = UUID()
-        let party = PartiesTable(id: partyID, partyLeader: req.userID, date_created: Date().ISO8601Format(), code: randomInt)
+        let party = PartiesTable(id: partyID, party_name: req.partyName, partyLeader: req.userID, date_created: Date().ISO8601Format(), code: randomInt, restaurants_url: req.restaurants_url)
         // Add to Party Members Table
         try await client.from(TableTypes.parties.tableName).upsert(party).execute()
 

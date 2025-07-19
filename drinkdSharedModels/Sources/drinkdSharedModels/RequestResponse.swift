@@ -29,10 +29,14 @@ public protocol PartyRequest {
 public struct CreatePartyRequest: Codable, PartyRequest {
     public let username: String
     public let userID: UUID
+    public let restaurants_url: String
+    public let partyName: String
 
-    public init(username: String, userID: UUID) {
+    public init(username: String, userID: UUID, restaurants_url: String, partyName: String) {
         self.username = username
         self.userID = userID
+        self.restaurants_url = restaurants_url
+        self.partyName = partyName
     }
 }
 

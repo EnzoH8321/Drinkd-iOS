@@ -40,30 +40,19 @@ final class Networking {
             return
         }
 
-        //1.Creating the URL we want to read.
-        //2.Wrapping that in a URLRequest, which allows us to configure how the URL should be accessed.
-        //3.Create and start a networking task from that URL request.
-        //4.Handle the result of that networking task.
-        var longitude: Double = 0.0
-        var latitude: Double = 0.0
-
         //If user location was found, continue
-        if let location = locationFetcher.lastKnownLocation {
-            latitude = location.latitude
-            longitude = location.longitude
-        }
-
         //If defaults are used, then the user location could not be found
-        if (longitude == 0.0 || latitude == 0.0) {
-            throw ClientNetworkErrors.noUserLocationFoundError
+        guard let latitude = locationFetcher.lastKnownLocation?.latitude,
+        let longitude = locationFetcher.lastKnownLocation?.longitude,
+              latitude != 0.0 || longitude != 0.0 else
+        {
             Log.networking.fault("ERROR - NO USER LOCATION FOUND ")
-            return
+            throw ClientNetworkErrors.noUserLocationFoundError
         }
 
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
-            throw ClientNetworkErrors.invalidURLError
             Log.networking.fault("ERROR - INVALID URL")
-            return
+            throw ClientNetworkErrors.invalidURLError
         }
 
         var request = URLRequest(url: url)
@@ -179,7 +168,7 @@ final class Networking {
     }
 
     // Fetch party info
-    func rejoinParty(viewModel: PartyViewModel) async throws {
+    func rejoinPartyOnAppStartup(viewModel: PartyViewModel) async throws {
         // Check VM if the user is already in a party
         guard !viewModel.currentlyInParty else { return }
         let urlString = HTTP.get(.rejoinParty).fullURLString
@@ -191,15 +180,31 @@ final class Networking {
         
 
     }
+
+    // Create a Yelp Business URL based on the users location
+    func createYelpBusinessURLString() throws -> String {
+
+        //If user location was found, continue
+        //If defaults are used, then the user location could not be found
+        guard let latitude = locationFetcher.lastKnownLocation?.latitude,
+        let longitude = locationFetcher.lastKnownLocation?.longitude,
+              latitude != 0.0 || longitude != 0.0 else
+        {
+            Log.networking.fault("ERROR - NO USER LOCATION FOUND ")
+            throw ClientNetworkErrors.noUserLocationFoundError
+        }
+
+        return "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10"
+    }
 }
 
 //MARK: Client -> Vapor Server
 extension Networking {
 
-    func createParty(username: String) async throws -> PostRouteResponse {
+    func createParty(username: String, partyName: String ,restaurantsURL: String) async throws -> PostRouteResponse {
 
         let urlString = HTTP.post(.createParty).fullURLString
-        let urlRequest = try postURLReq(reqType: .createParty, url: urlString, userName: username)
+        let urlRequest = try postURLReq(reqType: .createParty, url: urlString, partyName: partyName ,userName: username, restaurantsURL: restaurantsURL)
         let response =  try await postCall(urlReq: urlRequest)
         UserDefaultsWrapper.setPartyID(id: response.currentPartyID)
         return response
@@ -308,7 +313,7 @@ extension Networking {
 //MARK: Utilities
 extension Networking {
 
-    private func postURLReq(reqType: PostRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil ,userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil, imageURL: String? = nil) throws -> URLRequest {
+    private func postURLReq(reqType: PostRequestTypes, url: String, partyID: UUID? = nil, partyCode: Int? = nil, partyName: String? = nil, userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil, imageURL: String? = nil, restaurantsURL: String? = nil) throws -> URLRequest {
 
         guard let url = URL(string: url) else { throw ClientNetworkErrors.invalidURLError }
         var urlRequest = URLRequest(url: url)
@@ -320,8 +325,8 @@ extension Networking {
         do {
             switch reqType {
             case .createParty:
-                if let userName = userName {
-                    urlRequest.httpBody = try JSONEncoder().encode(CreatePartyRequest(username: userName, userID: userID))
+                if let userName = userName, let restaurants_url = restaurantsURL, let partyName = partyName {
+                    urlRequest.httpBody = try JSONEncoder().encode(CreatePartyRequest(username: userName, userID: userID, restaurants_url: restaurants_url, partyName: partyName))
                 }
             case .joinParty:
                 if let partyCode = partyCode, let userName = userName {
