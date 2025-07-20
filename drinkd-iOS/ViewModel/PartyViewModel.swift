@@ -28,10 +28,8 @@ class PartyViewModel {
     var personalUserID: UUID?
 
     var currentCardIndex: Int = 9
-    var currentlyInParty = false
     var currentParty: Party?
-    //Id for someone elses party
-    var friendPartyId: String?
+
     var isPartyLeader: Bool = false
     var topBarList: [String: restaurantScoreInfo] = [:]
     var currentScoreOfTopCard: Int = 0
@@ -50,6 +48,10 @@ class PartyViewModel {
 
     // WebSocket
     var currentWebsocket: WebSocket? = nil
+
+    var currentlyInParty: Bool {
+        return currentParty != nil ? true : false
+    }
 
     //Used when a party is joined
     func clearAllRestaurants() {
@@ -107,8 +109,7 @@ class PartyViewModel {
         }
     }
 
-    func leaveParty() {
-        self.currentlyInParty = false
+    func leaveParty() {        
         self.topRestaurants.removeAll()
         currentParty = nil
         currentParty?.partyID = ""

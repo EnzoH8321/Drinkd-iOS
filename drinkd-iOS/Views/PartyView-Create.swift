@@ -69,7 +69,7 @@ struct PartyView_Create: View {
                         let urlString = try Networking.shared.createYelpBusinessURLString()
                         let response = try await Networking.shared.createParty(username: userName, partyName: partyName ,restaurantsURL: urlString)
                         partyVM.setPersonalUserAndID(forName: response.currentUserName, forID: response.currentUserID)
-                        partyVM.currentlyInParty = true
+
                     } catch {
                         Log.networking.fault("Error - \(error)")
                         showAlert = (true, error.localizedDescription)

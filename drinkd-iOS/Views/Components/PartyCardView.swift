@@ -15,7 +15,6 @@ struct PartyCardView: View {
     @State private var path = NavigationPath()
 
     private var partyID: String { viewModel.currentParty?.partyID ?? "" }
-    private var friendPartyID: String { viewModel.friendPartyId ?? "" }
     private var partyName: String { viewModel.currentParty?.partyName ?? "" }
     private var partyVotes: Int { viewModel.currentParty?.partyMaxVotes ?? 0 }
 
@@ -70,7 +69,7 @@ struct PartyCardView: View {
                             Text("Party ID:")
                                 .font(.largeTitle)
 
-                            Text("\(viewModel.isPartyLeader ? partyID : friendPartyID)")
+                            Text(partyID)
                                 .font(.title2)
 
                             Text("Partyname:")
@@ -122,7 +121,8 @@ struct PartyCardView: View {
 
 #Preview("In a Party") {
     let partyVM = PartyViewModel()
-    partyVM.currentlyInParty = true
+    let party = Party(partyID: "5345345345345345345", partyMaxVotes: 1, partyName: "Party Name", url: "YELP API ")
+    partyVM.currentParty = party
 
      return PartyCardView()
         .environment(partyVM)

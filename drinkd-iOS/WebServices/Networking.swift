@@ -94,7 +94,6 @@ final class Networking {
 
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
             throw ClientNetworkErrors.invalidURLError
-            return
         }
 
         var request = URLRequest(url: url)
@@ -183,7 +182,6 @@ final class Networking {
 
         let party = Party(partyID: partyID.uuidString, partyMaxVotes: 0, partyName: partyName, url: partyURL)
         viewModel.currentParty = party
-        viewModel.currentlyInParty = true
 
         try await fetchRestaurantsAfterJoiningParty(viewModel: viewModel)
 
