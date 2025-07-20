@@ -82,7 +82,7 @@ final class Networking {
                 viewModel.updateLocalRestaurants(in: businesses)
             }
 
-            viewModel.currentParty?.url = url.absoluteString
+            viewModel.currentParty?.yelpURL = url.absoluteString
             viewModel.removeSplashScreen = true
             self.userDeniedLocationServices = false
         }
@@ -122,7 +122,7 @@ final class Networking {
 
             await MainActor.run {
                 viewModel.updateLocalRestaurants(in: JSONArray)
-                viewModel.currentParty?.url = url.absoluteString
+                viewModel.currentParty?.yelpURL = url.absoluteString
                 viewModel.removeSplashScreen = true
                 self.userDeniedLocationServices = false
             }
@@ -135,7 +135,7 @@ final class Networking {
     //Fetch restaurant after joining party
     func fetchRestaurantsAfterJoiningParty(viewModel: PartyViewModel) async throws {
 
-        guard let verifiedPartyURL = viewModel.currentParty?.url else {
+        guard let verifiedPartyURL = viewModel.currentParty?.yelpURL else {
             print("No URL Found")
             throw ClientNetworkErrors.noURLFoundError
         }
@@ -172,12 +172,27 @@ final class Networking {
         // Check VM if the user is already in a party
         guard !viewModel.currentlyInParty else { return }
         let urlString = HTTP.get(.rejoinParty).fullURLString
-        let urlReq = try getURLReq(reqType: .rejoinParty, url: "")
+        let urlReq = try getURLReq(reqType: .rejoinParty, url: urlString)
 
         let response = try await getCall(urlReq: urlReq)
 
         // Update viewModel.currentParty
-        
+        guard let partyID = response.partyID, let partyName = response.partyName, let partyURL = response.yelpURL else {
+            throw SharedErrors.general(error: .missingValue("Missing Party Data"))
+        }
+
+        let party = Party(partyID: partyID.uuidString, partyMaxVotes: 0, partyName: partyName, url: partyURL)
+        viewModel.currentParty = party
+        viewModel.currentlyInParty = true
+
+        try await fetchRestaurantsAfterJoiningParty(viewModel: viewModel)
+
+        if let currentParty = viewModel.currentParty,  let userID = UserDefaultsWrapper.getUserID(), let partyID = UUID(uuidString: currentParty.partyID)  {
+             await Networking.shared.connectToWebsocket(partyVM: viewModel, username: viewModel.personalUserName, userID: userID, partyID: partyID)
+        } else {
+            throw SharedErrors.general(error: .missingValue("Missing needed data"))
+        }
+
 
     }
 

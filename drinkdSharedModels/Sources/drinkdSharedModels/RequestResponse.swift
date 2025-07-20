@@ -91,8 +91,6 @@ public struct UpdateRatingRequest: Codable, PartyRequest {
 }
 
 // Used on the client, response from the server
-
-
 public struct PostRouteResponse: Codable {
     public let currentUserName: String
     public let currentUserID: UUID
@@ -108,11 +106,18 @@ public struct PostRouteResponse: Codable {
 public struct GetRouteResponse: Codable {
     public var restaurants: [RatedRestaurantsTable]?
     public let partyID: UUID?
+    public let partyName: String?
+    public let yelpURL: String?
 
-    public init(restaurants: [RatedRestaurantsTable]?, partyID: UUID?) {
+
+    public init(restaurants: [RatedRestaurantsTable]? = nil, partyID: UUID?, partyName: String?, yelpURL: String?) {
         self.restaurants = restaurants
         self.partyID = partyID
+        self.partyName = partyName
+        self.yelpURL = yelpURL
     }
+
+
 }
 
 //public struct TopRestaurantResponse: Codable {

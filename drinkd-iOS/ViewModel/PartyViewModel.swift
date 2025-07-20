@@ -95,7 +95,7 @@ class PartyViewModel {
 
         self.currentScoreOfTopCard = points
 
-        topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points, url: self.currentParty?.url ?? "URL NOT FOUND")
+        topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points, url: self.currentParty?.yelpURL ?? "URL NOT FOUND")
     }
 
     private func setUserLevel(level: userLevel) {

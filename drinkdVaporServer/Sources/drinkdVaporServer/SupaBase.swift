@@ -346,7 +346,7 @@ extension SupaBase {
         return sorted
     }
 
-    func rejoinParty(userID: String) async throws -> UUID {
+    func rejoinParty(userID: String) async throws -> PartiesTable {
 
 
         // Query the Users Table and get the associated party_id of the user
@@ -354,7 +354,10 @@ extension SupaBase {
         // Get party ID of the user
         let partyID = user.party_id
 
-        return partyID
+        // Query the Parties Table and get the associated PartiesTable
+        guard let party = try await fetchRows(tableType: .parties, dictionary: ["id": partyID]).first as? PartiesTable else { throw SharedErrors.supabase(error: .dataNotFound)}
+
+        return party
 
     }
 }

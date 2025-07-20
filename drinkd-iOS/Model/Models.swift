@@ -16,20 +16,18 @@ struct restaurantScoreInfo {
 }
 
 struct Party {
-    public var partyLeaderID: String
     public var partyID: String
     public var partyMaxVotes : Int
     public var partyName: String
-    public var timestamp: Int
-    public var url: String
+    // Telpy Business API String
+    public var yelpURL: String
 
-    public init(partyLeaderID: String, partyID: String, partyMaxVotes: Int, partyName: String, timestamp: Int, url: String) {
-        self.partyLeaderID = partyLeaderID
+    public init(partyID: String, partyMaxVotes: Int, partyName: String, url: String) {
+
         self.partyID = partyID
         self.partyMaxVotes = partyMaxVotes
         self.partyName = partyName
-        self.timestamp = timestamp
-        self.url = url
+        self.yelpURL = url
     }
 }
 

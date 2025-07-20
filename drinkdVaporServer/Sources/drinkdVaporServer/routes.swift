@@ -148,7 +148,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                     let topRestaurants: [RatedRestaurantsTable] = try await supabase.getTopChoices(partyID: partyID)
 
-                    let responseObj = GetRouteResponse(restaurants: topRestaurants, partyID: nil)
+                    let responseObj = GetRouteResponse(restaurants: topRestaurants, partyID: nil, partyName: nil, yelpURL: nil)
 
                     return try RouteHelper.createResponse(data: responseObj)
                 } catch {
@@ -165,10 +165,10 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     let pathComponents = path.components(separatedBy: "=")
                     guard let userID = pathComponents.count == 2 ? pathComponents[1] : nil else { throw SharedErrors.general(error: .generalError("Unable to parse User ID"))}
 
-                    // Get Party ID associated with the user
-                    let partyID = try await supabase.rejoinParty(userID: userID)
+                    // Get Party associated with the user
+                    let party = try await supabase.rejoinParty(userID: userID)
                     
-                    let responseObj = GetRouteResponse(restaurants: [], partyID: partyID)
+                    let responseObj = GetRouteResponse(restaurants: [], partyID: party.id, partyName: party.party_name, yelpURL: party.restaurants_url)
 
                     return try RouteHelper.createResponse(data: responseObj)
 
