@@ -46,7 +46,7 @@ final class SupaBase {
         let columnsToFilterFor: String = dictionary.keys.map {"\($0)"}.joined(separator: "'")
         let response = try await client
             .from(tableType.tableName)
-            .select(dictionary.count == 0 ? "*" : columnsToFilterFor)
+            .select()
             .match(dictionary)
             .execute()
 
@@ -210,7 +210,7 @@ extension SupaBase {
         // Add to Parties Table
         let randomInt = Int.random(in: 100000..<999999)
         let partyID = UUID()
-        let party = PartiesTable(id: partyID, party_name: req.partyName, partyLeader: req.userID, date_created: Date().ISO8601Format(), code: randomInt, restaurants_url: req.restaurants_url)
+        let party = PartiesTable(id: partyID, party_name: req.partyName, party_leader: req.userID, date_created: Date().ISO8601Format(), code: randomInt, restaurants_url: req.restaurants_url)
         // Add to Party Members Table
         try await client.from(TableTypes.parties.tableName).upsert(party).execute()
 

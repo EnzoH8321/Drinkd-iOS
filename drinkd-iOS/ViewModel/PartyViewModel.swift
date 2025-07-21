@@ -42,8 +42,7 @@ class PartyViewModel {
     var topRestaurants: [RatedRestaurantsTable] = []
 
     var chatMessageList: [WSMessage] = []
-    //
-//    var queryPartyError = false
+
     var removeSplashScreen = true
 
     // WebSocket

@@ -14,10 +14,10 @@ struct PartyView_Create: View {
     @State private var winningVoteAmount: String = ""
     @State private var userName: String = ""
     @State private var showAlert: (state: Bool, message: String) = (false, "")
-    @Environment(PartyViewModel.self) var partyVM
+    @Environment(PartyViewModel.self) var viewModel
 
     var body: some View {
-        @Bindable var partyVM = partyVM
+        @Bindable var partyVM = viewModel
         VStack {
             Text("Create Your Party")
                 .font(.title)
@@ -69,6 +69,9 @@ struct PartyView_Create: View {
                         let urlString = try Networking.shared.createYelpBusinessURLString()
                         let response = try await Networking.shared.createParty(username: userName, partyName: partyName ,restaurantsURL: urlString)
                         partyVM.setPersonalUserAndID(forName: response.currentUserName, forID: response.currentUserID)
+
+                        let party = Party(partyID: response.currentPartyID.uuidString, partyMaxVotes: 0, partyName: partyName, url: urlString)
+                        viewModel.currentParty = party
 
                     } catch {
                         Log.networking.fault("Error - \(error)")
