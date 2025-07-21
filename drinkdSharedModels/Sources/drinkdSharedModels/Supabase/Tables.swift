@@ -35,11 +35,11 @@ public protocol SupaBaseTable {
 
 // For tables
 public struct PartiesTable: Codable, Sendable, SupaBaseTable {
-    public let id: UUID?
-    public let date_created: String?
-    public let party_leader: UUID?
-    public let code: Int?
-    public let party_name: String?
+    public let id: UUID
+    public let date_created: String
+    public let party_leader: UUID
+    public let code: Int
+    public let party_name: String
     // Yelp URL
     public let restaurants_url: String?
 
@@ -50,6 +50,16 @@ public struct PartiesTable: Codable, Sendable, SupaBaseTable {
         self.code = code
         self.restaurants_url = restaurants_url
         self.party_name = party_name
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(UUID.self, forKey: .id)
+        self.date_created = try container.decode(String.self, forKey: .date_created)
+        self.party_leader = try container.decode(UUID.self, forKey: .party_leader)
+        self.code = try container.decode(Int.self, forKey: .code)
+        self.party_name = try container.decode(String.self, forKey: .party_name)
+        self.restaurants_url = try container.decode(String.self, forKey: .restaurants_url)
     }
 
 }

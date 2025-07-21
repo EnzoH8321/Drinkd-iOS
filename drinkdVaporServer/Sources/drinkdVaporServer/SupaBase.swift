@@ -264,9 +264,7 @@ extension SupaBase {
             throw SharedErrors.supabase(error: .rowIsEmpty)
         }
 
-        guard let validPartyID = partyTable.id else {
-            throw SharedErrors.supabase(error: .dataNotFound)
-        }
+         let validPartyID = partyTable.id
 
 
         // Happy Path, party exists with that code, get party ID

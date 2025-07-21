@@ -17,7 +17,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                     let newParty = try await supabase.createAParty(partyRequest)
 
-                    guard let partyID = newParty.id else { throw SharedErrors.General.missingValue("Missing id value")}
+                     let partyID = newParty.id
                     // Create a message channel
                     await supabase.rdbCreateChannel(partyID: partyID)
 
@@ -42,7 +42,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     let partyRequest = try JSONDecoder().decode(JoinPartyRequest.self, from: reqBody)
                     let (party, user) = try await supabase.joinParty(partyRequest)
 
-                    guard let partyID = party.id else { throw SharedErrors.General.missingValue("Missing id value")}
+                   let partyID = party.id
 
                     let routeResponseObject = PostRouteResponse(currentUserName: user.username, currentUserID: user.id, currentPartyID: partyID)
                     return try RouteHelper.createResponse(data: routeResponseObject)
@@ -69,7 +69,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                     guard let userData, let partyData else { throw SharedErrors.supabase(error: .rowIsEmpty) }
 
-                    guard let partyID = partyData.id else { throw SharedErrors.General.missingValue("Missing id value")}
+            let partyID = partyData.id 
 
                     try await supabase.leaveParty(partyRequest, partyID: partyID)
 
