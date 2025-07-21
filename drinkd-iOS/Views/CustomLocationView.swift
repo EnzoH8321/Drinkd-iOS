@@ -11,11 +11,28 @@ struct CustomLocationView: View {
 
     @Environment(PartyViewModel.self) var viewModel
 
-	@State private var latitude: String = ""
-	@State private var longitude: String = ""
     @State private var showAlert: (message: String, state: Bool) = ("", false)
 
+    private var latitude: Binding<String> {
+        Binding {
+            return String(viewModel.customLat)
+        } set: {
+            viewModel.customLat = Double($0) ?? 0
+        }
+
+    }
+
+    private var longitude: Binding<String> {
+        Binding {
+            return String(viewModel.customLong)
+        } set: {
+            viewModel.customLong = Double($0) ?? 0
+        }
+
+    }
+
 	var body: some View {
+        @Bindable var viewModel = viewModel
         VStack {
             Text("You have disabled location services. Please provide custom coordinates for Drinkd to use by entering a latitude and longitude below. For a more streamlined experience, please enable location services.")
                 .font(.title3)
@@ -26,7 +43,7 @@ struct CustomLocationView: View {
                     Text("Please enter the latitude below")
                         .bold()
                         .padding(.top, 8)
-                    TextField("Latitude", text: $latitude)
+                    TextField("Latitude", text: latitude)
                 }
 
 
@@ -34,7 +51,7 @@ struct CustomLocationView: View {
                     Text("Please enter the longitude below")
                         .bold()
                         .padding(.top, 8)
-                    TextField("Longitude", text: $longitude)
+                    TextField("Longitude", text: longitude)
                 }
 
             }
@@ -44,14 +61,9 @@ struct CustomLocationView: View {
 
             Button {
 
-                guard let latitude = Double(self.latitude), let longitude = Double(self.longitude) else {
-                    showAlert.state.toggle()
-                    return
-                }
-
                 Task {
                     do {
-                        try await Networking.shared.fetchRestaurants(viewModel: viewModel, latitude: latitude, longitude: longitude)
+                        try await Networking.shared.fetchRestaurants(viewModel: viewModel, latitude: viewModel.customLat, longitude: viewModel.customLong)
                     } catch {
                         showAlert.message = error.localizedDescription
                         showAlert.state.toggle()

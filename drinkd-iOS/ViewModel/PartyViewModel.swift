@@ -27,6 +27,9 @@ class PartyViewModel {
     var personalUserName = ""
     var personalUserID: UUID?
 
+    var customLat: Double = 0
+    var customLong: Double = 0
+
     var currentCardIndex: Int = 9
     var currentParty: Party?
 

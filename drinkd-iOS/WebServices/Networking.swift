@@ -140,18 +140,7 @@ final class Networking {
     }
 
     // Create a Yelp Business URL based on the users location
-    func createYelpBusinessURLString() throws -> String {
-
-        //If user location was found, continue
-        //If defaults are used, then the user location could not be found
-        guard let latitude = locationFetcher.lastKnownLocation?.latitude,
-        let longitude = locationFetcher.lastKnownLocation?.longitude,
-              latitude != 0.0 || longitude != 0.0 else
-        {
-            Log.networking.fault("ERROR - NO USER LOCATION FOUND ")
-            throw ClientNetworkErrors.noUserLocationFoundError
-        }
-
+    func createYelpBusinessURLString(latitude: Double, longitude: Double) throws -> String {
         return "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10"
     }
 
