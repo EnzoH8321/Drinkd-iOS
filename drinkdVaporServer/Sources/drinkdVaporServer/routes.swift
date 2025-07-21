@@ -21,7 +21,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     // Create a message channel
                     await supabase.rdbCreateChannel(partyID: partyID)
 
-                    let routeResponseObject = PostRouteResponse(currentUserName: partyRequest.username, currentUserID: partyRequest.userID, currentPartyID: partyID)
+                    let routeResponseObject = PostRouteResponse(currentUserName: partyRequest.username, currentUserID: partyRequest.userID, currentPartyID: partyID, partyName: newParty.party_name, yelpURL: newParty.restaurants_url ?? "")
                     let response = try RouteHelper.createResponse(data: routeResponseObject)
                     response.headers.add(name: "Content-Type", value: "application/json")
 
@@ -42,9 +42,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     let partyRequest = try JSONDecoder().decode(JoinPartyRequest.self, from: reqBody)
                     let (party, user) = try await supabase.joinParty(partyRequest)
 
-                   let partyID = party.id
-
-                    let routeResponseObject = PostRouteResponse(currentUserName: user.username, currentUserID: user.id, currentPartyID: partyID)
+                    let routeResponseObject = PostRouteResponse(currentUserName: user.username, currentUserID: user.id, currentPartyID: party.id, partyName: party.party_name, yelpURL: party.restaurants_url ?? "")
                     return try RouteHelper.createResponse(data: routeResponseObject)
 
                 } catch {
@@ -69,11 +67,11 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                     guard let userData, let partyData else { throw SharedErrors.supabase(error: .rowIsEmpty) }
 
-            let partyID = partyData.id 
+//                    let partyID = partyData.id 
 
-                    try await supabase.leaveParty(partyRequest, partyID: partyID)
+                    try await supabase.leaveParty(partyRequest, partyID: partyData.id)
 
-                    let routeResponseObject = PostRouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: partyID)
+                    let routeResponseObject = PostRouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: partyData.id, partyName: partyData.party_name, yelpURL: partyData.restaurants_url ?? "")
                     return try RouteHelper.createResponse(data: routeResponseObject)
 
                 } catch {
@@ -95,7 +93,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                         throw SharedErrors.supabase(error: .rowIsEmpty)
                     }
 
-                    let routeResponseObject = PostRouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: msgReq.partyID)
+                    let routeResponseObject = PostRouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: msgReq.partyID, partyName: "", yelpURL: "")
 
                     // Send Message
                     try await supabase.sendMessage(msgReq)
@@ -121,7 +119,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                     try await supabase.updateRestaurantRating(msgReq)
 
-                    let routeResponseObj = PostRouteResponse(currentUserName: msgReq.userName, currentUserID: msgReq.userID, currentPartyID: msgReq.partyID)
+                    let routeResponseObj = PostRouteResponse(currentUserName: msgReq.userName, currentUserID: msgReq.userID, currentPartyID: msgReq.partyID, partyName: "", yelpURL: "")
 
                     return try RouteHelper.createResponse(data: routeResponseObj)
 

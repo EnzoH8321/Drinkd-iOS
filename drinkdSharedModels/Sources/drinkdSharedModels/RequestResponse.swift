@@ -16,10 +16,6 @@ public enum PostRequestTypes {
     case updateRating
 }
 
-//public enum GetRequestTypes {
-//    case topRestaurants
-//}
-
 public protocol PartyRequest {
 
 }
@@ -95,11 +91,21 @@ public struct PostRouteResponse: Codable {
     public let currentUserName: String
     public let currentUserID: UUID
     public let currentPartyID: UUID
+    public let partyName: String
+    public let yelpURL: String
 
-    public init(currentUserName: String, currentUserID: UUID, currentPartyID: UUID) {
+//    public init(currentUserName: String, currentUserID: UUID, currentPartyID: UUID) {
+//        self.currentUserName = currentUserName
+//        self.currentUserID = currentUserID
+//        self.currentPartyID = currentPartyID
+//    }
+
+    public init(currentUserName: String, currentUserID: UUID, currentPartyID: UUID, partyName: String, yelpURL: String) {
         self.currentUserName = currentUserName
         self.currentUserID = currentUserID
         self.currentPartyID = currentPartyID
+        self.partyName = partyName
+        self.yelpURL = yelpURL
     }
 }
 

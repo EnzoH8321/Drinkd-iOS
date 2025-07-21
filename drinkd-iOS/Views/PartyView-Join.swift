@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import drinkdSharedModels
 
 struct PartyView_Join: View {
 
@@ -37,11 +37,11 @@ struct PartyView_Join: View {
             .padding()
             // Enter a Party ID
             VStack(alignment: .leading, spacing: 1) {
-                Text("Enter a Party ID")
+                Text("Enter a Party Code")
                     .font(.callout)
                     .bold()
                     .padding([.bottom], 8)
-                TextField("Party ID", text: $partyCode)
+                TextField("Party Code", text: $partyCode)
                     .textFieldStyle(Styles.regularTextFieldStyle())
             }
             .padding()
@@ -50,7 +50,9 @@ struct PartyView_Join: View {
 
                 Task {
                     do {
-                        try await Networking.shared.fetchRestaurantsAfterJoiningParty(viewModel: viewModel)
+                        guard let partyCode = Int(partyCode) else { throw SharedErrors.general(error: .generalError("Unable to convert Party Code to an Integer"))}
+                        try await Networking.shared.joinParty(viewModel: viewModel, partyCode: Int(partyCode), userName: personalUsername)
+                        try await Networking.shared.fetchRestaurants(viewModel: viewModel, latitude: nil, longitude: nil)
                     } catch {
                         showAlert.state.toggle()
                         showAlert.message = error.localizedDescription

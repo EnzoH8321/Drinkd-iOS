@@ -76,59 +76,10 @@ final class Networking {
 
     }
 
-    //Fetch restaurant after joining party
-    func fetchRestaurantsAfterJoiningParty(viewModel: PartyViewModel) async throws {
-
-        guard let verifiedPartyURL = viewModel.currentParty?.yelpURL else {
-            print("No URL Found")
-            throw ClientNetworkErrors.noURLFoundError
-        }
-
-        guard let verifiedURL = URL(string: verifiedPartyURL) else {
-            print("Could not convert string to URL")
-            throw ClientNetworkErrors.invalidURLError
-        }
-
-        var request = URLRequest(url: verifiedURL)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(Constants.token)", forHTTPHeaderField: "Authorization")
-
-        let (data, response) = try await URLSession.shared.data(for: request)
-
-        //If URLSession returns data, below code block will execute
-
-
-        guard let JSONDecoderValue = try? JSONDecoder().decode(YelpApiBusinessSearch.self, from: data) else {
-            throw ClientNetworkErrors.decodingError
-        }
-
-        if let JSONArray = JSONDecoderValue.businesses {
-            await MainActor.run {
-                viewModel.clearAllRestaurants()
-                viewModel.updateLocalRestaurants(in: JSONArray)
-            }
-        }
-
-    }
-
     // Fetch party info
     func rejoinPartyOnAppStartup(viewModel: PartyViewModel) async throws {
-        // Check VM if the user is already in a party
-        guard !viewModel.currentlyInParty else { return }
-        let urlString = HTTP.get(.rejoinParty).fullURLString
-        let urlReq = try getURLReq(reqType: .rejoinParty, url: urlString)
 
-        let response = try await getCall(urlReq: urlReq)
-
-        // Update viewModel.currentParty
-        guard let partyID = response.partyID, let partyName = response.partyName, let partyURL = response.yelpURL else {
-            throw SharedErrors.general(error: .missingValue("Missing Party Data"))
-        }
-
-        let party = Party(partyID: partyID.uuidString, partyMaxVotes: 0, partyName: partyName, url: partyURL)
-        viewModel.currentParty = party
-
-        try await fetchRestaurantsAfterJoiningParty(viewModel: viewModel)
+        try await fetchRestaurants(viewModel: viewModel, latitude: nil, longitude: nil)
 
         if let currentParty = viewModel.currentParty,  let userID = UserDefaultsWrapper.getUserID(), let partyID = UUID(uuidString: currentParty.partyID)  {
              await Networking.shared.connectToWebsocket(partyVM: viewModel, username: viewModel.personalUserName, userID: userID, partyID: partyID)
@@ -142,6 +93,20 @@ final class Networking {
     // Create a Yelp Business URL based on the users location
     func createYelpBusinessURLString(latitude: Double, longitude: Double) throws -> String {
         return "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10"
+    }
+
+    func joinParty(viewModel: PartyViewModel, partyCode: Int, userName: String) async throws {
+        // Check VM if the user is already in a party
+        guard viewModel.currentlyInParty == false else { return }
+        let urlString = HTTP.post(.joinParty).fullURLString
+//        let urlReq = try getURLReq(reqType: , url: urlString)
+        let urlReq = try postURLReq(reqType: .joinParty, url: urlString, partyCode: partyCode, userName: userName)
+
+        let response = try await postCall(urlReq: urlReq)
+
+        let party = Party(partyID: response.currentPartyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, url: response.yelpURL)
+        viewModel.currentParty = party
+
     }
 
     private func getRestaurants(latitude: Double, longitude: Double) async throws -> YelpApiBusinessSearch {
