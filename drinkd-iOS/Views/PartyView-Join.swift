@@ -47,7 +47,16 @@ struct PartyView_Join: View {
             .padding()
 
             Button {
-                fetchRestaurantsAfterJoiningParty()
+
+                Task {
+                    do {
+                        try await Networking.shared.fetchRestaurantsAfterJoiningParty(viewModel: viewModel)
+                    } catch {
+                        showAlert.state.toggle()
+                        showAlert.message = error.localizedDescription
+                    }
+
+                }
             } label: {
 
                 Text("Join Party")
@@ -61,20 +70,6 @@ struct PartyView_Join: View {
             Spacer()
         }
         .navigationBarTitleDisplayMode(.inline)
-    }
-
-    private func fetchRestaurantsAfterJoiningParty() {
-
-        Task {
-            do {
-                try await Networking.shared.fetchRestaurantsAfterJoiningParty(viewModel: viewModel)
-            } catch {
-                showAlert.state.toggle()
-                showAlert.message = error.localizedDescription
-            }
-
-        }
-
     }
 
 }

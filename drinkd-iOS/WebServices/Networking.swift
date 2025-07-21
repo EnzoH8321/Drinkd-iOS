@@ -32,47 +32,35 @@ final class Networking {
         self.userDeniedLocationServices = locationFetcher.errorWithLocationAuth
     }
 
-    func fetchRestaurantsOnStartUp(viewModel: PartyViewModel) async throws {
-
-        //TODO: Issue where during reload there is a possibility to do a 2x call. Fix issue
-        //Checks to see if the function already ran to prevent duplicate calls
-        if (viewModel.localRestaurants.count > 0) {
-            return
+    func fetchRestaurants(viewModel: PartyViewModel, latitude: Double?, longitude: Double?) async throws {
+        var usableLatitude = 0.0
+        var usableLongitude = 0.0
+        // Assumes User inputted custom location
+        if let latitude = latitude, let longitude = longitude, latitude != 0.0, longitude != 0.0 {
+            usableLatitude = latitude
+            usableLongitude = longitude
         }
 
-        //If user location was found, continue
-        //If defaults are used, then the user location could not be found
-        guard let latitude = locationFetcher.lastKnownLocation?.latitude,
-        let longitude = locationFetcher.lastKnownLocation?.longitude,
-              latitude != 0.0 || longitude != 0.0 else
-        {
-            Log.networking.fault("ERROR - NO USER LOCATION FOUND ")
-            throw ClientNetworkErrors.noUserLocationFoundError
+
+        // Assumes we should use device location
+        if usableLatitude == 0.0 || usableLongitude == 0.0 {
+            //If user location was found, continue
+            //If defaults are used, then the user location could not be found
+            guard let latitude = locationFetcher.lastKnownLocation?.latitude,
+                  let longitude = locationFetcher.lastKnownLocation?.longitude,
+                  latitude != 0.0 || longitude != 0.0 else
+            {
+                Log.networking.fault("ERROR - NO USER LOCATION FOUND ")
+                throw ClientNetworkErrors.noUserLocationFoundError
+            }
+
+            usableLatitude = latitude
+            usableLongitude = longitude
         }
 
-        guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
-            Log.networking.fault("ERROR - INVALID URL")
-            throw ClientNetworkErrors.invalidURLError
-        }
+        let businessSearch = try await getRestaurants(latitude: usableLatitude, longitude: usableLongitude)
 
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(Constants.token)", forHTTPHeaderField: "Authorization")
-
-        
-
-        let (data, response) = try await URLSession.shared.data(for: request)
-
-         let businessSearch = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: data)
-
-        guard var businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
-
-        for i in businesses.indices {
-            guard let imageStr = businesses[i].image_url else { continue }
-            guard let url = URL(string: imageStr) else { continue }
-            let (data, response) = try await URLSession.shared.data(from: url)
-            businesses[i].imageData = data
-        }
+        guard let businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
 
         await MainActor.run {
 
@@ -82,51 +70,8 @@ final class Networking {
                 viewModel.updateLocalRestaurants(in: businesses)
             }
 
-            viewModel.currentParty?.yelpURL = url.absoluteString
             viewModel.removeSplashScreen = true
             self.userDeniedLocationServices = false
-        }
-
-    }
-    //
-    //Fetches a user defined location. Used when user disabled location services.
-    func fetchUsingCustomLocation(viewModel: PartyViewModel, longitude: Double, latitude: Double) async throws {
-
-        guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
-            throw ClientNetworkErrors.invalidURLError
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(Constants.token)", forHTTPHeaderField: "Authorization")
-
-        let (data, response) = try await URLSession.shared.data(for: request)
-
-        if let httpResponse = response as? HTTPURLResponse {
-            let statusCode = httpResponse.statusCode
-            
-            // Check for errors
-            if !(200...299).contains(statusCode) {
-                throw SharedErrors.yelp(error: .invalidHTTPStatus("Invalid HTTP Status Code - \(statusCode)"))
-            }
-        }
-
-
-
-        guard let JSONDecoderValue = try? JSONDecoder().decode(YelpApiBusinessSearch.self, from: data) else {
-            throw ClientNetworkErrors.decodingError
-        }
-
-        if let JSONArray = JSONDecoderValue.businesses {
-
-            await MainActor.run {
-                viewModel.updateLocalRestaurants(in: JSONArray)
-                viewModel.currentParty?.yelpURL = url.absoluteString
-                viewModel.removeSplashScreen = true
-                self.userDeniedLocationServices = false
-            }
-
-
         }
 
     }
@@ -208,6 +153,32 @@ final class Networking {
         }
 
         return "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10"
+    }
+
+    private func getRestaurants(latitude: Double, longitude: Double) async throws -> YelpApiBusinessSearch {
+        guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
+            Log.networking.fault("ERROR - INVALID URL")
+            throw ClientNetworkErrors.invalidURLError
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(Constants.token)", forHTTPHeaderField: "Authorization")
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        if let httpResponse = response as? HTTPURLResponse {
+            let statusCode = httpResponse.statusCode
+
+            // Check for errors
+            if !(200...299).contains(statusCode) {
+                throw SharedErrors.yelp(error: .invalidHTTPStatus("Invalid HTTP Status Code - \(statusCode)"))
+            }
+        }
+
+
+        let businessSearch = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: data)
+
+        return businessSearch
     }
 }
 
