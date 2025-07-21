@@ -17,7 +17,7 @@ public enum PostRequestTypes {
 }
 
 public protocol PartyRequest {
-
+    var userID: UUID { get }
 }
 
 // Requests are Client - Server
@@ -38,10 +38,17 @@ public struct CreatePartyRequest: Codable, PartyRequest {
 
 
 public struct JoinPartyRequest: Codable, PartyRequest {
+    public let userID: UUID
     public let username: String
     public let partyCode: Int
 
-    public init(username: String, partyCode: Int) {
+//    public init( ,username: String, partyCode: Int) {
+//        self.username = username
+//        self.partyCode = partyCode
+//    }
+
+    public init(userID: UUID, username: String, partyCode: Int) {
+        self.userID = userID
         self.username = username
         self.partyCode = partyCode
     }
