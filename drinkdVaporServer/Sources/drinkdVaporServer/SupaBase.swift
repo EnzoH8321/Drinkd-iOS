@@ -41,7 +41,7 @@ final class SupaBase {
     // Dictionary represents filters. [column name: value to filter for]
     // Returns true if the provided dictionary matches any data in the provided table.
     // By default returns false
-    private func checkMatching(tableType: TableTypes, dictionary: [String: any PostgrestFilterValue] = [:]) async throws -> Bool {
+    func checkMatching(tableType: TableTypes, dictionary: [String: any PostgrestFilterValue] = [:]) async throws -> Bool {
 
         let columnsToFilterFor: String = dictionary.keys.map {"\($0)"}.joined(separator: "'")
         let response = try await client
@@ -223,25 +223,17 @@ extension SupaBase {
     }
 
     // Leave a party
-    func leaveParty(_ req: LeavePartyRequest, partyID: UUID) async throws {
+    func leavePartyAsHost(_ req: LeavePartyRequest, partyID: UUID) async throws {
+        // Delete Party
+        try await manuallyDeleteParty(userID: req.userID, partyID: partyID)
+        // Delete User
+        // For users, the row id is the user id
+        try await deleteDataFromTable(fromTable: .users, rowID: req.userID)
+    }
 
-        // Check if party leader
-        let isPartyLeader = try await checkMatching(tableType: .parties, dictionary: ["party_leader": req.userID])
-
-        // Path for leader
-        if isPartyLeader {
-            // Delete Party
-            try await manuallyDeleteParty(userID: req.userID, partyID: partyID)
-            // Delete User
-            // For users, the row id is the user id
-            try await deleteDataFromTable(fromTable: .users, rowID: req.userID)
-
-        } else {
-            // Path for Guest
-            try await deleteDataFromTable(fromTable: .users, rowID: req.userID)
-
-        }
-
+    func leavePartyAsGuest(_ req: LeavePartyRequest) async throws {
+        // Path for Guest
+        try await deleteDataFromTable(fromTable: .users, rowID: req.userID)
     }
 
     // Join a Party

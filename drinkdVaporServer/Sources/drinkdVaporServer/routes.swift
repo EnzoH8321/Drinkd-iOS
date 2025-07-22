@@ -65,11 +65,20 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                         supabase.fetchRows(tableType: .parties, dictionary: ["party_leader": "\(partyRequest.userID)"]).first as? PartiesTable
                     )
 
-                    guard let userData, let partyData else { throw SharedErrors.supabase(error: .rowIsEmpty) }
+                    guard let userData else { throw SharedErrors.supabase(error: .rowIsEmpty) }
 
-                    try await supabase.leaveParty(partyRequest, partyID: partyData.id)
+                    // Check if party leader
+                    let isPartyLeader = try await supabase.checkMatching(tableType: .parties, dictionary: ["party_leader": partyRequest.userID])
 
-                    let routeResponseObject = PostRouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: partyData.id, partyName: partyData.party_name, yelpURL: partyData.restaurants_url ?? "")
+                    if isPartyLeader {
+                        guard let partyData else { throw SharedErrors.supabase(error: .rowIsEmpty) }
+                        try await supabase.leavePartyAsHost(partyRequest, partyID: partyData.id)
+                    } else {
+                        try await supabase.leavePartyAsGuest(partyRequest)
+                    }
+
+
+                    let routeResponseObject = PostRouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: UUID(), partyName: "", yelpURL: "")
                     return try RouteHelper.createResponse(data: routeResponseObject)
 
                 } catch {
