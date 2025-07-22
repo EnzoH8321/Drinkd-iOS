@@ -24,7 +24,7 @@ class PartyViewModel {
         case member
     }
 
-    var personalUserName = ""
+//    var personalUserName = ""
     var personalUserID: UUID?
 
     var customLat: Double = 0
@@ -119,7 +119,7 @@ class PartyViewModel {
     //For chat
     //TODO: Finish Chat Features
     func setPersonalUserAndID(forName name: String, forID id: UUID) {
-        self.personalUserName = name
+//        self.personalUserName = name
         self.personalUserID = id
     }
 }

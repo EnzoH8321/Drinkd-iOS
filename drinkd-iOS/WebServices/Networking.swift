@@ -82,7 +82,7 @@ final class Networking {
         try await fetchRestaurants(viewModel: viewModel, latitude: nil, longitude: nil)
 
         if let currentParty = viewModel.currentParty,  let userID = UserDefaultsWrapper.getUserID(), let partyID = UUID(uuidString: currentParty.partyID)  {
-             await Networking.shared.connectToWebsocket(partyVM: viewModel, username: viewModel.personalUserName, userID: userID, partyID: partyID)
+            await Networking.shared.connectToWebsocket(partyVM: viewModel, username: currentParty.username, userID: userID, partyID: partyID)
         } else {
             throw SharedErrors.general(error: .missingValue("Missing needed data"))
         }
@@ -105,7 +105,7 @@ final class Networking {
 
         let response = try await postCall(urlReq: urlReq)
 
-        let party = Party(partyID: response.currentPartyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, url: response.yelpURL)
+        let party = Party(username: userName ,partyID: response.currentPartyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
         viewModel.currentParty = party
 
     }

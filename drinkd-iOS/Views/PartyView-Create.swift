@@ -70,7 +70,7 @@ struct PartyView_Create: View {
                         let response = try await Networking.shared.createParty(username: userName, partyName: partyName ,restaurantsURL: urlString)
                         partyVM.setPersonalUserAndID(forName: response.currentUserName, forID: response.currentUserID)
 
-                        let party = Party(partyID: response.currentPartyID.uuidString, partyMaxVotes: 0, partyName: partyName, url: urlString)
+                        let party = Party(username: userName ,partyID: response.currentPartyID.uuidString, partyMaxVotes: 0, partyName: partyName, yelpURL: urlString)
                         viewModel.currentParty = party
 
                     } catch {
