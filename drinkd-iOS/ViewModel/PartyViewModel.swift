@@ -114,7 +114,6 @@ class PartyViewModel {
     func leaveParty() {        
         self.topRestaurants.removeAll()
         currentParty = nil
-        currentParty?.partyID = ""
     }
 
     //For chat

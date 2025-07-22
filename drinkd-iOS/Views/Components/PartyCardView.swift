@@ -22,7 +22,7 @@ struct PartyCardView: View {
         path.append("chat")
 
         Task {
-            guard let partyID = UserDefaultsWrapper.getPartyID() else {
+            guard let partyID = UUID(uuidString: viewModel.currentParty?.partyID ?? "")  else {
                 print("Unable to get Party ID")
                 return
             }
@@ -43,7 +43,7 @@ struct PartyCardView: View {
         viewModel.leaveParty()
         Task {
             do {
-                guard let partyID = UserDefaultsWrapper.getPartyID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to get the party ID"))}
+                guard let partyID = UUID(uuidString: viewModel.currentParty?.partyID ?? "") else { throw SharedErrors.general(error: .userDefaultsError("Unable to get the party ID"))}
                 try await Networking.shared.leaveParty(partyVM: viewModel, partyID: partyID)
             } catch {
                 showAlert = (true, error.localizedDescription)
