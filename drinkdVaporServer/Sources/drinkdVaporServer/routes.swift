@@ -13,19 +13,16 @@ func routes(_ app: Application, supabase: SupaBase) throws {
             app.post("createParty") { req async -> Response in
                 do {
                     guard let reqBody = req.body.data else { return Response(status: .badRequest) }
-                    let partyRequest = try JSONDecoder().decode(CreatePartyRequest.self, from: reqBody)
+                    let req = try JSONDecoder().decode(CreatePartyRequest.self, from: reqBody)
 
-                    let newParty = try await supabase.createAParty(partyRequest)
+                    let newParty = try await supabase.createAParty(req)
 
-                     let partyID = newParty.id
                     // Create a message channel
-                    await supabase.rdbCreateChannel(partyID: partyID)
+                    await supabase.rdbCreateChannel(partyID: newParty.id)
 
-                    let routeResponseObject = PostRouteResponse(currentUserName: partyRequest.username, currentUserID: partyRequest.userID, currentPartyID: partyID, partyName: newParty.party_name, yelpURL: newParty.restaurants_url ?? "")
-                    let response = try RouteHelper.createResponse(data: routeResponseObject)
-                    response.headers.add(name: "Content-Type", value: "application/json")
+                    let respObj = PostRouteResponse(currentUserName: req.username, currentUserID: req.userID, currentPartyID: newParty.id, partyName: newParty.party_name, yelpURL: newParty.restaurants_url ?? "")
+                    return try RouteHelper.createResponse(data: respObj)
 
-                    return response
                 } catch {
                     Log.routes.warning("Error on createParty route - \(error)")
                     return RouteHelper.createErrorResponse(error: error)
@@ -39,11 +36,11 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                 do {
                     guard let reqBody = req.body.data else { return Response(status: .badRequest) }
-                    let partyRequest = try JSONDecoder().decode(JoinPartyRequest.self, from: reqBody)
-                    let (party, user) = try await supabase.joinParty(partyRequest)
+                    let req = try JSONDecoder().decode(JoinPartyRequest.self, from: reqBody)
+                    let (party, user) = try await supabase.joinParty(req)
 
-                    let routeResponseObject = PostRouteResponse(currentUserName: user.username, currentUserID: user.id, currentPartyID: party.id, partyName: party.party_name, yelpURL: party.restaurants_url ?? "")
-                    return try RouteHelper.createResponse(data: routeResponseObject)
+                    let respObj = PostRouteResponse(currentUserName: user.username, currentUserID: user.id, currentPartyID: party.id, partyName: party.party_name, yelpURL: party.restaurants_url ?? "")
+                    return try RouteHelper.createResponse(data: respObj)
 
                 } catch {
                     Log.routes.warning("Error on joinParty route - \(error)")
@@ -58,23 +55,23 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                 do {
                     guard let reqBody = req.body.data else { return Response(status: .badRequest) }
 
-                    let partyRequest = try JSONDecoder().decode(LeavePartyRequest.self, from: reqBody)
+                    let req = try JSONDecoder().decode(LeavePartyRequest.self, from: reqBody)
 
                     let (userData, partyData) = try await (
-                        supabase.fetchRows(tableType: .users, dictionary: ["id": "\(partyRequest.userID)"]).first as? UsersTable,
-                        supabase.fetchRows(tableType: .parties, dictionary: ["party_leader": "\(partyRequest.userID)"]).first as? PartiesTable
+                        supabase.fetchRows(tableType: .users, dictionary: ["id": "\(req.userID)"]).first as? UsersTable,
+                        supabase.fetchRows(tableType: .parties, dictionary: ["party_leader": "\(req.userID)"]).first as? PartiesTable
                     )
 
                     guard let userData else { throw SharedErrors.supabase(error: .rowIsEmpty) }
 
                     // Check if party leader
-                    let isPartyLeader = try await supabase.checkMatching(tableType: .parties, dictionary: ["party_leader": partyRequest.userID])
+                    let isPartyLeader = try await supabase.checkMatching(tableType: .parties, dictionary: ["party_leader": req.userID])
 
                     if isPartyLeader {
                         guard let partyData else { throw SharedErrors.supabase(error: .rowIsEmpty) }
-                        try await supabase.leavePartyAsHost(partyRequest, partyID: partyData.id)
+                        try await supabase.leavePartyAsHost(req, partyID: partyData.id)
                     } else {
-                        try await supabase.leavePartyAsGuest(partyRequest)
+                        try await supabase.leavePartyAsGuest(req)
                     }
 
 

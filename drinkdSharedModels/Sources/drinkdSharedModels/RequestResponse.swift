@@ -42,11 +42,6 @@ public struct JoinPartyRequest: Codable, PartyRequest {
     public let username: String
     public let partyCode: Int
 
-//    public init( ,username: String, partyCode: Int) {
-//        self.username = username
-//        self.partyCode = partyCode
-//    }
-
     public init(userID: UUID, username: String, partyCode: Int) {
         self.userID = userID
         self.username = username
@@ -93,19 +88,13 @@ public struct UpdateRatingRequest: Codable, PartyRequest {
     }
 }
 
-// Used on the client, response from the server
+// Response from the Server back to the Client.
 public struct PostRouteResponse: Codable {
     public let currentUserName: String
     public let currentUserID: UUID
     public let currentPartyID: UUID
     public let partyName: String
     public let yelpURL: String
-
-//    public init(currentUserName: String, currentUserID: UUID, currentPartyID: UUID) {
-//        self.currentUserName = currentUserName
-//        self.currentUserID = currentUserID
-//        self.currentPartyID = currentPartyID
-//    }
 
     public init(currentUserName: String, currentUserID: UUID, currentPartyID: UUID, partyName: String, yelpURL: String) {
         self.currentUserName = currentUserName
@@ -132,19 +121,3 @@ public struct GetRouteResponse: Codable {
 
 
 }
-
-//public struct TopRestaurantResponse: Codable {
-//    public var restaurants: [RatedRestaurantsTable]
-//
-//    public init(restaurants: [RatedRestaurantsTable]) {
-//        self.restaurants = restaurants
-//    }
-//}
-//
-//public struct RejoinPartyResponse: Codable {
-//    public let partyID: UUID
-//
-//    public init(partyID: UUID) {
-//        self.partyID = partyID
-//    }
-//}
