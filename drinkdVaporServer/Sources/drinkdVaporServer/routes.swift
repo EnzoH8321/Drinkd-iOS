@@ -37,9 +37,9 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                 do {
                     guard let reqBody = req.body.data else { return Response(status: .badRequest) }
                     let req = try JSONDecoder().decode(JoinPartyRequest.self, from: reqBody)
-                    let (party, user) = try await supabase.joinParty(req)
+                    let party = try await supabase.joinParty(req)
 
-                    let respObj = PostRouteResponse(currentUserName: user.username, currentUserID: user.id, currentPartyID: party.id, partyName: party.party_name, yelpURL: party.restaurants_url ?? "")
+                    let respObj = PostRouteResponse(currentUserName: req.username, currentUserID: req.userID, currentPartyID: party.id, partyName: party.party_name, yelpURL: party.restaurants_url ?? "")
                     return try RouteHelper.createResponse(data: respObj)
 
                 } catch {

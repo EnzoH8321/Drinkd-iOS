@@ -240,7 +240,7 @@ extension SupaBase {
     // Only works if you are not party leader, a party leader cannot join a party
     // Party Code should be six digits.
     // User should not be in another party
-    func joinParty(_ req: JoinPartyRequest) async throws -> (party: PartiesTable, user: UsersTable) {
+    func joinParty(_ req: JoinPartyRequest) async throws ->  PartiesTable {
 
         // Check that party code is six digits
         if req.partyCode < 100000 || req.partyCode > 999999 {
@@ -256,16 +256,12 @@ extension SupaBase {
             throw SharedErrors.supabase(error: .rowIsEmpty)
         }
 
-         let validPartyID = partyTable.id
-
-
         // Happy Path, party exists with that code, get party ID
-        let partyID = validPartyID
-        let newUser = UsersTable(id: req.userID, username: req.username, date_created: Date().ISO8601Format(), memberOfParty: partyID)
+        let newUser = UsersTable(id: req.userID, username: req.username, date_created: Date().ISO8601Format(), memberOfParty: partyTable.id)
         // Add to users table. This user will have a foreign key that traces back to the party
         try await upsertDataToTable(tableType: .users, data: newUser)
 
-        return (partyTable, newUser)
+        return partyTable
     }
 
     // Update Restaurant rating

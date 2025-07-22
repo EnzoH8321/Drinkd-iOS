@@ -97,7 +97,7 @@ final class Networking {
 
     func joinParty(viewModel: PartyViewModel, partyCode: Int, userName: String) async throws {
         // Check VM if the user is already in a party
-        guard viewModel.currentlyInParty == false else { return }
+        if viewModel.currentlyInParty == true { return }
         let urlString = HTTP.post(.joinParty).fullURLString
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
 
