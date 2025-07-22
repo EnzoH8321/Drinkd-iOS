@@ -103,9 +103,10 @@ final class Networking {
 
         let urlReq = try joinPartyReq(userID: userID, partyCode: partyCode, userName: userName)
 
-        let response = try await postCall(urlReq: urlReq)
+        let data = try await postCall(urlReq: urlReq)
+        let response = try JSONDecoder().decode(JoinPartyResponse.self, from: data)
 
-        let party = Party(username: userName ,partyID: response.currentPartyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
+        let party = Party(username: userName ,partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
         viewModel.currentParty = party
 
     }
@@ -140,33 +141,35 @@ final class Networking {
 //MARK: Client -> Vapor Server
 extension Networking {
 
-    func createParty(username: String, partyName: String ,restaurantsURL: String) async throws -> PostRouteResponse {
+    func createParty(username: String, partyName: String ,restaurantsURL: String) async throws -> CreatePartyResponse {
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
         let urlRequest = try createPartyReq(userID: userID, userName: username ,restaurantsUrl: restaurantsURL, partyName: partyName)
-        let response =  try await postCall(urlReq: urlRequest)
-        UserDefaultsWrapper.setPartyID(id: response.currentPartyID)
+        let data =  try await postCall(urlReq: urlRequest)
+        let response = try JSONDecoder().decode(CreatePartyResponse.self, from: data)
+        UserDefaultsWrapper.setPartyID(id: response.partyID)
         return response
     }
 
-    func leaveParty(partyVM: PartyViewModel, partyID: UUID) async throws -> PostRouteResponse {
+    func leaveParty(partyVM: PartyViewModel, partyID: UUID) async throws  {
 
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
         let urlReq = try leavePartyReq(userID: userID)
         await cancelWSConnection(partyVM: partyVM, partyID: partyID)
-        return try await postCall(urlReq: urlReq)
+//        return try await postCall(urlReq: urlReq)
+        let _ = try await postCall(urlReq: urlReq)
     }
 
-    func sendMessage(message: String, partyID: UUID) async throws -> PostRouteResponse {
+    func sendMessage(message: String, partyID: UUID) async throws {
 
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
         let urlReq = try sendMsgReq(userID: userID, message: message, partyID: partyID)
-        return try await postCall(urlReq: urlReq)
+        let _ = try await postCall(urlReq: urlReq)
     }
 
-    func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int, imageURL: String) async throws -> PostRouteResponse {
+    func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int, imageURL: String) async throws  {
 
         let urlReq = try updateRatingReq(partyID: partyID, userName: username, userID: userID, restaurantName: restaurantName, rating: rating, imageuRL: imageURL)
-        return try await postCall(urlReq: urlReq)
+        let _ = try await postCall(urlReq: urlReq)
     }
 
     func getTopRestaurants(partyID: UUID) async throws -> GetRouteResponse {
@@ -378,7 +381,7 @@ extension Networking {
     }
 
 
-    private func postCall(urlReq: URLRequest) async throws -> PostRouteResponse {
+    private func postCall(urlReq: URLRequest) async throws -> Data {
 
         do {
             let (data, response) = try await URLSession.shared.data(for: urlReq)
@@ -390,10 +393,7 @@ extension Networking {
                 throw error.error
             }
 
-            //Happy Path
-            let partyRequest = try JSONDecoder().decode(PostRouteResponse.self, from: data)
-
-            return partyRequest
+            return data
         } catch {
             Log.networking.fault("Error posting data: \(error)")
             throw error

@@ -20,7 +20,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     // Create a message channel
                     await supabase.rdbCreateChannel(partyID: newParty.id)
 
-                    let respObj = PostRouteResponse(currentUserName: req.username, currentUserID: req.userID, currentPartyID: newParty.id, partyName: newParty.party_name, yelpURL: newParty.restaurants_url ?? "")
+                    let respObj = CreatePartyResponse(partyID: newParty.id)
                     return try RouteHelper.createResponse(data: respObj)
 
                 } catch {
@@ -39,7 +39,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     let req = try JSONDecoder().decode(JoinPartyRequest.self, from: reqBody)
                     let party = try await supabase.joinParty(req)
 
-                    let respObj = PostRouteResponse(currentUserName: req.username, currentUserID: req.userID, currentPartyID: party.id, partyName: party.party_name, yelpURL: party.restaurants_url ?? "")
+                    let respObj = JoinPartyResponse(partyID: party.id, partyName: party.party_name, yelpURL: party.restaurants_url ?? "")
                     return try RouteHelper.createResponse(data: respObj)
 
                 } catch {
@@ -74,9 +74,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                         try await supabase.leavePartyAsGuest(req)
                     }
 
-
-                    let routeResponseObject = PostRouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: UUID(), partyName: "", yelpURL: "")
-                    return try RouteHelper.createResponse(data: routeResponseObject)
+                    return Response()
 
                 } catch {
                     Log.routes.warning("Error on leaveParty route - \(error)")
@@ -97,15 +95,13 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                         throw SharedErrors.supabase(error: .rowIsEmpty)
                     }
 
-                    let routeResponseObject = PostRouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: msgReq.partyID, partyName: "", yelpURL: "")
-
                     // Send Message
                     try await supabase.sendMessage(msgReq)
 
                     // Broadcast message
                     await supabase.rdbSendMessage(msgReq.message, partyID: msgReq.partyID)
 
-                    return try RouteHelper.createResponse(data: routeResponseObject)
+                    return Response()
                 } catch {
                     Log.routes.warning("Error on leaveParty route - \(error)")
                     return RouteHelper.createErrorResponse(error: error)
@@ -123,9 +119,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                     try await supabase.updateRestaurantRating(msgReq)
 
-                    let routeResponseObj = PostRouteResponse(currentUserName: msgReq.userName, currentUserID: msgReq.userID, currentPartyID: msgReq.partyID, partyName: "", yelpURL: "")
-
-                    return try RouteHelper.createResponse(data: routeResponseObj)
+                    return Response()
 
                 } catch {
                     Log.routes.warning("Error on updateRating route - \(error)")
