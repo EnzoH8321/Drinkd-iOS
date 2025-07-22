@@ -200,7 +200,7 @@ struct CardView: View {
                                     showError.status.toggle()
                                     return
                                 }
-                                guard let userID = viewModel.personalUserID else {
+                                guard let userID = UserDefaultsWrapper.getUserID() else {
                                     showError.message = "Could not find userID"
                                     showError.status.toggle()
                                     return

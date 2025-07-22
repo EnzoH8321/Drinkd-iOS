@@ -67,8 +67,6 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                     guard let userData, let partyData else { throw SharedErrors.supabase(error: .rowIsEmpty) }
 
-//                    let partyID = partyData.id 
-
                     try await supabase.leaveParty(partyRequest, partyID: partyData.id)
 
                     let routeResponseObject = PostRouteResponse(currentUserName: userData.username, currentUserID: userData.id, currentPartyID: partyData.id, partyName: partyData.party_name, yelpURL: partyData.restaurants_url ?? "")

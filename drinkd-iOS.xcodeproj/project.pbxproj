@@ -302,6 +302,7 @@
 				54F9C84D26FD5D6F008FA516 /* PartyView.swift */,
 				54F9C84F270223DC008FA516 /* PartyView-Join.swift */,
 				54F9C8512702283B008FA516 /* PartyView-Create.swift */,
+				5407FD71271924D4008BC496 /* PartyCardView.swift */,
 				54F9C858270257E1008FA516 /* SplashScreen.swift */,
 				549BFC462728CFBA00F96F48 /* CustomLocationView.swift */,
 				5444B98E273EE09100FA6DA2 /* SheetView.swift */,
@@ -326,7 +327,6 @@
 				54F9C83F26FBF8E8008FA516 /* CardView.swift */,
 				54F9C84B26FD1ED6008FA516 /* ListCardView.swift */,
 				54B3E536270E140C0004ECC5 /* Star.swift */,
-				5407FD71271924D4008BC496 /* PartyCardView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";

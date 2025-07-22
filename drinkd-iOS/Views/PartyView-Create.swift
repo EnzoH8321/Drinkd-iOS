@@ -68,8 +68,6 @@ struct PartyView_Create: View {
                     do {
                         let urlString = try Networking.shared.createYelpBusinessURLString(latitude: viewModel.customLat, longitude: viewModel.customLong)
                         let response = try await Networking.shared.createParty(username: userName, partyName: partyName ,restaurantsURL: urlString)
-                        partyVM.setPersonalUserAndID(forName: response.currentUserName, forID: response.currentUserID)
-
                         let party = Party(username: userName ,partyID: response.currentPartyID.uuidString, partyMaxVotes: 0, partyName: partyName, yelpURL: urlString)
                         viewModel.currentParty = party
 
