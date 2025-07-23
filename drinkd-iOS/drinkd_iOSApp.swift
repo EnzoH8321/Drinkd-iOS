@@ -54,7 +54,7 @@ struct drinkd_iOSApp: App {
 				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
 
                     Task {
-                        do {
+
                             let status = await ATTrackingManager.requestTrackingAuthorization()
 
                             switch status {
@@ -70,8 +70,14 @@ struct drinkd_iOSApp: App {
                                 fatalError()
                             }
 
-                            try await Networking.shared.rejoinParty(viewModel: viewModel)
-                            try await Networking.shared.fetchRestaurants(viewModel: viewModel, latitude: nil, longitude: nil)
+                        do {
+
+                            do {
+                                try await Networking.shared.rejoinParty(viewModel: viewModel)
+                            } catch {
+                                try await Networking.shared.updateRestaurants(viewModel: viewModel)
+                            }
+
                         } catch {
                             Log.general.fault("Error fetching onReceive: \(error)")
                         }

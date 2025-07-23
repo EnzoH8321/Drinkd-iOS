@@ -63,7 +63,7 @@ struct CustomLocationView: View {
 
                 Task {
                     do {
-                        try await Networking.shared.fetchRestaurants(viewModel: viewModel, latitude: viewModel.customLat, longitude: viewModel.customLong)
+                        try await Networking.shared.updateRestaurants(viewModel: viewModel, longitude: viewModel.customLong, latitude: viewModel.customLat)
                     } catch {
                         showAlert.message = error.localizedDescription
                         showAlert.state.toggle()

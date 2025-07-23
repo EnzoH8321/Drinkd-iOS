@@ -52,7 +52,6 @@ struct PartyView_Join: View {
                     do {
                         guard let partyCode = Int(partyCode) else { throw SharedErrors.general(error: .generalError("Unable to convert Party Code to an Integer"))}
                         try await Networking.shared.joinParty(viewModel: viewModel, partyCode: Int(partyCode), userName: personalUsername)
-                        try await Networking.shared.fetchRestaurants(viewModel: viewModel, latitude: nil, longitude: nil)
                     } catch {
                         showAlert.state.toggle()
                         showAlert.message = error.localizedDescription

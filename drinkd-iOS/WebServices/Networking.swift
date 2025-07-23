@@ -32,33 +32,19 @@ final class Networking {
         self.userDeniedLocationServices = locationFetcher.errorWithLocationAuth
     }
 
-    func fetchRestaurants(viewModel: PartyViewModel, latitude: Double?, longitude: Double?) async throws {
-        var usableLatitude = 0.0
-        var usableLongitude = 0.0
-        // Assumes User inputted custom location
-        if let latitude = latitude, let longitude = longitude, latitude != 0.0, longitude != 0.0 {
-            usableLatitude = latitude
-            usableLongitude = longitude
+    func updateRestaurants(viewModel: PartyViewModel) async throws {
+
+        //If user location was found, continue
+        //If defaults are used, then the user location could not be found
+        guard let latitude = locationFetcher.lastKnownLocation?.latitude,
+              let longitude = locationFetcher.lastKnownLocation?.longitude,
+              latitude != 0.0 || longitude != 0.0 else
+        {
+            Log.networking.fault("ERROR - NO USER LOCATION FOUND ")
+            throw ClientNetworkErrors.noUserLocationFoundError
         }
 
-
-        // Assumes we should use device location
-        if usableLatitude == 0.0 || usableLongitude == 0.0 {
-            //If user location was found, continue
-            //If defaults are used, then the user location could not be found
-            guard let latitude = locationFetcher.lastKnownLocation?.latitude,
-                  let longitude = locationFetcher.lastKnownLocation?.longitude,
-                  latitude != 0.0 || longitude != 0.0 else
-            {
-                Log.networking.fault("ERROR - NO USER LOCATION FOUND ")
-                throw ClientNetworkErrors.noUserLocationFoundError
-            }
-
-            usableLatitude = latitude
-            usableLongitude = longitude
-        }
-
-        let businessSearch = try await getRestaurants(latitude: usableLatitude, longitude: usableLongitude)
+        let businessSearch = try await getRestaurants(latitude: latitude, longitude: longitude)
 
         guard let businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
 
@@ -73,7 +59,33 @@ final class Networking {
             viewModel.removeSplashScreen = true
             self.userDeniedLocationServices = false
         }
+    }
 
+    func updateRestaurants(viewModel: PartyViewModel, longitude: Double, latitude: Double) async throws {
+
+        //If user location was found, continue
+        //If defaults are used, then the user location could not be found
+        guard latitude != 0.0 || longitude != 0.0 else
+        {
+            Log.networking.fault("ERROR - NO USER LOCATION FOUND ")
+            throw ClientNetworkErrors.noUserLocationFoundError
+        }
+
+        let businessSearch = try await getRestaurants(latitude: latitude, longitude: longitude)
+
+        guard let businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
+
+        await MainActor.run {
+
+            //Checks to see if the function already ran to prevent duplicate calls
+            //TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
+            if (viewModel.localRestaurants.count <= 0) {
+                viewModel.updateLocalRestaurants(in: businesses)
+            }
+
+            viewModel.removeSplashScreen = true
+            self.userDeniedLocationServices = false
+        }
     }
 
     // Create a Yelp Business URL based on the users location
@@ -93,7 +105,49 @@ final class Networking {
         let response = try JSONDecoder().decode(JoinPartyResponse.self, from: data)
 
         let party = Party(username: userName ,partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
-        viewModel.currentParty = party
+
+        let businessSearch = try await getRestaurants(yelpURL: party.yelpURL)
+
+        guard let businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
+
+        await MainActor.run {
+
+            //Checks to see if the function already ran to prevent duplicate calls
+            //TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
+            if (viewModel.localRestaurants.count <= 0) {
+                viewModel.updateLocalRestaurants(in: businesses)
+            }
+            viewModel.currentParty = party
+            viewModel.removeSplashScreen = true
+            self.userDeniedLocationServices = false
+        }
+
+    }
+
+    func rejoinParty(viewModel: PartyViewModel) async throws  {
+        let urlString = HTTP.get(.rejoinParty).fullURLString
+        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
+        let urlReq = try rejoinPartyReq(userID: userID.uuidString, url: urlString)
+        let data = try await getCall(urlReq: urlReq)
+        let response = try JSONDecoder().decode(RejoinPartyGetResponse.self, from: data)
+
+        let party = Party(username: response.username, partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
+
+        let businessSearch = try await getRestaurants(yelpURL: party.yelpURL)
+
+        guard let businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
+
+        await MainActor.run {
+
+            //Checks to see if the function already ran to prevent duplicate calls
+            //TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
+            if (viewModel.localRestaurants.count <= 0) {
+                viewModel.updateLocalRestaurants(in: businesses)
+            }
+            viewModel.currentParty = party
+            viewModel.removeSplashScreen = true
+            self.userDeniedLocationServices = false
+        }
 
     }
 
@@ -122,6 +176,34 @@ final class Networking {
 
         return businessSearch
     }
+
+    private func getRestaurants(yelpURL: String) async throws -> YelpApiBusinessSearch {
+        guard let url = URL(string: yelpURL) else {
+            Log.networking.fault("ERROR - INVALID URL")
+            throw ClientNetworkErrors.invalidURLError
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(Constants.token)", forHTTPHeaderField: "Authorization")
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        if let httpResponse = response as? HTTPURLResponse {
+            let statusCode = httpResponse.statusCode
+
+            // Check for errors
+            if !(200...299).contains(statusCode) {
+                throw SharedErrors.yelp(error: .invalidHTTPStatus("Invalid HTTP Status Code - \(statusCode)"))
+            }
+        }
+
+
+        let businessSearch = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: data)
+
+        return businessSearch
+    }
+
+
 }
 
 //MARK: Client -> Vapor Server
@@ -178,16 +260,7 @@ extension Networking {
         return restaurants
     }
 
-    func rejoinParty(viewModel: PartyViewModel) async throws {
-        let urlString = HTTP.get(.rejoinParty).fullURLString
-        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
-        let urlReq = try rejoinPartyReq(userID: userID.uuidString, url: urlString)
-        let data = try await getCall(urlReq: urlReq)
-        let response = try JSONDecoder().decode(RejoinPartyGetResponse.self, from: data)
 
-        let party = Party(username: response.username, partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
-        viewModel.currentParty = party
-    }
 
     //MARK: WebSocket code
 
