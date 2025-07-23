@@ -144,7 +144,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                     let topRestaurants: [RatedRestaurantsTable] = try await supabase.getTopChoices(partyID: partyID)
 
-                    let responseObj = GetRouteResponse(restaurants: topRestaurants, partyID: nil, partyName: nil, yelpURL: nil)
+                    let responseObj = TopRestaurantsGetResponse(restaurants: topRestaurants)
 
                     return try RouteHelper.createResponse(data: responseObj)
                 } catch {
@@ -163,8 +163,10 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                     // Get Party associated with the user
                     let party = try await supabase.rejoinParty(userID: userID)
-                    
-                    let responseObj = GetRouteResponse(restaurants: [], partyID: party.id, partyName: party.party_name, yelpURL: party.restaurants_url)
+                    let userTable = try await supabase.fetchRows(tableType: .users, dictionary: ["id": userID]).first as? UsersTable
+                    guard let userTable else { throw SharedErrors.general(error: .missingValue("UsersTable is nil"))}
+
+                    let responseObj = RejoinPartyGetResponse(username: userTable.username, partyID: party.id, partyCode: party.code, yelpURL: party.restaurants_url ?? "", partyName: party.party_name)
 
                     return try RouteHelper.createResponse(data: responseObj)
 

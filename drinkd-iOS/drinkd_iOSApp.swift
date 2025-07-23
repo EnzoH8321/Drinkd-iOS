@@ -69,7 +69,8 @@ struct drinkd_iOSApp: App {
                             @unknown default:
                                 fatalError()
                             }
-//                            try await Networking.shared.rejoinPartyOnAppStartup(viewModel: viewModel)
+
+                            try await Networking.shared.rejoinParty(viewModel: viewModel)
                             try await Networking.shared.fetchRestaurants(viewModel: viewModel, latitude: nil, longitude: nil)
                         } catch {
                             Log.general.fault("Error fetching onReceive: \(error)")

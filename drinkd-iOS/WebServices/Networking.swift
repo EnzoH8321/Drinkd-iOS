@@ -76,20 +76,6 @@ final class Networking {
 
     }
 
-    // Fetch party info
-    func rejoinPartyOnAppStartup(viewModel: PartyViewModel) async throws {
-
-        try await fetchRestaurants(viewModel: viewModel, latitude: nil, longitude: nil)
-
-        if let currentParty = viewModel.currentParty,  let userID = UserDefaultsWrapper.getUserID(), let partyID = UUID(uuidString: currentParty.partyID)  {
-            await Networking.shared.connectToWebsocket(partyVM: viewModel, username: currentParty.username, userID: userID, partyID: partyID)
-        } else {
-            throw SharedErrors.general(error: .missingValue("Missing needed data"))
-        }
-
-
-    }
-
     // Create a Yelp Business URL based on the users location
     func createYelpBusinessURLString(latitude: Double, longitude: Double) throws -> String {
         return "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10"
@@ -155,7 +141,6 @@ extension Networking {
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
         let urlReq = try leavePartyReq(userID: userID)
         await cancelWSConnection(partyVM: partyVM, partyID: partyID)
-//        return try await postCall(urlReq: urlReq)
         let _ = try await postCall(urlReq: urlReq)
     }
 
@@ -172,20 +157,36 @@ extension Networking {
         let _ = try await postCall(urlReq: urlReq)
     }
 
-    func getTopRestaurants(partyID: UUID) async throws -> GetRouteResponse {
+    func getTopRestaurants(partyID: UUID) async throws -> [RatedRestaurantsTable] {
         let urlString = HTTP.get(.topRestaurants).fullURLString
-        let urlReq = try getURLReq(reqType: .topRestaurants, url: urlString, partyID: partyID)
-        var restaurantResponse = try await getCall(urlReq: urlReq)
+        let urlReq = try topRestaurantsReq(partyID: partyID, url: urlString)
+        let data = try await getCall(urlReq: urlReq)
+        var response = try JSONDecoder().decode(TopRestaurantsGetResponse.self, from: data)
 
-        guard let restaurants = restaurantResponse.restaurants else { throw SharedErrors.general(error: .missingValue("GetRouteResponse.restaurants is nil"))}
+        if response.restaurants.count == 0 {
+            throw SharedErrors.general(error: .generalError("Restaurants Property is empty."))
+        }
+
+        var restaurants = response.restaurants
 
         for i in restaurants.indices {
             let url = URL(string: restaurants[i].image_url)!
             let (data, _) = try await URLSession.shared.data(from: url)
-            restaurantResponse.restaurants?[i].imageData = data
+            restaurants[i].imageData = data
         }
 
-        return restaurantResponse
+        return restaurants
+    }
+
+    func rejoinParty(viewModel: PartyViewModel) async throws {
+        let urlString = HTTP.get(.rejoinParty).fullURLString
+        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
+        let urlReq = try rejoinPartyReq(userID: userID.uuidString, url: urlString)
+        let data = try await getCall(urlReq: urlReq)
+        let response = try JSONDecoder().decode(RejoinPartyGetResponse.self, from: data)
+
+        let party = Party(username: response.username, partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
+        viewModel.currentParty = party
     }
 
     //MARK: WebSocket code
@@ -320,45 +321,40 @@ extension Networking {
         }
     }
 
-
-    private func getURLReq(reqType: HTTP.GetRoutes, url: String, partyID: UUID? = nil, userID: UUID? = nil, partyCode: Int? = nil , userName: String? = nil, message: String? = nil, restaurantName: String? = nil, rating: Int? = nil ) throws -> URLRequest {
-
-
+    // Get Req
+    private func buildGetReq(url: String) throws -> URLRequest {
         guard let url = URL(string: url) else { throw ClientNetworkErrors.invalidURLError }
         var urlRequest = URLRequest(url: url)
-        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
         urlRequest.httpMethod = "GET"
-
-        do {
-
-            switch reqType {
-            case .topRestaurants:
-
-                if let partyID = partyID, var components = URLComponents(string: url.absoluteString) {
-                    components.queryItems = [URLQueryItem(name: "partyID", value: partyID.uuidString)]
-                    urlRequest.url = components.url
-                } else {
-                    Log.networking.fault("Unable to create URLComponents or PartyID")
-                }
-
-            case .rejoinParty:
-                if var components = URLComponents(string: url.absoluteString) {
-                    components.queryItems = [URLQueryItem(name: "userID", value: userID.uuidString)]
-                    urlRequest.url = components.url
-                } else {
-                    Log.networking.fault("Unable to create URLComponents")
-                }
-            }
-
-        } catch {
-            Log.networking.fault("Error encoding JSON - \(error)")
-            throw error
-        }
-
         return urlRequest
     }
 
-    private func getCall(urlReq: URLRequest) async throws -> GetRouteResponse {
+    private func rejoinPartyReq(userID: String, url: String) throws -> URLRequest {
+        var urlReq = try buildGetReq(url: url)
+
+        if var components = URLComponents(string: url) {
+            components.queryItems = [URLQueryItem(name: "userID", value: userID)]
+            urlReq.url = components.url
+        } else {
+            Log.networking.fault("Unable to create URLComponents")
+        }
+        return urlReq
+    }
+
+    private func topRestaurantsReq(partyID: UUID,  url: String) throws -> URLRequest {
+        var urlReq = try buildGetReq(url: url)
+
+        if var components = URLComponents(string: url) {
+            components.queryItems = [URLQueryItem(name: "partyID", value: partyID.uuidString)]
+            urlReq.url = components.url
+        } else {
+            Log.networking.fault("Unable to create URLComponents or PartyID")
+        }
+
+        return urlReq
+    }
+
+    private func getCall(urlReq: URLRequest) async throws -> Data {
         do {
             let (data, response) = try await URLSession.shared.data(for: urlReq)
             let httpResponse = response as! HTTPURLResponse
@@ -369,10 +365,7 @@ extension Networking {
                 throw error.error
             }
 
-            //Happy Path
-            let decodedResponse = try JSONDecoder().decode(GetRouteResponse.self, from: data)
-
-            return decodedResponse
+            return data
 
         } catch {
             Log.networking.fault("Error posting data: \(error)")
