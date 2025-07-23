@@ -152,7 +152,7 @@ extension Networking {
         let data =  try await executeRequest(urlReq: urlRequest)
         let response = try JSONDecoder().decode(CreatePartyResponse.self, from: data)
 
-        let party = Party(username: username ,partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: partyName, yelpURL: restaurantsURL)
+        let party = Party(username: username ,partyID: response.partyID, partyMaxVotes: 0, partyName: partyName, yelpURL: restaurantsURL)
 
         await MainActor.run {
             viewModel.currentParty = party
@@ -213,7 +213,7 @@ extension Networking {
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(JoinPartyResponse.self, from: data)
 
-        let party = Party(username: userName ,partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
+        let party = Party(username: userName ,partyID: response.partyID, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
 
         let businessSearch = try await getRestaurants(yelpURL: party.yelpURL)
 
@@ -240,7 +240,7 @@ extension Networking {
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(RejoinPartyGetResponse.self, from: data)
 
-        let party = Party(username: response.username, partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
+        let party = Party(username: response.username, partyID: response.partyID, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
 
         let businessSearch = try await getRestaurants(yelpURL: party.yelpURL)
 

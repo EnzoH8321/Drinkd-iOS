@@ -17,13 +17,13 @@ struct restaurantScoreInfo {
 
 struct Party {
     public var username: String
-    public var partyID: String
+    public var partyID: UUID
     public var partyMaxVotes : Int
     public var partyName: String
     // Yelpy Business API String
     public var yelpURL: String
 
-    public init(username: String, partyID: String, partyMaxVotes: Int, partyName: String, yelpURL: String) {
+    public init(username: String, partyID: UUID, partyMaxVotes: Int, partyName: String, yelpURL: String) {
         self.username = username
         self.partyID = partyID
         self.partyMaxVotes = partyMaxVotes
