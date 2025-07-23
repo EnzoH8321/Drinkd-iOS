@@ -88,69 +88,6 @@ final class Networking {
         }
     }
 
-    // Create a Yelp Business URL based on the users location
-    func createYelpBusinessURLString(latitude: Double, longitude: Double) throws -> String {
-        return "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10"
-    }
-
-    func joinParty(viewModel: PartyViewModel, partyCode: Int, userName: String) async throws {
-        // Check VM if the user is already in a party
-        if viewModel.currentlyInParty == true { return }
-        let urlString = HTTP.post(.joinParty).fullURLString
-        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
-
-        let urlReq = try joinPartyReq(userID: userID, partyCode: partyCode, userName: userName)
-
-        let data = try await postCall(urlReq: urlReq)
-        let response = try JSONDecoder().decode(JoinPartyResponse.self, from: data)
-
-        let party = Party(username: userName ,partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
-
-        let businessSearch = try await getRestaurants(yelpURL: party.yelpURL)
-
-        guard let businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
-
-        await MainActor.run {
-
-            //Checks to see if the function already ran to prevent duplicate calls
-            //TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
-            if (viewModel.localRestaurants.count <= 0) {
-                viewModel.updateLocalRestaurants(in: businesses)
-            }
-            viewModel.currentParty = party
-            viewModel.removeSplashScreen = true
-            self.userDeniedLocationServices = false
-        }
-
-    }
-
-    func rejoinParty(viewModel: PartyViewModel) async throws  {
-        let urlString = HTTP.get(.rejoinParty).fullURLString
-        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
-        let urlReq = try rejoinPartyReq(userID: userID.uuidString, url: urlString)
-        let data = try await getCall(urlReq: urlReq)
-        let response = try JSONDecoder().decode(RejoinPartyGetResponse.self, from: data)
-
-        let party = Party(username: response.username, partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
-
-        let businessSearch = try await getRestaurants(yelpURL: party.yelpURL)
-
-        guard let businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
-
-        await MainActor.run {
-
-            //Checks to see if the function already ran to prevent duplicate calls
-            //TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
-            if (viewModel.localRestaurants.count <= 0) {
-                viewModel.updateLocalRestaurants(in: businesses)
-            }
-            viewModel.currentParty = party
-            viewModel.removeSplashScreen = true
-            self.userDeniedLocationServices = false
-        }
-
-    }
-
     private func getRestaurants(latitude: Double, longitude: Double) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
             Log.networking.fault("ERROR - INVALID URL")
@@ -209,13 +146,19 @@ final class Networking {
 //MARK: Client -> Vapor Server
 extension Networking {
 
-    func createParty(username: String, partyName: String ,restaurantsURL: String) async throws -> CreatePartyResponse {
+    func createParty(viewModel: PartyViewModel, username: String, partyName: String ,restaurantsURL: String) async throws {
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
         let urlRequest = try createPartyReq(userID: userID, userName: username ,restaurantsUrl: restaurantsURL, partyName: partyName)
         let data =  try await postCall(urlReq: urlRequest)
         let response = try JSONDecoder().decode(CreatePartyResponse.self, from: data)
         UserDefaultsWrapper.setPartyID(id: response.partyID)
-        return response
+
+        let party = Party(username: username ,partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: partyName, yelpURL: restaurantsURL)
+
+        await MainActor.run {
+            viewModel.currentParty = party
+        }
+
     }
 
     func leaveParty(partyVM: PartyViewModel, partyID: UUID) async throws  {
@@ -243,7 +186,7 @@ extension Networking {
         let urlString = HTTP.get(.topRestaurants).fullURLString
         let urlReq = try topRestaurantsReq(partyID: partyID, url: urlString)
         let data = try await getCall(urlReq: urlReq)
-        var response = try JSONDecoder().decode(TopRestaurantsGetResponse.self, from: data)
+        let response = try JSONDecoder().decode(TopRestaurantsGetResponse.self, from: data)
 
         if response.restaurants.count == 0 {
             throw SharedErrors.general(error: .generalError("Restaurants Property is empty."))
@@ -258,6 +201,64 @@ extension Networking {
         }
 
         return restaurants
+    }
+
+    func joinParty(viewModel: PartyViewModel, partyCode: Int, userName: String) async throws {
+        // Check VM if the user is already in a party
+        if viewModel.currentlyInParty == true { return }
+
+        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
+
+        let urlReq = try joinPartyReq(userID: userID, partyCode: partyCode, userName: userName)
+
+        let data = try await postCall(urlReq: urlReq)
+        let response = try JSONDecoder().decode(JoinPartyResponse.self, from: data)
+
+        let party = Party(username: userName ,partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
+
+        let businessSearch = try await getRestaurants(yelpURL: party.yelpURL)
+
+        guard let businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
+
+        await MainActor.run {
+
+            //Checks to see if the function already ran to prevent duplicate calls
+            //TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
+            if (viewModel.localRestaurants.count <= 0) {
+                viewModel.updateLocalRestaurants(in: businesses)
+            }
+            viewModel.currentParty = party
+            viewModel.removeSplashScreen = true
+            self.userDeniedLocationServices = false
+        }
+
+    }
+
+    func rejoinParty(viewModel: PartyViewModel) async throws  {
+        let urlString = HTTP.get(.rejoinParty).fullURLString
+        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
+        let urlReq = try rejoinPartyReq(userID: userID.uuidString, url: urlString)
+        let data = try await getCall(urlReq: urlReq)
+        let response = try JSONDecoder().decode(RejoinPartyGetResponse.self, from: data)
+
+        let party = Party(username: response.username, partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: response.partyName, yelpURL: response.yelpURL)
+
+        let businessSearch = try await getRestaurants(yelpURL: party.yelpURL)
+
+        guard let businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
+
+        await MainActor.run {
+
+            //Checks to see if the function already ran to prevent duplicate calls
+            //TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
+            if (viewModel.localRestaurants.count <= 0) {
+                viewModel.updateLocalRestaurants(in: businesses)
+            }
+            viewModel.currentParty = party
+            viewModel.removeSplashScreen = true
+            self.userDeniedLocationServices = false
+        }
+
     }
 
 

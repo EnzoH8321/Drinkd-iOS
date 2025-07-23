@@ -66,10 +66,8 @@ struct PartyView_Create: View {
 
                 Task {
                     do {
-                        let urlString = try Networking.shared.createYelpBusinessURLString(latitude: viewModel.customLat, longitude: viewModel.customLong)
-                        let response = try await Networking.shared.createParty(username: userName, partyName: partyName ,restaurantsURL: urlString)
-                        let party = Party(username: userName ,partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: partyName, yelpURL: urlString)
-                        viewModel.currentParty = party
+                        let urlString = "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(viewModel.customLat)&longitude=\(viewModel.customLong)&limit=10"
+                        try await Networking.shared.createParty(viewModel: viewModel, username: userName, partyName: partyName ,restaurantsURL: urlString)
 
                     } catch {
                         Log.networking.fault("Error - \(error)")
