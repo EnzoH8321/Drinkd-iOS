@@ -83,7 +83,7 @@ struct TopChoicesView: View {
 		}
         .task {
             do {
-                guard let partyID = UserDefaultsWrapper.getPartyID() else {
+                guard let partyID = UUID(uuidString: viewModel.currentParty?.partyID ?? "")  else {
                     Log.userDefaults.fault("Party ID not found in UserDefaults")
                     return
                 }

@@ -151,7 +151,6 @@ extension Networking {
         let urlRequest = try createPartyReq(userID: userID, userName: username ,restaurantsUrl: restaurantsURL, partyName: partyName)
         let data =  try await executeRequest(urlReq: urlRequest)
         let response = try JSONDecoder().decode(CreatePartyResponse.self, from: data)
-        UserDefaultsWrapper.setPartyID(id: response.partyID)
 
         let party = Party(username: username ,partyID: response.partyID.uuidString, partyMaxVotes: 0, partyName: partyName, yelpURL: restaurantsURL)
 
