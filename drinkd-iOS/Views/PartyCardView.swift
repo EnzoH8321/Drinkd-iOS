@@ -47,11 +47,12 @@ struct PartyCardView: View {
 
         Task {
             do {
-                viewModel.leaveParty()
                 guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .userDefaultsError("Unable to get the party ID"))}
                 try await Networking.shared.leaveParty(partyVM: viewModel, partyID: partyID)
-
+                viewModel.leaveParty()
             } catch {
+                // Leave the Party Anyway in case of failure
+                viewModel.leaveParty()
                 showAlert = (true, error.localizedDescription)
             }
 

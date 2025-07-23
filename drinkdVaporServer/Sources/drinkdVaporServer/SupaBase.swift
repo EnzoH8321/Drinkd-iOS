@@ -25,10 +25,10 @@ final class SupaBase {
 
         do {
             // Check if the party still exists in the parties table & if the person deleting is the party leader
-            let matches = try await checkMatching(tableType: .parties, dictionary: ["party_leader": userID])
+            let partyRow = try await fetchRows(tableType: .parties, dictionary: ["party_leader": userID])
 
-            // Happy Path
-            if matches { try await deleteDataFromTable(fromTable: .parties, rowID: partyID, userID: userID) }
+            // Happy Path, delete the party
+            if !partyRow.isEmpty { try await deleteRow(fromTable: .parties, rowID: partyID, userID: userID) }
 
         } catch {
             Log.supabase.fault("Unable to Delete Party due to error: \(error)")
@@ -36,39 +36,6 @@ final class SupaBase {
         }
     }
 
-
-
-    // Dictionary represents filters. [column name: value to filter for]
-    // Returns true if the provided dictionary matches any data in the provided table.
-    // By default returns false
-    func checkMatching(tableType: TableTypes, dictionary: [String: any PostgrestFilterValue] = [:]) async throws -> Bool {
-
-        let columnsToFilterFor: String = dictionary.keys.map {"\($0)"}.joined(separator: "'")
-        let response = try await client
-            .from(tableType.tableName)
-            .select()
-            .match(dictionary)
-            .execute()
-
-        do {
-            switch tableType {
-
-            case .parties:
-                return try JSONDecoder().decode([PartiesTable].self, from: Data(response.data)).isEmpty ? false : true
-            case .users:
-                return try JSONDecoder().decode([UsersTable].self, from: Data(response.data)).isEmpty ? false : true
-            case .messages:
-                return try JSONDecoder().decode([MessagesTable].self, from: Data(response.data)).isEmpty ? false : true
-            case .ratedRestaurants:
-                return try JSONDecoder().decode([RatedRestaurantsTable].self, from: Data(response.data)).isEmpty ? false : true
-            }
-
-        } catch {
-            Log.supabase.fault("checkMatching error: \(error)")
-            throw error
-        }
-
-    }
     // Upsert a row to a table
     // Upsert inserts a new row if one does not exist, otherwise update it
     private func upsertDataToTable<T: SupaBaseTable>(tableType: TableTypes, data: T) async throws {
@@ -131,7 +98,7 @@ final class SupaBase {
     }
 
     // Delete a row in a table
-    private func deleteDataFromTable(fromTable: TableTypes, rowID: UUID, userID: UUID? = nil) async throws {
+    private func deleteRow(fromTable: TableTypes, rowID: UUID, userID: UUID? = nil) async throws {
 
         switch fromTable {
         case .parties:
@@ -210,12 +177,12 @@ extension SupaBase {
         try await manuallyDeleteParty(userID: req.userID, partyID: partyID)
         // Delete User
         // For users, the row id is the user id
-        try await deleteDataFromTable(fromTable: .users, rowID: req.userID)
+        try await deleteRow(fromTable: .users, rowID: req.userID)
     }
 
     func leavePartyAsGuest(_ req: LeavePartyRequest) async throws {
         // Path for Guest
-        try await deleteDataFromTable(fromTable: .users, rowID: req.userID)
+        try await deleteRow(fromTable: .users, rowID: req.userID)
     }
 
     // Join a Party

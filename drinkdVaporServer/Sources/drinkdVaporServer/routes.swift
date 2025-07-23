@@ -65,9 +65,9 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     guard let userData else { throw SharedErrors.supabase(error: .rowIsEmpty) }
 
                     // Check if party leader
-                    let isPartyLeader = try await supabase.checkMatching(tableType: .parties, dictionary: ["party_leader": req.userID])
+                    let partyRow = try await supabase.fetchRows(tableType: .parties, dictionary: ["party_leader": req.userID])
 
-                    if isPartyLeader {
+                    if !partyRow.isEmpty {
                         guard let partyData else { throw SharedErrors.supabase(error: .rowIsEmpty) }
                         try await supabase.leavePartyAsHost(req, partyID: partyData.id)
                     } else {
