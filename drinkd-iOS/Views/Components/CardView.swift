@@ -195,8 +195,8 @@ struct CardView: View {
                                     return
                                 }
 
-                                guard let partyID = UserDefaultsWrapper.getPartyID() else {
-                                    showError.message = "Could not find partyID"
+                                guard let partyID = UUID(uuidString: party.partyID)  else {
+                                    showError.message = "Unable to convert party ID"
                                     showError.status.toggle()
                                     return
                                 }
