@@ -26,6 +26,19 @@ public enum TableTypes {
             return "RatedRestaurants"
         }
     }
+
+    public func decode(from data: Data) throws -> [any SupaBaseTable] {
+        switch self {
+        case .parties:
+            return try JSONDecoder().decode([PartiesTable].self, from: data)
+        case .users:
+            return try JSONDecoder().decode([UsersTable].self, from: data)
+        case .messages:
+            return try JSONDecoder().decode([MessagesTable].self, from: data)
+        case .ratedRestaurants:
+            return try JSONDecoder().decode([RatedRestaurantsTable].self, from: data)
+        }
+    }
 }
 
 public protocol SupaBaseTable {

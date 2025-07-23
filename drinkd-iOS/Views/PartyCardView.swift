@@ -14,13 +14,9 @@ struct PartyCardView: View {
     @State private var showAlert: (state: Bool, message: String) = (false, "")
     @State private var path = NavigationPath()
 
-    private var partyID: UUID? { viewModel.currentParty?.partyID }
     private var partyCode: String {
-        if let code = viewModel.currentParty?.partyCode {
-            return "\(code)"
-        }
-
-        return ""
+        guard let code = viewModel.currentParty?.partyCode else { return "" }
+        return "\(code)"
     }
     private var partyName: String { viewModel.currentParty?.partyName ?? "" }
     private var partyVotes: Int { viewModel.currentParty?.partyMaxVotes ?? 0 }
@@ -29,7 +25,6 @@ struct PartyCardView: View {
         path.append("chat")
 
         Task {
-
 
             guard let party = viewModel.currentParty else {
                 Log.general.info("User is not in a Party")
@@ -52,9 +47,10 @@ struct PartyCardView: View {
 
         Task {
             do {
+                viewModel.leaveParty()
                 guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .userDefaultsError("Unable to get the party ID"))}
                 try await Networking.shared.leaveParty(partyVM: viewModel, partyID: partyID)
-                viewModel.leaveParty()
+
             } catch {
                 showAlert = (true, error.localizedDescription)
             }
@@ -79,7 +75,7 @@ struct PartyCardView: View {
                             Text("Party Code:")
                                 .font(.largeTitle)
 
-                            Text(partyID?.uuidString ?? "")
+                            Text(partyCode)
                                 .font(.title2)
 
                             Text("Partyname:")

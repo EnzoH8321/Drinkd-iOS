@@ -159,7 +159,7 @@ final class SupaBase {
     }
 
     func fetchRows(tableType: TableTypes, dictionary: [String: any PostgrestFilterValue] = [:]) async throws -> [any SupaBaseTable] {
-        let columnsToFilterFor: String = dictionary.keys.map {"\($0)"}.joined(separator: "'")
+
         let response = try await client
             .from(tableType.tableName)
             .select()
@@ -167,25 +167,7 @@ final class SupaBase {
             .execute()
 
         do {
-            switch tableType {
-
-            case .parties:
-
-                let partiesArray = try JSONDecoder().decode([PartiesTable].self, from: Data(response.data))
-                return partiesArray
-
-            case .users:
-
-                let usersArray = try JSONDecoder().decode([UsersTable].self, from: Data(response.data))
-                return usersArray
-            case .messages:
-                let messagesArray = try JSONDecoder().decode([MessagesTable].self, from: Data(response.data))
-                return messagesArray
-            case .ratedRestaurants:
-                let restaurantsArray = try JSONDecoder().decode([RatedRestaurantsTable].self, from: Data(response.data))
-                return restaurantsArray
-            }
-
+            return try tableType.decode(from: response.data)
         } catch {
             Log.supabase.fault("fetchRow failed: \(error)")
             throw error
