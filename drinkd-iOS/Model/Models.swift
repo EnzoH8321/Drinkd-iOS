@@ -20,14 +20,16 @@ struct Party {
     public var partyID: UUID
     public var partyMaxVotes : Int
     public var partyName: String
+    public var partyCode: Int
     // Yelpy Business API String
     public var yelpURL: String
 
-    public init(username: String, partyID: UUID, partyMaxVotes: Int, partyName: String, yelpURL: String) {
+    init(username: String, partyID: UUID, partyMaxVotes: Int, partyName: String, partyCode: Int, yelpURL: String) {
         self.username = username
         self.partyID = partyID
         self.partyMaxVotes = partyMaxVotes
         self.partyName = partyName
+        self.partyCode = partyCode
         self.yelpURL = yelpURL
     }
 }

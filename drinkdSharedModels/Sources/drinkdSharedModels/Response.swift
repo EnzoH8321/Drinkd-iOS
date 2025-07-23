@@ -9,20 +9,24 @@ import Foundation
 // Response from the Server back to the Client.
 public struct CreatePartyResponse : Codable {
     public let partyID: UUID
+    public let partyCode: Int
 
-    public init(partyID: UUID) {
+    public init(partyID: UUID, partyCode: Int) {
         self.partyID = partyID
+        self.partyCode = partyCode
     }
 }
 
 public struct JoinPartyResponse: Codable {
     public let partyID: UUID
     public let partyName: String
+    public let partyCode: Int
     public let yelpURL: String
 
-    public init(partyID: UUID, partyName: String, yelpURL: String) {
+    public init(partyID: UUID, partyName: String, partyCode: Int, yelpURL: String) {
         self.partyID = partyID
         self.partyName = partyName
+        self.partyCode = partyCode
         self.yelpURL = yelpURL
     }
 

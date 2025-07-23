@@ -20,7 +20,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     // Create a message channel
                     await supabase.rdbCreateChannel(partyID: newParty.id)
 
-                    let respObj = CreatePartyResponse(partyID: newParty.id)
+                    let respObj = CreatePartyResponse(partyID: newParty.id, partyCode: newParty.code)
                     return try RouteHelper.createResponse(data: respObj)
 
                 } catch {
@@ -39,7 +39,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     let req = try JSONDecoder().decode(JoinPartyRequest.self, from: reqBody)
                     let party = try await supabase.joinParty(req)
 
-                    let respObj = JoinPartyResponse(partyID: party.id, partyName: party.party_name, yelpURL: party.restaurants_url ?? "")
+                    let respObj = JoinPartyResponse(partyID: party.id, partyName: party.party_name, partyCode: party.code, yelpURL: party.restaurants_url ?? "")
                     return try RouteHelper.createResponse(data: respObj)
 
                 } catch {
