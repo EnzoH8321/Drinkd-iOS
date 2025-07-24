@@ -168,10 +168,10 @@ extension Networking {
         let _ = try await executeRequest(urlReq: urlReq)
     }
 
-    func sendMessage(message: String, partyID: UUID) async throws {
+    func sendMessage(username: String, message: String, partyID: UUID) async throws {
 
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
-        let urlReq = try sendMsgReq(userID: userID, message: message, partyID: partyID)
+        let urlReq = try sendMsgReq(userID: userID, username: username, message: message, partyID: partyID)
         let _ = try await executeRequest(urlReq: urlReq)
     }
 
@@ -394,10 +394,10 @@ extension Networking {
         }
     }
 
-    private func sendMsgReq(userID: UUID, message: String, partyID: UUID) throws -> URLRequest {
+    private func sendMsgReq(userID: UUID, username: String, message: String, partyID: UUID) throws -> URLRequest {
         do {
             var baseReq = try buildPostReq(url: HTTP.post(.sendMessage).fullURLString)
-            baseReq.httpBody = try JSONEncoder().encode( SendMessageRequest(userID: userID, partyID: partyID, message: message) )
+            baseReq.httpBody = try JSONEncoder().encode( SendMessageRequest(userID: userID, username: username, partyID: partyID, message: message) )
             return baseReq
         } catch {
             Log.networking.fault("Error encoding JSON when sending a message - \(error)")

@@ -37,8 +37,8 @@ struct ChatView: View {
 
                             Task {
                                 do {
-                                    guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .missingValue("Unable to get party id"))}
-                                    try await Networking.shared.sendMessage(message: messageString, partyID: partyID)
+                                    guard let party = viewModel.currentParty else { throw SharedErrors.general(error: .missingValue("Party value is nil"))}
+                                    try await Networking.shared.sendMessage(username: party.username, message: messageString, partyID: party.partyID)
                                 } catch {
                                    showAlert = (true, error.localizedDescription)
                                 }

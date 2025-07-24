@@ -94,7 +94,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     try await supabase.sendMessage(msgReq)
 
                     // Broadcast message
-                    await supabase.rdbSendMessage(msgReq.message, partyID: msgReq.partyID)
+                    await supabase.rdbSendMessage(userName: msgReq.userName, message: msgReq.message, partyID: msgReq.partyID)
 
                     return Response()
                 } catch {
@@ -181,11 +181,6 @@ func routes(_ app: Application, supabase: SupaBase) throws {
             return
         }
 
-        guard let username = req.parameters.get("username") else {
-            Log.routes.fault("Username not found")
-            return
-        }
-
         guard let userID =  UUID(uuidString: req.parameters.get("userID") ?? "")  else {
             Log.routes.fault("userID not found")
             return
@@ -225,6 +220,12 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     Log.routes.fault("Unable to parse message")
                     return
                 }
+
+                guard let username = payload["userName"] as? String else {
+                    Log.routes.fault("Unable to parse message")
+                    return
+                }
+
 
                 messageArray.append("This message - \(message)")
 

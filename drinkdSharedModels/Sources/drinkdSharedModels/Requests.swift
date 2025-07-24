@@ -60,11 +60,13 @@ public struct LeavePartyRequest: Codable, PartyRequest  {
 
 public struct SendMessageRequest: Codable, PartyRequest {
     public let userID: UUID
+    public let userName: String
     public let partyID: UUID
     public let message: String
 
-    public init(userID: UUID, partyID: UUID, message: String) {
+    public init(userID: UUID, username: String, partyID: UUID, message: String) {
         self.userID = userID
+        self.userName = username
         self.partyID = partyID
         self.message = message
     }

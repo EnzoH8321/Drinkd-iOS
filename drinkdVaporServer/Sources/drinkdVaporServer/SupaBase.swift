@@ -301,7 +301,7 @@ extension SupaBase {
         return messageArray
     }
 
-    func rdbSendMessage(_ message: String, partyID: UUID) async {
+    func rdbSendMessage(userName: String ,message: String, partyID: UUID) async {
 
         if let channel = channels[partyID.uuidString] {
 
@@ -310,7 +310,8 @@ extension SupaBase {
                 try await channel.broadcast(
                     event: "newMessage",
                     message: [
-                        "message": message
+                        "message": message,
+                        "userName": userName
                     ]
                 )
 
