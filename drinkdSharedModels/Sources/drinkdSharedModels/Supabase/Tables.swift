@@ -39,6 +39,19 @@ public enum TableTypes {
             return try JSONDecoder().decode([RatedRestaurantsTable].self, from: data)
         }
     }
+
+    public func typeCast<T: SupaBaseTable>(from data: T) throws -> any SupaBaseTable & Encodable & Sendable {
+        switch self {
+        case .parties:
+            return try data as? PartiesTable ?? { throw SharedErrors.General.castingError("Unable to convert data to PartiesTable") }()
+        case .users:
+            return try data as? UsersTable ?? { throw SharedErrors.General.castingError("Unable to convert data to UsersTable") }()
+        case .messages:
+            return try data as? MessagesTable ?? { throw SharedErrors.General.castingError("Unable to convert data to MessagesTable") }()
+        case .ratedRestaurants:
+            return try data as? RatedRestaurantsTable ?? { throw SharedErrors.General.castingError("Unable to convert data to RatedRestaurantsTable") }()
+        }
+    }
 }
 
 public protocol SupaBaseTable {

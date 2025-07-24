@@ -21,14 +21,14 @@ final class SupaBase {
 
     // Manually deletes the party.
     // Only the party leader should be able to do this.
-    private func manuallyDeleteParty(userID: UUID, partyID: UUID) async throws {
+    private func deleteParty(userID: UUID, partyID: UUID) async throws {
 
         do {
             // Check if the party still exists in the parties table & if the person deleting is the party leader
-            let partyRow = try await fetchRows(tableType: .parties, dictionary: ["party_leader": userID])
+            let isPartyLeader = try await fetchRows(tableType: .parties, dictionary: ["party_leader": userID]).isEmpty ? false : true
 
             // Happy Path, delete the party
-            if !partyRow.isEmpty { try await deleteRow(fromTable: .parties, rowID: partyID, userID: userID) }
+            if isPartyLeader { try await deleteRow(fromTable: .parties, rowID: partyID, userID: userID) }
 
         } catch {
             Log.supabase.fault("Unable to Delete Party due to error: \(error)")
@@ -38,30 +38,11 @@ final class SupaBase {
 
     // Upsert a row to a table
     // Upsert inserts a new row if one does not exist, otherwise update it
-    private func upsertDataToTable<T: SupaBaseTable>(tableType: TableTypes, data: T) async throws {
+    private func upsertDataToTable<T: SupaBaseTable & Encodable >(tableType: TableTypes, data: T) async throws {
 
         do {
-            switch tableType {
-            case .parties:
-
-                guard let partyData = data as? PartiesTable else { throw SharedErrors.General.castingError("Unable to convert data to PartiesTable") }
-
-                try await client.from(tableType.tableName).upsert(partyData).execute()
-            case .users:
-                guard let usersData = data as? UsersTable else { throw SharedErrors.General.castingError("Unable to convert data to UsersTable") }
-
-                try await client.from(tableType.tableName).upsert(usersData).execute()
-
-            case .messages:
-                guard let messagesData = data as? MessagesTable else { throw SharedErrors.General.castingError("Unable to convert data to MessagesTable")}
-
-                try await client.from(tableType.tableName).upsert(messagesData).execute()
-
-            case .ratedRestaurants:
-                guard let restaurantData = data as? RatedRestaurantsTable else { throw SharedErrors.General.castingError("Unable to convert data to RatedRestaurantsTable")}
-
-                try await client.from(tableType.tableName).upsert(restaurantData).execute()
-            }
+            let table = try tableType.typeCast(from: data)
+            try await client.from(tableType.tableName).upsert(table).execute()
         } catch {
             Log.supabase.fault("upsertDataToTable failed: \(error)")
             throw error
@@ -73,23 +54,9 @@ final class SupaBase {
     private func insertRowToTable<T: SupaBaseTable>(tableType: TableTypes, data: T) async throws {
 
         do {
-            switch tableType {
-            case .parties:
-                guard let partyData = data as? PartiesTable else { throw SharedErrors.General.castingError("Unable to convert data to PartiesTable") }
+            let table = try tableType.typeCast(from: data)
+            try await client.from(tableType.tableName).insert(table).execute()
 
-                try await client.from(tableType.tableName).insert(partyData).execute()
-            case .users:
-                guard let usersData = data as? UsersTable else { throw SharedErrors.General.castingError("Unable to convert data to UsersTable") }
-
-                try await client.from(tableType.tableName).insert(usersData).execute()
-            case .messages:
-                guard let messagesData = data as? MessagesTable else { throw SharedErrors.General.castingError("Unable to convert data to MessagesTable")}
-
-                try await client.from(tableType.tableName).insert(messagesData).execute()
-            case .ratedRestaurants:
-                guard let restaurantData = data as? RatedRestaurantsTable else { throw SharedErrors.General.castingError("Unable to convert data to MessagesTable")}
-                try await client.from(tableType.tableName).insert(restaurantData).execute()
-            }
         } catch {
             Log.supabase.fault("insertRowToTable failed: \(error)")
             throw error
@@ -174,14 +141,13 @@ extension SupaBase {
     // Leave a party
     func leavePartyAsHost(_ req: LeavePartyRequest, partyID: UUID) async throws {
         // Delete Party
-        try await manuallyDeleteParty(userID: req.userID, partyID: partyID)
+        try await deleteParty(userID: req.userID, partyID: partyID)
         // Delete User
         // For users, the row id is the user id
         try await deleteRow(fromTable: .users, rowID: req.userID)
     }
 
     func leavePartyAsGuest(_ req: LeavePartyRequest) async throws {
-        // Path for Guest
         try await deleteRow(fromTable: .users, rowID: req.userID)
     }
 
