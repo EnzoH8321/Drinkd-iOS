@@ -208,7 +208,7 @@ extension SupaBase {
         }
 
         if restaurants.isEmpty {
-            Log.general.info("Empty restaurants array")
+            Log.supabase.info("Empty restaurants array")
             return []
         }
 
@@ -275,7 +275,6 @@ extension SupaBase {
         await channel.subscribe()
 
         channels[partyID.uuidString] = channel
-
     }
 
     func rdbGetMessages(channel: AsyncStream<JSONObject>) async -> [String] {

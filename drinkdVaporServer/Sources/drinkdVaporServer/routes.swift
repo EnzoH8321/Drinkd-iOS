@@ -57,12 +57,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
                     let req = try JSONDecoder().decode(LeavePartyRequest.self, from: reqBody)
 
-                    let (userData, partyData) = try await (
-                        supabase.fetchRows(tableType: .users, dictionary: ["id": "\(req.userID)"]).first as? UsersTable,
-                        supabase.fetchRows(tableType: .parties, dictionary: ["party_leader": "\(req.userID)"]).first as? PartiesTable
-                    )
-
-                    guard let userData else { throw SharedErrors.supabase(error: .rowIsEmpty) }
+                    let partyData = try await supabase.fetchRows(tableType: .parties, dictionary: ["party_leader": "\(req.userID)"]).first as? PartiesTable
 
                     // Check if party leader
                     let partyRow = try await supabase.fetchRows(tableType: .parties, dictionary: ["party_leader": req.userID])
