@@ -8,6 +8,7 @@
 import Foundation
 import Supabase
 import drinkdSharedModels
+import WebSocketKit
 
 @Observable
 final class SupaBase {
@@ -278,30 +279,6 @@ extension SupaBase {
         channels[partyID.uuidString] = channel
     }
 
-    func rdbGetMessages(channel: AsyncStream<JSONObject>) async -> [String] {
-
-        var messageArray: [String] = []
-
-        Task {
-            for await jsonObj in channel {
-
-                guard let payload = jsonObj["payload"]?.value as? [String: Any] else {
-                    print("Unable to parse payload")
-                    return
-                }
-
-                guard let message = payload["message"] as? String else {
-                    print("Unable to parse message")
-                    return
-                }
-
-                messageArray.append("This message - \(message)")
-            }
-        }
-
-        return messageArray
-    }
-
     func rdbSendMessage(userName: String ,message: String, partyID: UUID) async {
 
         if let channel = channels[partyID.uuidString] {
@@ -322,6 +299,57 @@ extension SupaBase {
 
         }
     }
+
+
+    func rdbListenForMessages(ws: WebSocket, partyID: String, userID: UUID) {
+
+        // Get Channel
+        guard let channel = channels[partyID] else {
+            Log.routes.fault("Channel not found")
+            return
+        }
+
+        // Get Broadcast stream
+        let stream = channel.broadcastStream(event: "newMessage")
+
+        Task {
+            // Get latest Messages
+            for await jsonObj in stream {
+
+                guard let payload = jsonObj["payload"]?.value as? [String: Any] else {
+                    Log.routes.fault("Unable to parse payload")
+                    return
+                }
+
+                guard let message = payload["message"] as? String else {
+                    Log.routes.fault("Unable to parse message")
+                    return
+                }
+
+                guard let username = payload["userName"] as? String else {
+                    Log.routes.fault("Unable to parse username")
+                    return
+                }
+
+                do {
+                    let wsMessage = WSMessage(text: message, username: username, timestamp: Date.now, userID: userID)
+                    let data = try JSONEncoder().encode(wsMessage)
+                    let byteArray: [UInt8] = data.withUnsafeBytes { bytes in
+                        return Array(bytes)
+                    }
+
+                    try await ws.send(byteArray)
+                } catch {
+                    Log.routes.fault("Error sending ws message - \(message)")
+                }
+
+            }
+
+            Log.routes.info("TASK DONE")
+        }
+    }
+
+
 }
 
 

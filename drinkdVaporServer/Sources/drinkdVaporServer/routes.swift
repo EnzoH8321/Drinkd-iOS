@@ -196,54 +196,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
             }
         }
 
-        // Get Channel
-        guard let channel = supabase.channels[partyID] else {
-            Log.routes.fault("Channel not found")
-            return
-        }
-
-        // Get Broadcast stream
-        let stream = channel.broadcastStream(event: "newMessage")
-
-        Task {
-
-            // Get latest Messages
-            for await jsonObj in stream {
-
-                guard let payload = jsonObj["payload"]?.value as? [String: Any] else {
-                    Log.routes.fault("Unable to parse payload")
-                    return
-                }
-
-                guard let message = payload["message"] as? String else {
-                    Log.routes.fault("Unable to parse message")
-                    return
-                }
-
-                guard let username = payload["userName"] as? String else {
-                    Log.routes.fault("Unable to parse message")
-                    return
-                }
-
-                let timestamp = Date.now
-
-                do {
-                    let wsMessage = WSMessage(text: message, username: username, timestamp: timestamp, userID: userID)
-                    let data = try JSONEncoder().encode(wsMessage)
-                    let byteArray: [UInt8] = data.withUnsafeBytes { bytes in
-                        return Array(bytes)
-                    }
-
-                    try await ws.send(byteArray)
-                } catch {
-                    Log.routes.fault("Error sending ws message - \(message)")
-                }
-
-            }
-            
-            Log.routes.info("TASK DONE")
-        }
-
+        supabase.rdbListenForMessages(ws: ws, partyID: partyID, userID: userID)
     }
 
 
