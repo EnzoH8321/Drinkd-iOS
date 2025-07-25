@@ -20,6 +20,7 @@ struct PartyCardView: View {
     }
     private var partyName: String { viewModel.currentParty?.partyName ?? "" }
     private var partyVotes: Int { viewModel.currentParty?.partyMaxVotes ?? 0 }
+    private var userName: String { viewModel.currentParty?.username ?? ""}
 
     private func joinChat()  {
         path.append("chat")
@@ -73,15 +74,19 @@ struct PartyCardView: View {
 
                         VStack {
 
-                            Text("Party Code:")
-                                .font(.largeTitle)
-
-                            Text(partyCode)
-                                .font(.title2)
-
                             Text("Partyname:")
                                 .font(.largeTitle)
                             Text("\(partyName)")
+                                .font(.title2)
+
+                            Text("Username")
+                                .font(.largeTitle)
+                            Text("\(userName)")
+                                .font(.title2)
+
+                            Text("Party Code:")
+                                .font(.largeTitle)
+                            Text(partyCode)
                                 .font(.title2)
 
                             Text("Votes to Win")
