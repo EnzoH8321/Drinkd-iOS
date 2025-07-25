@@ -59,6 +59,7 @@ public struct LeavePartyRequest: Codable, PartyRequest  {
 
 
 public struct SendMessageRequest: Codable, PartyRequest {
+    
     public let userID: UUID
     public let userName: String
     public let partyID: UUID

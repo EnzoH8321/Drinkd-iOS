@@ -193,9 +193,9 @@ extension SupaBase {
         try await upsertDataToTable(tableType: .ratedRestaurants, data: restaurant)
     }
 
-    func sendMessage(_ req: SendMessageRequest) async throws {
+    func sendMessage(_ req: SendMessageRequest, messageID: UUID) async throws {
 
-        let message = MessagesTable(id: UUID(), partyId: req.partyID, date_created: Date().ISO8601Format(), text: req.message, userId: req.userID, user_name: req.userName)
+        let message = MessagesTable(id: messageID, partyId: req.partyID, date_created: Date().ISO8601Format(), text: req.message, userId: req.userID, user_name: req.userName)
         // Add message to messages table
         try await upsertDataToTable(tableType: .messages, data: message)
 
@@ -279,7 +279,7 @@ extension SupaBase {
         channels[partyID.uuidString] = channel
     }
 
-    func rdbSendMessage(userName: String ,message: String, partyID: UUID) async {
+    func rdbSendMessage(userName: String ,message: String, messageID: UUID, partyID: UUID) async {
 
         if let channel = channels[partyID.uuidString] {
 
@@ -289,7 +289,8 @@ extension SupaBase {
                     event: "newMessage",
                     message: [
                         "message": message,
-                        "userName": userName
+                        "userName": userName,
+                        "messageID": messageID.uuidString
                     ]
                 )
 
@@ -331,8 +332,13 @@ extension SupaBase {
                     return
                 }
 
+                guard let id = payload["messageID"] as? String, let messageID = UUID(uuidString: id)  else {
+                    Log.routes.fault("Unable to parse messageID")
+                    return
+                }
+
                 do {
-                    let wsMessage = WSMessage(text: message, username: username, timestamp: Date.now, userID: userID)
+                    let wsMessage = WSMessage(id: messageID, text: message, username: username, timestamp: Date.now, userID: userID)
                     let data = try JSONEncoder().encode(wsMessage)
                     let byteArray: [UInt8] = data.withUnsafeBytes { bytes in
                         return Array(bytes)

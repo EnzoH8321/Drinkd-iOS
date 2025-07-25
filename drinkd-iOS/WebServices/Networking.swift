@@ -271,7 +271,7 @@ extension Networking {
             {
                 throw SharedErrors.general(error: .missingValue("Unable to convert date"))
             }
-            return WSMessage(text: $0.text, username: $0.user_name, timestamp: dateString, userID: $0.user_id)
+            return WSMessage(id: $0.id, text: $0.text, username: $0.user_name, timestamp: dateString, userID: $0.user_id)
         }
 
 

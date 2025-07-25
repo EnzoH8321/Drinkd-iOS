@@ -89,12 +89,14 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     guard let userData = try await supabase.fetchRows(tableType: .users, dictionary: ["id": "\(msgReq.userID)"]).first as? UsersTable else {
                         throw SharedErrors.supabase(error: .rowIsEmpty)
                     }
+                    //Message ID, same ID for both the MessageTable id & WSMessage
+                    let id = UUID()
 
                     // Send Message to Messages Table
-                    try await supabase.sendMessage(msgReq)
+                    try await supabase.sendMessage(msgReq, messageID: id)
 
                     // Broadcast message
-                    await supabase.rdbSendMessage(userName: msgReq.userName, message: msgReq.message, partyID: msgReq.partyID)
+                    await supabase.rdbSendMessage(userName: msgReq.userName, message: msgReq.message, messageID: id, partyID: msgReq.partyID)
 
                     return Response()
                 } catch {
