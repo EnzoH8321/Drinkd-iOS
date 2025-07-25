@@ -30,6 +30,7 @@ public enum HTTP {
     public enum GetRoutes: String, CaseIterable {
         case topRestaurants
         case rejoinParty
+        case getMessages
     }
 
     public var fullURLString: String {

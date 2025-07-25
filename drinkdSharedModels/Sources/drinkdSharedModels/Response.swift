@@ -56,3 +56,11 @@ public struct TopRestaurantsGetResponse: Codable {
         self.restaurants = restaurants
     }
 }
+
+public struct MessagesGetResponse: Codable {
+    public let messages: [MessagesTable]
+
+    public init(messages: [MessagesTable]) {
+        self.messages = messages
+    }
+}

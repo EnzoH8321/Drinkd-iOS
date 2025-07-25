@@ -195,7 +195,7 @@ extension SupaBase {
 
     func sendMessage(_ req: SendMessageRequest) async throws {
 
-        let message = MessagesTable(id: UUID(), partyId: req.partyID, date_created: Date().ISO8601Format(), text: req.message, userId: req.userID)
+        let message = MessagesTable(id: UUID(), partyId: req.partyID, date_created: Date().ISO8601Format(), text: req.message, userId: req.userID, user_name: req.userName)
         // Add message to messages table
         try await upsertDataToTable(tableType: .messages, data: message)
 

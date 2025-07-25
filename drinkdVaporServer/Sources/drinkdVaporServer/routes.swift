@@ -170,6 +170,27 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     return RouteHelper.createErrorResponse(error: error)
                 }
             }
+        case .getMessages:
+            app.get("getMessages") { req async -> Response in
+
+                do {
+                    guard let path = req.url.query else { return Response(status: .badRequest) }
+                    let pathComponents = path.components(separatedBy: "=")
+                    guard let partyID = pathComponents.count == 2 ? pathComponents[1] : nil else { throw SharedErrors.general(error: .generalError("Unable to parse party ID"))}
+
+
+                    guard let messages = try await supabase.fetchRows(tableType: .messages, dictionary: ["party_id": partyID]) as? [MessagesTable] else { throw SharedErrors.general(error: .missingValue("MessagesTable is nil")) }
+
+                    let responseObj = MessagesGetResponse(messages: messages)
+
+                    return try RouteHelper.createResponse(data: responseObj)
+
+                } catch {
+                    Log.routes.warning("Error on getMessages route - \(error)")
+                    return RouteHelper.createErrorResponse(error: error)
+                }
+
+            }
         }
     }
 

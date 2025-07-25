@@ -260,6 +260,24 @@ extension Networking {
 
     }
 
+    func getMessages(viewModel: PartyViewModel) async throws {
+        guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .missingValue("Missing Party ID"))}
+        let urlString = HTTP.get(.getMessages).fullURLString
+        let urlReq = try getMessagesReq(partyID: partyID, url: urlString)
+        let data = try await executeRequest(urlReq: urlReq)
+        let response = try JSONDecoder().decode(MessagesGetResponse.self, from: data)
+        let messages = try response.messages.map {
+            guard let dateString = $0.date_created.fromPostgreSQLTimestamp() else
+            {
+                throw SharedErrors.general(error: .missingValue("Unable to convert date"))
+            }
+            return WSMessage(text: $0.text, username: $0.user_name, timestamp: dateString, userID: $0.user_id)
+        }
+
+
+        viewModel.chatMessageList = messages
+    }
+
 }
 
 // MARK: Websocket
@@ -276,6 +294,13 @@ extension Networking {
                     partyVM.currentWebsocket = ws
 
                     if let validWS = partyVM.currentWebsocket {
+
+                        // Get existing messages from party during initialization
+                        Task {
+                           try await Networking.shared.getMessages(viewModel: partyVM)
+                        }
+
+
                         // Connected WebSocket.
                         validWS.onBinary { ws, binary in
                             let data = Data(buffer: binary)
@@ -449,6 +474,19 @@ extension Networking {
         return urlReq
     }
 
+    private func getMessagesReq(partyID: UUID, url: String) throws -> URLRequest {
+        var urlReq = try buildGetReq(url: url)
+
+        if var components = URLComponents(string: url) {
+            components.queryItems = [URLQueryItem(name: "partyID", value: partyID.uuidString)]
+            urlReq.url = components.url
+        } else {
+            Log.networking.fault("Unable to create URLComponents or PartyID")
+        }
+
+        return urlReq
+    }
+
 
     private func executeRequest(urlReq: URLRequest) async throws -> Data {
 
@@ -464,7 +502,7 @@ extension Networking {
 
             return data
         } catch {
-            Log.networking.fault("Error posting data: \(error)")
+            Log.networking.fault("Error executing request: \(error)")
             throw error
         }
 

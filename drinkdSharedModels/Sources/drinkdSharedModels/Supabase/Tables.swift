@@ -110,13 +110,15 @@ public struct MessagesTable: Codable, Sendable, SupaBaseTable {
     public let party_id: UUID
     public let text: String
     public let user_id: UUID
+    public let user_name: String
 
-    public init(id: UUID, partyId: UUID, date_created: String, text: String, userId: UUID) {
+    public init(id: UUID, partyId: UUID, date_created: String, text: String, userId: UUID, user_name: String) {
         self.id = id
         self.party_id = partyId
         self.date_created = date_created
         self.text = text
         self.user_id = userId
+        self.user_name = user_name
     }
 }
 
