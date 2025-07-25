@@ -90,7 +90,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                         throw SharedErrors.supabase(error: .rowIsEmpty)
                     }
 
-                    // Send Message
+                    // Send Message to Messages Table
                     try await supabase.sendMessage(msgReq)
 
                     // Broadcast message
@@ -204,7 +204,6 @@ func routes(_ app: Application, supabase: SupaBase) throws {
 
         // Get Broadcast stream
         let stream = channel.broadcastStream(event: "newMessage")
-        var messageArray: [String] = []
 
         Task {
 
@@ -225,9 +224,6 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     Log.routes.fault("Unable to parse message")
                     return
                 }
-
-
-                messageArray.append("This message - \(message)")
 
                 let timestamp = Date.now
 

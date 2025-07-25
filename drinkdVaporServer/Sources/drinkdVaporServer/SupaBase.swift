@@ -11,6 +11,7 @@ import drinkdSharedModels
 
 @Observable
 final class SupaBase {
+    // RDB Channels
     // [channel name: channel]
     var channels: [String: RealtimeChannelV2] = [:]
 
