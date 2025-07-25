@@ -279,7 +279,7 @@ extension SupaBase {
         channels[partyID.uuidString] = channel
     }
 
-    func rdbSendMessage(userName: String ,message: String, messageID: UUID, partyID: UUID) async {
+    func rdbSendMessage(userName: String, userID: UUID, message: String, messageID: UUID, partyID: UUID) async {
 
         if let channel = channels[partyID.uuidString] {
 
@@ -289,6 +289,7 @@ extension SupaBase {
                     event: "newMessage",
                     message: [
                         "message": message,
+                        "userID": userID.uuidString,
                         "userName": userName,
                         "messageID": messageID.uuidString
                     ]
@@ -302,7 +303,7 @@ extension SupaBase {
     }
 
 
-    func rdbListenForMessages(ws: WebSocket, partyID: String, userID: UUID) {
+    func rdbListenForMessages(ws: WebSocket, partyID: String) {
 
         // Get Channel
         guard let channel = channels[partyID] else {
@@ -332,8 +333,13 @@ extension SupaBase {
                     return
                 }
 
-                guard let id = payload["messageID"] as? String, let messageID = UUID(uuidString: id)  else {
+                guard let idString = payload["messageID"] as? String, let messageID = UUID(uuidString: idString)  else {
                     Log.routes.fault("Unable to parse messageID")
+                    return
+                }
+
+                guard let userIDString = payload["userID"] as? String, let userID = UUID(uuidString: userIDString)  else {
+                    Log.routes.fault("Unable to parse userID")
                     return
                 }
 

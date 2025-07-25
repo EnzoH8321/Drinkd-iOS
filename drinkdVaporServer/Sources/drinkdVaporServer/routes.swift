@@ -96,7 +96,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
                     try await supabase.sendMessage(msgReq, messageID: id)
 
                     // Broadcast message
-                    await supabase.rdbSendMessage(userName: msgReq.userName, message: msgReq.message, messageID: id, partyID: msgReq.partyID)
+                    await supabase.rdbSendMessage(userName: msgReq.userName, userID: msgReq.userID, message: msgReq.message, messageID: id, partyID: msgReq.partyID)
 
                     return Response()
                 } catch {
@@ -219,7 +219,7 @@ func routes(_ app: Application, supabase: SupaBase) throws {
             }
         }
 
-        supabase.rdbListenForMessages(ws: ws, partyID: partyID, userID: userID)
+        supabase.rdbListenForMessages(ws: ws, partyID: partyID)
     }
 
 
