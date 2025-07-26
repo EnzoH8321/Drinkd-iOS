@@ -148,8 +148,8 @@ extension Networking {
 
     func createParty(viewModel: PartyViewModel, username: String, partyName: String ,restaurantsURL: String) async throws {
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
-        let urlRequest = try createPartyReq(userID: userID, userName: username ,restaurantsUrl: restaurantsURL, partyName: partyName)
-        let data =  try await executeRequest(urlReq: urlRequest)
+        let urlRequest = try HTTP.PostRoutes.createParty.createPartyReq(userID: userID, userName: username, restaurantsUrl: restaurantsURL, partyName: partyName)
+        let data = try await executeRequest(urlReq: urlRequest)
         let response = try JSONDecoder().decode(CreatePartyResponse.self, from: data)
 
         let party = Party(username: username ,partyID: response.partyID, partyMaxVotes: 0, partyName: partyName, partyCode: response.partyCode, yelpURL: restaurantsURL)
@@ -157,13 +157,12 @@ extension Networking {
         await MainActor.run {
             viewModel.currentParty = party
         }
-
     }
 
     func leaveParty(partyVM: PartyViewModel, partyID: UUID) async throws  {
 
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
-        let urlReq = try leavePartyReq(userID: userID)
+        let urlReq = try HTTP.PostRoutes.leaveParty.leavePartyReq(userID: userID)
         await cancelWSConnection(partyVM: partyVM, partyID: partyID)
         let _ = try await executeRequest(urlReq: urlReq)
     }
@@ -171,19 +170,19 @@ extension Networking {
     func sendMessage(username: String, message: String, partyID: UUID) async throws {
 
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
-        let urlReq = try sendMsgReq(userID: userID, username: username, message: message, partyID: partyID)
+        let urlReq = try HTTP.PostRoutes.sendMessage.sendMsgReq(userID: userID, username: username, message: message, partyID: partyID)
         let _ = try await executeRequest(urlReq: urlReq)
     }
 
     func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int, imageURL: String) async throws  {
 
-        let urlReq = try updateRatingReq(partyID: partyID, userName: username, userID: userID, restaurantName: restaurantName, rating: rating, imageuRL: imageURL)
+        let urlReq = try HTTP.PostRoutes.updateRating.updateRatingReq(partyID: partyID, userName: username, userID: userID, restaurantName: restaurantName, rating: rating, imageuRL: imageURL)
         let _ = try await executeRequest(urlReq: urlReq)
     }
 
     func getTopRestaurants(partyID: UUID) async throws -> [RatedRestaurantsTable] {
         let urlString = HTTP.get(.topRestaurants).fullURLString
-        let urlReq = try topRestaurantsReq(partyID: partyID, url: urlString)
+        let urlReq = try HTTP.GetRoutes.topRestaurants.topRestaurantsReq(partyID: partyID, url: urlString)
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(TopRestaurantsGetResponse.self, from: data)
 
@@ -208,7 +207,7 @@ extension Networking {
 
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
 
-        let urlReq = try joinPartyReq(userID: userID, partyCode: partyCode, userName: userName)
+        let urlReq = try HTTP.PostRoutes.joinParty.joinPartyReq(userID: userID, partyCode: partyCode, userName: userName)
 
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(JoinPartyResponse.self, from: data)
@@ -236,7 +235,7 @@ extension Networking {
     func rejoinParty(viewModel: PartyViewModel) async throws  {
         let urlString = HTTP.get(.rejoinParty).fullURLString
         guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
-        let urlReq = try rejoinPartyReq(userID: userID.uuidString, url: urlString)
+        let urlReq = try HTTP.GetRoutes.rejoinParty.rejoinPartyReq(userID: userID.uuidString, url: urlString)
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(RejoinPartyGetResponse.self, from: data)
 
@@ -263,7 +262,7 @@ extension Networking {
     func getMessages(viewModel: PartyViewModel) async throws {
         guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .missingValue("Missing Party ID"))}
         let urlString = HTTP.get(.getMessages).fullURLString
-        let urlReq = try getMessagesReq(partyID: partyID, url: urlString)
+        let urlReq = try HTTP.GetRoutes.getMessages.getMessagesReq(partyID: partyID, url: urlString)
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(MessagesGetResponse.self, from: data)
         let messages = try response.messages.map {
@@ -374,119 +373,6 @@ extension Networking {
 
 //MARK: Utilities
 extension Networking {
-    // Post Req
-    private func buildPostReq(url: String) throws -> URLRequest {
-        guard let url = URL(string: url) else { throw ClientNetworkErrors.invalidURLError }
-        var urlRequest = URLRequest(url: url)
-
-        urlRequest.httpMethod = "POST"
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        return urlRequest
-    }
-
-    private func createPartyReq(userID: UUID, userName: String, restaurantsUrl: String, partyName: String) throws -> URLRequest {
-        do {
-            var baseReq = try buildPostReq(url: HTTP.post(.createParty).fullURLString)
-            baseReq.httpBody = try JSONEncoder().encode(CreatePartyRequest(username: userName, userID: userID, restaurants_url: restaurantsUrl, partyName: partyName))
-            return baseReq
-        } catch {
-            Log.networking.fault("Error encoding JSON when creating a party - \(error)")
-            throw error
-        }
-
-    }
-
-    private func joinPartyReq(userID: UUID, partyCode: Int, userName: String) throws -> URLRequest {
-        do {
-            var baseReq = try buildPostReq(url: HTTP.post(.joinParty).fullURLString)
-            baseReq.httpBody = try JSONEncoder().encode(JoinPartyRequest(userID: userID, username: userName, partyCode: partyCode))
-            return baseReq
-        } catch {
-            Log.networking.fault("Error encoding JSON when joining a party - \(error)")
-            throw error
-        }
-    }
-
-    private func leavePartyReq(userID: UUID) throws -> URLRequest {
-        do {
-            var baseReq = try buildPostReq(url: HTTP.post(.leaveParty).fullURLString)
-            baseReq.httpBody = try JSONEncoder().encode(LeavePartyRequest(userID: userID))
-            return baseReq
-        } catch {
-            Log.networking.fault("Error encoding JSON when leaving a party - \(error)")
-            throw error
-        }
-    }
-
-    private func sendMsgReq(userID: UUID, username: String, message: String, partyID: UUID) throws -> URLRequest {
-        do {
-            var baseReq = try buildPostReq(url: HTTP.post(.sendMessage).fullURLString)
-            baseReq.httpBody = try JSONEncoder().encode( SendMessageRequest(userID: userID, username: username, partyID: partyID, message: message) )
-            return baseReq
-        } catch {
-            Log.networking.fault("Error encoding JSON when sending a message - \(error)")
-            throw error
-        }
-    }
-
-    private func updateRatingReq(partyID: UUID,  userName: String ,  userID: UUID,  restaurantName: String, rating: Int,  imageuRL: String) throws -> URLRequest {
-        do {
-            var baseReq = try buildPostReq(url: HTTP.post(.updateRating).fullURLString)
-            baseReq.httpBody = try JSONEncoder().encode( UpdateRatingRequest(partyID: partyID, userID: userID, userName: userName, restaurantName: restaurantName, rating: rating, imageURL: imageuRL))
-            return baseReq
-        } catch {
-            Log.networking.fault("Error encoding JSON when updating a rating - \(error)")
-            throw error
-        }
-    }
-
-    // Get Req
-    private func buildGetReq(url: String) throws -> URLRequest {
-        guard let url = URL(string: url) else { throw ClientNetworkErrors.invalidURLError }
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "GET"
-        return urlRequest
-    }
-
-    private func rejoinPartyReq(userID: String, url: String) throws -> URLRequest {
-        var urlReq = try buildGetReq(url: url)
-
-        if var components = URLComponents(string: url) {
-            components.queryItems = [URLQueryItem(name: "userID", value: userID)]
-            urlReq.url = components.url
-        } else {
-            Log.networking.fault("Unable to create URLComponents")
-        }
-        return urlReq
-    }
-
-    private func topRestaurantsReq(partyID: UUID,  url: String) throws -> URLRequest {
-        var urlReq = try buildGetReq(url: url)
-
-        if var components = URLComponents(string: url) {
-            components.queryItems = [URLQueryItem(name: "partyID", value: partyID.uuidString)]
-            urlReq.url = components.url
-        } else {
-            Log.networking.fault("Unable to create URLComponents or PartyID")
-        }
-
-        return urlReq
-    }
-
-    private func getMessagesReq(partyID: UUID, url: String) throws -> URLRequest {
-        var urlReq = try buildGetReq(url: url)
-
-        if var components = URLComponents(string: url) {
-            components.queryItems = [URLQueryItem(name: "partyID", value: partyID.uuidString)]
-            urlReq.url = components.url
-        } else {
-            Log.networking.fault("Unable to create URLComponents or PartyID")
-        }
-
-        return urlReq
-    }
-
 
     private func executeRequest(urlReq: URLRequest) async throws -> Data {
 

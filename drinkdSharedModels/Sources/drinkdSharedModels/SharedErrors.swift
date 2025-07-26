@@ -83,6 +83,21 @@ public enum SharedErrors: Codable, LocalizedError {
 
 }
 
+// Client specific network errors
+public enum ClientNetworkErrors:  String ,LocalizedError {
+    case serializationError
+    case decodingError
+    case noUserLocationFoundError
+    case invalidURLError
+    case noURLFoundError
+    case generalNetworkError
+    case databaseRefNotFoundError
+
+    public var errorDescription: String? {
+        return self.rawValue
+    }
+}
+
 // Converts Errors -> Codable
 // Error -> String
 

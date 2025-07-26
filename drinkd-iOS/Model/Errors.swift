@@ -6,20 +6,6 @@
 //
 
 import Foundation
-// Client specific network errors
-enum ClientNetworkErrors:  String ,LocalizedError {
-	case serializationError
-	case decodingError
-	case noUserLocationFoundError
-	case invalidURLError
-	case noURLFoundError
-	case generalNetworkError
-	case databaseRefNotFoundError
-
-    var errorDescription: String? {
-        return self.rawValue
-    }
-}
 
 enum NetworkSuccess {
 	case connectionSuccess
