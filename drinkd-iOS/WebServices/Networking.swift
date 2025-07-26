@@ -147,7 +147,7 @@ final class Networking {
 extension Networking {
 
     func createParty(viewModel: PartyViewModel, username: String, partyName: String ,restaurantsURL: String) async throws {
-        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
+        let userID = try UserDefaultsWrapper.getUserID
         let urlRequest = try HTTP.PostRoutes.createParty.createPartyReq(userID: userID, userName: username, restaurantsUrl: restaurantsURL, partyName: partyName)
         let data = try await executeRequest(urlReq: urlRequest)
         let response = try JSONDecoder().decode(CreatePartyResponse.self, from: data)
@@ -161,7 +161,7 @@ extension Networking {
 
     func leaveParty(partyVM: PartyViewModel, partyID: UUID) async throws  {
 
-        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
+        let userID = try UserDefaultsWrapper.getUserID
         let urlReq = try HTTP.PostRoutes.leaveParty.leavePartyReq(userID: userID)
         await cancelWSConnection(partyVM: partyVM, partyID: partyID)
         let _ = try await executeRequest(urlReq: urlReq)
@@ -169,7 +169,7 @@ extension Networking {
 
     func sendMessage(username: String, message: String, partyID: UUID) async throws {
 
-        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
+        let userID = try UserDefaultsWrapper.getUserID
         let urlReq = try HTTP.PostRoutes.sendMessage.sendMsgReq(userID: userID, username: username, message: message, partyID: partyID)
         let _ = try await executeRequest(urlReq: urlReq)
     }
@@ -205,7 +205,7 @@ extension Networking {
         // Check VM if the user is already in a party
         if viewModel.currentlyInParty == true { return }
 
-        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
+        let userID = try UserDefaultsWrapper.getUserID
 
         let urlReq = try HTTP.PostRoutes.joinParty.joinPartyReq(userID: userID, partyCode: partyCode, userName: userName)
 
@@ -234,7 +234,7 @@ extension Networking {
 
     func rejoinParty(viewModel: PartyViewModel) async throws  {
         let urlString = HTTP.get(.rejoinParty).fullURLString
-        guard let userID = UserDefaultsWrapper.getUserID() else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID"))}
+        let userID = try UserDefaultsWrapper.getUserID
         let urlReq = try HTTP.GetRoutes.rejoinParty.rejoinPartyReq(userID: userID.uuidString, url: urlString)
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(RejoinPartyGetResponse.self, from: data)

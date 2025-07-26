@@ -16,8 +16,13 @@ struct MessageView: View {
     
     //Check to see if the message was written by the user.
     private var isMyMessage: Bool {
-        let currentID = UserDefaultsWrapper.getUserID()
-        return currentID == messageUserID ? true : false
+        do {
+            let currentID = try UserDefaultsWrapper.getUserID
+            return currentID == messageUserID ? true : false
+        } catch {
+            return false
+        }
+
     }
     
     var body: some View {

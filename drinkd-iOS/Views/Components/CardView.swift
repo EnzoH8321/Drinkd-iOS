@@ -195,14 +195,9 @@ struct CardView: View {
                                     return
                                 }
 
-                                guard let userID = UserDefaultsWrapper.getUserID() else {
-                                    showError.message = "Could not find userID"
-                                    showError.status.toggle()
-                                    return
-                                }
-
                                 Task {
                                     do {
+                                        let userID = try UserDefaultsWrapper.getUserID
                                         if viewModel.currentScoreOfTopCard == 0 { return }
                                         try await Networking.shared.addRating(partyID: party.partyID, userID: userID, username: party.username, restaurantName: restaurantTitle, rating: viewModel.currentScoreOfTopCard, imageURL: restaurantImageURL)
                                     } catch {

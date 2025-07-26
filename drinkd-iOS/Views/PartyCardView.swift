@@ -27,20 +27,21 @@ struct PartyCardView: View {
 
         Task {
 
-            guard let party = viewModel.currentParty else {
-                Log.general.info("User is not in a Party")
-                return
+            do {
+                guard let party = viewModel.currentParty else {
+                    Log.general.info("User is not in a Party")
+                    return
+                }
+
+                let userID = try UserDefaultsWrapper.getUserID
+
+                // Only connect to the websocket once.
+                if viewModel.currentWebsocket == nil {
+                    await Networking.shared.connectToWebsocket(partyVM: viewModel, username: party.username, userID: userID, partyID: party.partyID)
+                }
             }
 
-            guard let userID = UserDefaultsWrapper.getUserID() else {
-                print("Unable to get User ID")
-                return
-            }
 
-            // Only connect to the websocket once.
-            if viewModel.currentWebsocket == nil {
-                await Networking.shared.connectToWebsocket(partyVM: viewModel, username: party.username, userID: userID, partyID: party.partyID)
-            }
         }
     }
 

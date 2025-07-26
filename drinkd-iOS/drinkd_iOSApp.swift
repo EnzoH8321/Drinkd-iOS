@@ -17,9 +17,12 @@ struct AppLauncher {
     static func main() throws {
         if NSClassFromString("XCTestCase") == nil {
             // Set user id on startup, if it does not already exist
-            if UserDefaultsWrapper.getUserID() == nil {
+            do {
+               let _ = try UserDefaultsWrapper.getUserID
+            } catch {
                 UserDefaultsWrapper.setUserIDOnStartup()
             }
+
             Networking.shared.locationFetcher.start()
             drinkd_iOSApp.main()
 

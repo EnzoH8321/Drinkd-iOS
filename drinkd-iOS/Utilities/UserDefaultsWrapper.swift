@@ -9,7 +9,7 @@ import Foundation
 import drinkdSharedModels
 
 final class UserDefaultsWrapper {
-//    static let shared = UserDefaultsWrapper()
+
     private init() {}
 
     private static let defaults = UserDefaults.standard
@@ -20,9 +20,13 @@ final class UserDefaultsWrapper {
         defaults.set(id, forKey: UserDefaultsKeys.userID.rawValue)
     }
 
-    static func getUserID() -> UUID? {
-        guard let uuidString = defaults.object(forKey: UserDefaultsKeys.userID.rawValue) as? String, let uuid = UUID(uuidString: uuidString) else { return nil }
-        return uuid
+    static var getUserID: UUID {
+        get throws {
+            guard let uuidString = defaults.object(forKey: UserDefaultsKeys.userID.rawValue) as? String,
+                  let uuid = UUID(uuidString: uuidString) else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID")) }
+
+            return uuid
+        }
     }
 
 }
