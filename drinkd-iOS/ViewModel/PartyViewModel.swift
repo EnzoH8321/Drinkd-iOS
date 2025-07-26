@@ -19,18 +19,12 @@ class PartyViewModel {
         case restaurant_reservation
     }
 
-    private enum userLevel: String {
-        case creator
-        case member
-    }
-
     var customLat: Double = 0
     var customLong: Double = 0
 
     var currentCardIndex: Int = 9
     var currentParty: Party?
 
-    var isPartyLeader: Bool = false
     var topBarList: [String: restaurantScoreInfo] = [:]
     var currentScoreOfTopCard: Int = 0
     //Represents Deck
@@ -97,15 +91,6 @@ class PartyViewModel {
         self.currentScoreOfTopCard = points
 
         topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points, url: self.currentParty?.yelpURL ?? "URL NOT FOUND")
-    }
-
-    private func setUserLevel(level: userLevel) {
-        switch (level) {
-        case .member:
-            self.isPartyLeader = false
-        case .creator:
-            self.isPartyLeader = true
-        }
     }
 
     func leaveParty() {        
