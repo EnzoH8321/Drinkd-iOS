@@ -5,6 +5,9 @@
 //  Created by Enzo Herrera on 6/1/25.
 //
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public struct WSMessage: Codable, Hashable, Identifiable {
     public let id: UUID

@@ -40,7 +40,7 @@ final class Networking {
               let longitude = locationFetcher.lastKnownLocation?.longitude,
               latitude != 0.0 || longitude != 0.0 else
         {
-            Log.networking.fault("ERROR - NO USER LOCATION FOUND ")
+            Log.networking.error("ERROR - NO USER LOCATION FOUND ")
             throw ClientNetworkErrors.noUserLocationFoundError
         }
 
@@ -67,7 +67,7 @@ final class Networking {
         //If defaults are used, then the user location could not be found
         guard latitude != 0.0 || longitude != 0.0 else
         {
-            Log.networking.fault("ERROR - NO USER LOCATION FOUND ")
+            Log.networking.error("ERROR - NO USER LOCATION FOUND ")
             throw ClientNetworkErrors.noUserLocationFoundError
         }
 
@@ -90,7 +90,7 @@ final class Networking {
 
     private func getRestaurants(latitude: Double, longitude: Double) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
-            Log.networking.fault("ERROR - INVALID URL")
+            Log.networking.error("ERROR - INVALID URL")
             throw ClientNetworkErrors.invalidURLError
         }
 
@@ -116,7 +116,7 @@ final class Networking {
 
     private func getRestaurants(yelpURL: String) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: yelpURL) else {
-            Log.networking.fault("ERROR - INVALID URL")
+            Log.networking.error("ERROR - INVALID URL")
             throw ClientNetworkErrors.invalidURLError
         }
 
@@ -307,7 +307,7 @@ extension Networking {
                                 let message = try JSONDecoder().decode(WSMessage.self, from: data)
                                 partyVM.chatMessageList.append(message)
                             } catch {
-                                Log.networking.fault("Error decoding websocket binary data - \(error)")
+                                Log.networking.error("Error decoding websocket binary data - \(error)")
                             }
                         }
 
@@ -317,18 +317,18 @@ extension Networking {
                             case .success(let success):
                                 Log.routes.debug("Successfully closed websocket connection for PARTYID: \(partyID)")
                             case .failure(let failure):
-                                Log.routes.fault("Unable to close websocket connection - \(failure)")
+                                Log.routes.error("Unable to close websocket connection - \(failure)")
                             }
                         }
                     } else {
-                        Log.routes.fault("PartyVM websocket is nil")
+                        Log.routes.error("PartyVM websocket is nil")
                     }
 
                 }
             }
 
         } catch {
-            Log.networking.fault("Error connecting to WebSocket - \(error)")
+            Log.networking.error("Error connecting to WebSocket - \(error)")
         }
 
     }
@@ -337,7 +337,7 @@ extension Networking {
         do {
 
             guard let vm = partyVM.currentWebsocket else {
-                Log.networking.fault("PartyVM websocket is nil")
+                Log.networking.error("PartyVM websocket is nil")
                 return
             }
 
@@ -346,7 +346,7 @@ extension Networking {
             partyVM.currentWebsocket = nil
 
         } catch {
-            Log.networking.fault("Error closing WebSocket - \(error)")
+            Log.networking.error("Error closing WebSocket - \(error)")
         }
     }
 
@@ -388,7 +388,7 @@ extension Networking {
 
             return data
         } catch {
-            Log.networking.fault("Error executing request: \(error)")
+            Log.networking.error("Error executing request: \(error)")
             throw error
         }
 

@@ -82,7 +82,7 @@ struct drinkd_iOSApp: App {
                             }
 
                         } catch {
-                            Log.general.fault("Error fetching onReceive: \(error)")
+                            Log.general.error("Error fetching onReceive: \(error)")
                         }
                     }
 

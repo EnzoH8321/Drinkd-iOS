@@ -10,16 +10,71 @@ import Supabase
 import drinkdSharedModels
 import WebSocketKit
 
-@Observable
+// Add this custom storage class
+class VaporAuthStorage: AuthLocalStorage, @unchecked Sendable {
+    private var storage: [String: Data] = [:]
+
+    func store(key: String, value: Data) {
+        storage[key] = value
+    }
+
+    func retrieve(key: String) -> Data? {
+        return storage[key]
+    }
+
+    func remove(key: String) {
+        storage.removeValue(forKey: key)
+    }
+}
+
 final class SupaBase {
     // RDB Channels
     // [channel name: channel]
     var channels: [String: RealtimeChannelV2] = [:]
+    private let client: SupabaseClient
 
-    private let client = SupabaseClient(
-        supabaseURL: URL(string: "https://jdkdtahoqpsspesqyojb.supabase.co")!,
-        supabaseKey: ProcessInfo.processInfo.environment["SUPABASE_KEY"]!
-    )
+    init() {
+           let supabaseKey: String
+
+           // Try to read from Docker secret first
+           if let secretKey = try? String(contentsOfFile: "/run/secrets/supabase_key").trimmingCharacters(in: .whitespacesAndNewlines) {
+               supabaseKey = secretKey
+           }
+           // Fallback to environment variable
+           else if let envKey = ProcessInfo.processInfo.environment["SUPABASE_KEY"] {
+               supabaseKey = envKey
+           }
+           else {
+               fatalError("SUPABASE_KEY not found in secrets or environment variables")
+           }
+
+           guard let supabaseURL = URL(string: "https://jdkdtahoqpsspesqyojb.supabase.co") else {
+               fatalError("Invalid Supabase URL")
+           }
+
+           self.client = SupabaseClient(
+               supabaseURL: supabaseURL,
+               supabaseKey: supabaseKey,
+               options: SupabaseClientOptions(
+                   db: .init(),
+                   auth: .init(storage: VaporAuthStorage()),
+                   global: .init(),
+                   realtime: .init()
+               )
+           )
+       }
+
+//    private let client = SupabaseClient(
+//        supabaseURL: URL(string: "https://jdkdtahoqpsspesqyojb.supabase.co")!,
+//        supabaseKey: ProcessInfo.processInfo.environment["SUPABASE_KEY"]!,
+//        options: SupabaseClientOptions(
+//            db: .init(),
+//            auth: .init( storage: VaporAuthStorage()),
+//            global: .init(),
+//            realtime: .init(),
+//        )
+//    )
+    
 
     // Manually deletes the party.
     // Only the party leader should be able to do this.
@@ -33,7 +88,7 @@ final class SupaBase {
             if isPartyLeader { try await deleteRow(fromTable: .parties, rowID: partyID, userID: userID) }
 
         } catch {
-            Log.supabase.fault("Unable to Delete Party due to error: \(error)")
+            Log.supabase.error("Unable to Delete Party due to error: \(error)")
             throw error
         }
     }
@@ -46,7 +101,7 @@ final class SupaBase {
             let table = try tableType.typeCast(from: data)
             try await client.from(tableType.tableName).upsert(table).execute()
         } catch {
-            Log.supabase.fault("upsertDataToTable failed: \(error)")
+            Log.supabase.error("upsertDataToTable failed: \(error)")
             throw error
         }
 
@@ -60,7 +115,7 @@ final class SupaBase {
             try await client.from(tableType.tableName).insert(table).execute()
 
         } catch {
-            Log.supabase.fault("insertRowToTable failed: \(error)")
+            Log.supabase.error("insertRowToTable failed: \(error)")
             throw error
         }
 
@@ -73,14 +128,14 @@ final class SupaBase {
         case .parties:
 
             guard let userID = userID else {
-                Log.supabase.fault("Invalid Leader ID passed in")
+                Log.supabase.error("Invalid Leader ID passed in")
                 throw SharedErrors.supabase(error: .dataNotFound)
             }
 
             do {
                 try await client.from(fromTable.tableName).delete().eq("party_leader", value: userID).execute()
             } catch {
-                Log.supabase.fault("deleteDataFromTable failed: \(error)")
+                Log.supabase.error("deleteDataFromTable failed: \(error)")
                 throw error
             }
 
@@ -88,7 +143,7 @@ final class SupaBase {
             do {
                 try await client.from(fromTable.tableName).delete().eq("id", value: rowID).execute()
             } catch {
-                Log.supabase.fault("deleteDataFromTable failed: \(error)")
+                Log.supabase.error("deleteDataFromTable failed: \(error)")
                 throw error
             }
         }
@@ -105,7 +160,7 @@ final class SupaBase {
         do {
             return try tableType.decode(from: response.data)
         } catch {
-            Log.supabase.fault("fetchRow failed: \(error)")
+            Log.supabase.error("fetchRow failed: \(error)")
             throw error
         }
     }
@@ -296,7 +351,7 @@ extension SupaBase {
                 )
 
             } catch {
-                Log.supabase.fault("Error in rdbSendMessage - \(error)")
+                Log.supabase.error("Error in rdbSendMessage - \(error)")
             }
 
         }
@@ -307,7 +362,7 @@ extension SupaBase {
 
         // Get Channel
         guard let channel = channels[partyID] else {
-            Log.routes.fault("Channel not found")
+            Log.routes.error("Channel not found")
             return
         }
 
@@ -319,27 +374,27 @@ extension SupaBase {
             for await jsonObj in stream {
 
                 guard let payload = jsonObj["payload"]?.value as? [String: Any] else {
-                    Log.routes.fault("Unable to parse payload")
+                    Log.routes.error("Unable to parse payload")
                     return
                 }
 
                 guard let message = payload["message"] as? String else {
-                    Log.routes.fault("Unable to parse message")
+                    Log.routes.error("Unable to parse message")
                     return
                 }
 
                 guard let username = payload["userName"] as? String else {
-                    Log.routes.fault("Unable to parse username")
+                    Log.routes.error("Unable to parse username")
                     return
                 }
 
                 guard let idString = payload["messageID"] as? String, let messageID = UUID(uuidString: idString)  else {
-                    Log.routes.fault("Unable to parse messageID")
+                    Log.routes.error("Unable to parse messageID")
                     return
                 }
 
                 guard let userIDString = payload["userID"] as? String, let userID = UUID(uuidString: userIDString)  else {
-                    Log.routes.fault("Unable to parse userID")
+                    Log.routes.error("Unable to parse userID")
                     return
                 }
 
@@ -352,7 +407,7 @@ extension SupaBase {
 
                     try await ws.send(byteArray)
                 } catch {
-                    Log.routes.fault("Error sending ws message - \(message)")
+                    Log.routes.error("Error sending ws message - \(message)")
                 }
 
             }

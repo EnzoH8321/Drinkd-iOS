@@ -70,7 +70,7 @@ struct PartyView_Create: View {
                         try await Networking.shared.createParty(viewModel: viewModel, username: userName, partyName: partyName ,restaurantsURL: urlString)
 
                     } catch {
-                        Log.networking.fault("Error - \(error)")
+                        Log.networking.error("Error - \(error)")
                         showAlert = (true, error.localizedDescription)
                     }
                 }

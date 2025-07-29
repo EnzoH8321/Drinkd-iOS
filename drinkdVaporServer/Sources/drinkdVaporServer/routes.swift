@@ -200,12 +200,12 @@ func routes(_ app: Application, supabase: SupaBase) throws {
     app.webSocket("testWS", ":username", ":userID", ":partyID", ) { req, ws in
 
         guard let partyID = req.parameters.get("partyID") else {
-            Log.routes.fault("Party ID not found")
+            Log.routes.error("Party ID not found")
             return
         }
 
         guard let userID =  UUID(uuidString: req.parameters.get("userID") ?? "")  else {
-            Log.routes.fault("userID not found")
+            Log.routes.error("userID not found")
             return
         }
 
@@ -213,9 +213,9 @@ func routes(_ app: Application, supabase: SupaBase) throws {
         ws.onClose.whenComplete { result in
             switch result {
             case .success(let success):
-                Log.routes.debug("Successfully closed websocket connection for PARTYID: \(partyID)")
+                Log.routes.info("Successfully closed websocket connection for PARTYID: \(partyID)")
             case .failure(let failure):
-                Log.routes.fault("Unable to close websocket connection - \(failure)")
+                Log.routes.error("Unable to close websocket connection - \(failure)")
             }
         }
 
