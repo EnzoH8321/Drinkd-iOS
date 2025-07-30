@@ -9,6 +9,7 @@ import Foundation
 import Supabase
 import drinkdSharedModels
 import WebSocketKit
+import Vapor
 
 // Add this custom storage class
 class VaporAuthStorage: AuthLocalStorage, @unchecked Sendable {
@@ -34,35 +35,71 @@ final class SupaBase {
     private let client: SupabaseClient
 
     init() {
-           let supabaseKey: String
+        let supabaseKey: String
 
-           // Try to read from Docker secret first
-           if let secretKey = try? String(contentsOfFile: "/run/secrets/supabase_key").trimmingCharacters(in: .whitespacesAndNewlines) {
-               supabaseKey = secretKey
-           }
-           // Fallback to environment variable
-           else if let envKey = ProcessInfo.processInfo.environment["SUPABASE_KEY"] {
-               supabaseKey = envKey
-           }
-           else {
-               fatalError("SUPABASE_KEY not found in secrets or environment variables")
-           }
+        // Try to read Supabase key from Docker secret first
+//        if let secretKey = try? String(contentsOfFile: "/run/secrets/supabase_key").trimmingCharacters(in: .whitespacesAndNewlines) {
+//            supabaseKey = secretKey
+//        }
+        // Fallback to environment variable
+        if let envKey = Environment.get("SUPABASE_KEY") {
+            supabaseKey = envKey
+        }
+        else {
+            fatalError("SUPABASE_KEY not found in secrets or environment variables")
+        }
 
-           guard let supabaseURL = URL(string: "https://jdkdtahoqpsspesqyojb.supabase.co") else {
-               fatalError("Invalid Supabase URL")
-           }
+        // Get Supabase URL from environment variable
+        //        guard let urlString = ProcessInfo.processInfo.environment["SUPABASE_URL"],
+        //              let url = URL(string: urlString) else {
+        //            fatalError("SUPABASE_URL environment variable is required and must be a valid URL")
+        //        }
+        guard let supabaseURL = URL(string: "https://jdkdtahoqpsspesqyojb.supabase.co") else {
+            fatalError("Invalid Supabase URL")
+        }
 
-           self.client = SupabaseClient(
-               supabaseURL: supabaseURL,
-               supabaseKey: supabaseKey,
-               options: SupabaseClientOptions(
-                   db: .init(),
-                   auth: .init(storage: VaporAuthStorage()),
-                   global: .init(),
-                   realtime: .init()
-               )
-           )
-       }
+        self.client = SupabaseClient(
+            supabaseURL: supabaseURL,
+            supabaseKey: supabaseKey,
+            options: SupabaseClientOptions(
+                db: .init(),
+                auth: .init(storage: VaporAuthStorage()),
+                global: .init(),
+                realtime: .init()
+            )
+        )
+    }
+
+//    init() {
+//           let supabaseKey: String
+//
+//           // Try to read from Docker secret first
+//           if let secretKey = try? String(contentsOfFile: "/run/secrets/supabase_key").trimmingCharacters(in: .whitespacesAndNewlines) {
+//               supabaseKey = secretKey
+//           }
+//           // Fallback to environment variable
+//           else if let envKey = ProcessInfo.processInfo.environment["SUPABASE_KEY"] {
+//               supabaseKey = envKey
+//           }
+//           else {
+//               fatalError("SUPABASE_KEY not found in secrets or environment variables")
+//           }
+//
+//           guard let supabaseURL = URL(string: "https://jdkdtahoqpsspesqyojb.supabase.co") else {
+//               fatalError("Invalid Supabase URL")
+//           }
+//
+//           self.client = SupabaseClient(
+//               supabaseURL: supabaseURL,
+//               supabaseKey: supabaseKey,
+//               options: SupabaseClientOptions(
+//                   db: .init(),
+//                   auth: .init(storage: VaporAuthStorage()),
+//                   global: .init(),
+//                   realtime: .init()
+//               )
+//           )
+//       }
 
 //    private let client = SupabaseClient(
 //        supabaseURL: URL(string: "https://jdkdtahoqpsspesqyojb.supabase.co")!,
