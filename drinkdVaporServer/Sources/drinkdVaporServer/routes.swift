@@ -2,6 +2,10 @@ import Vapor
 import drinkdSharedModels
 
 func routes(_ app: Application, supabase: SupaBase) throws {
+    // For Testing the server is up and running
+    app.get("hello") { req in
+        return "HELLO VAPOR"
+    }
 
     // MARK: Post Routes
     for route in HTTP.PostRoutes.allCases {
