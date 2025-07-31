@@ -13,6 +13,12 @@ xcuserdata/
 ## Plist
 *.plist
 
+## Fly code
+*.toml
+
+## yml files
+*.yml
+
 ## Secrets folder
 secrets/
 .env
