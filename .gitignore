@@ -19,6 +19,9 @@ xcuserdata/
 ## yml files
 *.yml
 
+## Dockerfile
+Dockerfile.*
+
 ## Secrets folder
 secrets/
 .env
