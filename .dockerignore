@@ -1,0 +1,11 @@
+Only include these directories:
+(Everything else is excluded by default with this approach)
+Uncomment this section if you want to be more explicit:
+Exclude everything first, then include only what's needed
+*
+!drinkdVaporServer/
+!drinkdVaporServer/Tests/
+!drinkdSharedModels/
+drinkdVaporServer/.git
+drinkdVaporServer/secrets/
+drinkdVaporServer/.env
