@@ -46,8 +46,6 @@ struct TestApp: App {
 
 struct drinkd_iOSApp: App {
 
-//	@UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-
 	@State var viewModel = PartyViewModel()
 
 	var body: some Scene {
@@ -92,47 +90,3 @@ struct drinkd_iOSApp: App {
 		}
 	}
 }
-
-
-
-//TODO: Maybe get back to this, old code for push notifications.
-// It's a UNUserNotificationCenterDelegate and you can think of it as a Notification Center. This is where all the notification actions are handled.
-//@available(iOS 10, *)
-//extension AppDelegate {
-//
-//	// Receive displayed notifications for iOS 10 devices.
-//	func userNotificationCenter(_ center: UNUserNotificationCenter,
-//								willPresent notification: UNNotification,
-//								withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-//
-//		let userInfo = notification.request.content.userInfo
-//
-//		if let messageID = userInfo[gcmMessageIDKey] {
-//			print("Message ID: \(messageID)")
-//		}
-//
-//		// Change this to your preferred presentation option
-//		completionHandler([[.banner, .badge, .sound]])
-//	}
-//
-//	func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-//
-//	}
-//
-//	func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-//
-//	}
-//
-//	func userNotificationCenter(_ center: UNUserNotificationCenter,
-//								didReceive response: UNNotificationResponse,
-//								withCompletionHandler completionHandler: @escaping () -> Void) {
-//
-//		let userInfo = response.notification.request.content.userInfo
-//
-//		if let messageID = userInfo[gcmMessageIDKey] {
-//			print("Message ID from userNotificationCenter didReceive: \(messageID)")
-//		}
-//
-//		completionHandler()
-//	}
-//}
