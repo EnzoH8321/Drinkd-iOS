@@ -13,16 +13,10 @@ import Vapor
 @Observable
 class PartyViewModel {
 
-    private enum TransactionTypes: String {
-        case pickup
-        case delivery
-        case restaurant_reservation
-    }
-
     var customLat: Double = 0
     var customLong: Double = 0
 
-    var currentCardIndex: Int = 9
+    private var currentCardIndex: Int = 9
     var currentParty: Party?
 
     var topBarList: [String: restaurantScoreInfo] = [:]
@@ -58,13 +52,13 @@ class PartyViewModel {
         for var element in restaurants {
             let transactionArray = element.transactions ?? [""]
 
-            if (transactionArray.contains(TransactionTypes.pickup.rawValue)) {
+            if (transactionArray.contains("pickup")) {
                 element.pickUpAvailable = true
             }
-            if (transactionArray.contains(TransactionTypes.delivery.rawValue)) {
+            if (transactionArray.contains("delivery")) {
                 element.deliveryAvailable = true
             }
-            if (transactionArray.contains(TransactionTypes.restaurant_reservation.rawValue)) {
+            if (transactionArray.contains("restaurant_reservation")) {
                 element.reservationAvailable = true
             }
 

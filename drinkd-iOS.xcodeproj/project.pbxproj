@@ -51,7 +51,6 @@
 		54F9C8572702494E008FA516 /* PartyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C8562702494E008FA516 /* PartyViewModel.swift */; };
 		54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C858270257E1008FA516 /* SplashScreen.swift */; };
 		54F9C85B27037F2F008FA516 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C85A27037F2F008FA516 /* Models.swift */; };
-		54F9C85D2703E52A008FA516 /* RemoteImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C85C2703E52A008FA516 /* RemoteImageLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,7 +125,6 @@
 		54F9C8562702494E008FA516 /* PartyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyViewModel.swift; sourceTree = "<group>"; };
 		54F9C858270257E1008FA516 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 		54F9C85A27037F2F008FA516 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
-		54F9C85C2703E52A008FA516 /* RemoteImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -344,7 +342,6 @@
 		54F9C85E2703E578008FA516 /* WebServices */ = {
 			isa = PBXGroup;
 			children = (
-				54F9C85C2703E52A008FA516 /* RemoteImageLoader.swift */,
 				54F9C854270244B9008FA516 /* Location.swift */,
 				54BEE37327593A9300C82880 /* Networking.swift */,
 			);
@@ -545,7 +542,6 @@
 				54F9C8572702494E008FA516 /* PartyViewModel.swift in Sources */,
 				54BEE37427593A9300C82880 /* Networking.swift in Sources */,
 				54B86718277522D2004D02A1 /* Errors.swift in Sources */,
-				54F9C85D2703E52A008FA516 /* RemoteImageLoader.swift in Sources */,
 				54F9C85B27037F2F008FA516 /* Models.swift in Sources */,
 				54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */,
 				54F9C83926FBD986008FA516 /* YelpAPIModels.swift in Sources */,
