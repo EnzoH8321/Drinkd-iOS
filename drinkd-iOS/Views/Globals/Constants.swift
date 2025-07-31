@@ -17,3 +17,7 @@ struct Constants {
         return UIDevice.current.userInterfaceIdiom == .phone        
     }
 }
+
+enum NetworkSuccess {
+    case connectionSuccess
+}
