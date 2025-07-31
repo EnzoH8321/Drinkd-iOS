@@ -34,7 +34,6 @@
 		54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* MasterView.swift */; };
 		54F9C80D26FBB537008FA516 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80C26FBB537008FA516 /* Assets.xcassets */; };
 		54F9C81026FBB537008FA516 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80F26FBB537008FA516 /* Preview Assets.xcassets */; };
-		54F9C81526FBB537008FA516 /* drinkd_iOS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C81326FBB537008FA516 /* drinkd_iOS.xcdatamodeld */; };
 		54F9C82926FBB538008FA516 /* drinkd_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C82826FBB538008FA516 /* drinkd_iOSUITests.swift */; };
 		54F9C82B26FBB538008FA516 /* drinkd_iOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C82A26FBB538008FA516 /* drinkd_iOSUITestsLaunchTests.swift */; };
 		54F9C83926FBD986008FA516 /* YelpAPIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C83826FBD986008FA516 /* YelpAPIModels.swift */; };
@@ -103,7 +102,6 @@
 		54F9C80A26FBB536008FA516 /* MasterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterView.swift; sourceTree = "<group>"; };
 		54F9C80C26FBB537008FA516 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		54F9C80F26FBB537008FA516 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		54F9C81426FBB537008FA516 /* drinkd_iOS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = drinkd_iOS.xcdatamodel; sourceTree = "<group>"; };
 		54F9C81A26FBB538008FA516 /* drinkd-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "drinkd-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F9C82426FBB538008FA516 /* drinkd-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "drinkd-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F9C82826FBB538008FA516 /* drinkd_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSUITests.swift; sourceTree = "<group>"; };
@@ -237,7 +235,6 @@
 				54F9C83726FBD95B008FA516 /* Model */,
 				54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */,
 				54F9C80C26FBB537008FA516 /* Assets.xcassets */,
-				54F9C81326FBB537008FA516 /* drinkd_iOS.xcdatamodeld */,
 				54F9C80E26FBB537008FA516 /* Preview Content */,
 			);
 			path = "drinkd-iOS";
@@ -529,7 +526,6 @@
 				54C8A4B5277431EE0090D968 /* Extensions.swift in Sources */,
 				54F9C84A26FD1A59008FA516 /* HomeView.swift in Sources */,
 				549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */,
-				54F9C81526FBB537008FA516 /* drinkd_iOS.xcdatamodeld in Sources */,
 				54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */,
 				5407FD72271924D5008BC496 /* PartyCardView.swift in Sources */,
 				54F9C8572702494E008FA516 /* PartyViewModel.swift in Sources */,
@@ -1007,19 +1003,6 @@
 			productName = drinkdSharedModels;
 		};
 /* End XCSwiftPackageProductDependency section */
-
-/* Begin XCVersionGroup section */
-		54F9C81326FBB537008FA516 /* drinkd_iOS.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				54F9C81426FBB537008FA516 /* drinkd_iOS.xcdatamodel */,
-			);
-			currentVersion = 54F9C81426FBB537008FA516 /* drinkd_iOS.xcdatamodel */;
-			path = drinkd_iOS.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 54F9C7FD26FBB536008FA516 /* Project object */;
 }
