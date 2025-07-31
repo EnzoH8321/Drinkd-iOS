@@ -15,34 +15,17 @@ import drinkdSharedModels
 struct AppLauncher {
 
     static func main() throws {
-        if NSClassFromString("XCTestCase") == nil {
-            // Set user id on startup, if it does not already exist
-            do {
-               let _ = try UserDefaultsWrapper.getUserID
-            } catch {
-                UserDefaultsWrapper.setUserIDOnStartup()
-            }
-
-            Networking.shared.locationFetcher.start()
-            drinkd_iOSApp.main()
-
-        } else {
-            TestApp.main()
+        // Set user id on startup, if it does not already exist
+        do {
+           let _ = try UserDefaultsWrapper.getUserID
+        } catch {
+            UserDefaultsWrapper.setUserIDOnStartup()
         }
+
+        Networking.shared.locationFetcher.start()
+        drinkd_iOSApp.main()
     }
 }
-
-struct TestApp: App {
-    
-    init() {
-
-    }
-
-    var body: some Scene {
-        WindowGroup { Text("Running Unit Tests") }
-    }
-}
-
 
 struct drinkd_iOSApp: App {
 
