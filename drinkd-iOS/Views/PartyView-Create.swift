@@ -24,35 +24,33 @@ struct PartyView_Create: View {
                 .bold()
                 .padding()
             //
-            VStack(alignment: .leading, spacing: 1) {
+            VStack(alignment: .leading) {
                 Text("Create a Username")
                     .font(.callout)
                     .bold()
-                    .padding([.bottom], 8)
                 
                 TextField("Username", text: $userName)
                     .textFieldStyle(Styles.regularTextFieldStyle())
             }.padding()
             
-            VStack(alignment: .leading, spacing: 1) {
+            VStack(alignment: .leading) {
                 Text("Create a Party Name")
                     .font(.callout)
                     .bold()
-                    .padding([.bottom], 8)
                 
                 TextField("Party Name(Max 15 Characters, No Numbers)", text: $partyName )
                     .textFieldStyle(Styles.regularTextFieldStyle())
             }.padding()
             
-            VStack(alignment: .leading, spacing: 1) {
-                Text("Set a Winning Vote Amount")
-                    .font(.callout)
-                    .bold()
-                    .padding([.bottom], 8)
-                
-                TextField("Votes", text: $winningVoteAmount)
-                    .textFieldStyle(Styles.regularTextFieldStyle())
-            }.padding()
+//            VStack(alignment: .leading) {
+//                Text("Set a Winning Vote Amount")
+//                    .font(.callout)
+//                    .bold()
+////                    .padding([.bottom], 8)
+//                
+//                TextField("Votes", text: $winningVoteAmount)
+//                    .textFieldStyle(Styles.regularTextFieldStyle())
+//            }.padding()
             
             Button {
 
@@ -70,7 +68,7 @@ struct PartyView_Create: View {
                         try await Networking.shared.createParty(viewModel: viewModel, username: userName, partyName: partyName ,restaurantsURL: urlString)
 
                     } catch {
-                        Log.networking.error("Error - \(error)")
+                        Log.networking.error("Error creating a party - \(error)")
                         showAlert = (true, error.localizedDescription)
                     }
                 }
