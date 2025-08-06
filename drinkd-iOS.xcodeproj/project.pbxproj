@@ -10,6 +10,7 @@
 		5407FD72271924D5008BC496 /* PartyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5407FD71271924D4008BC496 /* PartyCardView.swift */; };
 		54267D642DCD229600621162 /* Vapor in Frameworks */ = {isa = PBXBuildFile; productRef = 54267D632DCD229600621162 /* Vapor */; };
 		5430E126276D1D8F00326A52 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5430E125276D1D8F00326A52 /* ChatView.swift */; };
+		543196DD2E41D07400EA17BB /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 543196DC2E41D07400EA17BB /* drinkdSharedModels */; };
 		5444B98F273EE09200FA6DA2 /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5444B98E273EE09100FA6DA2 /* SheetView.swift */; };
 		5444B991273EE99800FA6DA2 /* HowToView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5444B990273EE99800FA6DA2 /* HowToView.swift */; };
 		5456285C278A5FE400CA6005 /* MockJSON.json in Resources */ = {isa = PBXBuildFile; fileRef = 5456285B278A5FE400CA6005 /* MockJSON.json */; };
@@ -138,6 +139,7 @@
 			files = (
 				54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */,
 				54267D642DCD229600621162 /* Vapor in Frameworks */,
+				543196DD2E41D07400EA17BB /* drinkdSharedModels in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,8 +452,8 @@
 			);
 			mainGroup = 54F9C7FC26FBB536008FA516;
 			packageReferences = (
-				54C7BD202DC2E22F00045D67 /* XCLocalSwiftPackageReference "drinkdSharedModels" */,
 				54267D622DCD229600621162 /* XCRemoteSwiftPackageReference "vapor" */,
+				543196DB2E41D07400EA17BB /* XCRemoteSwiftPackageReference "drinkdSharedModels" */,
 			);
 			productRefGroup = 54F9C80626FBB536008FA516 /* Products */;
 			projectDirPath = "";
@@ -966,13 +968,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		54C7BD202DC2E22F00045D67 /* XCLocalSwiftPackageReference "drinkdSharedModels" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = drinkdSharedModels;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		54267D622DCD229600621162 /* XCRemoteSwiftPackageReference "vapor" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -982,6 +977,14 @@
 				minimumVersion = 4.110.1;
 			};
 		};
+		543196DB2E41D07400EA17BB /* XCRemoteSwiftPackageReference "drinkdSharedModels" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EnzoH8321/drinkdSharedModels";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -989,6 +992,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 54267D622DCD229600621162 /* XCRemoteSwiftPackageReference "vapor" */;
 			productName = Vapor;
+		};
+		543196DC2E41D07400EA17BB /* drinkdSharedModels */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 543196DB2E41D07400EA17BB /* XCRemoteSwiftPackageReference "drinkdSharedModels" */;
+			productName = drinkdSharedModels;
 		};
 		54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */ = {
 			isa = XCSwiftPackageProductDependency;
