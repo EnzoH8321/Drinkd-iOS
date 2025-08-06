@@ -7,7 +7,6 @@
 
 import Foundation
 import drinkdSharedModels
-import Vapor
 import SwiftUI
 
 protocol NetworkingProtocol {
@@ -163,7 +162,7 @@ extension Networking {
 
         let userID = try UserDefaultsWrapper.getUserID
         let urlReq = try HTTP.PostRoutes.leaveParty.leavePartyReq(userID: userID)
-        await cancelWSConnection(partyVM: partyVM, partyID: partyID)
+        WebSocket.shared.cancelWebSocketConnection()
         let _ = try await executeRequest(urlReq: urlReq)
     }
 
@@ -275,98 +274,6 @@ extension Networking {
 
 
         viewModel.chatMessageList = messages
-    }
-
-}
-
-// MARK: Websocket
-extension Networking {
-
-    func connectToWebsocket(partyVM: PartyViewModel, username: String, userID: UUID, partyID: UUID) async {
-
-        do {
-
-            try await withTimeout(seconds: 5) {
-                try await WebSocket.connect(to: "ws://localhost:8080/testWS/\(username)/\(userID.uuidString)/\(partyID.uuidString)") { ws in
-                    Log.networking.info("WebSocket connected to url - ws://localhost:8080/testWS/\(username)/\(userID.uuidString)/\(partyID.uuidString)")
-
-                    partyVM.currentWebsocket = ws
-
-                    if let validWS = partyVM.currentWebsocket {
-
-                        // Get existing messages from party during initialization
-                        Task {
-                           try await Networking.shared.getMessages(viewModel: partyVM)
-                        }
-
-
-                        // Connected WebSocket.
-                        validWS.onBinary { ws, binary in
-                            let data = Data(buffer: binary)
-                            do {
-                                let message = try JSONDecoder().decode(WSMessage.self, from: data)
-                                partyVM.chatMessageList.append(message)
-                            } catch {
-                                Log.networking.error("Error decoding websocket binary data - \(error)")
-                            }
-                        }
-
-                        // Check if the websocket connection has closed
-                        validWS.onClose.whenComplete { result in
-                            switch result {
-                            case .success(let success):
-                                Log.routes.debug("Successfully closed websocket connection for PARTYID: \(partyID)")
-                            case .failure(let failure):
-                                Log.routes.error("Unable to close websocket connection - \(failure)")
-                            }
-                        }
-                    } else {
-                        Log.routes.error("PartyVM websocket is nil")
-                    }
-
-                }
-            }
-
-        } catch {
-            Log.networking.error("Error connecting to WebSocket - \(error)")
-        }
-
-    }
-
-    func cancelWSConnection(partyVM: PartyViewModel, partyID: UUID) async {
-        do {
-
-            guard let vm = partyVM.currentWebsocket else {
-                Log.networking.error("PartyVM websocket is nil")
-                return
-            }
-
-            try await vm.close()
-
-            partyVM.currentWebsocket = nil
-
-        } catch {
-            Log.networking.error("Error closing WebSocket - \(error)")
-        }
-    }
-
-    private func withTimeout<T>(seconds: TimeInterval, operation: @escaping () async throws -> T) async throws -> T {
-        return try await withThrowingTaskGroup(of: T.self) { group in
-            // Add the main operation
-            group.addTask {
-                try await operation()
-            }
-
-            // Add timeout task
-            group.addTask {
-                try await Task.sleep(for: .seconds(seconds))
-                throw SharedErrors.general(error: .generalError("Timeout Hit"))
-            }
-
-            // Return the first result and cancel other tasks
-            defer { group.cancelAll() }
-            return try await group.next()!
-        }
     }
 
 }

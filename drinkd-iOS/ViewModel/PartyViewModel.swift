@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 import drinkdSharedModels
-import Vapor
 
 @Observable
 class PartyViewModel {
@@ -32,9 +31,6 @@ class PartyViewModel {
     var chatMessageList: [WSMessage] = []
 
     var removeSplashScreen = true
-
-    // WebSocket
-    var currentWebsocket: WebSocket? = nil
 
     var currentlyInParty: Bool {
         return currentParty != nil ? true : false
