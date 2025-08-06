@@ -22,7 +22,7 @@ The hardest part about going for a night out with your friends is deciding where
  
 ## Additional
 
-Code for the Vapor server - https://github.com/EnzoH8321/drinkdVaporServer
+Code for the Vapor server - https://github.com/EnzoH8321/drinkdVaporServer <br>
 Code for the Shared models - https://github.com/EnzoH8321/drinkdSharedModels
 
 ## Contact Me
