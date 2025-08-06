@@ -289,9 +289,8 @@ extension CardView {
         var body: some View {
             LabeledContent {
                 Image(systemName: imageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24)
+                    .frame(maxWidth: 24)
+                    .imageScale(.large)
                     .tint(Color.black)
             } label: {
                 VStack(alignment: .leading) {
