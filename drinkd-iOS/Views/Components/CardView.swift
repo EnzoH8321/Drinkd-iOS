@@ -96,17 +96,24 @@ struct CardView: View {
                         Text("\(restaurantPrice)")
                             .font(.title3)
                     }
-                    
 
-                    AsyncImage(url: URL(string: restaurantImageURL)) { image in
+                    HStack {
+                        Spacer()
 
-                        guard let image = image.image else {
-                            return Image(systemName: "multiply.circle")
-                                .resizable()
+                        AsyncImage(url: URL(string: restaurantImageURL)) { image in
+
+                            guard let image = image.image else {
+                                return Image(systemName: "multiply.circle")
+                                    .resizable()
+                            }
+
+                            return image.resizable()
                         }
+                        .scaledToFit()
 
-                        return image.resizable()
+                        Spacer()
                     }
+
 
                     GeometryReader { geo in
 
