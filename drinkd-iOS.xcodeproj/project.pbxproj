@@ -169,14 +169,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		54562858278A250000CA6005 /* API Models */ = {
-			isa = PBXGroup;
-			children = (
-				54F9C83826FBD986008FA516 /* YelpAPIModels.swift */,
-			);
-			path = "API Models";
-			sourceTree = "<group>";
-		};
 		54562862278A62BF00CA6005 /* drinkd-iOS-NetworkingTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -242,7 +234,7 @@
 				54F9C85E2703E578008FA516 /* WebServices */,
 				54F9C83D26FBF891008FA516 /* ViewModel */,
 				54F9C83A26FBE151008FA516 /* Views */,
-				54F9C83726FBD95B008FA516 /* Model */,
+				54F9C83726FBD95B008FA516 /* Models */,
 				54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */,
 				54F9C80C26FBB537008FA516 /* Assets.xcassets */,
 				54F9C80E26FBB537008FA516 /* Preview Content */,
@@ -280,13 +272,13 @@
 			path = "drinkd-iOSUITests";
 			sourceTree = "<group>";
 		};
-		54F9C83726FBD95B008FA516 /* Model */ = {
+		54F9C83726FBD95B008FA516 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				54562858278A250000CA6005 /* API Models */,
+				54F9C83826FBD986008FA516 /* YelpAPIModels.swift */,
 				54F9C85A27037F2F008FA516 /* Models.swift */,
 			);
-			path = Model;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		54F9C83A26FBE151008FA516 /* Views */ = {

@@ -8,7 +8,7 @@
 import SwiftUI
 import Foundation
 
-struct restaurantScoreInfo {
+struct RestaurantScoreInfo {
 	var name: String
 	var	score: Int
 	var url: String

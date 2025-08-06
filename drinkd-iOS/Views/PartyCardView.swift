@@ -24,25 +24,6 @@ struct PartyCardView: View {
 
     private func joinChat()  {
         path.append("chat")
-
-        Task {
-
-            do {
-                guard let party = viewModel.currentParty else {
-                    Log.general.info("User is not in a Party")
-                    return
-                }
-
-                let userID = try UserDefaultsWrapper.getUserID
-
-                // Only connect to the websocket once.
-//                if WebSocket.shared.websocketTask == nil {
-//                    await WebSocket.shared.connectToWebsocket(partyVM: viewModel, username: party.username, userID: userID, partyID: party.partyID)
-//                }
-            }
-
-
-        }
     }
 
     private func leaveParty() {

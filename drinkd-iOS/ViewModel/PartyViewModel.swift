@@ -18,7 +18,7 @@ class PartyViewModel {
     private var currentCardIndex: Int = 9
     var currentParty: Party?
 
-    var topBarList: [String: restaurantScoreInfo] = [:]
+    var topBarList: [String: RestaurantScoreInfo] = [:]
     var currentScoreOfTopCard: Int = 0
     //Represents Deck
     var localRestaurants: [YelpApiBusinessSearchProperties] = []
@@ -80,7 +80,7 @@ class PartyViewModel {
 
         self.currentScoreOfTopCard = points
 
-        topBarList["\(currentCardIndex)"] = restaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points, url: self.currentParty?.yelpURL ?? "URL NOT FOUND")
+        topBarList["\(currentCardIndex)"] = RestaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points, url: self.currentParty?.yelpURL ?? "URL NOT FOUND")
     }
 
     func leaveParty() {        
