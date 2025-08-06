@@ -7,9 +7,13 @@
 
 import Foundation
 import drinkdSharedModels
+import Realtime
+import Supabase
 
 @Observable
 final class WebSocket: NSObject, URLSessionWebSocketDelegate {
+
+    private var client: SupabaseClient!
 
     static let shared = WebSocket()
 
@@ -17,9 +21,30 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
 
     var websocketTask:  URLSessionWebSocketTask? = nil
 
+    private var channel: RealtimeChannelV2!
+
     private override init() {
         super.init()
         self.session = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
+
+        let supabaseKey: String
+
+        if let envKey = ProcessInfo.processInfo.environment["SUPABASE_KEY"] {
+            supabaseKey = envKey
+        } else {
+            fatalError("SUPABASE_KEY environment variable not set")
+        }
+
+
+        guard let supabaseURL = URL(string: "https://jdkdtahoqpsspesqyojb.supabase.co") else {
+            fatalError("Invalid Supabase URL")
+        }
+
+        self.client = SupabaseClient(
+            supabaseURL: supabaseURL,
+            supabaseKey: supabaseKey
+            )
+
     }
 
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
@@ -30,69 +55,6 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
         print("Web Socket did disconnect")
         ping()
-    }
-
-    func connectToWebsocket(partyVM: PartyViewModel, username: String, userID: UUID, partyID: UUID) async {
-
-        do {
-
-            let url = URL(string: "ws://localhost:8080/testWS/\(username)/\(userID.uuidString)/\(partyID.uuidString)")!
-
-            self.websocketTask = URLSession.shared.webSocketTask(with: url)
-            self.websocketTask?.resume()
-
-            guard let websocket = websocketTask else {
-                Log.general.error("Websocket task is nil")
-                return
-            }
-
-
-            try await withTimeout(seconds: 5) {
-
-                self.receiveWebsocket(task: websocket, partyVM: partyVM)
-
-            }
-
-        } catch {
-            Log.networking.error("Error connecting to WebSocket - \(error)")
-        }
-
-    }
-
-    func receiveWebsocket(task: URLSessionWebSocketTask, partyVM: PartyViewModel) {
-        task.receive { result in
-
-            switch result {
-            case .success(let success):
-                // Get existing messages from party during initialization
-                Task {
-                    try await Networking.shared.getMessages(viewModel: partyVM)
-                }
-
-                do {
-                    switch success {
-
-                    case .data(let data):
-
-                        do {
-                            let message = try JSONDecoder().decode(WSMessage.self, from: data)
-                            partyVM.chatMessageList.append(message)
-                        } catch {
-                            Log.networking.error("Error decoding websocket binary data - \(error)")
-                        }
-                    case .string(let string):
-                        Log.general.info("Websocket received string - \(string)")
-                    }
-
-                }
-
-            case .failure(let failure):
-                Log.general.error("Error connecting to websocket - \(failure)")
-                return
-            }
-
-            self.receiveWebsocket(task: task, partyVM: partyVM)
-        }
     }
 
     func cancelWebSocketConnection() {
@@ -123,6 +85,100 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
                     self.ping()
                 }
             }
+        }
+    }
+
+    // Creates channel, partyID should be the channel identifier
+    // Only use when creating party
+    func rdbCreateChannel(partyVM: PartyViewModel, partyID: UUID) async {
+
+        self.channel = client.channel(partyID.uuidString) {
+            $0.broadcast.receiveOwnBroadcasts = true
+        }
+
+        do {
+            try await self.channel?.subscribeWithError()
+            rdbListenForMessages(partyVM: partyVM ,partyID: partyID.uuidString)
+        } catch {
+            Log.general.error("rdbCreateChannel error: \(error)")
+        }
+
+
+        Log.general.info("New Channel - \(self.channel)")
+    }
+
+    func rdbSendMessage(userName: String, userID: UUID, message: String, messageID: UUID, partyID: UUID) async {
+
+        if let channel = self.channel {
+
+            do {
+
+                try await channel.broadcast(
+                    event: "newMessage",
+                    message: [
+                        "message": message,
+                        "userID": userID.uuidString,
+                        "userName": userName,
+                        "messageID": messageID.uuidString
+                    ]
+                )
+
+            } catch {
+                Log.supabase.error("Error in rdbSendMessage - \(error)")
+            }
+
+        }
+    }
+
+   private func rdbListenForMessages(partyVM: PartyViewModel, partyID: String) {
+        Log.general.notice("Listening for rdb messages")
+        // Get Channel
+        guard let channel = self.channel else {
+            Log.general.error("Channel not found")
+            return
+        }
+
+        // Get Broadcast stream
+        let stream = channel.broadcastStream(event: "newMessage")
+
+        Task {
+            // Get latest Messages
+            for await jsonObj in stream {
+
+                Log.general.notice("message - \(jsonObj)")
+
+                guard let payload = jsonObj["payload"]?.value as? [String: Any] else {
+                    Log.routes.error("Unable to parse payload")
+                    return
+                }
+
+                guard let message = payload["message"] as? String else {
+                    Log.routes.error("Unable to parse message")
+                    return
+                }
+
+                guard let username = payload["userName"] as? String else {
+                    Log.routes.error("Unable to parse username")
+                    return
+                }
+
+                guard let idString = payload["messageID"] as? String, let messageID = UUID(uuidString: idString)  else {
+                    Log.routes.error("Unable to parse messageID")
+                    return
+                }
+
+                guard let userIDString = payload["userID"] as? String, let userID = UUID(uuidString: userIDString)  else {
+                    Log.routes.error("Unable to parse userID")
+                    return
+                }
+
+
+                let wsMessage = WSMessage(id: messageID, text: message, username: username, timestamp: Date.now, userID: userID)
+                partyVM.chatMessageList.append(wsMessage)
+
+            }
+
+            Log.general.info("TASK DONE")
         }
     }
 

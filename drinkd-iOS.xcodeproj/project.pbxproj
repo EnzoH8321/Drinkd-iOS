@@ -12,6 +12,8 @@
 		543196D82E3E6C2D00EA17BB /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543196D72E3E6C2D00EA17BB /* WebSocket.swift */; };
 		5444B98F273EE09200FA6DA2 /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5444B98E273EE09100FA6DA2 /* SheetView.swift */; };
 		5444B991273EE99800FA6DA2 /* HowToView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5444B990273EE99800FA6DA2 /* HowToView.swift */; };
+		544A78612E43111500497F93 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 544A78602E43111500497F93 /* Realtime */; };
+		544A78642E43177E00497F93 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 544A78632E43177E00497F93 /* Supabase */; };
 		5456285C278A5FE400CA6005 /* MockJSON.json in Resources */ = {isa = PBXBuildFile; fileRef = 5456285B278A5FE400CA6005 /* MockJSON.json */; };
 		54562864278A62BF00CA6005 /* drinkd_iOS_NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562863278A62BF00CA6005 /* drinkd_iOS_NetworkingTests.swift */; };
 		54562871278DFAF600CA6005 /* Model_Methods_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562870278DFAF600CA6005 /* Model_Methods_Tests.swift */; };
@@ -138,6 +140,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */,
+				544A78612E43111500497F93 /* Realtime in Frameworks */,
+				544A78642E43177E00497F93 /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,6 +162,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		544A78622E43177E00497F93 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		54562858278A250000CA6005 /* API Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +219,7 @@
 				54F9C81D26FBB538008FA516 /* drinkd-iOSTests */,
 				54F9C82726FBB538008FA516 /* drinkd-iOSUITests */,
 				54562862278A62BF00CA6005 /* drinkd-iOS-NetworkingTests */,
+				544A78622E43177E00497F93 /* Frameworks */,
 				54F9C80626FBB536008FA516 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -452,6 +464,7 @@
 			mainGroup = 54F9C7FC26FBB536008FA516;
 			packageReferences = (
 				543196DB2E41D07400EA17BB /* XCRemoteSwiftPackageReference "drinkdSharedModels" */,
+				544A785F2E43111500497F93 /* XCRemoteSwiftPackageReference "supabase-swift" */,
 			);
 			productRefGroup = 54F9C80626FBB536008FA516 /* Products */;
 			projectDirPath = "";
@@ -976,9 +989,27 @@
 				kind = branch;
 			};
 		};
+		544A785F2E43111500497F93 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		544A78602E43111500497F93 /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 544A785F2E43111500497F93 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		544A78632E43177E00497F93 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 544A785F2E43111500497F93 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
 		54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = drinkdSharedModels;

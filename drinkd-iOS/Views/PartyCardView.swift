@@ -36,9 +36,9 @@ struct PartyCardView: View {
                 let userID = try UserDefaultsWrapper.getUserID
 
                 // Only connect to the websocket once.
-                if WebSocket.shared.websocketTask == nil {
-                    await WebSocket.shared.connectToWebsocket(partyVM: viewModel, username: party.username, userID: userID, partyID: party.partyID)
-                }
+//                if WebSocket.shared.websocketTask == nil {
+//                    await WebSocket.shared.connectToWebsocket(partyVM: viewModel, username: party.username, userID: userID, partyID: party.partyID)
+//                }
             }
 
 
