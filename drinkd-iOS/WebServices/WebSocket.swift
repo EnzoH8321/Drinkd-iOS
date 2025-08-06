@@ -88,6 +88,7 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
 
             case .failure(let failure):
                 Log.general.error("Error connecting to websocket - \(failure)")
+                return
             }
 
             self.receiveWebsocket(task: task, partyVM: partyVM)
