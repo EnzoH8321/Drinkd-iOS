@@ -45,48 +45,46 @@ struct PartyCardView: View {
     var body: some View {
 
         NavigationStack(path: $path) {
+
             VStack {
 
-                VStack {
+                Text("Partyname:")
+                    .font(.largeTitle)
+                Text("\(partyName)")
+                    .font(.title2)
 
-                    Text("Partyname:")
-                        .font(.largeTitle)
-                    Text("\(partyName)")
-                        .font(.title2)
+                Text("Username")
+                    .font(.largeTitle)
+                Text("\(userName)")
+                    .font(.title2)
 
-                    Text("Username")
-                        .font(.largeTitle)
-                    Text("\(userName)")
-                        .font(.title2)
+                Text("Party Code:")
+                    .font(.largeTitle)
+                Text(partyCode)
+                    .font(.title2)
 
-                    Text("Party Code:")
-                        .font(.largeTitle)
-                    Text(partyCode)
-                        .font(.title2)
+                Text("Votes to Win")
+                    .font(.largeTitle)
+                Text("\(partyVotes)")
+                    .font(.title2)
 
-                    Text("Votes to Win")
-                        .font(.largeTitle)
-                    Text("\(partyVotes)")
-                        .font(.title2)
-
-                    Button {
-                        joinChat()
-                    } label: {
-                        Text("Join Chat")
-                            .bold()
-                    }
-                    .buttonStyle(Styles.DefaultAppButton())
-
-                    //
-                    Button {
-                        leaveParty()
-                    } label: {
-                        Text("Leave Party")
-                            .bold()
-                    }
-                    .buttonStyle(Styles.DefaultAppButton())
-
+                Button {
+                    joinChat()
+                } label: {
+                    Text("Join Chat")
+                        .bold()
                 }
+                .buttonStyle(Styles.DefaultAppButton())
+
+                //
+                Button {
+                    leaveParty()
+                } label: {
+                    Text("Leave Party")
+                        .bold()
+                }
+                .buttonStyle(Styles.DefaultAppButton())
+
             }
             .padding()
             .navigationDestination(for: String.self) { value in
