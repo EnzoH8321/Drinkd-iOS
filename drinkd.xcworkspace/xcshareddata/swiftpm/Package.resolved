@@ -1,0 +1,24 @@
+{
+  "originHash" : "be1db5ac4e92fe42fe66825911f82a7520def66a784f7945ff5036f2ae8f4eee",
+  "pins" : [
+    {
+      "identity" : "drinkdsharedmodels",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/EnzoH8321/drinkdSharedModels",
+      "state" : {
+        "branch" : "main",
+        "revision" : "1e624c8d38906fe8cc58297f18671a529a53a170"
+      }
+    },
+    {
+      "identity" : "swift-log",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-log",
+      "state" : {
+        "revision" : "ce592ae52f982c847a4efc0dd881cc9eb32d29f2",
+        "version" : "1.6.4"
+      }
+    }
+  ],
+  "version" : 3
+}
