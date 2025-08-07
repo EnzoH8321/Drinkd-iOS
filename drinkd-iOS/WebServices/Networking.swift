@@ -31,6 +31,7 @@ final class Networking {
         self.userDeniedLocationServices = locationFetcher.errorWithLocationAuth
     }
 
+    /// Fetches nearby restaurants based on user location and updates the view model with the results.
     func updateRestaurants(viewModel: PartyViewModel) async throws {
 
         //If user location was found, continue
@@ -60,6 +61,12 @@ final class Networking {
         }
     }
 
+    /// Fetches nearby restaurants using provided coordinates and updates the view model with the results.
+    /// - Parameter viewModel: The PartyViewModel instance to update with restaurant data
+    /// - Parameter longitude: The longitude coordinate for restaurant search
+    /// - Parameter latitude: The latitude coordinate for restaurant search
+    /// - Throws: ClientNetworkErrors.noUserLocationFoundError if coordinates are invalid (0.0)
+    /// - Throws: SharedErrors.yelp if the API response is missing required data
     func updateRestaurants(viewModel: PartyViewModel, longitude: Double, latitude: Double) async throws {
 
         //If user location was found, continue
@@ -87,6 +94,12 @@ final class Networking {
         }
     }
 
+    /// Fetches nearby bars from the Yelp API using provided coordinates.
+    /// - Parameter latitude: The latitude coordinate for the search
+    /// - Parameter longitude: The longitude coordinate for the search
+    /// - Returns: YelpApiBusinessSearch containing the API response with business data
+    /// - Throws: ClientNetworkErrors.invalidURLError if URL construction fails
+    /// - Throws: SharedErrors.yelp if HTTP status code is not 2xx
     private func getRestaurants(latitude: Double, longitude: Double) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
             Log.error.log("ERROR - INVALID URL")
@@ -113,6 +126,11 @@ final class Networking {
         return businessSearch
     }
 
+    /// Fetches restaurant data from the Yelp API using a provided URL string.
+    /// - Parameter yelpURL: The complete Yelp API URL string for the request
+    /// - Returns: YelpApiBusinessSearch containing the API response with business data
+    /// - Throws: ClientNetworkErrors.invalidURLError if URL string is malformed
+    /// - Throws: SharedErrors.yelp if HTTP status code is not 2xx
     private func getRestaurants(yelpURL: String) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: yelpURL) else {
             Log.error.log("ERROR - INVALID URL")
@@ -145,6 +163,11 @@ final class Networking {
 //MARK: Client -> Vapor Server
 extension Networking {
 
+    /// Creates a new party with the specified details and establishes a WebSocket connection.
+    /// - Parameter viewModel: The PartyViewModel instance to update with the new party
+    /// - Parameter username: The username of the party creator
+    /// - Parameter partyName: The name for the new party
+    /// - Parameter restaurantsURL: The Yelp API URL for restaurant data
     func createParty(viewModel: PartyViewModel, username: String, partyName: String ,restaurantsURL: String) async throws {
         let userID = try UserDefaultsWrapper.getUserID
         let urlRequest = try HTTP.PostRoutes.createParty.createPartyReq(userID: userID, userName: username, restaurantsUrl: restaurantsURL, partyName: partyName)
@@ -159,6 +182,9 @@ extension Networking {
         }
     }
 
+    /// Removes the current user from the specified party and closes the WebSocket connection.
+    /// - Parameter partyVM: The PartyViewModel instance for the party being left
+    /// - Parameter partyID: The unique identifier of the party to leave
     func leaveParty(partyVM: PartyViewModel, partyID: UUID) async throws  {
 
         let userID = try UserDefaultsWrapper.getUserID
@@ -167,6 +193,10 @@ extension Networking {
         let _ = try await executeRequest(urlReq: urlReq)
     }
 
+    /// Sends a message to the specified party through both WebSocket and HTTP API.
+    /// - Parameter username: The username of the message sender
+    /// - Parameter message: The text content of the message
+    /// - Parameter partyID: The unique identifier of the party to send the message to
     func sendMessage(username: String, message: String, partyID: UUID) async throws {
 
         let userID = try UserDefaultsWrapper.getUserID
@@ -175,12 +205,23 @@ extension Networking {
         let _ = try await executeRequest(urlReq: urlReq)
     }
 
+    /// Submits a user's rating for a restaurant in the specified party.
+    /// - Parameter partyID: The unique identifier of the party
+    /// - Parameter userID: The unique identifier of the user submitting the rating
+    /// - Parameter username: The username of the user submitting the rating
+    /// - Parameter restaurantName: The name of the restaurant being rated
+    /// - Parameter rating: The numerical rating value for the restaurant
+    /// - Parameter imageURL: The URL of the restaurant's image
     func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int, imageURL: String) async throws  {
 
         let urlReq = try HTTP.PostRoutes.updateRating.updateRatingReq(partyID: partyID, userName: username, userID: userID, restaurantName: restaurantName, rating: rating, imageuRL: imageURL)
         let _ = try await executeRequest(urlReq: urlReq)
     }
 
+    /// Retrieves the top-rated restaurants for a party with their image data.
+    /// - Parameter partyID: The unique identifier of the party
+    /// - Returns: Array of RatedRestaurantsTable objects with populated image data
+    /// - Throws: SharedErrors.general if no restaurants are found
     func getTopRestaurants(partyID: UUID) async throws -> [RatedRestaurantsTable] {
         let urlString = HTTP.get(.topRestaurants).fullURLString
         let urlReq = try HTTP.GetRoutes.topRestaurants.topRestaurantsReq(partyID: partyID, url: urlString)
@@ -201,7 +242,11 @@ extension Networking {
 
         return restaurants
     }
-
+    /// Joins an existing party using a party code and loads restaurant data.
+    /// - Parameter viewModel: The PartyViewModel instance to update with party data
+    /// - Parameter partyCode: The numeric code for the party to join
+    /// - Parameter userName: The username of the user joining the party
+    /// - Throws: SharedErrors.yelp if restaurant data is missing
     func joinParty(viewModel: PartyViewModel, partyCode: Int, userName: String) async throws {
         // Check VM if the user is already in a party
         if viewModel.currentlyInParty == true { return }
@@ -233,6 +278,9 @@ extension Networking {
 
     }
 
+    /// Rejoins a previously joined party using stored user credentials and restores party state.
+    /// - Parameter viewModel: The PartyViewModel instance to update with party data
+    /// - Throws: SharedErrors.yelp if restaurant data is missing
     func rejoinParty(viewModel: PartyViewModel) async throws  {
         let urlString = HTTP.get(.rejoinParty).fullURLString
         let userID = try UserDefaultsWrapper.getUserID
@@ -262,6 +310,9 @@ extension Networking {
 
     }
 
+    /// Retrieves all chat messages for the current party and updates the view model.
+    /// - Parameter viewModel: The PartyViewModel instance to update with message data
+    /// - Throws: SharedErrors.general if party ID is missing or date conversion fails
     func getMessages(viewModel: PartyViewModel) async throws {
         guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .missingValue("Missing Party ID"))}
         let urlString = HTTP.get(.getMessages).fullURLString

@@ -29,7 +29,7 @@ class LocationFetcher: NSObject, CLLocationManagerDelegate {
 	}
 
 	func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-		print("Error -> \(error.localizedDescription)")
+        Log.error.log("Error -> \(error.localizedDescription)")
 		self.errorWithLocationAuth = true
 	}
 
@@ -47,7 +47,7 @@ class LocationFetcher: NSObject, CLLocationManagerDelegate {
 				.restricted:
 			self.errorWithLocationAuth = true
 		@unknown default:
-			print("Unknown Default")
+            Log.general.log("Unknown Default")
 		}
 	}
 
