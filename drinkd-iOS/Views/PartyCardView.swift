@@ -63,10 +63,10 @@ struct PartyCardView: View {
                 Text(partyCode)
                     .font(.title2)
 
-                Text("Votes to Win")
-                    .font(.largeTitle)
-                Text("\(partyVotes)")
-                    .font(.title2)
+//                Text("Votes to Win")
+//                    .font(.largeTitle)
+//                Text("\(partyVotes)")
+//                    .font(.title2)
 
                 Button {
                     joinChat()
