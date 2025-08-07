@@ -43,13 +43,13 @@ struct drinkd_iOSApp: App {
 
                             switch status {
                             case .notDetermined:
-                                Log.general.info("Not Determined")
+                                Log.general.log("Not Determined")
                             case .restricted:
-                                Log.general.info("Restricted Tracking")
+                                Log.general.log("Restricted Tracking")
                             case .denied:
-                                Log.general.info("User has Denied Tracking")
+                                Log.general.log("User has Denied Tracking")
                             case .authorized:
-                                Log.general.info("User has Authorized Tracking")
+                                Log.general.log("User has Authorized Tracking")
                             @unknown default:
                                 fatalError()
                             }
@@ -63,7 +63,7 @@ struct drinkd_iOSApp: App {
                             }
 
                         } catch {
-                            Log.general.error("Error fetching onReceive: \(error)")
+                            Log.error.log("Error fetching onReceive: \(error)")
                         }
                     }
 

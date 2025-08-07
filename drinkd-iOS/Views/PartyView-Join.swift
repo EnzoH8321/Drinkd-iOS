@@ -48,13 +48,13 @@ struct PartyView_Join: View {
             .padding()
 
             Button {
-
+                
                 Task {
                     do {
                         guard let partyCode = Int(partyCode) else { throw SharedErrors.general(error: .generalError("Unable to convert Party Code to an Integer"))}
                         try await Networking.shared.joinParty(viewModel: viewModel, partyCode: Int(partyCode), userName: personalUsername)
                     } catch {
-                        Log.general.error("Error Joining Party - \(error)")
+                        Log.error.log("Error Joining Party - \(error)")
                         showAlert.state.toggle()
                         showAlert.message = error.localizedDescription
                     }

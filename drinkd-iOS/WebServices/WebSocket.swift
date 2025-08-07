@@ -53,11 +53,11 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
     func cancelWebSocketConnection() {
 
         guard websocketTask != nil else {
-            Log.networking.error("Websocket is nil")
+            Log.error.log("Websocket is nil")
             return
         }
 
-        Log.general.info("Closing websocket connection")
+        Log.error.log("Closing websocket connection")
         let reason = "Closing connection".data(using: .utf8)
         websocketTask?.cancel(with: .goingAway, reason: reason)
         websocketTask = nil
@@ -65,7 +65,7 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
 
     func ping() {
         guard let webSocketTask = self.websocketTask else {
-            Log.general.error("Error: No WebSocket task")
+            Log.error.log("Error: No WebSocket task")
             return
         }
 
@@ -93,11 +93,11 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
             try await self.channel?.subscribeWithError()
             rdbListenForMessages(partyVM: partyVM ,partyID: partyID.uuidString)
         } catch {
-            Log.general.error("rdbCreateChannel error: \(error)")
+            Log.error.log("rdbCreateChannel error: \(error)")
         }
 
 
-        Log.general.info("New Channel - \(self.channel)")
+        Log.general.log("New Channel - \(self.channel)")
     }
 
     func rdbSendMessage(userName: String, userID: UUID, message: String, messageID: UUID, partyID: UUID) async {
@@ -117,17 +117,17 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
                 )
 
             } catch {
-                Log.supabase.error("Error in rdbSendMessage - \(error)")
+                Log.error.log("Error in rdbSendMessage - \(error)")
             }
 
         }
     }
 
    private func rdbListenForMessages(partyVM: PartyViewModel, partyID: String) {
-        Log.general.notice("Listening for rdb messages")
+
         // Get Channel
         guard let channel = self.channel else {
-            Log.general.error("Channel not found")
+            Log.error.log("Channel not found")
             return
         }
 
@@ -138,30 +138,28 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
             // Get latest Messages
             for await jsonObj in stream {
 
-                Log.general.notice("message - \(jsonObj)")
-
                 guard let payload = jsonObj["payload"]?.value as? [String: Any] else {
-                    Log.routes.error("Unable to parse payload")
+                    Log.error.log("Unable to parse payload")
                     return
                 }
 
                 guard let message = payload["message"] as? String else {
-                    Log.routes.error("Unable to parse message")
+                    Log.error.log("Unable to parse message")
                     return
                 }
 
                 guard let username = payload["userName"] as? String else {
-                    Log.routes.error("Unable to parse username")
+                    Log.error.log("Unable to parse username")
                     return
                 }
 
                 guard let idString = payload["messageID"] as? String, let messageID = UUID(uuidString: idString)  else {
-                    Log.routes.error("Unable to parse messageID")
+                    Log.error.log("Unable to parse messageID")
                     return
                 }
 
                 guard let userIDString = payload["userID"] as? String, let userID = UUID(uuidString: userIDString)  else {
-                    Log.routes.error("Unable to parse userID")
+                    Log.error.log("Unable to parse userID")
                     return
                 }
 
@@ -171,7 +169,7 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
 
             }
 
-            Log.general.info("TASK DONE")
+            Log.general.log("TASK DONE")
         }
     }
 

@@ -39,7 +39,7 @@ final class Networking {
               let longitude = locationFetcher.lastKnownLocation?.longitude,
               latitude != 0.0 || longitude != 0.0 else
         {
-            Log.networking.error("ERROR - NO USER LOCATION FOUND ")
+            Log.error.log("ERROR - NO USER LOCATION FOUND ")
             throw ClientNetworkErrors.noUserLocationFoundError
         }
 
@@ -66,7 +66,7 @@ final class Networking {
         //If defaults are used, then the user location could not be found
         guard latitude != 0.0 || longitude != 0.0 else
         {
-            Log.networking.error("ERROR - NO USER LOCATION FOUND ")
+            Log.error.log("ERROR - NO USER LOCATION FOUND ")
             throw ClientNetworkErrors.noUserLocationFoundError
         }
 
@@ -89,7 +89,7 @@ final class Networking {
 
     private func getRestaurants(latitude: Double, longitude: Double) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
-            Log.networking.error("ERROR - INVALID URL")
+            Log.error.log("ERROR - INVALID URL")
             throw ClientNetworkErrors.invalidURLError
         }
 
@@ -115,7 +115,7 @@ final class Networking {
 
     private func getRestaurants(yelpURL: String) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: yelpURL) else {
-            Log.networking.error("ERROR - INVALID URL")
+            Log.error.log("ERROR - INVALID URL")
             throw ClientNetworkErrors.invalidURLError
         }
 
@@ -299,7 +299,7 @@ extension Networking {
 
             return data
         } catch {
-            Log.networking.error("Error executing request: \(error)")
+            Log.error.log("Error executing request: \(error)")
             throw error
         }
 

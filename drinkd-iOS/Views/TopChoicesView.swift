@@ -84,7 +84,7 @@ struct TopChoicesView: View {
         .task {
             do {
                 guard let partyID = viewModel.currentParty?.partyID  else {
-                    Log.userDefaults.error("Party ID not found in UserDefaults")
+                    Log.error.log("Party ID not found in UserDefaults")
                     return
                 }
 
@@ -92,7 +92,7 @@ struct TopChoicesView: View {
                 viewModel.topRestaurants = restaurants
 
             } catch {
-                Log.general.error("Error - \(error)")
+                Log.error.log("Error - \(error)")
             }
         }
 

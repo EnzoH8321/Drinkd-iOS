@@ -166,7 +166,7 @@ struct CardView: View {
 
                                             // More Info Button
                                             Button("More Info") {
-                                                guard let url = URL(string: "\(restaurantURL)") else { return Log.general.error("Bad Restaurant URL") }
+                                                guard let url = URL(string: "\(restaurantURL)") else { return Log.general.log("Bad Restaurant URL") }
                                                 openURL(url)
                                             }
                                             .bold()
