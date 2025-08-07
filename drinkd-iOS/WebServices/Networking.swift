@@ -95,7 +95,7 @@ final class Networking {
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("Bearer \(Constants.token)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(Constants.yelpToken)", forHTTPHeaderField: "Authorization")
         let (data, response) = try await URLSession.shared.data(for: request)
 
         if let httpResponse = response as? HTTPURLResponse {
@@ -121,7 +121,7 @@ final class Networking {
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("Bearer \(Constants.token)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(Constants.yelpToken)", forHTTPHeaderField: "Authorization")
         let (data, response) = try await URLSession.shared.data(for: request)
 
         if let httpResponse = response as? HTTPURLResponse {

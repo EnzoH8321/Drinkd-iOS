@@ -27,14 +27,7 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
         super.init()
         self.session = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
 
-        let supabaseKey: String
-
-        if let envKey = ProcessInfo.processInfo.environment["SUPABASE_KEY"] {
-            supabaseKey = envKey
-        } else {
-            fatalError("SUPABASE_KEY environment variable not set")
-        }
-
+        let supabaseKey = Constants.supabaseToken
 
         guard let supabaseURL = URL(string: "https://jdkdtahoqpsspesqyojb.supabase.co") else {
             fatalError("Invalid Supabase URL")
@@ -43,7 +36,7 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
         self.client = SupabaseClient(
             supabaseURL: supabaseURL,
             supabaseKey: supabaseKey
-            )
+        )
 
     }
 

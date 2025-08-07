@@ -10,12 +10,9 @@ import SwiftUI
 
 struct Constants {
 
-    //Hidden API KEY
-    static let token: String = ProcessInfo.processInfo.environment["YELP_APIKEY"]!
-
-    static var isPhone: Bool {
-        return UIDevice.current.userInterfaceIdiom == .phone        
-    }
+    //Hidden API KEYS
+    static let yelpToken: String = ProcessInfo.processInfo.environment["YELP_APIKEY"]!
+    static let supabaseToken: String = ProcessInfo.processInfo.environment["SUPABASE_KEY"]!
 }
 
 enum NetworkSuccess {
