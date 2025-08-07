@@ -30,7 +30,6 @@
 		54BEE37427593A9300C82880 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BEE37327593A9300C82880 /* Networking.swift */; };
 		54C7BD0E2DC1D88D00045D67 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C7BD0D2DC1D88D00045D67 /* Constants.swift */; };
 		54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */; };
-		54C8A4B5277431EE0090D968 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C8A4B4277431EE0090D968 /* Extensions.swift */; };
 		54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */; };
 		54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* MasterView.swift */; };
 		54F9C80D26FBB537008FA516 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80C26FBB537008FA516 /* Assets.xcassets */; };
@@ -98,7 +97,6 @@
 		54B3E536270E140C0004ECC5 /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
 		54BEE37327593A9300C82880 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		54C7BD0D2DC1D88D00045D67 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		54C8A4B4277431EE0090D968 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		54F9C80526FBB536008FA516 /* drinkd-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "drinkd-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSApp.swift; sourceTree = "<group>"; };
 		54F9C80A26FBB536008FA516 /* MasterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterView.swift; sourceTree = "<group>"; };
@@ -325,7 +323,6 @@
 			isa = PBXGroup;
 			children = (
 				54F9C84526FCF403008FA516 /* Styles.swift */,
-				54C8A4B4277431EE0090D968 /* Extensions.swift */,
 				54C7BD0D2DC1D88D00045D67 /* Constants.swift */,
 			);
 			path = Globals;
@@ -526,7 +523,6 @@
 				54C7BD0E2DC1D88D00045D67 /* Constants.swift in Sources */,
 				5444B991273EE99800FA6DA2 /* HowToView.swift in Sources */,
 				54F9C84C26FD1ED6008FA516 /* ListCardView.swift in Sources */,
-				54C8A4B5277431EE0090D968 /* Extensions.swift in Sources */,
 				54F9C84A26FD1A59008FA516 /* HomeView.swift in Sources */,
 				549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */,
 				54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */,
@@ -776,8 +772,8 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -816,8 +812,8 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -24,23 +24,24 @@ struct PartyView_Join: View {
                 .font(.title)
                 .bold()
                 .padding()
+
             // Create a Username
-            VStack(alignment: .leading, spacing: 1) {
+            VStack(alignment: .leading) {
                 Text("Create a Username")
                     .font(.callout)
                     .bold()
-                    .padding([.bottom], 8)
 
                 TextField("Enter a username here", text: $personalUsername)
                     .textFieldStyle(Styles.regularTextFieldStyle())
             }
             .padding()
+
             // Enter a Party ID
-            VStack(alignment: .leading, spacing: 1) {
+            VStack(alignment: .leading) {
                 Text("Enter a Party Code")
                     .font(.callout)
                     .bold()
-                    .padding([.bottom], 8)
+
                 TextField("Party Code", text: $partyCode)
                     .textFieldStyle(Styles.regularTextFieldStyle())
             }
@@ -53,6 +54,7 @@ struct PartyView_Join: View {
                         guard let partyCode = Int(partyCode) else { throw SharedErrors.general(error: .generalError("Unable to convert Party Code to an Integer"))}
                         try await Networking.shared.joinParty(viewModel: viewModel, partyCode: Int(partyCode), userName: personalUsername)
                     } catch {
+                        Log.general.error("Error Joining Party - \(error)")
                         showAlert.state.toggle()
                         showAlert.message = error.localizedDescription
                     }
@@ -75,10 +77,12 @@ struct PartyView_Join: View {
 
 }
 
+#Preview("In a Party") {
+    let partyVM = PartyViewModel()
+    let party = Party( username: "USER001" ,partyID: UUID(uuidString: "6f31b771-0027-4407-8c97-07a7609d3e2b")!, partyMaxVotes: 1, partyName: "Party Name", partyCode: 123123 ,yelpURL: "YELP API ")
+    partyVM.currentParty = party
 
-@available(iOS 15.0, *)
-struct PartyView_Join_Previews: PreviewProvider {
-    static var previews: some View {
-        PartyView_Join()
-    }
+     return PartyView_Join()
+        .environment(partyVM)
 }
+
