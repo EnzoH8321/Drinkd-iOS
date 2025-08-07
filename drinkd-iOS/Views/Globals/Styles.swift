@@ -27,64 +27,22 @@ enum CardSpecificStyle {
 enum ButtonSyling {
 	static let frameHeight = CGFloat(5)
 	static let clipShape = RoundedRectangle(cornerRadius: 10)
-	static let buttonShadowColor = Color.black
-	static let buttonShadowRadius = CGFloat(0)
-	static let buttonShadowX = CGFloat(0)
-	static let buttonShadowY = CGFloat(0)
 	static let buttonTextColor = Color.white
 }
 
 struct Styles {
 
-     struct DefaultAppButton: ButtonStyle {
+    struct DefaultAppButton: ButtonStyle {
 
         func makeBody(configuration: Configuration) -> some View {
             configuration
                 .label
-                .font( Constants.isPhone ? .body : .title2)
+                .font(.body)
                 .foregroundColor(ButtonSyling.buttonTextColor)
-                .padding(Constants.isPhone ? 20 : 50)
-                .frame(height: Constants.isPhone ? ButtonSyling.frameHeight : ButtonSyling.frameHeight + CGFloat(30))
                 .padding()
                 .background(AppColors.primaryColor)
                 .clipShape(ButtonSyling.clipShape)
                 .opacity(configuration.isPressed ? 0.5 : 1)
-                .padding(20)
-        }
-    }
-
-    struct CardInfoButton: ButtonStyle {
-
-        func makeBody(configuration: Configuration) -> some View {
-            configuration
-                .label
-                .font(Constants.isPhone ? .body : .title2)
-                .foregroundColor(ButtonSyling.buttonTextColor)
-                .padding(Constants.isPhone ? 20 : 35)
-                .frame(height: Constants.isPhone ? ButtonSyling.frameHeight : ButtonSyling.frameHeight + CGFloat(10))
-                .padding()
-                .background(AppColors.primaryColor)
-                .clipShape(ButtonSyling.clipShape)
-                .shadow(color: configuration.isPressed ? Color.gray : ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y:  ButtonSyling.buttonShadowY)
-                .opacity(configuration.isPressed ? 0.5 : 1)
-        }
-    }
-
-    struct noPartyYelpButtonStyle: ButtonStyle {
-
-        func makeBody(configuration: Configuration) -> some View {
-            configuration
-                .label
-                .font(Constants.isPhone ? .body : .title2)
-                .foregroundColor(ButtonSyling.buttonTextColor)
-                .padding(Constants.isPhone ? 0 : 15)
-                .frame(height: Constants.isPhone ? 5 : ButtonSyling.frameHeight + CGFloat(40))
-                .padding()
-                .background(AppColors.primaryColor)
-                .clipShape(ButtonSyling.clipShape)
-                .shadow(color: configuration.isPressed ? Color.gray : ButtonSyling.buttonShadowColor, radius: ButtonSyling.buttonShadowRadius, x: ButtonSyling.buttonShadowX, y:  ButtonSyling.buttonShadowY)
-                .opacity(configuration.isPressed ? 0.5 : 1)
-
         }
     }
 
@@ -92,10 +50,10 @@ struct Styles {
     struct regularTextFieldStyle: TextFieldStyle {
 
         func _body(configuration: TextField<_Label>) -> some View {
-                configuration
+            configuration
                 .border(Color(UIColor.separator))
                 .textFieldStyle(.roundedBorder)
-            }
+        }
     }
 
     struct LabeledContentCardStyling: LabeledContentStyle {

@@ -170,7 +170,7 @@ struct CardView: View {
                                                 openURL(url)
                                             }
                                             .bold()
-                                            .buttonStyle(Styles.CardInfoButton())
+                                            .buttonStyle(Styles.DefaultAppButton())
                                             .padding(.top, 20)
 
                                             Spacer()
@@ -225,7 +225,7 @@ struct CardView: View {
                             Spacer()
                         }
                         .bold()
-                        .buttonStyle(Styles.CardInfoButton())
+                        .buttonStyle(Styles.DefaultAppButton())
 
                         HStack {
                             Spacer()
