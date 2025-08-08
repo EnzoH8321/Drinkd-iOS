@@ -77,12 +77,11 @@ struct MasterView: View {
 
 }
 
+#Preview {
+    let partyVM = PartyViewModel()
+    let party = Party(username: "USERNAME01" ,partyID: UUID(uuidString: "6f31b771-0027-4407-8c97-07a7609d3e2b")!, partyMaxVotes: 1, partyName: "Party Name", partyCode: 123123 ,yelpURL: "YELP API ")
+    partyVM.currentParty = party
 
-
-@available(iOS 15.0, *)
-struct ContentView_Previews: PreviewProvider {
-	static var previews: some View {
-        MasterView()
-            .environment(PartyViewModel())
-	}
+   return MasterView()
+        .environment(partyVM)
 }

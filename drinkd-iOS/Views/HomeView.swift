@@ -13,32 +13,23 @@ struct HomeView: View {
     @State var refreshView = false
     @State var cardCounter = 9
 
-	var body: some View {
-		GeometryReader{ proxy in
+    var body: some View {
 
-			VStack {
-                ZStack {
-                    //TODO: Find a way to refresh without having to toggle between card views.
-
-                    ForEach(0..<viewModel.localRestaurants.count, id: \.self) { element in
-                        CardView(cardCounter: $cardCounter, in: viewModel.localRestaurants[element])
-                            .stacked(at: element, in: viewModel.localRestaurants.count)
-
-                    }
-
-                }
-                .id(refreshView)
-			}
-            .onChange(of: cardCounter) { oldValue, newValue in
-                if newValue == 0 {
-                    // Used to Manually refresh view
-                    refreshView.toggle()
-                }
+        ZStack {
+            ForEach(0..<viewModel.localRestaurants.count, id: \.self) { element in
+                CardView(cardCounter: $cardCounter, in: viewModel.localRestaurants[element])
+                    .stacked(at: element, in: viewModel.localRestaurants.count)
             }
-		}
+        }
+        .id(refreshView)
+        .onChange(of: cardCounter) { oldValue, newValue in
+            if newValue == 0 {
+                // Used to Manually refresh view
+                refreshView.toggle()
+            }
+        }
 
-	}
-		
+    }
 
 }
 
