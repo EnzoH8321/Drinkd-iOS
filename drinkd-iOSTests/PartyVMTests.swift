@@ -6,11 +6,120 @@
 //
 
 import Testing
+import Foundation
+import drinkdSharedModels
+@testable import drinkd_iOS
 
-struct PartyVM_Tests {
 
-    @Test func <#test function name#>() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+@Suite("PartyViewModel Tests")
+class PartyVMTests {
+
+    var vm: PartyViewModel
+
+    init() {
+        vm = PartyViewModel()
+        testInitialVMData()
+//        setupVM()
+    }
+
+    deinit {
+        vm = PartyViewModel()
+    }
+
+    @Test func clearAllRestaurants_Test() async throws {
+
+        updateLocalRestaurants()
+
+        #expect(vm.localRestaurants.count == 1)
+        #expect(vm.localRestaurantsDefault.count == 1)
+
+        vm.clearAllRestaurants()
+
+        #expect(vm.localRestaurants.count == 0)
+        #expect(vm.localRestaurantsDefault.count == 0)
+    }
+
+    @Test func updateLocalRestaurants_Test() {
+
+        guard let businessProps =  Utilities.createBusinessSearchProperties() else {
+            TestLog.error.log("Failed to create BusinessSearchProperties")
+            return
+        }
+
+        vm.updateLocalRestaurants(in: [businessProps])
+
+        #expect(vm.localRestaurants.count == 1)
+        #expect(vm.localRestaurantsDefault.count == 1)
+
+        #expect(vm.localRestaurants[0].deliveryAvailable == true)
+        #expect(vm.localRestaurants[0].pickUpAvailable == true)
+        #expect(vm.localRestaurants[0].reservationAvailable == nil)
+
+    }
+
+    @Test func removeCardFromDeck_Test() {
+        vm.removeCardFromDeck()
+        #expect(vm.currentCardIndex == 8)
+
+        vm.currentCardIndex = -1
+        vm.removeCardFromDeck()
+        #expect(vm.currentCardIndex == 9)
+    }
+
+    @Test func addScoreToCard_Test() {
+        updateLocalRestaurants()
+        vm.currentCardIndex = 0
+        vm.addScoreToCard(points: 5)
+        #expect(vm.currentScoreOfTopCard == 5)
+
+        let topBarRestaurant = vm.topBarList["0"]
+
+        #expect(topBarRestaurant?.name == "Alexander's Steakhouse")
+
+
+        print(vm.topBarList)
+
+    }
+
+    @Test func leaveParty_Test() {
+        vm.currentParty = Party(username: "", partyID: UUID(), partyMaxVotes: 1, partyName: "TEST PARTY", partyCode: 670, yelpURL: "3434")
+        vm.topRestaurants.append(RatedRestaurantsTable(id: UUID(), partyID: UUID(), userID: UUID(), userName: "User", restaurantName: "restaurantName", rating: 5, imageURL: "TEST"))
+        vm.chatMessageList.append(WSMessage(id: UUID(), text: "34", username: "DFGDFG", timestamp: Date(), userID: UUID()))
+
+        #expect(vm.currentParty != nil)
+        #expect(vm.topRestaurants.count == 1)
+        #expect(vm.chatMessageList.count == 1)
+
+        vm.leaveParty()
+
+        #expect(vm.currentParty == nil)
+        #expect(vm.topRestaurants.count == 0)
+        #expect(vm.chatMessageList.count == 0)
+
+    }
+
+    @Test private func testInitialVMData() {
+        #expect(vm.customLat == 0)
+        #expect(vm.customLong == 0)
+        #expect(vm.currentCardIndex == 9)
+        #expect(vm.currentParty == nil)
+        #expect(vm.topBarList.count == 0)
+        #expect(vm.currentScoreOfTopCard == 0)
+        #expect(vm.localRestaurants.count == 0)
+        #expect(vm.localRestaurantsDefault.count == 0)
+        #expect(vm.topRestaurants.count == 0)
+        #expect(vm.chatMessageList.count == 0)
+        #expect(vm.removeSplashScreen == true)
+    }
+
+    private func updateLocalRestaurants() {
+        guard let businessProps =  Utilities.createBusinessSearchProperties() else {
+            TestLog.error.log("Failed to create BusinessSearchProperties")
+            return
+        }
+
+        vm.localRestaurants.append(businessProps)
+        vm.localRestaurantsDefault.append(businessProps)
     }
 
 }

@@ -6,24 +6,24 @@
 //
 
 import Testing
-import drinkd_iOS
+@testable import drinkd_iOS
 
 @Suite("Networking Tests")
-struct NetworkingTests {
+class NetworkingTests {
 
     var partyVM: PartyViewModel
 
     init() {
-        
+        self.partyVM = PartyViewModel()
     }
 
     deinit {
 
     }
 
-//    @Test func <#test function name#>() async throws {
-//        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
-//    }
+    //    @Test func <#test function name#>() async throws {
+    //        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    //    }
 
 
     private func setupVM() {
