@@ -15,7 +15,7 @@ class PartyViewModel {
     var customLat: Double = 0
     var customLong: Double = 0
 
-    private var currentCardIndex: Int = 9
+    var currentCardIndex: Int = 9
     var currentParty: Party?
 
     var topBarList: [String: RestaurantScoreInfo] = [:]
@@ -75,6 +75,11 @@ class PartyViewModel {
     func addScoreToCard(points: Int) {
 
         if (points == currentScoreOfTopCard) {
+            return
+        }
+
+        if !localRestaurantsDefault.indices.contains(currentCardIndex) {
+            Log.error.log("Invalid Index at currentCardIndex: \(currentCardIndex)")
             return
         }
 
