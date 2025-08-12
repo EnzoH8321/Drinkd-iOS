@@ -12,23 +12,11 @@ import drinkdSharedModels
 
 
 @Suite("PartyViewModel Tests")
-class PartyVMTests {
-
-    var vm: PartyViewModel
-
-    init() {
-        vm = PartyViewModel()
-        testInitialVMData()
-//        setupVM()
-    }
-
-    deinit {
-        vm = PartyViewModel()
-    }
+struct PartyVMTests {
 
     @Test func clearAllRestaurants_Test() async throws {
-
-        updateLocalRestaurants()
+        var vm = PartyViewModel()
+        updateLocalRestaurants(vm: vm)
 
         #expect(vm.localRestaurants.count == 1)
         #expect(vm.localRestaurantsDefault.count == 1)
@@ -40,6 +28,7 @@ class PartyVMTests {
     }
 
     @Test func updateLocalRestaurants_Test() {
+        var vm = PartyViewModel()
 
         guard let businessProps =  Utilities.createBusinessSearchProperties() else {
             TestLog.error.log("Failed to create BusinessSearchProperties")
@@ -58,6 +47,7 @@ class PartyVMTests {
     }
 
     @Test func removeCardFromDeck_Test() {
+        var vm = PartyViewModel()
         vm.removeCardFromDeck()
         #expect(vm.currentCardIndex == 8)
 
@@ -67,7 +57,8 @@ class PartyVMTests {
     }
 
     @Test func addScoreToCard_Test() {
-        updateLocalRestaurants()
+        var vm = PartyViewModel()
+        updateLocalRestaurants(vm: vm)
         vm.currentCardIndex = 0
         vm.addScoreToCard(points: 5)
         #expect(vm.currentScoreOfTopCard == 5)
@@ -82,6 +73,7 @@ class PartyVMTests {
     }
 
     @Test func leaveParty_Test() {
+        var vm = PartyViewModel()
         vm.currentParty = Party(username: "", partyID: UUID(), partyMaxVotes: 1, partyName: "TEST PARTY", partyCode: 670, yelpURL: "3434")
         vm.topRestaurants.append(RatedRestaurantsTable(id: UUID(), partyID: UUID(), userID: UUID(), userName: "User", restaurantName: "restaurantName", rating: 5, imageURL: "TEST"))
         vm.chatMessageList.append(WSMessage(id: UUID(), text: "34", username: "DFGDFG", timestamp: Date(), userID: UUID()))
@@ -98,7 +90,8 @@ class PartyVMTests {
 
     }
 
-    @Test private func testInitialVMData() {
+    @Test func testInitialVMData() {
+        var vm = PartyViewModel()
         #expect(vm.customLat == 0)
         #expect(vm.customLong == 0)
         #expect(vm.currentCardIndex == 9)
@@ -112,7 +105,7 @@ class PartyVMTests {
         #expect(vm.removeSplashScreen == true)
     }
 
-    private func updateLocalRestaurants() {
+    private func updateLocalRestaurants(vm: PartyViewModel) {
         guard let businessProps =  Utilities.createBusinessSearchProperties() else {
             TestLog.error.log("Failed to create BusinessSearchProperties")
             return
