@@ -11,55 +11,56 @@ import drinkdSharedModels
 @testable import drinkd_iOS
 
 @Suite("Networking Tests")
-struct NetworkingTests {
+class NetworkingTests {
 
-//    var vm: PartyViewModel
     // Core Location in Test uses the XCTEST Plan Location of SF (latitude: 37.7873589, longitude: -122.408227)
     private let sfLocation: CLLocationCoordinate2D
+//    var networking: Networking!
 
     init() {
-        self.sfLocation = CLLocationCoordinate2D(latitude: 37.7873589, longitude: -122.408227)
+        sfLocation = CLLocationCoordinate2D(latitude: 37.7873589, longitude: -122.408227)
     }
 
-
-
     @Test func updateUserDeniedLocationServices_Test()  {
-        Networking.shared.updateUserDeniedLocationServices()
-        #expect(Networking.shared.userDeniedLocationServices == false)
+        let networking = Networking()
+        networking.updateUserDeniedLocationServices()
+        #expect(networking.userDeniedLocationServices == false)
     }
 
 
     @Test("Updates restaurants based on user location via CoreLocation")
     func updateRestaurants_DefaultLocation_Test() async throws  {
-        let lastKnownLocation = try #require(Networking.shared.locationFetcher.lastKnownLocation)
+        let networking = Networking()
+        networking.locationFetcher.lastKnownLocation = sfLocation
+
         let vm = PartyViewModel()
 
 
-       try await Networking.shared.updateRestaurants(viewModel: vm)
+       try await networking.updateRestaurants(viewModel: vm)
         #expect(vm.localRestaurants.count > 0)
         #expect(vm.localRestaurantsDefault.count > 0)
         #expect(vm.removeSplashScreen == true)
-        #expect(Networking.shared.userDeniedLocationServices == false)
+        #expect(networking.userDeniedLocationServices == false)
     }
 
     @Test("Updates restaurants, fails due to 0.0 longitude/latitude")
     func updateRestaurants_DefaultLocationZeroLocation_Test() async throws  {
+        let networking = Networking()
         let vm = PartyViewModel()
-        Networking.shared.locationFetcher.lastKnownLocation = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
+        networking.locationFetcher.lastKnownLocation = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
         await #expect(throws: ClientNetworkErrors.noUserLocationFoundError) {
-            try await Networking.shared.updateRestaurants(viewModel: vm)
+            try await networking.updateRestaurants(viewModel: vm)
         }
     }
 
     @Test("Updates restaurants based on custom location")
     func updateRestaurants_CustomLocation_Test() async throws  {
         let vm = PartyViewModel()
-        try await Networking.shared.updateRestaurants(viewModel: vm, longitude: sfLocation.longitude, latitude: sfLocation.latitude)
+        let networking = Networking()
+        try await networking.updateRestaurants(viewModel: vm, longitude: sfLocation.longitude, latitude: sfLocation.latitude)
         #expect(vm.localRestaurants.count > 0)
         #expect(vm.localRestaurantsDefault.count > 0)
         #expect(vm.removeSplashScreen == true)
-        #expect(Networking.shared.userDeniedLocationServices == false)
+        #expect(networking.userDeniedLocationServices == false)
     }
 }
-
-
