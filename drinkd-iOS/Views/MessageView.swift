@@ -6,14 +6,15 @@
 //
 
 import SwiftUI
+import drinkdSharedModels
 
 struct MessageView: View {
     
     var username: String
     var message: String
     var messageUserID: UUID
-    var timestampString: String
-    
+    var timestamp: Date
+
     //Check to see if the message was written by the user.
     private var isMyMessage: Bool {
         do {
@@ -24,11 +25,15 @@ struct MessageView: View {
         }
 
     }
-    
+
+    private var timeString: String {
+        return timestamp.monthDay
+    }
+
     var body: some View {
         
         ZStack {
-            RoundedRectangle(cornerRadius: 5)
+            RoundedRectangle(cornerRadius: 25)
                 .fill( isMyMessage ? AppColors.primaryColor : Color(red: 230/255, green: 230/255, blue: 230/255))
             
             VStack(alignment: .leading, spacing: 10) {
@@ -38,7 +43,7 @@ struct MessageView: View {
                         .bold()
                         .padding([.leading, .top], 10)
                     
-                    Text("\(timestampString)")
+                    Text(timeString)
                         .padding([.leading], 30)
                     
                     Spacer()
@@ -56,9 +61,7 @@ struct MessageView: View {
     }
 }
 
-struct MessageView_Previews: PreviewProvider {
-    static var previews: some View {
-        MessageView(username: "Enzo", message: "CHAT FEATURES WORKS", messageUserID: UUID(),  timestampString: "Dfdfd")
-    }
+#Preview {
+    MessageView(username: "User101", message: "Hellow World!", messageUserID: UUID(), timestamp: Date())
 }
 
