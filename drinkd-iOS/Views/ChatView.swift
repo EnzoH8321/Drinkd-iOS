@@ -63,3 +63,30 @@ struct ChatView: View {
 		}
     }
 }
+
+#Preview {
+
+    do {
+        let viewModel = PartyViewModel()
+        // Supposed to be yourself
+        let id1 = try UserDefaultsWrapper.getUserID
+        let id2 = UUID()
+
+        let chats: [WSMessage] = [
+            WSMessage(id: UUID(), text: "Hi there, how are you?", username: "User001", timestamp: Date(), userID: id1),
+            WSMessage(id: UUID(), text: "I'm good, just working right now!!!", username: "User002", timestamp: Date().advanced(by: 10), userID: id2),
+            WSMessage(id: UUID(), text: "Busy Today?", username: "User001", timestamp: Date().advanced(by: 20), userID: id1),
+            WSMessage(id: UUID(), text: "Yep, going to stay late I think!!!", username: "User002", timestamp: Date().advanced(by: 30), userID: id2),
+        ]
+
+        viewModel.chatMessageList = chats
+
+
+       return ChatView()
+            .environment(Networking())
+            .environment(viewModel)
+    } catch {
+        return Text("Error: \(error)")
+    }
+
+}

@@ -36,21 +36,23 @@ struct MessageView: View {
             RoundedRectangle(cornerRadius: 25)
                 .fill( isMyMessage ? AppColors.primaryColor : Color(red: 230/255, green: 230/255, blue: 230/255))
             
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading) {
                 
                 HStack(alignment: .bottom) {
                     Text("\(username)")
                         .bold()
-                        .padding([.leading, .top], 10)
-                    
-                    Text(timeString)
-                        .padding([.leading], 30)
-                    
+                        .padding([.leading, .top])
+
                     Spacer()
+
+                    Text(timeString)
+                        .font(.caption)
+                        .padding([.trailing])
+                        .italic()
                 }
                 
                 Text("\(message)")
-                    .padding([.leading, .bottom], 10)
+                    .padding([.leading, .bottom, .trailing])
             }
             .foregroundColor(isMyMessage ? .white : .black)
             
@@ -61,7 +63,16 @@ struct MessageView: View {
     }
 }
 
-#Preview {
+#Preview("MyMessages") {
+    do {
+        let userID = try UserDefaultsWrapper.getUserID
+        return MessageView(username: "User101", message: "Hello World!", messageUserID: userID, timestamp: Date())
+    } catch {
+        return Text("Error")
+    }
+}
+
+#Preview("Other Peoples Messages") {
     MessageView(username: "User101", message: "Hellow World!", messageUserID: UUID(), timestamp: Date())
 }
 
