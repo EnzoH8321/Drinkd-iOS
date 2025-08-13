@@ -7,7 +7,7 @@
       "location" : "https://github.com/EnzoH8321/drinkdSharedModels",
       "state" : {
         "branch" : "main",
-        "revision" : "47e550641fb6b6322df013cf169cb541ba46afe5"
+        "revision" : "37e25540ee982417f34504318b3c1bcfad5e2a5c"
       }
     },
     {
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
       "state" : {
-        "revision" : "23e3442166b5122f73f9e3e622cd1e4bafeab3b7",
-        "version" : "1.6.0"
+        "revision" : "b2ed9eabefe56202ee4939dd9fc46b6241c88317",
+        "version" : "1.6.1"
       }
     }
   ],
