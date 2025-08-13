@@ -9,7 +9,7 @@ import SwiftUI
 import drinkdSharedModels
 
 struct ChatView: View {
-
+    @Environment(Networking.self) var networking
     @Environment(PartyViewModel.self) var viewModel
 	@State var messageString = ""
     @State private var showAlert: (state: Bool, message: String) = (false, "")
@@ -38,7 +38,7 @@ struct ChatView: View {
                             Task {
                                 do {
                                     guard let party = viewModel.currentParty else { throw SharedErrors.general(error: .missingValue("Party value is nil"))}
-                                    try await Networking.shared.sendMessage(username: party.username, message: messageString, partyID: party.partyID)
+                                    try await networking.sendMessage(username: party.username, message: messageString, partyID: party.partyID)
                                 } catch {
                                    showAlert = (true, error.localizedDescription)
                                 }

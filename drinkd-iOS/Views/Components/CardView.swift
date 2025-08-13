@@ -19,6 +19,7 @@ struct CardView: View {
     @Binding var cardCounter: Int
     @Environment(PartyViewModel.self) var viewModel
     @Environment(\.openURL) var openURL
+    @Environment(Networking.self) var networking
     @State private var showError: (status: Bool, message: String) = (false, "")
 
     var restaurantTitle: String
@@ -206,7 +207,7 @@ struct CardView: View {
                                     do {
                                         let userID = try UserDefaultsWrapper.getUserID
                                         if viewModel.currentScoreOfTopCard == 0 { return }
-                                        try await Networking.shared.addRating(partyID: party.partyID, userID: userID, username: party.username, restaurantName: restaurantTitle, rating: viewModel.currentScoreOfTopCard, imageURL: restaurantImageURL)
+                                        try await networking.addRating(partyID: party.partyID, userID: userID, username: party.username, restaurantName: restaurantTitle, rating: viewModel.currentScoreOfTopCard, imageURL: restaurantImageURL)
                                     } catch {
                                         showError.message = error.localizedDescription
                                         showError.status.toggle()

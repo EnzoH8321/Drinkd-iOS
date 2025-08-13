@@ -9,7 +9,7 @@ import SwiftUI
 import drinkdSharedModels
 
 struct PartyCardView: View {
-
+    @Environment(Networking.self) var networking
     @Environment(PartyViewModel.self) var viewModel
     @State private var showAlert: (state: Bool, message: String) = (false, "")
     @State private var path = NavigationPath()
@@ -31,7 +31,7 @@ struct PartyCardView: View {
         Task {
             do {
                 guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .userDefaultsError("Unable to get the party ID"))}
-                try await Networking.shared.leaveParty(partyVM: viewModel, partyID: partyID)
+                try await networking.leaveParty(partyVM: viewModel, partyID: partyID)
                 viewModel.leaveParty()
             } catch {
                 // Leave the Party Anyway in case of failure

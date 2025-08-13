@@ -9,7 +9,7 @@ import SwiftUI
 import drinkdSharedModels
 
 struct PartyView_Join: View {
-
+    @Environment(Networking.self) var networking
     @Environment(PartyViewModel.self) var viewModel
 
     @State private var partyCode: String = ""
@@ -52,7 +52,7 @@ struct PartyView_Join: View {
                 Task {
                     do {
                         guard let partyCode = Int(partyCode) else { throw SharedErrors.general(error: .generalError("Unable to convert Party Code to an Integer"))}
-                        try await Networking.shared.joinParty(viewModel: viewModel, partyCode: Int(partyCode), userName: personalUsername)
+                        try await networking.joinParty(viewModel: viewModel, partyCode: Int(partyCode), userName: personalUsername)
                     } catch {
                         Log.error.log("Error Joining Party - \(error)")
                         showAlert.state.toggle()

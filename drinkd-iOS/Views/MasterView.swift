@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MasterView: View {
-
+    @Environment(Networking.self) var networking
     @Environment(PartyViewModel.self) var viewModel
 	@State private var selectedTab: Int = 1
 
@@ -23,7 +23,7 @@ struct MasterView: View {
 
 					TabView(selection: $selectedTab) {
 						//
-                        if (!Networking.shared.userDeniedLocationServices) {
+                        if (!networking.userDeniedLocationServices) {
 							HomeView()
 								.frame(width: globalWidth - 30 , height: globalHeight / 1.15)
 								.padding(.bottom, 30)

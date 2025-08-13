@@ -15,6 +15,7 @@ struct PartyView_Create: View {
     @State private var userName: String = ""
     @State private var showAlert: (state: Bool, message: String) = (false, "")
     @Environment(PartyViewModel.self) var viewModel
+    @Environment(Networking.self) var networking
 
     var body: some View {
         @Bindable var partyVM = viewModel
@@ -65,7 +66,7 @@ struct PartyView_Create: View {
                 Task {
                     do {
                         let urlString = "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(viewModel.customLat)&longitude=\(viewModel.customLong)&limit=10"
-                        try await Networking.shared.createParty(viewModel: viewModel, username: userName, partyName: partyName ,restaurantsURL: urlString)
+                        try await networking.createParty(viewModel: viewModel, username: userName, partyName: partyName ,restaurantsURL: urlString)
 
                     } catch {
                         Log.error.log("Error creating a party - \(error)")

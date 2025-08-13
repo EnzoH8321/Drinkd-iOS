@@ -12,29 +12,26 @@ import UserNotifications
 import drinkdSharedModels
 
 @main
-struct AppLauncher {
-
-    static func main() throws {
-        // Set user id on startup, if it does not already exist
-        do {
-           let _ = try UserDefaultsWrapper.getUserID
-        } catch {
-            UserDefaultsWrapper.setUserIDOnStartup()
-        }
-
-        Networking.shared.locationFetcher.start()
-        drinkd_iOSApp.main()
-    }
-}
-
 struct drinkd_iOSApp: App {
 
 	@State var viewModel = PartyViewModel()
+    @State var networking = Networking()
 
 	var body: some Scene {
 		WindowGroup {
 			MasterView()
+                .onAppear {
+                    // Set user id on startup, if it does not already exist
+                    do {
+                       let _ = try UserDefaultsWrapper.getUserID
+                    } catch {
+                        UserDefaultsWrapper.setUserIDOnStartup()
+                    }
+
+                    networking.locationFetcher.start()
+                }
 				.environment(viewModel)
+                .environment(networking)
 				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
 
                     Task {
@@ -57,9 +54,9 @@ struct drinkd_iOSApp: App {
                         do {
 
                             do {
-                                try await Networking.shared.rejoinParty(viewModel: viewModel)
+                                try await networking.rejoinParty(viewModel: viewModel)
                             } catch {
-                                try await Networking.shared.updateRestaurants(viewModel: viewModel)
+                                try await networking.updateRestaurants(viewModel: viewModel)
                             }
 
                         } catch {
@@ -67,8 +64,7 @@ struct drinkd_iOSApp: App {
                         }
                     }
 
-                    Networking.shared.updateUserDeniedLocationServices()
-
+                    networking.updateUserDeniedLocationServices()
 				}
 		}
 	}

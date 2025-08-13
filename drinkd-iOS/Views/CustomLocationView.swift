@@ -10,7 +10,7 @@ import SwiftUI
 struct CustomLocationView: View {
 
     @Environment(PartyViewModel.self) var viewModel
-
+    @Environment(Networking.self) var networking
     @State private var showAlert: (message: String, state: Bool) = ("", false)
 
     private var latitude: Binding<String> {
@@ -63,7 +63,7 @@ struct CustomLocationView: View {
 
                 Task {
                     do {
-                        try await Networking.shared.updateRestaurants(viewModel: viewModel, longitude: viewModel.customLong, latitude: viewModel.customLat)
+                        try await networking.updateRestaurants(viewModel: viewModel, longitude: viewModel.customLong, latitude: viewModel.customLat)
                     } catch {
                         showAlert.message = error.localizedDescription
                         showAlert.state.toggle()
@@ -104,4 +104,5 @@ struct CustomLocationView: View {
 #Preview {
     CustomLocationView()
         .environment(PartyViewModel())
+        .environment(Networking())
 }

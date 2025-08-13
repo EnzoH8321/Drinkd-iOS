@@ -9,26 +9,8 @@ import Foundation
 import drinkdSharedModels
 import SwiftUI
 
-//protocol NetworkingProtocol {
-//    func fetchRestaurantsOnStartUp(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void)
-//    func fetchUsingCustomLocation(viewModel: PartyViewModel, longitude: Double, latitude: Double, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void)
-//    func fetchRestaurantsAfterJoiningParty(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void)
-//    func calculateTopThreeRestaurants(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void)
-//    func submitRestaurantScore(viewModel: PartyViewModel)
-//    func fetchExistingMessages(viewModel: PartyViewModel, completionHandler: @escaping (Result<NetworkSuccess, ClientNetworkErrors>) -> Void)
-//    func removeMessagingObserver(viewModel: PartyViewModel)    
-//}
-
-
-protocol NetworkingProtocol {
-    var locationFetcher: LocationFetcher { get }
-}
-
 @Observable
-final class Networking: NetworkingProtocol {
-
-    static let shared = Networking()
-    private init() { }
+final class Networking {
 
     private(set) var userDeniedLocationServices = false
     var locationFetcher = LocationFetcher()
@@ -312,7 +294,7 @@ extension Networking {
             self.userDeniedLocationServices = false
         }
         await WebSocket.shared.rdbCreateChannel(partyVM: viewModel, partyID: party.partyID)
-        try await Networking.shared.getMessages(viewModel: viewModel)
+        try await getMessages(viewModel: viewModel)
 
     }
 

@@ -9,7 +9,7 @@ import SwiftUI
 import drinkdSharedModels
 
 struct TopChoicesView: View {
-
+    @Environment(Networking.self) var networking
     @Environment(PartyViewModel.self) var viewModel
 
     private var firstChoice: RatedRestaurantsTable? {
@@ -88,7 +88,7 @@ struct TopChoicesView: View {
                     return
                 }
 
-                let restaurants = try await Networking.shared.getTopRestaurants(partyID: partyID)
+                let restaurants = try await networking.getTopRestaurants(partyID: partyID)
                 viewModel.topRestaurants = restaurants
 
             } catch {
