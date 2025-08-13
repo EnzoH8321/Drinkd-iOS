@@ -82,13 +82,13 @@ final class Networking {
         }
     }
 
-    /// Fetches nearby bars from the Yelp API using provided coordinates.
+    /// Fetches nearby restaurants from the Yelp API using provided coordinates.
     /// - Parameter latitude: The latitude coordinate for the search
     /// - Parameter longitude: The longitude coordinate for the search
     /// - Returns: YelpApiBusinessSearch containing the API response with business data
     /// - Throws: ClientNetworkErrors.invalidURLError if URL construction fails
     /// - Throws: SharedErrors.yelp if HTTP status code is not 2xx
-    private func getRestaurants(latitude: Double, longitude: Double) async throws -> YelpApiBusinessSearch {
+     func getRestaurants(latitude: Double, longitude: Double) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
             Log.error.log("ERROR - INVALID URL")
             throw ClientNetworkErrors.invalidURLError
@@ -119,7 +119,7 @@ final class Networking {
     /// - Returns: YelpApiBusinessSearch containing the API response with business data
     /// - Throws: ClientNetworkErrors.invalidURLError if URL string is malformed
     /// - Throws: SharedErrors.yelp if HTTP status code is not 2xx
-    private func getRestaurants(yelpURL: String) async throws -> YelpApiBusinessSearch {
+     func getRestaurants(yelpURL: String) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: yelpURL) else {
             Log.error.log("ERROR - INVALID URL")
             throw ClientNetworkErrors.invalidURLError

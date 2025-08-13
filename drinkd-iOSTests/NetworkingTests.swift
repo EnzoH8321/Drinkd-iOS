@@ -11,11 +11,10 @@ import drinkdSharedModels
 @testable import drinkd_iOS
 
 @Suite("Networking Tests")
-class NetworkingTests {
+struct NetworkingTests {
 
     // Core Location in Test uses the XCTEST Plan Location of SF (latitude: 37.7873589, longitude: -122.408227)
     private let sfLocation: CLLocationCoordinate2D
-//    var networking: Networking!
 
     init() {
         sfLocation = CLLocationCoordinate2D(latitude: 37.7873589, longitude: -122.408227)
@@ -62,5 +61,21 @@ class NetworkingTests {
         #expect(vm.localRestaurantsDefault.count > 0)
         #expect(vm.removeSplashScreen == true)
         #expect(networking.userDeniedLocationServices == false)
+    }
+
+    @Test("Updates restaurants, fails due to 0.0 longitude/latitude")
+    func updateRestaurants_CustomLocationZeroLocation_Test() async throws  {
+        let vm = PartyViewModel()
+        let networking = Networking()
+        await #expect(throws: ClientNetworkErrors.noUserLocationFoundError) {
+            try await networking.updateRestaurants(viewModel: vm, longitude: 0.0, latitude: 0.0)
+        }
+    }
+
+    @Test("Get restaurants with the provided coordinates")
+    func getRestaurants_Coordinates_Test() async throws {
+        let networking = Networking()
+        let businessSearch = try await networking.getRestaurants(latitude: sfLocation.latitude, longitude: sfLocation.longitude)
+        #expect(!businessSearch.businesses!.isEmpty)
     }
 }
