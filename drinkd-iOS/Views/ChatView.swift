@@ -37,17 +37,21 @@ struct ChatView: View {
 
                             Task {
                                 do {
+                                    // We copy messageString to a local var so we can safely reset messageString without having to wait for the async call to finish
+                                    let message = messageString
+                                    messageString.removeAll()
                                     guard let party = viewModel.currentParty else { throw SharedErrors.general(error: .missingValue("Party value is nil"))}
-                                    try await networking.sendMessage(username: party.username, message: messageString, partyID: party.partyID)
+                                    try await networking.sendMessage(username: party.username, message: message, partyID: party.partyID)
+
                                 } catch {
                                    showAlert = (true, error.localizedDescription)
                                 }
                             }
 
                         }, label: {
-                            Image(systemName: "plus")
-                                .resizable()
-                                .frame(width: 20, height: 20)
+                            Image(systemName: "arrow.up.circle")
+                                .font(.title)
+                                .tint(AppColors.primaryColor)
                         })
                             .padding([.leading, .trailing], 8)
                         Spacer()

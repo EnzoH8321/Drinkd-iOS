@@ -84,4 +84,5 @@ struct MasterView: View {
 
    return MasterView()
         .environment(partyVM)
+        .environment(Networking())
 }

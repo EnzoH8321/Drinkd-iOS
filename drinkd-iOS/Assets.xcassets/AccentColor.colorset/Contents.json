@@ -1,6 +1,15 @@
 {
   "colors" : [
     {
+      "color" : {
+        "color-space" : "srgb",
+        "components" : {
+          "alpha" : "1.000",
+          "blue" : "27",
+          "green" : "29",
+          "red" : "233"
+        }
+      },
       "idiom" : "universal"
     }
   ],
