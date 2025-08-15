@@ -43,7 +43,7 @@ struct NetworkingTests {
     }
 
     @Test("Updates restaurants, fails due to 0.0 longitude/latitude")
-    func updateRestaurants_DefaultLocationZeroLocation_Test() async throws  {
+    func updateRestaurants_DefaultLocationNoUserLocationFoundError_Test() async throws  {
         let networking = Networking()
         let vm = PartyViewModel()
         networking.locationFetcher.lastKnownLocation = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
@@ -64,7 +64,7 @@ struct NetworkingTests {
     }
 
     @Test("Updates restaurants, fails due to 0.0 longitude/latitude")
-    func updateRestaurants_CustomLocationZeroLocation_Test() async throws  {
+    func updateRestaurants_CustomLocationNoUserLocationFoundError_Test() async throws  {
         let vm = PartyViewModel()
         let networking = Networking()
         await #expect(throws: ClientNetworkErrors.noUserLocationFoundError) {
@@ -78,4 +78,27 @@ struct NetworkingTests {
         let businessSearch = try await networking.getRestaurants(latitude: sfLocation.latitude, longitude: sfLocation.longitude)
         #expect(!businessSearch.businesses!.isEmpty)
     }
+
+    @Test("Get restaurants with the provided url string")
+    func getRestaurants_URLString_Test() async throws {
+        let networking = Networking()
+        let urlString = "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(37.334606)&longitude=\(-122.009102)&limit=10"
+        let businessSearch = try await networking.getRestaurants(yelpURL: urlString)
+        #expect(!businessSearch.businesses!.isEmpty)
+    }
+
+    @Test("Get restaurants with the provided url string, Fails with ClientNetworkErrors.invalidURLError")
+    func getRestaurants_URLStringInvalidURLError_Test() async throws {
+
+        let networking = Networking()
+        // Test for different url strings
+        let urlString = ""
+       await  #expect(throws: ClientNetworkErrors.invalidURLError, performing: {
+            try await networking.getRestaurants(yelpURL: urlString)
+        })
+
+    }
+
+
 }
+
