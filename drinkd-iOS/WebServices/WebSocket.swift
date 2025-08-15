@@ -15,15 +15,13 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
 
     private var client: SupabaseClient!
 
-    static let shared = WebSocket()
-
     private var session: URLSession!
 
     var websocketTask:  URLSessionWebSocketTask? = nil
 
     private var channel: RealtimeChannelV2!
 
-    private override init() {
+    override init() {
         super.init()
         self.session = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
 

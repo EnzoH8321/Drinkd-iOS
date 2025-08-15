@@ -12,6 +12,8 @@ import SwiftUI
 @Observable
 final class Networking {
 
+    private let Websocket = WebSocket()
+
     private(set) var userDeniedLocationServices = false
     var locationFetcher = LocationFetcher()
 
@@ -164,7 +166,7 @@ extension Networking {
         let response = try JSONDecoder().decode(CreatePartyResponse.self, from: data)
 
         let party = Party(username: username ,partyID: response.partyID, partyMaxVotes: 0, partyName: partyName, partyCode: response.partyCode, yelpURL: restaurantsURL)
-        await WebSocket.shared.rdbCreateChannel(partyVM: viewModel, partyID: response.partyID)
+        await Websocket.rdbCreateChannel(partyVM: viewModel, partyID: response.partyID)
         await MainActor.run {
             viewModel.currentParty = party
         }
@@ -177,7 +179,7 @@ extension Networking {
 
         let userID = try UserDefaultsWrapper.getUserID
         let urlReq = try HTTP.PostRoutes.leaveParty.leavePartyReq(userID: userID)
-        WebSocket.shared.cancelWebSocketConnection()
+        Websocket.cancelWebSocketConnection()
         let _ = try await executeRequest(urlReq: urlReq)
     }
 
@@ -189,7 +191,7 @@ extension Networking {
 
         let userID = try UserDefaultsWrapper.getUserID
         let urlReq = try HTTP.PostRoutes.sendMessage.sendMsgReq(userID: userID, username: username, message: message, partyID: partyID)
-        await WebSocket.shared.rdbSendMessage(userName: username, userID: userID, message: message, messageID: UUID(), partyID: partyID)
+        await Websocket.rdbSendMessage(userName: username, userID: userID, message: message, messageID: UUID(), partyID: partyID)
         let _ = try await executeRequest(urlReq: urlReq)
     }
 
@@ -293,7 +295,7 @@ extension Networking {
             viewModel.removeSplashScreen = true
             self.userDeniedLocationServices = false
         }
-        await WebSocket.shared.rdbCreateChannel(partyVM: viewModel, partyID: party.partyID)
+        await Websocket.rdbCreateChannel(partyVM: viewModel, partyID: party.partyID)
         try await getMessages(viewModel: viewModel)
 
     }
