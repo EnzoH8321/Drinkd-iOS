@@ -13,13 +13,13 @@ import Supabase
 @Observable
 final class WebSocket: NSObject, URLSessionWebSocketDelegate {
 
-    private var client: SupabaseClient!
+    private(set) var client: SupabaseClient!
 
-    private var session: URLSession!
+    private(set) var session: URLSession!
 
     var websocketTask:  URLSessionWebSocketTask? = nil
 
-    private var channel: RealtimeChannelV2!
+    private(set) var channel: RealtimeChannelV2!
 
     override init() {
         super.init()

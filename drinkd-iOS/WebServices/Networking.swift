@@ -12,7 +12,11 @@ import SwiftUI
 @Observable
 final class Networking {
 
-    private let Websocket = WebSocket()
+    init(webSocket: WebSocket = WebSocket()) {
+        self.webSocket = webSocket
+    }
+
+    private var webSocket: WebSocket
 
     private(set) var userDeniedLocationServices = false
     var locationFetcher = LocationFetcher()
