@@ -14,57 +14,52 @@ struct ChatView: View {
 	@State var messageString = ""
     @State private var showAlert: (state: Bool, message: String) = (false, "")
 
-	var body: some View {
+    var body: some View {
 
-		GeometryReader { geo in
-			
-			VStack {
-                ScrollViewReader { scrollView in
-                    ScrollView {
-                        VStack {
-                            ForEach(viewModel.chatMessageList) { messageObj in
-                                MessageView(username: messageObj.username, message: messageObj.text, messageUserID: messageObj.userID, timestamp: messageObj.timestamp)
-                            }
+        VStack {
+            ScrollViewReader { scrollView in
+                ScrollView {
+                    VStack {
+                        ForEach(viewModel.chatMessageList) { messageObj in
+                            MessageView(username: messageObj.username, message: messageObj.text, messageUserID: messageObj.userID, timestamp: messageObj.timestamp)
                         }
                     }
-
-                    HStack {
-                        Spacer()
-                        TextField("Enter Text Here", text: $messageString)
-                            .textFieldStyle(Styles.regularTextFieldStyle())
-                        
-                        Button(action: {
-
-                            Task {
-                                do {
-                                    // We copy messageString to a local var so we can safely reset messageString without having to wait for the async call to finish
-                                    let message = messageString
-                                    messageString.removeAll()
-                                    guard let party = viewModel.currentParty else { throw SharedErrors.general(error: .missingValue("Party value is nil"))}
-                                    try await networking.sendMessage(username: party.username, message: message, partyID: party.partyID)
-
-                                } catch {
-                                   showAlert = (true, error.localizedDescription)
-                                }
-                            }
-
-                        }, label: {
-                            Image(systemName: "arrow.up.circle")
-                                .font(.title)
-                                .tint(AppColors.primaryColor)
-                        })
-                            .padding([.leading, .trailing], 8)
-                        Spacer()
-                    }
-                    .padding([.bottom], 16)
-                    
                 }
-				
-			}
-            .alert(isPresented: $showAlert.state) {
-                Alert(title: Text("Error"), message: Text(showAlert.message))
+
+                HStack {
+                    Spacer()
+                    TextField("Enter Text Here", text: $messageString)
+                        .textFieldStyle(Styles.regularTextFieldStyle())
+
+                    Button(action: {
+
+                        Task {
+                            do {
+                                // We copy messageString to a local var so we can safely reset messageString without having to wait for the async call to finish
+                                let message = messageString
+                                messageString.removeAll()
+                                guard let party = viewModel.currentParty else { throw SharedErrors.general(error: .missingValue("Party value is nil"))}
+                                try await networking.sendMessage(username: party.username, message: message, partyID: party.partyID)
+
+                            } catch {
+                                showAlert = (true, error.localizedDescription)
+                            }
+                        }
+
+                    }, label: {
+                        Image(systemName: "arrow.up.circle")
+                            .font(.title)
+                            .tint(AppColors.primaryColor)
+                    })
+
+                    Spacer()
+                }
+                .padding([.bottom])
             }
-		}
+        }
+        .alert(isPresented: $showAlert.state) {
+            Alert(title: Text("Error"), message: Text(showAlert.message))
+        }
     }
 }
 
