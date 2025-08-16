@@ -170,7 +170,7 @@ extension Networking {
         let response = try JSONDecoder().decode(CreatePartyResponse.self, from: data)
 
         let party = Party(username: username ,partyID: response.partyID, partyMaxVotes: 0, partyName: partyName, partyCode: response.partyCode, yelpURL: restaurantsURL)
-        await Websocket.rdbCreateChannel(partyVM: viewModel, partyID: response.partyID)
+        await webSocket.rdbCreateChannel(partyVM: viewModel, partyID: response.partyID)
         await MainActor.run {
             viewModel.currentParty = party
         }
@@ -183,7 +183,7 @@ extension Networking {
 
         let userID = try UserDefaultsWrapper.getUserID
         let urlReq = try HTTP.PostRoutes.leaveParty.leavePartyReq(userID: userID)
-        Websocket.cancelWebSocketConnection()
+        webSocket.cancelWebSocketConnection()
         let _ = try await executeRequest(urlReq: urlReq)
     }
 
@@ -195,7 +195,7 @@ extension Networking {
 
         let userID = try UserDefaultsWrapper.getUserID
         let urlReq = try HTTP.PostRoutes.sendMessage.sendMsgReq(userID: userID, username: username, message: message, partyID: partyID)
-        await Websocket.rdbSendMessage(userName: username, userID: userID, message: message, messageID: UUID(), partyID: partyID)
+        await webSocket.rdbSendMessage(userName: username, userID: userID, message: message, messageID: UUID(), partyID: partyID)
         let _ = try await executeRequest(urlReq: urlReq)
     }
 
@@ -299,7 +299,7 @@ extension Networking {
             viewModel.removeSplashScreen = true
             self.userDeniedLocationServices = false
         }
-        await Websocket.rdbCreateChannel(partyVM: viewModel, partyID: party.partyID)
+        await webSocket.rdbCreateChannel(partyVM: viewModel, partyID: party.partyID)
         try await getMessages(viewModel: viewModel)
 
     }
