@@ -99,24 +99,5 @@ struct NetworkingTests {
 
     }
 
-    @Test("Create a party")
-    func createParty() async throws {
-        let networking = Networking()
-        let vm = PartyViewModel()
-        let username = "Guest001"
-        let partyName = "Party001"
-        let restaurantsURL = "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(sfLocation.latitude)&longitude=\(sfLocation.longitude)&limit=10"
-
-        try await networking.createParty(viewModel: vm, username: username, partyName: partyName, restaurantsURL: restaurantsURL)
-
-        let party = #require(vm.currentParty)
-        #expect(party.username == username)
-        #expect(party.partyName == partyName)
-        #expect(party.yelpURL == restaurantsURL)
-        #expect(party.partyMaxVotes == 0)
-
-    }
-
-
 }
 

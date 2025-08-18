@@ -170,7 +170,7 @@ extension Networking {
         let response = try JSONDecoder().decode(CreatePartyResponse.self, from: data)
 
         let party = Party(username: username ,partyID: response.partyID, partyMaxVotes: 0, partyName: partyName, partyCode: response.partyCode, yelpURL: restaurantsURL)
-        await webSocket.rdbCreateChannel(partyVM: viewModel, partyID: response.partyID)
+        await webSocket.rdbSetSubscribeAndListen(partyVM: viewModel, partyID: response.partyID)
         await MainActor.run {
             viewModel.currentParty = party
         }
@@ -299,7 +299,7 @@ extension Networking {
             viewModel.removeSplashScreen = true
             self.userDeniedLocationServices = false
         }
-        await webSocket.rdbCreateChannel(partyVM: viewModel, partyID: party.partyID)
+        await webSocket.rdbSetSubscribeAndListen(partyVM: viewModel, partyID: party.partyID)
         try await getMessages(viewModel: viewModel)
 
     }

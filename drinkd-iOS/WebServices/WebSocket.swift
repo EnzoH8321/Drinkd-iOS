@@ -15,15 +15,12 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
 
     private(set) var client: SupabaseClient!
 
-    private(set) var session: URLSession!
-
     var websocketTask:  URLSessionWebSocketTask? = nil
 
     private(set) var channel: RealtimeChannelV2!
 
     override init() {
         super.init()
-        self.session = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
 
         let supabaseKey = Constants.supabaseToken
 
@@ -46,6 +43,12 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
         print("Web Socket did disconnect")
         ping()
+    }
+
+    func setChannel(partyID: UUID) {
+        self.channel = client.channel(partyID.uuidString) {
+            $0.broadcast.receiveOwnBroadcasts = true
+        }
     }
 
     func cancelWebSocketConnection() {
@@ -79,13 +82,11 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
         }
     }
 
-    // Creates channel, partyID should be the channel identifier
+    // Creates channel, subsrcribes to it and listens for messages
     // Only use when creating party
-    func rdbCreateChannel(partyVM: PartyViewModel, partyID: UUID) async {
+    func rdbSetSubscribeAndListen(partyVM: PartyViewModel, partyID: UUID) async {
 
-        self.channel = client.channel(partyID.uuidString) {
-            $0.broadcast.receiveOwnBroadcasts = true
-        }
+        setChannel(partyID: partyID)
 
         do {
             try await self.channel?.subscribeWithError()
@@ -121,7 +122,7 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
         }
     }
 
-   private func rdbListenForMessages(partyVM: PartyViewModel, partyID: String) {
+    func rdbListenForMessages(partyVM: PartyViewModel, partyID: String) {
 
         // Get Channel
         guard let channel = self.channel else {
@@ -164,7 +165,7 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
 
                 let wsMessage = WSMessage(id: messageID, text: message, username: username, timestamp: Date.now, userID: userID)
                 partyVM.chatMessageList.append(wsMessage)
-
+                
             }
 
             Log.general.log("TASK DONE")

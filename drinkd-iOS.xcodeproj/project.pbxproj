@@ -13,6 +13,8 @@
 		54222D822E465C09003E58F3 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54222D812E465C09003E58F3 /* Utilities.swift */; };
 		54222D842E465E81003E58F3 /* TestLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54222D832E465E81003E58F3 /* TestLog.swift */; };
 		54222D8E2E46F840003E58F3 /* TestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 54222D8D2E46F840003E58F3 /* TestPlan.xctestplan */; };
+		5422315E2E502926003E58F3 /* WebSocketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5422315D2E502926003E58F3 /* WebSocketTests.swift */; };
+		542455CB2E50F50400702EEA /* TestErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542455CA2E50F50400702EEA /* TestErrors.swift */; };
 		5430E126276D1D8F00326A52 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5430E125276D1D8F00326A52 /* ChatView.swift */; };
 		543196D82E3E6C2D00EA17BB /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543196D72E3E6C2D00EA17BB /* WebSocket.swift */; };
 		5444B98F273EE09200FA6DA2 /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5444B98E273EE09100FA6DA2 /* SheetView.swift */; };
@@ -85,6 +87,8 @@
 		54222D812E465C09003E58F3 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		54222D832E465E81003E58F3 /* TestLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestLog.swift; sourceTree = "<group>"; };
 		54222D8D2E46F840003E58F3 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
+		5422315D2E502926003E58F3 /* WebSocketTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketTests.swift; sourceTree = "<group>"; };
+		542455CA2E50F50400702EEA /* TestErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestErrors.swift; sourceTree = "<group>"; };
 		5430E125276D1D8F00326A52 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		543196D72E3E6C2D00EA17BB /* WebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		5444B98E273EE09100FA6DA2 /* SheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
@@ -250,6 +254,8 @@
 				54222D7F2E4659A6003E58F3 /* PartyVMTests.swift */,
 				54222D812E465C09003E58F3 /* Utilities.swift */,
 				54222D832E465E81003E58F3 /* TestLog.swift */,
+				5422315D2E502926003E58F3 /* WebSocketTests.swift */,
+				542455CA2E50F50400702EEA /* TestErrors.swift */,
 			);
 			path = "drinkd-iOSTests";
 			sourceTree = "<group>";
@@ -545,7 +551,9 @@
 				54222D842E465E81003E58F3 /* TestLog.swift in Sources */,
 				54562871278DFAF600CA6005 /* Model_Methods_Tests.swift in Sources */,
 				54222D802E4659A6003E58F3 /* PartyVMTests.swift in Sources */,
+				542455CB2E50F50400702EEA /* TestErrors.swift in Sources */,
 				54631E5F27D87522008CE6B8 /* ViewModel_Methods_Tests.swift in Sources */,
+				5422315E2E502926003E58F3 /* WebSocketTests.swift in Sources */,
 				5456288A278F63C600CA6005 /* MockDatabaseObject.swift in Sources */,
 				54222D822E465C09003E58F3 /* Utilities.swift in Sources */,
 				5456287B278E39CE00CA6005 /* Networking_Methods_Tests.swift in Sources */,
