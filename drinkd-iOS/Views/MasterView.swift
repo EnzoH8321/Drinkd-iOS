@@ -16,23 +16,29 @@ struct MasterView: View {
 
 		VStack {
 			if viewModel.removeSplashScreen {
-				GeometryReader { proxy in
-
-					let globalWidth = proxy.frame(in: .global).width
-					let globalHeight = proxy.frame(in: .global).height
 
 					TabView(selection: $selectedTab) {
 						//
                         if (!networking.userDeniedLocationServices) {
-							HomeView()
-								.frame(width: globalWidth - 30 , height: globalHeight / 1.15)
-								.padding(.bottom, 30)
-								.navigationTitle("")
-								.navigationBarHidden(true)
-								.tabItem {
-									Image(systemName: "house")
-									Text("Home")
-								}.tag(1)
+
+                            ZStack {
+
+                                AppColors.primaryColor
+                                    .ignoresSafeArea(.all, edges: .top)
+
+                                HomeView()
+                                    .padding()
+                                    .padding(.bottom)
+
+                            }
+                            .navigationTitle("")
+                            .navigationBarHidden(true)
+                            .tabItem {
+                                Image(systemName: "house")
+                                Text("Home")
+                            }.tag(1)
+
+
 						} else {
 							CustomLocationView()
 								.navigationBarTitle("")
@@ -67,7 +73,6 @@ struct MasterView: View {
 
 					}
 
-				}
 			} else {
 				SplashScreen()
 			}
