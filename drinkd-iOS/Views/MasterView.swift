@@ -23,8 +23,8 @@ struct MasterView: View {
 
                             ZStack {
 
-                                AppColors.primaryColor
-                                    .ignoresSafeArea(.all, edges: .top)
+//                                AppColors.primaryColor
+//                                    .ignoresSafeArea(.all, edges: .top)
 
                                 HomeView()
                                     .padding()
@@ -34,8 +34,8 @@ struct MasterView: View {
                             .navigationTitle("")
                             .navigationBarHidden(true)
                             .tabItem {
-                                Image(systemName: "house")
-                                Text("Home")
+                                Label("Home", systemImage: selectedTab == 1 ? "house.fill" : "house")
+                                    .environment(\.symbolVariants, .none)
                             }.tag(1)
 
 
@@ -53,22 +53,23 @@ struct MasterView: View {
 							.navigationBarTitle("")
 							.navigationBarHidden(true)
 							.tabItem {
-								Image(systemName: "chart.bar")
-								Text("TopChoices")
+                                Label("TopChoices", systemImage: selectedTab == 2 ? "chart.bar.fill" : "chart.bar")
+                                    .environment(\.symbolVariants, .none)
 							}.tag(2)
 						//
 						PartyView()
 							.navigationBarTitle("")
 							.navigationBarHidden(true)
 							.tabItem {
-								Image(systemName: "person.3")
-								Text("Party")
+                                Label("Party", systemImage: selectedTab == 3 ? "person.3.fill" : "person.3")
+                                    .environment(\.symbolVariants, .none)
+
 							}.tag(3)
 						//
 						SheetView()
 							.tabItem {
-								Image(systemName: "list.bullet")
-								Text("Settings")
+                                Label("Settings", systemImage: selectedTab == 4 ? "gearshape.fill" : "gearshape")
+                                    .environment(\.symbolVariants, .none)
 							}.tag(4)
 
 					}
