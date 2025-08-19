@@ -11,7 +11,7 @@ struct HomeView: View {
     @Environment(PartyViewModel.self) var viewModel
     // Used to manually refresh view
     @State var refreshView = false
-    @State var cardCounter = 9
+    @State var cardCounter = 0
 
     var body: some View {
 
@@ -27,6 +27,9 @@ struct HomeView: View {
                 // Used to Manually refresh view
                 refreshView.toggle()
             }
+        }
+        .onAppear {
+            cardCounter = viewModel.localRestaurants.count
         }
 
     }

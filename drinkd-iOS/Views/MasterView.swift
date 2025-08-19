@@ -15,66 +15,51 @@ struct MasterView: View {
 	var body: some View {
 
 		VStack {
-			if viewModel.removeSplashScreen {
+            if viewModel.removeSplashScreen {
 
-					TabView(selection: $selectedTab) {
-						//
-                        if (!networking.userDeniedLocationServices) {
+                TabView(selection: $selectedTab) {
+                    //
+                    if (!networking.userDeniedLocationServices) {
 
-                            ZStack {
-
-//                                AppColors.primaryColor
-//                                    .ignoresSafeArea(.all, edges: .top)
-
-                                HomeView()
-                                    .padding()
-                                    .padding(.bottom)
-
-                            }
-                            .navigationTitle("")
-                            .navigationBarHidden(true)
+                        HomeView()
+                            .padding()
+                            .padding(.bottom)
                             .tabItem {
                                 Label("Home", systemImage: selectedTab == 1 ? "house.fill" : "house")
                                     .environment(\.symbolVariants, .none)
                             }.tag(1)
 
 
-						} else {
-							CustomLocationView()
-								.navigationBarTitle("")
-								.navigationBarHidden(true)
-								.tabItem {
-									Image(systemName: "house")
-									Text("Home")
-								}.tag(1)
-						}
-						//
-						TopChoicesView()
-							.navigationBarTitle("")
-							.navigationBarHidden(true)
-							.tabItem {
-                                Label("TopChoices", systemImage: selectedTab == 2 ? "chart.bar.fill" : "chart.bar")
-                                    .environment(\.symbolVariants, .none)
-							}.tag(2)
-						//
-						PartyView()
-							.navigationBarTitle("")
-							.navigationBarHidden(true)
-							.tabItem {
-                                Label("Party", systemImage: selectedTab == 3 ? "person.3.fill" : "person.3")
-                                    .environment(\.symbolVariants, .none)
+                    } else {
+                        CustomLocationView()
+                            .tabItem {
+                                Image(systemName: "house")
+                                Text("Home")
+                            }.tag(1)
+                    }
+                    //
+                    TopChoicesView()
+                        .tabItem {
+                            Label("TopChoices", systemImage: selectedTab == 2 ? "chart.bar.fill" : "chart.bar")
+                                .environment(\.symbolVariants, .none)
+                        }.tag(2)
+                    //
+                    PartyView()
+                        .tabItem {
+                            Label("Party", systemImage: selectedTab == 3 ? "person.3.fill" : "person.3")
+                                .environment(\.symbolVariants, .none)
 
-							}.tag(3)
-						//
-						SheetView()
-							.tabItem {
-                                Label("Settings", systemImage: selectedTab == 4 ? "gearshape.fill" : "gearshape")
-                                    .environment(\.symbolVariants, .none)
-							}.tag(4)
+                        }.tag(3)
+                    //
+                    SheetView()
+                        .tabItem {
+                            Label("Settings", systemImage: selectedTab == 4 ? "gearshape.fill" : "gearshape")
+                                .environment(\.symbolVariants, .none)
+                        }.tag(4)
 
-					}
+                }
 
-			} else {
+            } else {
 				SplashScreen()
 			}
 		}
