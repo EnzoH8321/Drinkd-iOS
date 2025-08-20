@@ -15,6 +15,9 @@
 		54222D8E2E46F840003E58F3 /* TestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 54222D8D2E46F840003E58F3 /* TestPlan.xctestplan */; };
 		5422315E2E502926003E58F3 /* WebSocketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5422315D2E502926003E58F3 /* WebSocketTests.swift */; };
 		542455CB2E50F50400702EEA /* TestErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542455CA2E50F50400702EEA /* TestErrors.swift */; };
+		542459932E56382100702EEA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542459922E56382100702EEA /* Extensions.swift */; };
+		542459952E56389200702EEA /* StackableWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542459942E56389200702EEA /* StackableWrapper.swift */; };
+		542459972E56396000702EEA /* LoopingStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542459962E56396000702EEA /* LoopingStack.swift */; };
 		5430E126276D1D8F00326A52 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5430E125276D1D8F00326A52 /* ChatView.swift */; };
 		543196D82E3E6C2D00EA17BB /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543196D72E3E6C2D00EA17BB /* WebSocket.swift */; };
 		5444B98F273EE09200FA6DA2 /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5444B98E273EE09100FA6DA2 /* SheetView.swift */; };
@@ -89,6 +92,9 @@
 		54222D8D2E46F840003E58F3 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 		5422315D2E502926003E58F3 /* WebSocketTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketTests.swift; sourceTree = "<group>"; };
 		542455CA2E50F50400702EEA /* TestErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestErrors.swift; sourceTree = "<group>"; };
+		542459922E56382100702EEA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		542459942E56389200702EEA /* StackableWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackableWrapper.swift; sourceTree = "<group>"; };
+		542459962E56396000702EEA /* LoopingStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingStack.swift; sourceTree = "<group>"; };
 		5430E125276D1D8F00326A52 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		543196D72E3E6C2D00EA17BB /* WebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		5444B98E273EE09100FA6DA2 /* SheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
@@ -314,6 +320,8 @@
 				54F9C83F26FBF8E8008FA516 /* CardView.swift */,
 				54F9C84B26FD1ED6008FA516 /* ListCardView.swift */,
 				54B3E536270E140C0004ECC5 /* Star.swift */,
+				542459942E56389200702EEA /* StackableWrapper.swift */,
+				542459962E56396000702EEA /* LoopingStack.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -323,6 +331,7 @@
 			children = (
 				54F9C84526FCF403008FA516 /* Styles.swift */,
 				54C7BD0D2DC1D88D00045D67 /* Constants.swift */,
+				542459922E56382100702EEA /* Extensions.swift */,
 			);
 			path = Globals;
 			sourceTree = "<group>";
@@ -519,6 +528,7 @@
 				54F9C84626FCF403008FA516 /* Styles.swift in Sources */,
 				54B3E537270E140E0004ECC5 /* Star.swift in Sources */,
 				5430E126276D1D8F00326A52 /* ChatView.swift in Sources */,
+				542459952E56389200702EEA /* StackableWrapper.swift in Sources */,
 				54C7BD0E2DC1D88D00045D67 /* Constants.swift in Sources */,
 				5444B991273EE99800FA6DA2 /* HowToView.swift in Sources */,
 				54F9C84C26FD1ED6008FA516 /* ListCardView.swift in Sources */,
@@ -529,6 +539,7 @@
 				54F9C8572702494E008FA516 /* PartyViewModel.swift in Sources */,
 				54BEE37427593A9300C82880 /* Networking.swift in Sources */,
 				54F9C85B27037F2F008FA516 /* Models.swift in Sources */,
+				542459972E56396000702EEA /* LoopingStack.swift in Sources */,
 				54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */,
 				543196D82E3E6C2D00EA17BB /* WebSocket.swift in Sources */,
 				54F9C83926FBD986008FA516 /* YelpAPIModels.swift in Sources */,
@@ -540,6 +551,7 @@
 				54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */,
 				5444B98F273EE09200FA6DA2 /* SheetView.swift in Sources */,
 				54F9C8522702283B008FA516 /* PartyView-Create.swift in Sources */,
+				542459932E56382100702EEA /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

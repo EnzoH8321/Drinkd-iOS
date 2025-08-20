@@ -22,22 +22,22 @@ struct CardView: View {
     @Environment(Networking.self) var networking
     @State private var showError: (status: Bool, message: String) = (false, "")
 
-    var restaurantTitle: String
-    var restaurantCategories: String
-    var restaurantScore: Int
-    var restaurantPrice: String
-    var restaurantImageURL: String
-    var restaurantCity: String
-    var restaurantAddress1: String
-    var restaurantAddress2: String?
-    var restaurantPhoneNumber: String
-    var restaurantZipCode: String
-    var restaurantState: String
-    var restaurantURL: String
-    var optionsDelivery: Bool = false
-    var optionsPickup: Bool = false
-    var optionsReservations: Bool = false
-    
+    private var restaurantTitle: String
+    private var restaurantCategories: String
+    private var restaurantScore: Int
+    private var restaurantPrice: String
+    private var restaurantImageURL: String
+    private var restaurantCity: String
+    private var restaurantAddress1: String
+    private var restaurantAddress2: String?
+    private var restaurantPhoneNumber: String
+    private var restaurantZipCode: String
+    private var restaurantState: String
+    private var restaurantURL: String
+    private var optionsDelivery: Bool = false
+    private var optionsPickup: Bool = false
+    private var optionsReservations: Bool = false
+
     
     //We use optionals because the API can return null for some properties
     init(cardCounter: Binding<Int> ,in restaurantDetails: YelpApiBusinessSearchProperties) {
@@ -72,8 +72,7 @@ struct CardView: View {
 
 
     var body: some View {
-        GeometryReader { geo in
-            
+
             ZStack {
                 RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
                     .fill(Color.white)
@@ -249,32 +248,32 @@ struct CardView: View {
             .alert(isPresented: $showError.status, content: {
                 Alert(title: Text("Error"), message: Text("Error - \(showError.message)"))
             })
-            .rotationEffect(.degrees(Double(offset.width / 5 )))
-            .offset(x: offset.width * 5, y: 0)
-            .opacity(2 - Double(abs(offset.width / 50)))
-            .gesture(
-                DragGesture()
-                    .onChanged { gesture in
-                        //TODO: currently not able to get accurate frame of scrollview. Find a solution without having to add extra padding
-                        if (gesture.startLocation.y + 60 > self.scrollDimensionminY) {return}
-                        
-                        self.offset = gesture.translation
-                    }
-                
-                    .onEnded { _ in
-                        if abs(self.offset.width) > 100 {
-                            // remove the card
-                            updateCardCounter()
-                            viewModel.removeCardFromDeck()
-                            viewModel.currentScoreOfTopCard = 0
-                            viewModel.topBarList.removeAll()
+//            .rotationEffect(.degrees(Double(offset.width / 5 )))
+//            .offset(x: offset.width * 5, y: 0)
+//            .opacity(2 - Double(abs(offset.width / 50)))
+//            .gesture(
+//                DragGesture()
+//                    .onChanged { gesture in
+//                        //TODO: currently not able to get accurate frame of scrollview. Find a solution without having to add extra padding
+//                        if (gesture.startLocation.y + 60 > self.scrollDimensionminY) {return}
+//                        
+//                        self.offset = gesture.translation
+//                    }
+//                
+//                    .onEnded { _ in
+//                        if abs(self.offset.width) > 100 {
+//                            // remove the card
+//                            updateCardCounter()
+//                            viewModel.removeCardFromDeck()
+//                            viewModel.currentScoreOfTopCard = 0
+//                            viewModel.topBarList.removeAll()
+//
+//                        } else {
+//                            self.offset = .zero
+//                        }
+//                    }
+//            )
 
-                        } else {
-                            self.offset = .zero
-                        }
-                    }
-            )
-        }
     
     }
 }
