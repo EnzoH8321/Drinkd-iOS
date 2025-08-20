@@ -15,10 +15,8 @@ class PartyViewModel {
     var customLat: Double = 0
     var customLong: Double = 0
 
-    var currentCardIndex: Int = 9
     var currentParty: Party?
 
-    var topBarList: [String: RestaurantScoreInfo] = [:]
     var currentScoreOfTopCard: Int = 0
     //Represents Deck
     var localRestaurants: [YelpApiBusinessSearchProperties] = []
@@ -34,12 +32,6 @@ class PartyViewModel {
 
     var currentlyInParty: Bool {
         return currentParty != nil ? true : false
-    }
-
-    //Used when a party is joined
-    func clearAllRestaurants() {
-        self.localRestaurants.removeAll()
-        self.localRestaurantsDefault.removeAll()
     }
 
     //Checks to see if the transaction array exists. if it does, parse it and fill the needed transaction properties
@@ -63,14 +55,6 @@ class PartyViewModel {
         }
     }
 
-    func removeCardFromDeck() {
-
-        self.currentCardIndex -= 1
-
-        if (self.currentCardIndex < 0) {
-            self.currentCardIndex = 9
-        }
-    }
 
     func addScoreToCard(points: Int) {
 
@@ -78,17 +62,10 @@ class PartyViewModel {
             return
         }
 
-        if !localRestaurantsDefault.indices.contains(currentCardIndex) {
-            Log.error.log("Invalid Index at currentCardIndex: \(currentCardIndex)")
-            return
-        }
-
         self.currentScoreOfTopCard = points
-
-        topBarList["\(currentCardIndex)"] = RestaurantScoreInfo(name: localRestaurantsDefault[currentCardIndex].name ?? "Not Found", score: points, url: self.currentParty?.yelpURL ?? "URL NOT FOUND")
     }
 
-    func leaveParty() {        
+    func leaveParty() {
         self.topRestaurants.removeAll()
         currentParty = nil
         chatMessageList.removeAll()

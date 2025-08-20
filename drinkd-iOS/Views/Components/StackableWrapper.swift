@@ -8,6 +8,7 @@
 import SwiftUI
 // Allows you to stack views & adds animations
 struct StackableWrapper<Content: View>: View {
+    @Environment(PartyViewModel.self) var viewModel
 
     var index: Int
     var count: Int
@@ -51,6 +52,7 @@ struct StackableWrapper<Content: View>: View {
                         offset = xOffset
                     }).onEnded({ value in
 
+                        viewModel.currentScoreOfTopCard = 0
                         let xVelocity = max(-value.velocity.width / 5 , 0)
                         /*
                          Slow drag: Must drag past 65% of screen to trigger

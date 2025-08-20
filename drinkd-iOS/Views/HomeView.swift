@@ -9,40 +9,21 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(PartyViewModel.self) var viewModel
-    @State var cardCounter = 0
+
     var visibleCardsCount: Int = 2
     // View properties
     @State private var rotation: Int = 0
 
     var body: some View {
 
-//        ZStack {
-//            ForEach(0..<viewModel.localRestaurants.count, id: \.self) { element in
-//                CardView(cardCounter: $cardCounter, in: viewModel.localRestaurants[element])
-//                    .stacked(at: element, in: viewModel.localRestaurants.count)
-//            }
-//        }
-//        .id(refreshView)
-//        .onChange(of: cardCounter) { oldValue, newValue in
-//            if newValue == 0 {
-//                // Used to Manually refresh view
-//                refreshView.toggle()
-//            }
-//        }
-//        .onAppear {
-//            cardCounter = viewModel.localRestaurants.count
-//        }
-
-
-
         Group(subviews: baseView()) { collection in
-            let collection = collection.rotateFromLeft(by: rotation)
-            let count = collection.count
+            let modifiedCollection = collection.rotateFromLeft(by: rotation)
+            let count = modifiedCollection.count
 
             ZStack {
-                ForEach(collection) { view in
+                ForEach(modifiedCollection) { view in
                     // lets reverse the stack with zindex
-                    let index = collection.index(view)
+                    let index = modifiedCollection.index(view)
                     let zIndex = Double(count - index)
 
                     StackableWrapper(index: index, count: count, visibleCardsCount: visibleCardsCount, rotation: $rotation) {
@@ -53,8 +34,6 @@ struct HomeView: View {
                 }
             }
         }
-
-
     }
 
 }
@@ -62,7 +41,7 @@ struct HomeView: View {
 extension HomeView {
     @ViewBuilder func baseView() -> some View {
         ForEach(0..<viewModel.localRestaurants.count, id: \.self) { element in
-            CardView(cardCounter: $cardCounter, in: viewModel.localRestaurants[element])
+            CardView(in: viewModel.localRestaurants[element])
         }
     }
 }
