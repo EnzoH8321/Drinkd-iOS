@@ -9,9 +9,10 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(PartyViewModel.self) var viewModel
-    // Used to manually refresh view
-//    @State var refreshView = false
     @State var cardCounter = 0
+    var visibleCardsCount: Int = 2
+    // View properties
+    @State private var rotation: Int = 0
 
     var body: some View {
 
@@ -33,10 +34,23 @@ struct HomeView: View {
 //        }
 
 
-        LoopingStack {
-            ForEach(0..<viewModel.localRestaurants.count, id: \.self) { element in
-                CardView(cardCounter: $cardCounter, in: viewModel.localRestaurants[element])
-//                    .stacked(at: element, in: viewModel.localRestaurants.count)
+
+        Group(subviews: baseView()) { collection in
+            let collection = collection.rotateFromLeft(by: rotation)
+            let count = collection.count
+
+            ZStack {
+                ForEach(collection) { view in
+                    // lets reverse the stack with zindex
+                    let index = collection.index(view)
+                    let zIndex = Double(count - index)
+
+                    StackableWrapper(index: index, count: count, visibleCardsCount: visibleCardsCount, rotation: $rotation) {
+                        view
+                    }
+                    .zIndex(zIndex)
+
+                }
             }
         }
 
@@ -45,14 +59,14 @@ struct HomeView: View {
 
 }
 
-//For stacked styling
-extension View {
-	func stacked(at position: Int, in total: Int) -> some View {
-		let offset = CGFloat(total - position)
-
-		return self.offset(CGSize(width: 0, height: offset * -2))
-	}
+extension HomeView {
+    @ViewBuilder func baseView() -> some View {
+        ForEach(0..<viewModel.localRestaurants.count, id: \.self) { element in
+            CardView(cardCounter: $cardCounter, in: viewModel.localRestaurants[element])
+        }
+    }
 }
+
 
 #Preview("In a Party") {
     let partyVM = PartyViewModel()

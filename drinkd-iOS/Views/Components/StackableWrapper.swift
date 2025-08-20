@@ -18,7 +18,6 @@ struct StackableWrapper<Content: View>: View {
     @State private var offset: CGFloat = .zero
     // Useful to calculate the end result when dragging is finished (to push into the next card)
     @State private var viewSize: CGSize = .zero
-    let onEnded: () -> Void
     var body: some View {
 
         // Visible cards offset and scaling
@@ -51,7 +50,7 @@ struct StackableWrapper<Content: View>: View {
                         let xOffset = -max(-value.translation.width, 0)
                         offset = xOffset
                     }).onEnded({ value in
-                        onEnded()
+
                         let xVelocity = max(-value.velocity.width / 5 , 0)
                         /*
                          Slow drag: Must drag past 65% of screen to trigger
