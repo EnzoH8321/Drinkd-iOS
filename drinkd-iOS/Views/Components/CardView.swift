@@ -80,6 +80,17 @@ struct CardView: View {
                         Text("/")
                         Text("\(restaurantPrice)")
                             .font(.title3)
+
+                        Spacer()
+
+                        Button {
+                            guard let url = URL(string: "\(restaurantURL)") else { return Log.error.log("Bad Restaurant URL") }
+                            openURL(url)
+                        } label: {
+                            Image(systemName: "info.square.fill")
+                                .font(.title)
+                        }
+
                     }
 
                     HStack {
@@ -98,13 +109,6 @@ struct CardView: View {
 
                         Spacer()
                     }
-
-
-                    GeometryReader { geo in
-
-                        let minY = geo.frame(in: CoordinateSpace.global).minY
-                        let maxY = geo.frame(in: CoordinateSpace.global).maxY
-                        let frame = geo.frame(in: CoordinateSpace.global)
 
                         VStack(alignment: .leading) {
 
@@ -143,78 +147,22 @@ struct CardView: View {
                                             subheadline: optionsReservations ? "Reservations Available" : "Reservations Unavailable",
                                             imageName: "square.and.pencil")
 
-                                    Divider()
-
-                                    if (!viewModel.currentlyInParty) {
-                                        HStack {
-                                            Spacer()
-
-                                            // More Info Button
-                                            Button("More Info") {
-                                                guard let url = URL(string: "\(restaurantURL)") else { return Log.general.log("Bad Restaurant URL") }
-                                                openURL(url)
-                                            }
-                                            .bold()
-                                            .buttonStyle(Styles.DefaultAppButton())
-                                            .padding(.top, 20)
-
-                                            Spacer()
-                                        }
-
-                                    }
                                 }
                                 .labeledContentStyle(Styles.LabeledContentCardStyling())
                             }
 
                         }
-                    }
 
                     if (viewModel.currentlyInParty) {
-                        // Button H-Stack
-                        HStack {
-                            Spacer()
-                            // Submit Button
-                            Button("Submit") {
-
-                                guard let party = viewModel.currentParty else {
-                                    showError.message = "User is not in a party"
-                                    showError.status.toggle()
-                                    return
-                                }
-
-                                Task {
-                                    do {
-                                        let userID = try UserDefaultsWrapper.getUserID
-                                        if viewModel.currentScoreOfTopCard == 0 { return }
-                                        try await networking.addRating(partyID: party.partyID, userID: userID, username: party.username, restaurantName: restaurantTitle, rating: viewModel.currentScoreOfTopCard, imageURL: restaurantImageURL)
-                                    } catch {
-                                        showError.message = error.localizedDescription
-                                        showError.status.toggle()
-                                    }
-
-                                }
-
-                            }
-
-                            // More Info Button
-                            Button("More Info") {
-                                guard let url = URL(string: "\(restaurantURL)") else { return print("BAD URL") }
-                                openURL(url)
-                            }
-
-                            Spacer()
-                        }
-                        .bold()
-                        .buttonStyle(Styles.DefaultAppButton())
 
                         HStack {
                             Spacer()
                             Group {
-                                Star( starValue: 1)
-                                Star( starValue: 2)
-                                Star( starValue: 3)
-                                Star( starValue: 4)
-                                Star( starValue: 5)
+
+                                ForEach(1...5, id: \.self) { index in
+                                    Star(showError: $showError, starValue: index, restaurantTitle: restaurantTitle, restaurantImageURL: restaurantImageURL)
+                                }
+
                             }
                             .scaledToFit()
                             .frame(height: 50, alignment: .center)
