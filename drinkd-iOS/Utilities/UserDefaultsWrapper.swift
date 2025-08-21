@@ -16,14 +16,18 @@ final class UserDefaultsWrapper {
 
     private static let defaults = UserDefaults.standard
 
-    // User ID
+    /// Generates and stores a new user ID in UserDefaults
     static func setUserIDOnStartup() {
         let id = UUID().uuidString
         defaults.set(id, forKey: userID)
     }
 
+    /// Retrieves the stored user ID from UserDefaults as a UUID
+    /// - Returns: The user's UUID
+    /// - Throws: Error if user ID is not found or cannot be converted to a UUID
     static var getUserID: UUID {
         get throws {
+            // Extract UUID string from UserDefaults and convert to UUID
             guard let uuidString = defaults.object(forKey: userID) as? String,
                   let uuid = UUID(uuidString: uuidString) else { throw SharedErrors.general(error: .userDefaultsError("Unable to find user ID")) }
 

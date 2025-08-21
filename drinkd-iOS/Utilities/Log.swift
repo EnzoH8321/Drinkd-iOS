@@ -17,10 +17,16 @@ enum Log {
     case general
     case error
 
+    /// Logs a message with file location context using the appropriate log level
+    /// - Parameters:
+    ///   - msg: Message to log
+    ///   - file: Source file path
+    ///   - line: Source line number
     func log(_ msg: String, file: String = #file, line: Int = #line) {
-
+        // Extract filename from full path
         let fileName = (file as NSString).lastPathComponent
 
+        // Log message based on log level type
         switch self {
         case .general:
             let logger = Logger(subsystem: subsystem, category: "General")

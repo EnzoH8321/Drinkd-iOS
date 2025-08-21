@@ -34,10 +34,12 @@ class PartyViewModel {
         return currentParty != nil ? true : false
     }
 
-    //Checks to see if the transaction array exists. if it does, parse it and fill the needed transaction properties
+    /// Updates service availability values
+    /// - Parameter restaurants: Restaurant data
     func updateLocalRestaurants(in restaurants: [YelpApiBusinessSearchProperties]) {
 
         for var element in restaurants {
+            // Get available transaction types, use empty array if none provided
             let transactionArray = element.transactions ?? [""]
 
             if (transactionArray.contains("pickup")) {
@@ -56,6 +58,10 @@ class PartyViewModel {
     }
 
 
+    /// Updates the score of the top card with the provided points value.
+    /// If the new points value is the same as the current score, no update occurs.
+    /// - Parameter points: The new score value to assign to the top card
+
     func addScoreToCard(points: Int) {
 
         if (points == currentScoreOfTopCard) {
@@ -65,6 +71,7 @@ class PartyViewModel {
         self.currentScoreOfTopCard = points
     }
 
+    /// Exits the current party session and resets all party-related data
     func leaveParty() {
         self.topRestaurants.removeAll()
         currentParty = nil

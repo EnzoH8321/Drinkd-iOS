@@ -45,14 +45,17 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
         ping()
     }
 
+    /// Sets up websocket channel for the specified party
+    /// - Parameter partyID: UUID of the party to connect to
     func setChannel(partyID: UUID) {
         self.channel = client.channel(partyID.uuidString) {
             $0.broadcast.receiveOwnBroadcasts = true
         }
     }
 
+    /// Cancels the active WebSocket connection if one exists
     func cancelWebSocketConnection() {
-
+        // Exit early if no WebSocket connection exists
         guard websocketTask != nil else {
             Log.error.log("Websocket is nil")
             return
@@ -64,17 +67,19 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
         websocketTask = nil
     }
 
+    /// Sends a ping to check WebSocket connection health and schedules the next ping
     func ping() {
+        // Ensure WebSocket task exists before attempting ping
         guard let webSocketTask = self.websocketTask else {
             Log.error.log("Error: No WebSocket task")
             return
         }
-
+        // Send ping and handle response
         webSocketTask.sendPing { error in
             if let error = error {
-                print("Error when sending PING \(error)")
+                Log.error.log("Error when sending PING \(error)")
             } else {
-                print("Web Socket connection is alive")
+                Log.general.log("Web Socket connection is alive")
                 DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
                     self.ping()
                 }
@@ -82,29 +87,38 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
         }
     }
 
-    // Creates channel, subsrcribes to it and listens for messages
-    // Only use when creating party
+    /// Subscribes to a channel and listens for messages
+    /// - Parameters:
+    ///   - partyVM: Party view model
+    ///   - partyID: UUID of the party to subscribe to
     func rdbSetSubscribeAndListen(partyVM: PartyViewModel, partyID: UUID) async {
 
         setChannel(partyID: partyID)
 
         do {
+            // Subscribe to channel and start listening for messages
             try await self.channel?.subscribeWithError()
-            rdbListenForMessages(partyVM: partyVM ,partyID: partyID.uuidString)
+            rdbListenForMessages(partyVM: partyVM)
         } catch {
             Log.error.log("rdbCreateChannel error: \(error)")
         }
 
-
         Log.general.log("New Channel - \(self.channel)")
     }
 
+    /// Sends a chat message to the party channel via real-time database broadcast
+    /// - Parameters:
+    ///   - userName: Username of the message sender
+    ///   - userID: Users UUID
+    ///   - message: Text content of the message
+    ///   - messageID: UUID for this message
+    ///   - partyID: UUID of the party receiving the message
     func rdbSendMessage(userName: String, userID: UUID, message: String, messageID: UUID, partyID: UUID) async {
 
         if let channel = self.channel {
 
             do {
-
+                // Broadcast message
                 try await channel.broadcast(
                     event: "newMessage",
                     message: [
@@ -122,7 +136,10 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
         }
     }
 
-    func rdbListenForMessages(partyVM: PartyViewModel, partyID: String) {
+    /// Listens for incoming messages and updates the chat list
+    /// - Parameters:
+    ///   - partyVM: Party view model
+    func rdbListenForMessages(partyVM: PartyViewModel) {
 
         // Get Channel
         guard let channel = self.channel else {
@@ -172,20 +189,26 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
         }
     }
 
+    /// Executes an async operation with a timeout, throwing an error if time limit is exceeded
+    /// - Parameters:
+    ///   - seconds: Maximum time to wait before timing out
+    ///   - operation: Async operation to execute with timeout
+    /// - Returns: Result of the operation if completed within timeout
+    /// - Throws: Operation error or timeout error if time limit exceeded
     private func withTimeout<T>(seconds: TimeInterval, operation: @escaping () async throws -> T) async throws -> T {
         return try await withThrowingTaskGroup(of: T.self) { group in
-            // Add the main operation
+            // Add the main operation task
             group.addTask {
                 try await operation()
             }
 
-            // Add timeout task
+            // Add timeout task that throws after specified duration
             group.addTask {
                 try await Task.sleep(for: .seconds(seconds))
                 throw SharedErrors.general(error: .generalError("Timeout Hit"))
             }
 
-            // Return the first result and cancel other tasks
+            // Return first completed result and cancel remaining tasks
             defer { group.cancelAll() }
             return try await group.next()!
         }

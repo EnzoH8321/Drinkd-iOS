@@ -330,6 +330,10 @@ extension Networking {
 //MARK: Utilities
 extension Networking {
 
+    /// Executes a URL request and returns response data, handling HTTP errors
+    /// - Parameter urlReq: The URL request to execute
+    /// - Returns: Response data if request succeeds
+    /// - Throws: Network error or decoded API error from response
     private func executeRequest(urlReq: URLRequest) async throws -> Data {
 
         do {
