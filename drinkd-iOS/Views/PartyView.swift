@@ -34,7 +34,7 @@ struct PartyView: View {
                     Spacer()
 				}
 			} else {
-				VStack{
+				VStack {
 					PartyCardView()
 				}
 			}

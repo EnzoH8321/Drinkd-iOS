@@ -48,42 +48,38 @@ struct PartyCardView: View {
 
             VStack {
 
-                Text("Partyname:")
-                    .font(.largeTitle)
-                Text("\(partyName)")
-                    .font(.title2)
-
-                Text("Username")
-                    .font(.largeTitle)
-                Text("\(userName)")
-                    .font(.title2)
-
-                Text("Party Code:")
-                    .font(.largeTitle)
-                Text(partyCode)
-                    .font(.title2)
-
-//                Text("Votes to Win")
-//                    .font(.largeTitle)
-//                Text("\(partyVotes)")
-//                    .font(.title2)
-
-                Button {
-                    joinChat()
-                } label: {
-                    Text("Join Chat")
-                        .bold()
+                LabeledContent("Partyname") {
+                    Text("\(partyName)")
                 }
-                .buttonStyle(Styles.DefaultAppButton())
 
-                //
-                Button {
-                    leaveParty()
-                } label: {
-                    Text("Leave Party")
-                        .bold()
+                LabeledContent("Username") {
+                    Text("\(userName)")
                 }
-                .buttonStyle(Styles.DefaultAppButton())
+
+                LabeledContent("Party Code") {
+                    Text("\(partyCode)")
+                }
+
+                HStack {
+
+                    Button {
+                        joinChat()
+                    } label: {
+                        Text("Join Chat")
+                            .bold()
+                    }
+                    .buttonStyle(Styles.DefaultAppButton())
+
+                    //
+                    Button {
+                        leaveParty()
+                    } label: {
+                        Text("Leave Party")
+                            .bold()
+                    }
+                    .buttonStyle(Styles.DefaultAppButton())
+                }
+                .padding(.top)
 
             }
             .padding()
@@ -107,5 +103,6 @@ struct PartyCardView: View {
 
      return PartyCardView()
         .environment(partyVM)
+        .environment(Networking())
 }
 
