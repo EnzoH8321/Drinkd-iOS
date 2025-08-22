@@ -9,7 +9,18 @@ import SwiftUI
 
 struct SplashScreen: View {
     var body: some View {
-        Text("Splash Screen")
+
+        ZStack {
+
+            Color(red: 240/255, green: 240/255, blue: 240/255)
+                .ignoresSafeArea()
+
+            Image("drinkdLogo")
+                .resizable()
+                .scaledToFit()
+        }
+
+
     }
 }
 
