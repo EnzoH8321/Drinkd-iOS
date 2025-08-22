@@ -37,6 +37,7 @@
 		54BEE37427593A9300C82880 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BEE37327593A9300C82880 /* Networking.swift */; };
 		54C7BD0E2DC1D88D00045D67 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C7BD0D2DC1D88D00045D67 /* Constants.swift */; };
 		54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */; };
+		54EFB0F92E58F69F007984D5 /* ConfidentialKit in Frameworks */ = {isa = PBXBuildFile; productRef = 54EFB0F82E58F69F007984D5 /* ConfidentialKit */; };
 		54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */; };
 		54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* MasterView.swift */; };
 		54F9C80D26FBB537008FA516 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80C26FBB537008FA516 /* Assets.xcassets */; };
@@ -154,6 +155,7 @@
 				54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */,
 				544A78612E43111500497F93 /* Realtime in Frameworks */,
 				544A78642E43177E00497F93 /* Supabase in Frameworks */,
+				54EFB0F92E58F69F007984D5 /* ConfidentialKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +377,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				54EFB0FC2E58F6EB007984D5 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				542BE6252E103AE300B13011 /* Utilities */,
@@ -459,6 +462,8 @@
 			packageReferences = (
 				543196DB2E41D07400EA17BB /* XCRemoteSwiftPackageReference "drinkdSharedModels" */,
 				544A785F2E43111500497F93 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				54EFB0F72E58F69F007984D5 /* XCRemoteSwiftPackageReference "swift-confidential" */,
+				54EFB0FA2E58F6D5007984D5 /* XCRemoteSwiftPackageReference "swift-confidential-plugin" */,
 			);
 			productRefGroup = 54F9C80626FBB536008FA516 /* Products */;
 			projectDirPath = "";
@@ -585,6 +590,10 @@
 			isa = PBXTargetDependency;
 			target = 54F9C80426FBB536008FA516 /* drinkd-iOS */;
 			targetProxy = 54562865278A62BF00CA6005 /* PBXContainerItemProxy */;
+		};
+		54EFB0FC2E58F6EB007984D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 54EFB0FB2E58F6EB007984D5 /* Confidential */;
 		};
 		54F9C81C26FBB538008FA516 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1003,6 +1012,22 @@
 				minimumVersion = 2.5.1;
 			};
 		};
+		54EFB0F72E58F69F007984D5 /* XCRemoteSwiftPackageReference "swift-confidential" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/securevale/swift-confidential";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.1;
+			};
+		};
+		54EFB0FA2E58F6D5007984D5 /* XCRemoteSwiftPackageReference "swift-confidential-plugin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/securevale/swift-confidential-plugin";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1019,6 +1044,16 @@
 		54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = drinkdSharedModels;
+		};
+		54EFB0F82E58F69F007984D5 /* ConfidentialKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 54EFB0F72E58F69F007984D5 /* XCRemoteSwiftPackageReference "swift-confidential" */;
+			productName = ConfidentialKit;
+		};
+		54EFB0FB2E58F6EB007984D5 /* Confidential */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 54EFB0FA2E58F6D5007984D5 /* XCRemoteSwiftPackageReference "swift-confidential-plugin" */;
+			productName = "plugin:Confidential";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -7,12 +7,13 @@
 
 import Foundation
 import SwiftUI
+import ConfidentialKit
 
 struct Constants {
 
     //Hidden API KEYS
-    static let yelpToken: String = ProcessInfo.processInfo.environment["YELP_APIKEY"]!
-    static let supabaseToken: String = ProcessInfo.processInfo.environment["SUPABASE_KEY"]!
+    static let yelpToken: String = "\(Secrets.$yelpKey)"
+    static let supabaseToken: String = "\(Secrets.$supabaseKey)"
 }
 
 enum NetworkSuccess {
