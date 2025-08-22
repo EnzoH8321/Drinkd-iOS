@@ -84,5 +84,6 @@ struct PartyView_Join: View {
 
      return PartyView_Join()
         .environment(partyVM)
+        .environment(Networking())
 }
 

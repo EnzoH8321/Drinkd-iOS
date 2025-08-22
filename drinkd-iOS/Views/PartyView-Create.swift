@@ -99,5 +99,6 @@ struct PartyView_Create_Previews: PreviewProvider {
     static var previews: some View {
         PartyView_Create()
             .environment(PartyViewModel())
+            .environment(Networking())
     }
 }
