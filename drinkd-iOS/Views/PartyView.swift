@@ -15,7 +15,7 @@ struct PartyView: View {
 	var body: some View {
 		NavigationView {
 			if (!viewModel.currentlyInParty) {
-                HStack {
+                VStack {
                     Spacer()
 
                     NavigationLink(destination: PartyView_Create()) {
@@ -23,15 +23,17 @@ struct PartyView: View {
                         Text("Create Party")
                             .bold()
                     }
-                    .padding([.trailing])
+                    .padding()
                     .buttonStyle(Styles.DefaultAppButton())
+
+
 
                     NavigationLink(destination: PartyView_Join()) {
 
                         Text("Join Party")
                             .bold()
                     }
-                    .padding([.leading])
+                    .padding()
                     .buttonStyle(Styles.DefaultAppButton())
 
                     Spacer()

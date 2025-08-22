@@ -62,6 +62,8 @@ struct PartyCardView: View {
 
                 HStack {
 
+                    Spacer()
+
                     Button {
                         joinChat()
                     } label: {
@@ -69,6 +71,8 @@ struct PartyCardView: View {
                             .bold()
                     }
                     .buttonStyle(Styles.DefaultAppButton())
+
+                    Spacer()
 
                     //
                     Button {
@@ -78,6 +82,8 @@ struct PartyCardView: View {
                             .bold()
                     }
                     .buttonStyle(Styles.DefaultAppButton())
+
+                    Spacer()
                 }
                 .padding(.top)
 
