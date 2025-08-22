@@ -61,7 +61,6 @@ class PartyViewModel {
     /// Updates the score of the top card with the provided points value.
     /// If the new points value is the same as the current score, no update occurs.
     /// - Parameter points: The new score value to assign to the top card
-
     func addScoreToCard(points: Int) {
 
         if (points == currentScoreOfTopCard) {

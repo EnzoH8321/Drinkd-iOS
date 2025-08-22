@@ -109,7 +109,7 @@ struct WebSocketTests {
         do {
             try await ws.stubSetupChannel(partyID: partyID)
             await ws.stubSendMessage(partyID: partyID)
-            ws.rdbListenForMessages(partyVM: vm, partyID: partyID.uuidString)
+            ws.rdbListenForMessages(partyVM: vm)
             // We suspend the task to ensure the broadcast stream has enough time to emit a message
             try await Task.sleep(for: .seconds(2))
 
