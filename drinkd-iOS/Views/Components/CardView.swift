@@ -61,9 +61,8 @@ struct CardView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius)
                     .fill(Color.white)
-                    .overlay(RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius).strokeBorder(Color(red: 221/255, green: 221/255, blue: 221/255), lineWidth: 1))
-                
-                
+                    .overlay(RoundedRectangle(cornerRadius: CardSpecificStyle.cornerRadius).strokeBorder(Color(red: 221/255, green: 221/255, blue: 221/255), lineWidth: 2))
+
                 VStack(alignment: .leading) {
                     Text("\(restaurantTitle)")
                         .font(.largeTitle)
