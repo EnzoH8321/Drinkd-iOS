@@ -258,6 +258,8 @@ extension Networking {
 
         guard let businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
 
+        await webSocket.rdbSetSubscribeAndListen(partyVM: viewModel, partyID: response.partyID)
+
         await MainActor.run {
 
             //Checks to see if the function already ran to prevent duplicate calls
