@@ -327,6 +327,18 @@ extension Networking {
         viewModel.chatMessageList = messages
     }
 
+    func getRatedRestaurants(viewModel: PartyViewModel) async throws {
+        guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .missingValue("Missing Party ID"))}
+        let urlString = HTTP.get(.ratedRestaurants).fullURLString
+        let userID = try UserDefaultsWrapper.getUserID
+        let urlReq = try HTTP.GetRoutes.ratedRestaurants.ratedRestaurantsReq(userID: userID, partyID: partyID, url: urlString)
+        let data = try await executeRequest(urlReq: urlReq)
+        let response = try JSONDecoder().decode(RatedRestaurantsGetResponse.self, from: data)
+
+        viewModel.ratedRestaurants = response.ratedRestaurants
+
+    }
+
 }
 
 //MARK: Utilities

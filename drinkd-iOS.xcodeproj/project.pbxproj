@@ -780,7 +780,7 @@
 				CODE_SIGN_ENTITLEMENTS = "drinkd-iOS/drinkd-iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 35;
 				DEVELOPMENT_ASSET_PATHS = "\"drinkd-iOS/Preview Content\"";
 				DEVELOPMENT_TEAM = 9537WHKZZD;
 				ENABLE_PREVIEWS = YES;
@@ -821,7 +821,7 @@
 				CODE_SIGN_ENTITLEMENTS = "drinkd-iOS/drinkd-iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 35;
 				DEVELOPMENT_ASSET_PATHS = "\"drinkd-iOS/Preview Content\"";
 				DEVELOPMENT_TEAM = 9537WHKZZD;
 				ENABLE_PREVIEWS = YES;

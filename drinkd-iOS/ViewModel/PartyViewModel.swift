@@ -23,6 +23,9 @@ class PartyViewModel {
     //
     var localRestaurantsDefault: [YelpApiBusinessSearchProperties] = []
 
+    // Rated restaurants by the user
+    var ratedRestaurants: [RatedRestaurantsTable] = []
+
     // Top Restaurants
     var topRestaurants: [RatedRestaurantsTable] = []
 

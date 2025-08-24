@@ -55,6 +55,7 @@ struct drinkd_iOSApp: App {
 
                             do {
                                 try await networking.rejoinParty(viewModel: viewModel)
+                                try await networking.getRatedRestaurants(viewModel: viewModel)
                             } catch {
                                 try await networking.updateRestaurants(viewModel: viewModel)
                             }
