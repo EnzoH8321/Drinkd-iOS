@@ -7,11 +7,6 @@
 
 import Foundation
 
-struct CodeLocation: Codable {
-    let file: String
-    let line: Int
-}
-
 enum YelpErrors: LocalizedError, Codable {
     case missingProperty(String)
     case invalidHTTPStatus(String)
@@ -29,13 +24,26 @@ enum YelpErrors: LocalizedError, Codable {
 
 enum LocationErrors: LocalizedError, Codable {
 
-    case invalidLastKnownLocation(msg: String, location: CodeLocation = CodeLocation(file: #file, line: #line))
+    case invalidLastKnownLocation(msg: String, file: String = #file, line: Int = #line)
 
     var errorDescription: String? {
         switch self {
-        case .invalidLastKnownLocation(let msg, let location):
-            Log.error.log(msg, file: location.file, line: location.line)
+        case .invalidLastKnownLocation(let msg, let file, let line):
+            Log.error.log(msg, file: file  , line: line)
             return "Invalid last known location - \(msg)"
+        }
+    }
+}
+
+enum UserDefaultsErrors: LocalizedError, Codable {
+
+    case noUserID(msg: String, file: String = #file, line: Int = #line)
+
+    var errorDescription: String? {
+        switch self {
+        case .noUserID(let msg, let file, let line):
+            Log.error.log(msg, file: file, line: line)
+            return "Unable to find UserID - \(msg)"
         }
     }
 }
