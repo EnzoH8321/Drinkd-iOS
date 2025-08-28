@@ -164,8 +164,8 @@ extension Networking {
     /// - Parameter restaurantsURL: The Yelp API URL for restaurant data
     func createParty(viewModel: PartyViewModel, username: String, partyName: String ,restaurantsURL: String) async throws {
         let userID = try UserDefaultsWrapper.getUserID
-        let urlRequest = try HTTP.PostRoutes.createParty.createPartyReq(userID: userID, userName: username, restaurantsUrl: restaurantsURL, partyName: partyName)
-        let data = try await executeRequest(urlReq: urlRequest)
+        let urlReq = try HTTP.PostReq.createParty(userID: userID, userName: username, restaurantsUrl: restaurantsURL, partyName: partyName).createReq()
+        let data = try await executeRequest(urlReq: urlReq)
 
         let response = try JSONDecoder().decode(CreatePartyResponse.self, from: data)
 
@@ -182,7 +182,7 @@ extension Networking {
     func leaveParty(partyVM: PartyViewModel, partyID: UUID) async throws  {
 
         let userID = try UserDefaultsWrapper.getUserID
-        let urlReq = try HTTP.PostRoutes.leaveParty.leavePartyReq(userID: userID)
+        let urlReq = try HTTP.PostReq.leaveParty(userID: userID).createReq()
         webSocket.cancelWebSocketConnection()
         let _ = try await executeRequest(urlReq: urlReq)
     }
@@ -194,7 +194,7 @@ extension Networking {
     func sendMessage(username: String, message: String, partyID: UUID) async throws {
 
         let userID = try UserDefaultsWrapper.getUserID
-        let urlReq = try HTTP.PostRoutes.sendMessage.sendMsgReq(userID: userID, username: username, message: message, partyID: partyID)
+        let urlReq = try HTTP.PostReq.sendMessage(userID: userID, username: username, message: message, partyID: partyID).createReq()
         await webSocket.rdbSendMessage(userName: username, userID: userID, message: message, messageID: UUID(), partyID: partyID)
         let _ = try await executeRequest(urlReq: urlReq)
     }
@@ -207,8 +207,7 @@ extension Networking {
     /// - Parameter rating: The numerical rating value for the restaurant
     /// - Parameter imageURL: The URL of the restaurant's image
     func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int, imageURL: String) async throws  {
-
-        let urlReq = try HTTP.PostRoutes.updateRating.updateRatingReq(partyID: partyID, userName: username, userID: userID, restaurantName: restaurantName, rating: rating, imageuRL: imageURL)
+        let urlReq = try HTTP.PostReq.updateRating(partyID: partyID, userName: username, userID: userID, restaurantName: restaurantName, rating: rating, imageuRL: imageURL).createReq()
         let _ = try await executeRequest(urlReq: urlReq)
     }
 
@@ -217,8 +216,7 @@ extension Networking {
     /// - Returns: Array of RatedRestaurantsTable objects with populated image data
     /// - Throws: SharedErrors.general if no restaurants are found
     func getTopRestaurants(partyID: UUID) async throws -> [RatedRestaurantsTable] {
-        let urlString = HTTP.get(.topRestaurants).fullURLString
-        let urlReq = try HTTP.GetRoutes.topRestaurants.topRestaurantsReq(partyID: partyID, url: urlString)
+        let urlReq = try HTTP.GetReq.topRestaurants(partyID: partyID).createReq()
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(TopRestaurantsGetResponse.self, from: data)
 
@@ -247,7 +245,7 @@ extension Networking {
 
         let userID = try UserDefaultsWrapper.getUserID
 
-        let urlReq = try HTTP.PostRoutes.joinParty.joinPartyReq(userID: userID, partyCode: partyCode, userName: userName)
+        let urlReq = try HTTP.PostReq.joinParty(userID: userID, partyCode: partyCode, userName: userName).createReq()
 
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(JoinPartyResponse.self, from: data)
@@ -278,9 +276,8 @@ extension Networking {
     /// - Parameter viewModel: The PartyViewModel instance to update with party data
     /// - Throws: SharedErrors.yelp if restaurant data is missing
     func rejoinParty(viewModel: PartyViewModel) async throws  {
-        let urlString = HTTP.get(.rejoinParty).fullURLString
         let userID = try UserDefaultsWrapper.getUserID
-        let urlReq = try HTTP.GetRoutes.rejoinParty.rejoinPartyReq(userID: userID.uuidString, url: urlString)
+        let urlReq = try HTTP.GetReq.rejoinParty(userID: userID.uuidString).createReq()
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(RejoinPartyGetResponse.self, from: data)
 
@@ -311,8 +308,8 @@ extension Networking {
     /// - Throws: SharedErrors.general if party ID is missing or date conversion fails
     func getMessages(viewModel: PartyViewModel) async throws {
         guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .missingValue("Missing Party ID"))}
-        let urlString = HTTP.get(.getMessages).fullURLString
-        let urlReq = try HTTP.GetRoutes.getMessages.getMessagesReq(partyID: partyID, url: urlString)
+
+        let urlReq = try HTTP.GetReq.getMessages(partyID: partyID).createReq()
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(MessagesGetResponse.self, from: data)
         let messages = try response.messages.map {
@@ -329,9 +326,8 @@ extension Networking {
 
     func getRatedRestaurants(viewModel: PartyViewModel) async throws {
         guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .missingValue("Missing Party ID"))}
-        let urlString = HTTP.get(.ratedRestaurants).fullURLString
         let userID = try UserDefaultsWrapper.getUserID
-        let urlReq = try HTTP.GetRoutes.ratedRestaurants.ratedRestaurantsReq(userID: userID, partyID: partyID, url: urlString)
+        let urlReq = try HTTP.GetReq.ratedRestaurants(userID: userID, partyID: partyID).createReq()
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(RatedRestaurantsGetResponse.self, from: data)
 
