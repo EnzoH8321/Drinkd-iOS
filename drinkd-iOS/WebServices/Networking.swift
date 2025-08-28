@@ -40,7 +40,7 @@ final class Networking {
 
         let businessSearch = try await getRestaurants(latitude: latitude, longitude: longitude)
 
-        guard let businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
+        guard let businesses = businessSearch.businesses else { throw YelpErrors.missingProperty("Missing businesses property")}
 
         await MainActor.run {
 
@@ -73,7 +73,7 @@ final class Networking {
 
         let businessSearch = try await getRestaurants(latitude: latitude, longitude: longitude)
 
-        guard let businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
+        guard let businesses = businessSearch.businesses else { throw YelpErrors.missingProperty("Missing businesses property")}
 
         await MainActor.run {
 
@@ -110,7 +110,7 @@ final class Networking {
 
             // Check for errors
             if !(200...299).contains(statusCode) {
-                throw SharedErrors.yelp(error: .invalidHTTPStatus("Invalid HTTP Status Code - \(statusCode)"))
+                throw YelpErrors.invalidHTTPStatus("Invalid HTTP Status Code - \(statusCode)")
             }
         }
 
@@ -141,7 +141,7 @@ final class Networking {
 
             // Check for errors
             if !(200...299).contains(statusCode) {
-                throw SharedErrors.yelp(error: .invalidHTTPStatus("Invalid HTTP Status Code - \(statusCode)"))
+                throw YelpErrors.invalidHTTPStatus("Invalid HTTP Status Code - \(statusCode)")
             }
         }
 
@@ -254,7 +254,7 @@ extension Networking {
 
         let businessSearch = try await getRestaurants(yelpURL: party.yelpURL)
 
-        guard let businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
+        guard let businesses = businessSearch.businesses else { throw YelpErrors.missingProperty("Missing businesses property")}
 
         await webSocket.rdbSetSubscribeAndListen(partyVM: viewModel, partyID: response.partyID)
 
@@ -285,7 +285,7 @@ extension Networking {
 
         let businessSearch = try await getRestaurants(yelpURL: party.yelpURL)
 
-        guard let businesses = businessSearch.businesses else { throw SharedErrors.yelp(error: .missingProperty("Missing businesses property"))}
+        guard let businesses = businessSearch.businesses else { throw YelpErrors.missingProperty("Missing businesses property")}
 
         await MainActor.run {
 
