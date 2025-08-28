@@ -34,8 +34,7 @@ final class Networking {
               let longitude = locationFetcher.lastKnownLocation?.longitude,
               latitude != 0.0 || longitude != 0.0 else
         {
-            Log.error.log("ERROR - NO USER LOCATION FOUND ")
-            throw ClientNetworkErrors.noUserLocationFoundError
+            throw LocationErrors.invalidLastKnownLocation(msg: "Unable to retrieve last known location")
         }
 
         let businessSearch = try await getRestaurants(latitude: latitude, longitude: longitude)
@@ -67,8 +66,7 @@ final class Networking {
         //If defaults are used, then the user location could not be found
         guard latitude != 0.0 || longitude != 0.0 else
         {
-            Log.error.log("ERROR - NO USER LOCATION FOUND ")
-            throw ClientNetworkErrors.noUserLocationFoundError
+            throw LocationErrors.invalidLastKnownLocation(msg: "Latitude or Longitude is 0.0")
         }
 
         let businessSearch = try await getRestaurants(latitude: latitude, longitude: longitude)
@@ -97,7 +95,7 @@ final class Networking {
      func getRestaurants(latitude: Double, longitude: Double) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
             Log.error.log("ERROR - INVALID URL")
-            throw ClientNetworkErrors.invalidURLError
+            throw SharedErrors.general(error: .generalError("Invalid URL"))
         }
 
         var request = URLRequest(url: url)
@@ -128,7 +126,7 @@ final class Networking {
      func getRestaurants(yelpURL: String) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: yelpURL) else {
             Log.error.log("ERROR - INVALID URL")
-            throw ClientNetworkErrors.invalidURLError
+            throw SharedErrors.general(error: .generalError("Invalid URL"))
         }
 
         var request = URLRequest(url: url)

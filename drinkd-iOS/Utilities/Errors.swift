@@ -7,11 +7,16 @@
 
 import Foundation
 
+struct CodeLocation: Codable {
+    let file: String
+    let line: Int
+}
+
 enum YelpErrors: LocalizedError, Codable {
     case missingProperty(String)
     case invalidHTTPStatus(String)
 
-    public var errorDescription: String? {
+     var errorDescription: String? {
         switch self {
         case .missingProperty(let string):
             return "missingProperty error - \(string)"
@@ -20,3 +25,29 @@ enum YelpErrors: LocalizedError, Codable {
         }
     }
 }
+
+
+enum LocationErrors: LocalizedError, Codable {
+
+    case invalidLastKnownLocation(msg: String, location: CodeLocation = CodeLocation(file: #file, line: #line))
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidLastKnownLocation(let msg, let location):
+            Log.error.log(msg, file: location.file, line: location.line)
+            return "Invalid last known location - \(msg)"
+        }
+    }
+}
+
+//enum NetworkingErrors: LocalizedError, Codable {
+//    case invalidURL(msg: String, location: CodeLocation = CodeLocation(file: #file, line: #line))
+//
+//    var errorDescription: String? {
+//        switch self {
+//        case .invalidURL(let msg, let location):
+//            Log.error.log(msg, file: location.file, line: location.line)
+//            return "Invalid URL - \(msg)"
+//        }
+//    }
+//}
