@@ -21,6 +21,8 @@ Version 2.0 is almost here! 1.0 released way back in 2021, almost a lifetime ago
 
  * Improve testing suite 
  * iPad styling
+ * Improve Card UI
+ * Add more party features? (Top Score, customizations etc.)
    
 ## Additional
 
@@ -29,5 +31,8 @@ Code for the Shared models - https://github.com/EnzoH8321/drinkdSharedModels
 
 ## Contact Me
 If you would liked to contact me, please email enzoherrera123@gmail.com
+
+## Miscellaneous
+Due to professional and personal responsibilities, I cannot work on the app full time. I try and work on it when I can on the weekends, but otherwise it is updated when I have the time. If you find any bugs and/or have suggestions for improvement, please contact me through email :)  
 
 
