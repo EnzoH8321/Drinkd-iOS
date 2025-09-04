@@ -32,7 +32,7 @@ final class Networking {
         //If defaults are used, then the user location could not be found
         guard let latitude = locationFetcher.lastKnownLocation?.latitude,
               let longitude = locationFetcher.lastKnownLocation?.longitude,
-              latitude != 0.0 || longitude != 0.0 else
+              latitude != 0.0 && longitude != 0.0 else
         {
             throw LocationErrors.invalidLastKnownLocation(msg: "Unable to retrieve last known location")
         }
@@ -64,10 +64,7 @@ final class Networking {
 
         //If user location was found, continue
         //If defaults are used, then the user location could not be found
-        guard latitude != 0.0 || longitude != 0.0 else
-        {
-            throw LocationErrors.invalidLastKnownLocation(msg: "Latitude or Longitude is 0.0")
-        }
+        if latitude == 0.0 && longitude == 0.0 { throw LocationErrors.invalidLastKnownLocation(msg: "Invalid Latitude and Longitude") }
 
         let businessSearch = try await getRestaurants(latitude: latitude, longitude: longitude)
 

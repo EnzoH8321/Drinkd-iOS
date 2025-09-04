@@ -6,30 +6,13 @@
 //
 
 import SwiftUI
+import drinkdSharedModels
 
 struct CustomLocationView: View {
 
     @Environment(PartyViewModel.self) var viewModel
     @Environment(Networking.self) var networking
     @State private var showAlert: (message: String, state: Bool) = ("", false)
-
-    private var latitude: Binding<String> {
-        Binding {
-            return String(viewModel.customLat)
-        } set: {
-            viewModel.customLat = Double($0) ?? 0
-        }
-
-    }
-
-    private var longitude: Binding<String> {
-        Binding {
-            return String(viewModel.customLong)
-        } set: {
-            viewModel.customLong = Double($0) ?? 0
-        }
-
-    }
 
 	var body: some View {
         @Bindable var viewModel = viewModel
@@ -43,26 +26,31 @@ struct CustomLocationView: View {
                     Text("Please enter the latitude below")
                         .bold()
                         .padding(.top, 8)
-                    TextField("Latitude", text: latitude)
-                }
 
+                    TextField("Latitude", value: $viewModel.customLat, format: .number)
+                }
 
                 Group {
                     Text("Please enter the longitude below")
                         .bold()
                         .padding(.top, 8)
-                    TextField("Longitude", text: longitude)
+                    TextField("Longitude", value: $viewModel.customLong, format: .number)
                 }
 
             }
             .padding()
             .textFieldStyle(Styles.regularTextFieldStyle())
-            .keyboardType(.decimalPad)
 
             Button {
 
                 Task {
                     do {
+
+                       // Assume user is currently not on Null Island
+                        if viewModel.customLong == 0 && viewModel.customLat == 0 {
+                            throw SharedErrors.general(error: .missingValue("Invalid Latitude and/or Longitude"))
+                        }
+
                         try await networking.updateRestaurants(viewModel: viewModel, longitude: viewModel.customLong, latitude: viewModel.customLat)
                     } catch {
                         showAlert.message = error.localizedDescription
