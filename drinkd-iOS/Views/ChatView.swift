@@ -35,6 +35,7 @@ struct ChatView: View {
 
                         Task {
                             do {
+                                if messageString.isEmpty { return }
                                 // We copy messageString to a local var so we can safely reset messageString without having to wait for the async call to finish
                                 let message = messageString
                                 messageString.removeAll()
