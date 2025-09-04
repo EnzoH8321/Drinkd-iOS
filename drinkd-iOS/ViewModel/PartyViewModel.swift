@@ -40,24 +40,23 @@ class PartyViewModel {
     /// Updates service availability values
     /// - Parameter restaurants: Restaurant data
     func updateLocalRestaurants(in restaurants: [YelpApiBusinessSearchProperties]) {
+        
+        localRestaurants.removeAll()
+        localRestaurantsDefault.removeAll()
 
-        for var element in restaurants {
-            // Get available transaction types, use empty array if none provided
-            let transactionArray = element.transactions ?? [""]
+        let updatedRestaurants = restaurants.map { restaurant in
+            var updatedRestaurant = restaurant
+            let transactions = restaurant.transactions ?? []
 
-            if (transactionArray.contains("pickup")) {
-                element.pickUpAvailable = true
-            }
-            if (transactionArray.contains("delivery")) {
-                element.deliveryAvailable = true
-            }
-            if (transactionArray.contains("restaurant_reservation")) {
-                element.reservationAvailable = true
-            }
+            updatedRestaurant.pickUpAvailable = transactions.contains("pickup")
+            updatedRestaurant.deliveryAvailable = transactions.contains("delivery")
+            updatedRestaurant.reservationAvailable = transactions.contains("restaurant_reservation")
 
-            localRestaurants.append(element)
-            localRestaurantsDefault.append(element)
+            return updatedRestaurant
         }
+
+        localRestaurants = updatedRestaurants
+        localRestaurantsDefault = updatedRestaurants
     }
 
 

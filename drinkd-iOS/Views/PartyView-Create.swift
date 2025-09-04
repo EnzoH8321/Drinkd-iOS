@@ -65,7 +65,8 @@ struct PartyView_Create: View {
 
                 Task {
                     do {
-                        let urlString = "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(viewModel.customLat)&longitude=\(viewModel.customLong)&limit=10"
+                        let location = try networking.locationFetcher.getLocation(partyVM: partyVM).coordinate
+                        let urlString = "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(location.latitude)&longitude=\(location.longitude)&limit=10"
                         try await networking.createParty(viewModel: viewModel, username: userName, partyName: partyName ,restaurantsURL: urlString)
 
                     } catch {

@@ -6,6 +6,7 @@
 //
 
 import CoreLocation
+import drinkdSharedModels
 
 class LocationFetcher: NSObject, CLLocationManagerDelegate {
 	let manager = CLLocationManager()
@@ -51,7 +52,27 @@ class LocationFetcher: NSObject, CLLocationManagerDelegate {
 		}
 	}
 
-	
+    /// Retrieves the user's current location with fallback options.
+    ///
+    /// This function attempts to get a valid location using a priority system:
+    /// 1. Device's last known GPS location (if available)
+    /// 2. Custom coordinates from the party view model (if set)
+    ///
+    /// - Parameter partyVM: The PartyViewModel containing custom location coordinates
+    /// - Returns: A CLLocation object representing the user's position
+    /// - Throws: SharedErrors.general if no valid location can be determined
+    func getLocation(partyVM: PartyViewModel) throws -> CLLocation {
+        if let lastKnownLocation {
+            return CLLocation(latitude: lastKnownLocation.latitude, longitude: lastKnownLocation.longitude)
+        }
+
+        if partyVM.customLat != 0 && partyVM.customLong != 0 {
+            return CLLocation(latitude: partyVM.customLat, longitude: partyVM.customLong)
+        }
+
+        throw SharedErrors.general(error: .missingValue("Unable to retrieve the current location"))
+    }
+
 }
 
 

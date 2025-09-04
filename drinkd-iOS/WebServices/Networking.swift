@@ -75,11 +75,7 @@ final class Networking {
 
         await MainActor.run {
 
-            //Checks to see if the function already ran to prevent duplicate calls
-            //TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
-            if (viewModel.localRestaurants.count <= 0) {
-                viewModel.updateLocalRestaurants(in: businesses)
-            }
+            viewModel.updateLocalRestaurants(in: businesses)
 
             viewModel.removeSplashScreen = true
             self.userDeniedLocationServices = false
@@ -177,12 +173,14 @@ extension Networking {
     /// Removes the current user from the specified party and closes the WebSocket connection.
     /// - Parameter partyVM: The PartyViewModel instance for the party being left
     /// - Parameter partyID: The unique identifier of the party to leave
-    func leaveParty(partyVM: PartyViewModel, partyID: UUID) async throws  {
-
+    func leaveParty(partyVM: PartyViewModel, networking: Networking, partyID: UUID) async throws  {
         let userID = try UserDefaultsWrapper.getUserID
         let urlReq = try HTTP.PostReq.leaveParty(userID: userID).createReq()
         webSocket.cancelWebSocketConnection()
         let _ = try await executeRequest(urlReq: urlReq)
+
+        let location = try networking.locationFetcher.getLocation(partyVM: partyVM).coordinate
+        try await networking.updateRestaurants(viewModel: partyVM, longitude: location.longitude, latitude: location.latitude)
     }
 
     /// Sends a message to the specified party through both WebSocket and HTTP API.
@@ -257,12 +255,7 @@ extension Networking {
         await webSocket.rdbSetSubscribeAndListen(partyVM: viewModel, partyID: response.partyID)
 
         await MainActor.run {
-
-            //Checks to see if the function already ran to prevent duplicate calls
-            //TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
-            if (viewModel.localRestaurants.count <= 0) {
-                viewModel.updateLocalRestaurants(in: businesses)
-            }
+            viewModel.updateLocalRestaurants(in: businesses)
             viewModel.currentParty = party
             viewModel.removeSplashScreen = true
             self.userDeniedLocationServices = false
@@ -286,12 +279,7 @@ extension Networking {
         guard let businesses = businessSearch.businesses else { throw YelpErrors.missingProperty("Missing businesses property")}
 
         await MainActor.run {
-
-            //Checks to see if the function already ran to prevent duplicate calls
-            //TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
-            if (viewModel.localRestaurants.count <= 0) {
-                viewModel.updateLocalRestaurants(in: businesses)
-            }
+            viewModel.updateLocalRestaurants(in: businesses)
             viewModel.currentParty = party
             viewModel.removeSplashScreen = true
             self.userDeniedLocationServices = false

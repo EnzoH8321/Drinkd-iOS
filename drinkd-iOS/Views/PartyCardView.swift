@@ -31,7 +31,7 @@ struct PartyCardView: View {
         Task {
             do {
                 guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .missingValue("Unable to find party ID"))}
-                try await networking.leaveParty(partyVM: viewModel, partyID: partyID)
+                try await networking.leaveParty(partyVM: viewModel, networking: networking, partyID: partyID)
                 viewModel.leaveParty()
             } catch {
                 // Leave the Party Anyway in case of failure
