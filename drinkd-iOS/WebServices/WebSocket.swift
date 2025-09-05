@@ -169,12 +169,12 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
                     return
                 }
 
-                guard let idString = payload["messageID"] as? String, let messageID = UUID(uuidString: idString)  else {
+                guard let idString = payload["messageID"] as? String, let messageID = UUID(uuidString: idString) else {
                     Log.error.log("Unable to parse messageID")
                     return
                 }
 
-                guard let userIDString = payload["userID"] as? String, let userID = UUID(uuidString: userIDString)  else {
+                guard let userIDString = payload["userID"] as? String, let userID = UUID(uuidString: userIDString) else {
                     Log.error.log("Unable to parse userID")
                     return
                 }

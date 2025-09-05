@@ -58,8 +58,6 @@ final class Networking {
     /// - Parameter viewModel: The PartyViewModel instance to update with restaurant data
     /// - Parameter longitude: The longitude coordinate for restaurant search
     /// - Parameter latitude: The latitude coordinate for restaurant search
-    /// - Throws: ClientNetworkErrors.noUserLocationFoundError if coordinates are invalid (0.0)
-    /// - Throws: SharedErrors.yelp if the API response is missing required data
     func updateRestaurants(viewModel: PartyViewModel, longitude: Double, latitude: Double) async throws {
 
         //If user location was found, continue
@@ -83,8 +81,6 @@ final class Networking {
     /// - Parameter latitude: The latitude coordinate for the search
     /// - Parameter longitude: The longitude coordinate for the search
     /// - Returns: YelpApiBusinessSearch containing the API response with business data
-    /// - Throws: ClientNetworkErrors.invalidURLError if URL construction fails
-    /// - Throws: SharedErrors.yelp if HTTP status code is not 2xx
      func getRestaurants(latitude: Double, longitude: Double) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
             Log.error.log("ERROR - INVALID URL")
@@ -114,8 +110,6 @@ final class Networking {
     /// Fetches restaurant data from the Yelp API using a provided URL string.
     /// - Parameter yelpURL: The complete Yelp API URL string for the request
     /// - Returns: YelpApiBusinessSearch containing the API response with business data
-    /// - Throws: ClientNetworkErrors.invalidURLError if URL string is malformed
-    /// - Throws: SharedErrors.yelp if HTTP status code is not 2xx
      func getRestaurants(yelpURL: String) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: yelpURL) else {
             Log.error.log("ERROR - INVALID URL")
@@ -207,7 +201,6 @@ extension Networking {
     /// Retrieves the top-rated restaurants for a party with their image data.
     /// - Parameter partyID: The unique identifier of the party
     /// - Returns: Array of RatedRestaurantsTable objects with populated image data
-    /// - Throws: SharedErrors.general if no restaurants are found
     func getTopRestaurants(partyID: UUID) async throws -> [RatedRestaurantsTable] {
         let urlReq = try HTTP.GetReq.topRestaurants(partyID: partyID).createReq()
         let data = try await executeRequest(urlReq: urlReq)
@@ -231,7 +224,6 @@ extension Networking {
     /// - Parameter viewModel: The PartyViewModel instance to update with party data
     /// - Parameter partyCode: The numeric code for the party to join
     /// - Parameter userName: The username of the user joining the party
-    /// - Throws: SharedErrors.yelp if restaurant data is missing
     func joinParty(viewModel: PartyViewModel, partyCode: Int, userName: String) async throws {
         // Check VM if the user is already in a party
         if viewModel.currentlyInParty == true { return }
@@ -262,7 +254,6 @@ extension Networking {
 
     /// Rejoins a previously joined party using stored user credentials and restores party state.
     /// - Parameter viewModel: The PartyViewModel instance to update with party data
-    /// - Throws: SharedErrors.yelp if restaurant data is missing
     func rejoinParty(viewModel: PartyViewModel) async throws  {
         let userID = try UserDefaultsWrapper.getUserID
         let urlReq = try HTTP.GetReq.rejoinParty(userID: userID.uuidString).createReq()
@@ -288,7 +279,6 @@ extension Networking {
 
     /// Retrieves all chat messages for the current party and updates the view model.
     /// - Parameter viewModel: The PartyViewModel instance to update with message data
-    /// - Throws: SharedErrors.general if party ID is missing or date conversion fails
     func getMessages(viewModel: PartyViewModel) async throws {
         guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .missingValue("Missing Party ID"))}
 
@@ -307,6 +297,8 @@ extension Networking {
         viewModel.chatMessageList = messages
     }
 
+    /// Fetches rated restaurants for the current party and updates the view model.
+    /// - Parameter viewModel: The PartyViewModel instance to update with rated restaurant data
     func getRatedRestaurants(viewModel: PartyViewModel) async throws {
         guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .missingValue("Missing Party ID"))}
         let userID = try UserDefaultsWrapper.getUserID
@@ -315,7 +307,6 @@ extension Networking {
         let response = try JSONDecoder().decode(RatedRestaurantsGetResponse.self, from: data)
 
         viewModel.ratedRestaurants = response.ratedRestaurants
-
     }
 
 }

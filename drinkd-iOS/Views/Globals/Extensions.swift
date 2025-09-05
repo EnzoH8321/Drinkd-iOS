@@ -15,8 +15,7 @@ extension SubviewsCollection {
         let moveIndex = by % count
         let rotatedElements = Array(self[moveIndex...]) + Array(self[0..<moveIndex])
 
-        // this will give the result like,
-        // if array given [1, 2, 3,4,5] and steps 2, the result will be [3,4,5,1,2]
+        // this will give the result like, if array given [1,2,3,4,5] and steps 2, the result will be [3,4,5,1,2]
         return rotatedElements
     }
 

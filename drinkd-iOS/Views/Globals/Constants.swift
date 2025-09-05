@@ -15,7 +15,3 @@ struct Constants {
     static let yelpToken: String = "\(Secrets.$yelpKey)"
     static let supabaseToken: String = "\(Secrets.$supabaseKey)"
 }
-
-enum NetworkSuccess {
-    case connectionSuccess
-}
