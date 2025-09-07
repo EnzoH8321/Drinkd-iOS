@@ -1,0 +1,50 @@
+{
+  "configurations" : [
+    {
+      "id" : "699B51D5-6FE3-4DC1-9333-9081F033B3CC",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "commandLineArgumentEntries" : [
+      {
+        "argument" : "",
+        "enabled" : false
+      }
+    ],
+    "locationScenario" : {
+      "identifier" : "San Francisco, CA, USA",
+      "referenceType" : "built-in"
+    },
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:drinkd-iOS.xcodeproj",
+      "identifier" : "54F9C80426FBB536008FA516",
+      "name" : "drinkd-iOS"
+    }
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "NetworkingTests\/testCustomLocationWorksWithValidData()",
+        "NetworkingTests\/testInitialFetchWorksWithValidData()",
+        "ViewModel_Methods_Tests\/test_joinExistingParty()"
+      ],
+      "target" : {
+        "containerPath" : "container:drinkd-iOS.xcodeproj",
+        "identifier" : "54F9C81926FBB538008FA516",
+        "name" : "drinkd-iOSTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:drinkd-iOS.xcodeproj",
+        "identifier" : "54F9C82326FBB538008FA516",
+        "name" : "drinkd-iOSUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

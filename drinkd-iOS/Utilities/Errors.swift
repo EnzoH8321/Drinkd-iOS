@@ -22,7 +22,7 @@ enum YelpErrors: LocalizedError, Codable {
 }
 
 
-enum LocationErrors: LocalizedError, Codable {
+enum LocationErrors: LocalizedError, Codable, Equatable {
 
     case invalidLastKnownLocation(msg: String, file: String = #file, line: Int = #line)
 

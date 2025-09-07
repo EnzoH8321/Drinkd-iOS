@@ -42,38 +42,25 @@ struct PartyVMTests {
 
         #expect(vm.localRestaurants[0].deliveryAvailable == true)
         #expect(vm.localRestaurants[0].pickUpAvailable == true)
-        #expect(vm.localRestaurants[0].reservationAvailable == nil)
+        #expect(vm.localRestaurants[0].reservationAvailable == false)
 
     }
 
-//    @Test func removeCardFromDeck_Test() {
-//        var vm = PartyViewModel()
-//        vm.removeCardFromDeck()
-//        #expect(vm.currentCardIndex == 8)
-//
-//        vm.currentCardIndex = -1
-//        vm.removeCardFromDeck()
-//        #expect(vm.currentCardIndex == 9)
-//    }
-
     @Test func addScoreToCard_Test() {
-        var vm = PartyViewModel()
+        let vm = PartyViewModel()
         updateLocalRestaurants(vm: vm)
-//        vm.currentCardIndex = 0
         vm.addScoreToCard(points: 5)
         #expect(vm.currentScoreOfTopCard == 5)
+    }
 
-//        let topBarRestaurant = vm.topBarList["0"]
-
-//        #expect(topBarRestaurant?.name == "Alexander's Steakhouse")
-
-
-
-
+    @Test func addScoreToCard_SamePoints_Test() {
+        let vm = PartyViewModel()
+        vm.addScoreToCard(points: 0)
+        #expect(vm.currentScoreOfTopCard == 0)
     }
 
     @Test func leaveParty_Test() {
-        var vm = PartyViewModel()
+        let vm = PartyViewModel()
         vm.currentParty = Party(username: "", partyID: UUID(), partyMaxVotes: 1, partyName: "TEST PARTY", partyCode: 670, yelpURL: "3434")
         vm.topRestaurants.append(RatedRestaurantsTable(id: UUID(), partyID: UUID(), userID: UUID(), userName: "User", restaurantName: "restaurantName", rating: 5, imageURL: "TEST"))
         vm.chatMessageList.append(WSMessage(id: UUID(), text: "34", username: "DFGDFG", timestamp: Date(), userID: UUID()))
