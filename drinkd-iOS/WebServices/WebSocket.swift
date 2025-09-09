@@ -195,24 +195,24 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
     ///   - operation: Async operation to execute with timeout
     /// - Returns: Result of the operation if completed within timeout
     /// - Throws: Operation error or timeout error if time limit exceeded
-    private func withTimeout<T>(seconds: TimeInterval, operation: @escaping () async throws -> T) async throws -> T {
-        return try await withThrowingTaskGroup(of: T.self) { group in
-            // Add the main operation task
-            group.addTask {
-                try await operation()
-            }
-
-            // Add timeout task that throws after specified duration
-            group.addTask {
-                try await Task.sleep(for: .seconds(seconds))
-                throw SharedErrors.general(error: .generalError("Timeout Hit"))
-            }
-
-            // Return first completed result and cancel remaining tasks
-            defer { group.cancelAll() }
-            return try await group.next()!
-        }
-    }
+//    private func withTimeout<T>(seconds: TimeInterval, operation: @escaping () async throws -> T) async throws -> T {
+//        return try await withThrowingTaskGroup(of: T.self) { group in
+//            // Add the main operation task
+//            group.addTask {
+//                try await operation()
+//            }
+//
+//            // Add timeout task that throws after specified duration
+//            group.addTask {
+//                try await Task.sleep(for: .seconds(seconds))
+//                throw SharedErrors.general(error: .generalError("Timeout Hit"))
+//            }
+//
+//            // Return first completed result and cancel remaining tasks
+//            defer { group.cancelAll() }
+//            return try await group.next()!
+//        }
+//    }
 
 
 }
