@@ -12,7 +12,7 @@ import CoreLocation
 
 struct LocationTests {
 
-    @Test("Get the location using the users last known location")
+    @Test("Get a location using the users last known location")
     func getLocation_UseLastKnownLocation_Test() async throws {
         let vm = PartyViewModel()
         let coordinates = CLLocationCoordinate2D(latitude: 37.507160, longitude: -122.260521)
@@ -24,7 +24,7 @@ struct LocationTests {
         #expect(location.coordinate.longitude == -122.260521)
     }
 
-    @Test("Get the location using the user inputted location")
+    @Test("Get a location using the user inputted location")
     func getLocation_UseUserInputtedLocation_Test() async throws {
         let vm = PartyViewModel()
         vm.customLat = 37.507160
@@ -37,7 +37,7 @@ struct LocationTests {
         #expect(location.coordinate.longitude == -122.260521)
     }
 
-    @Test("Try to get the user location and fail")
+    @Test("Get the user location with failure")
     func getLocation_Fail_Test() async throws {
         let vm = PartyViewModel()
         let fetcher = LocationFetcher()

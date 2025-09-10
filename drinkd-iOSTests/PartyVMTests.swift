@@ -27,7 +27,8 @@ struct PartyVMTests {
 //        #expect(vm.localRestaurantsDefault.count == 0)
 //    }
 
-    @Test func updateLocalRestaurants_Test() {
+    @Test("Update local restaurants")
+    func updateLocalRestaurants_Test() {
         var vm = PartyViewModel()
 
         guard let businessProps =  Utilities.createBusinessSearchProperties() else {
@@ -46,20 +47,23 @@ struct PartyVMTests {
 
     }
 
-    @Test func addScoreToCard_Test() {
+    @Test("Add score of 5")
+    func addScoreToCard_Test() {
         let vm = PartyViewModel()
         updateLocalRestaurants(vm: vm)
         vm.addScoreToCard(points: 5)
         #expect(vm.currentScoreOfTopCard == 5)
     }
 
-    @Test func addScoreToCard_SamePoints_Test() {
+    @Test("Add score of 0")
+    func addScoreToCard_SamePoints_Test() {
         let vm = PartyViewModel()
         vm.addScoreToCard(points: 0)
         #expect(vm.currentScoreOfTopCard == 0)
     }
 
-    @Test func leaveParty_Test() {
+    @Test("Leave party")
+    func leaveParty_Test() {
         let vm = PartyViewModel()
         vm.currentParty = Party(username: "", partyID: UUID(), partyMaxVotes: 1, partyName: "TEST PARTY", partyCode: 670, yelpURL: "3434")
         vm.topRestaurants.append(RatedRestaurantsTable(id: UUID(), partyID: UUID(), userID: UUID(), userName: "User", restaurantName: "restaurantName", rating: 5, imageURL: "TEST"))
@@ -77,7 +81,8 @@ struct PartyVMTests {
 
     }
 
-    @Test func testInitialVMData() {
+    @Test("Initial VM data")
+    func testInitialVMData() {
         let vm = PartyViewModel()
         #expect(vm.customLat == 0)
         #expect(vm.customLong == 0)

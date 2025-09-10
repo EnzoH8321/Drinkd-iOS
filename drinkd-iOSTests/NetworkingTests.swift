@@ -50,7 +50,7 @@ struct NetworkingTests {
         #expect(networking.userDeniedLocationServices == false)
     }
 
-    @Test("Updates restaurants, fails due to 0.0 longitude/latitude")
+    @Test("Update restaurants with failure due to 0.0 longitude/latitude")
     func updateRestaurants_DefaultLocation_NoUserLocationFoundError_Test() async throws  {
         let networking = Networking()
         let vm = PartyViewModel()
@@ -71,7 +71,7 @@ struct NetworkingTests {
         #expect(networking.userDeniedLocationServices == false)
     }
 
-    @Test("Updates restaurants, fails due to 0.0 longitude/latitude")
+    @Test("Update restaurants with failure due to 0.0 longitude/latitude")
     func updateRestaurants_CustomLocation_NoUserLocationFoundError_Test() async throws  {
         let vm = PartyViewModel()
         let networking = Networking()

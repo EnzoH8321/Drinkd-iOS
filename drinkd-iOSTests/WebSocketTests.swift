@@ -13,7 +13,7 @@ import Supabase
 @Suite("WebSocket Tests")
 struct WebSocketTests {
 
-    @Test("Test setting a channel")
+    @Test("Create a channel")
     func setChannel_Test() async {
         let ws = WebSocket()
         let id = UUID(uuidString: "E921E1F2-C37C-495B-93FC-0C247A3E6E5F")!
@@ -23,7 +23,7 @@ struct WebSocketTests {
         #expect(ws.channel.status == .unsubscribed)
     }
 
-    @Test("Test creating a channel, subscribing & listening for messages")
+    @Test("Create a channel, subscribing & listen for messages")
     func rdbCreateChannel_Test() async {
         let ws = WebSocket()
         let vm = PartyViewModel()
@@ -34,7 +34,7 @@ struct WebSocketTests {
         #expect(ws.channel.status == .subscribed || ws.channel.status == .unsubscribing)
     }
 
-    @Test("Test sending a message" ,.timeLimit(.minutes(1)))
+    @Test("Send a message" ,.timeLimit(.minutes(1)))
     func rdbSendMessage_Test() async {
         let ws = WebSocket()
         let partyID = UUID(uuidString: "E641E3F9-C36C-495A-93FC-0C847A9E6E5F")!
@@ -100,7 +100,7 @@ struct WebSocketTests {
         }
     }
 
-    @Test("Test listening for a message")
+    @Test("Listen for a message")
     func rdbListenForMessages_Test() async throws {
         let ws = WebSocket()
         let vm = PartyViewModel()
@@ -125,7 +125,7 @@ struct WebSocketTests {
 
     }
 
-    @Test("Test cancelling a websocket connection")
+    @Test("Cancel a websocket connection")
     func cancelWebSocketConnection_Test() async throws {
         let ws = WebSocket()
         let urlSession = URLSession(configuration: .default)
