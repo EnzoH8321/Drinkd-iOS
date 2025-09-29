@@ -27,6 +27,7 @@
 		54562873278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json in Resources */ = {isa = PBXBuildFile; fileRef = 54562872278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json */; };
 		54562886278EAE2D00CA6005 /* MockTopThreeChoices.json in Resources */ = {isa = PBXBuildFile; fileRef = 54562885278EAE2D00CA6005 /* MockTopThreeChoices.json */; };
 		5456288A278F63C600CA6005 /* MockDatabaseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562889278F63C600CA6005 /* MockDatabaseObject.swift */; };
+		54806F902E87A30B009F1B29 /* FakeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54806F8F2E87A30B009F1B29 /* FakeData.swift */; };
 		54852CDD2E707788002AF93E /* NetworkClientProtocolMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54852CDC2E707788002AF93E /* NetworkClientProtocolMock.swift */; };
 		5496D19B276D188E000C732A /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5496D19A276D188E000C732A /* MessageView.swift */; };
 		549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549BFC462728CFBA00F96F48 /* CustomLocationView.swift */; };
@@ -101,6 +102,7 @@
 		54562872278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockYelpBusinessSearchProperties.json; sourceTree = "<group>"; };
 		54562885278EAE2D00CA6005 /* MockTopThreeChoices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockTopThreeChoices.json; sourceTree = "<group>"; };
 		54562889278F63C600CA6005 /* MockDatabaseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDatabaseObject.swift; sourceTree = "<group>"; };
+		54806F8F2E87A30B009F1B29 /* FakeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeData.swift; sourceTree = "<group>"; };
 		54852CDC2E707788002AF93E /* NetworkClientProtocolMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClientProtocolMock.swift; sourceTree = "<group>"; };
 		5496D19A276D188E000C732A /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		549BFC462728CFBA00F96F48 /* CustomLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLocationView.swift; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				5422315D2E502926003E58F3 /* WebSocketTests.swift */,
 				542455CA2E50F50400702EEA /* TestErrors.swift */,
 				54233A5A2E6D07C000EB4273 /* LocationTests.swift */,
+				54806F8F2E87A30B009F1B29 /* FakeData.swift */,
 			);
 			path = "drinkd-iOSTests";
 			sourceTree = "<group>";
@@ -556,6 +559,7 @@
 				54233A5B2E6D07C000EB4273 /* LocationTests.swift in Sources */,
 				54222D842E465E81003E58F3 /* TestLog.swift in Sources */,
 				54222D802E4659A6003E58F3 /* PartyVMTests.swift in Sources */,
+				54806F902E87A30B009F1B29 /* FakeData.swift in Sources */,
 				542455CB2E50F50400702EEA /* TestErrors.swift in Sources */,
 				5422315E2E502926003E58F3 /* WebSocketTests.swift in Sources */,
 				5456288A278F63C600CA6005 /* MockDatabaseObject.swift in Sources */,
