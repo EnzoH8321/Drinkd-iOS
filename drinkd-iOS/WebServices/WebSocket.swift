@@ -22,7 +22,9 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
     override init() {
         super.init()
 
-        let supabaseKey = Constants.supabaseToken
+        guard let supabaseKey = ProcessInfo.processInfo.environment["SUPABASE_PUBLISHABLE_KEY"] else {
+            fatalError("Unable to retrieve the publishable supabase key")
+        }
 
         guard let supabaseURL = URL(string: "https://jdkdtahoqpsspesqyojb.supabase.co") else {
             fatalError("Invalid Supabase URL")
