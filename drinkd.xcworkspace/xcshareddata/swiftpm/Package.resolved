@@ -1,5 +1,5 @@
 {
-  "originHash" : "b827d33d86f87b714c5df72957fd03a7da9f3c162d1735baad97a7d5419074c1",
+  "originHash" : "8221b420907165d4a642a43ee496aa6d343d4e9fe750dbd3386395f667fcac43",
   "pins" : [
     {
       "identity" : "drinkdsharedmodels",
@@ -7,7 +7,7 @@
       "location" : "https://github.com/EnzoH8321/drinkdSharedModels",
       "state" : {
         "branch" : "main",
-        "revision" : "12df94b574bf691dc24fed8f8b7e4117f5fe302d"
+        "revision" : "668fbf9b8bcc861f95334bf10a2a6a3cbc2d19c4"
       }
     },
     {
@@ -47,24 +47,6 @@
       }
     },
     {
-      "identity" : "swift-confidential",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/securevale/swift-confidential",
-      "state" : {
-        "revision" : "7f571ab0df5b0ffd4b26b92b9dd8f21d6b3a6ca8",
-        "version" : "0.4.1"
-      }
-    },
-    {
-      "identity" : "swift-confidential-plugin",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/securevale/swift-confidential-plugin",
-      "state" : {
-        "revision" : "9bf4fb3c87a769e13557aa1b564d7c66d74423b4",
-        "version" : "0.4.1"
-      }
-    },
-    {
       "identity" : "swift-crypto",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
@@ -89,15 +71,6 @@
       "state" : {
         "revision" : "ce592ae52f982c847a4efc0dd881cc9eb32d29f2",
         "version" : "1.6.4"
-      }
-    },
-    {
-      "identity" : "swift-syntax",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/swiftlang/swift-syntax.git",
-      "state" : {
-        "revision" : "f99ae8aa18f0cf0d53481901f88a0991dc3bd4a2",
-        "version" : "601.0.1"
       }
     },
     {

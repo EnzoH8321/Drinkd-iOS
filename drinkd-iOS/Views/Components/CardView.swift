@@ -152,14 +152,22 @@ struct CardView: View {
 
                         }
 
-                    if (viewModel.currentlyInParty && !viewModel.ratedRestaurants.isEmpty) {
+                    if (viewModel.currentlyInParty) {
 
                         HStack {
                             Spacer()
                             Group {
-
-                                ForEach(1...5, id: \.self) { index in
-                                    Star(showError: $showError, starValue: index, restaurantTitle: restaurantTitle, restaurantImageURL: restaurantImageURL)
+                                //TODO: Possible race condition w/ loading the rated restaurants. Seems the view loads into memory before network request to update rated restaurants returns. We need to ensure if there are no rated restaurants, we only use the "star" images.
+                                if !viewModel.ratedRestaurants.isEmpty {
+                                    ForEach(1...5, id: \.self) { index in
+                                        let imageName = setImageName(value: index)
+                                        Star(showError: $showError, starValue: index, restaurantTitle: restaurantTitle, restaurantImageURL: restaurantImageURL, imageName: imageName)
+                                    }
+                                } else {
+                                    ForEach(1...5, id: \.self) { index in
+                                        let imageName = "star"
+                                        Star(showError: $showError, starValue: index, restaurantTitle: restaurantTitle, restaurantImageURL: restaurantImageURL, imageName: imageName)
+                                    }
                                 }
 
                             }
@@ -176,6 +184,23 @@ struct CardView: View {
                 Alert(title: Text("Error"), message: Text("Error - \(showError.message)"))
             })
 
+    }
+
+    /// Determines the appropriate SF Symbol name for a star based on the restaurant's rating.
+    ///
+    /// This function checks if the restaurant has been previously rated by the user. If a rating exists,
+    /// it displays filled stars up to that rating. For unrated restaurants, it uses the current temporary
+    /// score from the top card being evaluated.
+    ///
+    /// - Parameter value: The star position (1-5) to determine if it should be filled or empty
+    /// - Returns: "star.fill" for filled stars or "star" for empty stars
+    func setImageName(value: Int) ->  String {
+        // If the resturant has already been rated, use that rating
+        if let restaurant = viewModel.ratedRestaurants.first(where: { $0.restaurant_name == restaurantTitle }) {
+            return value > restaurant.rating ? "star" : "star.fill"
+        }
+
+        return viewModel.currentScoreOfTopCard < 0 || value > viewModel.currentScoreOfTopCard ? "star" : "star.fill"
     }
 }
 
