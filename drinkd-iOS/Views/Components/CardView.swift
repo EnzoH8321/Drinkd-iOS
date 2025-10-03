@@ -72,7 +72,7 @@ struct CardView: View {
                         .font(.title3)
                     
                     HStack {
-                        ForEach(0..<restaurantScore) { element in
+                        ForEach(0..<restaurantScore, id: \.self) { element in
                             Image(systemName: "star.fill")
                                 .foregroundColor(AppColors.primaryColor)
                         }
@@ -152,7 +152,7 @@ struct CardView: View {
 
                         }
 
-                    if (viewModel.currentlyInParty) {
+                    if (viewModel.currentlyInParty && !viewModel.ratedRestaurants.isEmpty) {
 
                         HStack {
                             Spacer()
