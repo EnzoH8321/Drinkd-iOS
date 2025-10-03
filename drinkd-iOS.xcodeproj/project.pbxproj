@@ -33,16 +33,13 @@
 		549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549BFC462728CFBA00F96F48 /* CustomLocationView.swift */; };
 		54B3E537270E140E0004ECC5 /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B3E536270E140C0004ECC5 /* Star.swift */; };
 		54BEE37427593A9300C82880 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BEE37327593A9300C82880 /* Networking.swift */; };
-		54C7BD0E2DC1D88D00045D67 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C7BD0D2DC1D88D00045D67 /* Constants.swift */; };
 		54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */; };
-		54EFB0F92E58F69F007984D5 /* ConfidentialKit in Frameworks */ = {isa = PBXBuildFile; productRef = 54EFB0F82E58F69F007984D5 /* ConfidentialKit */; };
 		54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */; };
 		54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* MasterView.swift */; };
 		54F9C80D26FBB537008FA516 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80C26FBB537008FA516 /* Assets.xcassets */; };
 		54F9C81026FBB537008FA516 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80F26FBB537008FA516 /* Preview Assets.xcassets */; };
 		54F9C82926FBB538008FA516 /* drinkd_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C82826FBB538008FA516 /* drinkd_iOSUITests.swift */; };
 		54F9C82B26FBB538008FA516 /* drinkd_iOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C82A26FBB538008FA516 /* drinkd_iOSUITestsLaunchTests.swift */; };
-		54F9C83926FBD986008FA516 /* YelpAPIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C83826FBD986008FA516 /* YelpAPIModels.swift */; };
 		54F9C84026FBF8E8008FA516 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C83F26FBF8E8008FA516 /* CardView.swift */; };
 		54F9C84626FCF403008FA516 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84526FCF403008FA516 /* Styles.swift */; };
 		54F9C84826FD1A05008FA516 /* TopChoicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84726FD1A05008FA516 /* TopChoicesView.swift */; };
@@ -108,7 +105,6 @@
 		549BFC462728CFBA00F96F48 /* CustomLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLocationView.swift; sourceTree = "<group>"; };
 		54B3E536270E140C0004ECC5 /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
 		54BEE37327593A9300C82880 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
-		54C7BD0D2DC1D88D00045D67 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		54F9C80526FBB536008FA516 /* drinkd-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "drinkd-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSApp.swift; sourceTree = "<group>"; };
 		54F9C80A26FBB536008FA516 /* MasterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterView.swift; sourceTree = "<group>"; };
@@ -118,7 +114,6 @@
 		54F9C82426FBB538008FA516 /* drinkd-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "drinkd-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F9C82826FBB538008FA516 /* drinkd_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSUITests.swift; sourceTree = "<group>"; };
 		54F9C82A26FBB538008FA516 /* drinkd_iOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		54F9C83826FBD986008FA516 /* YelpAPIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpAPIModels.swift; sourceTree = "<group>"; };
 		54F9C83F26FBF8E8008FA516 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		54F9C84526FCF403008FA516 /* Styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
 		54F9C84726FD1A05008FA516 /* TopChoicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopChoicesView.swift; sourceTree = "<group>"; };
@@ -152,7 +147,6 @@
 				54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */,
 				544A78612E43111500497F93 /* Realtime in Frameworks */,
 				544A78642E43177E00497F93 /* Supabase in Frameworks */,
-				54EFB0F92E58F69F007984D5 /* ConfidentialKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,7 +268,6 @@
 		54F9C83726FBD95B008FA516 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				54F9C83826FBD986008FA516 /* YelpAPIModels.swift */,
 				54F9C85A27037F2F008FA516 /* Models.swift */,
 			);
 			path = Models;
@@ -325,7 +318,6 @@
 			isa = PBXGroup;
 			children = (
 				54F9C84526FCF403008FA516 /* Styles.swift */,
-				54C7BD0D2DC1D88D00045D67 /* Constants.swift */,
 				542459922E56382100702EEA /* Extensions.swift */,
 			);
 			path = Globals;
@@ -373,7 +365,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				54EFB0FC2E58F6EB007984D5 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				542BE6252E103AE300B13011 /* Utilities */,
@@ -458,8 +449,6 @@
 			packageReferences = (
 				543196DB2E41D07400EA17BB /* XCRemoteSwiftPackageReference "drinkdSharedModels" */,
 				544A785F2E43111500497F93 /* XCRemoteSwiftPackageReference "supabase-swift" */,
-				54EFB0F72E58F69F007984D5 /* XCRemoteSwiftPackageReference "swift-confidential" */,
-				54EFB0FA2E58F6D5007984D5 /* XCRemoteSwiftPackageReference "swift-confidential-plugin" */,
 			);
 			productRefGroup = 54F9C80626FBB536008FA516 /* Products */;
 			projectDirPath = "";
@@ -526,7 +515,6 @@
 				54B3E537270E140E0004ECC5 /* Star.swift in Sources */,
 				5430E126276D1D8F00326A52 /* ChatView.swift in Sources */,
 				542459952E56389200702EEA /* StackableWrapper.swift in Sources */,
-				54C7BD0E2DC1D88D00045D67 /* Constants.swift in Sources */,
 				5444B991273EE99800FA6DA2 /* HowToView.swift in Sources */,
 				54F9C84C26FD1ED6008FA516 /* ListCardView.swift in Sources */,
 				54F9C84A26FD1A59008FA516 /* HomeView.swift in Sources */,
@@ -538,7 +526,6 @@
 				54F9C85B27037F2F008FA516 /* Models.swift in Sources */,
 				54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */,
 				543196D82E3E6C2D00EA17BB /* WebSocket.swift in Sources */,
-				54F9C83926FBD986008FA516 /* YelpAPIModels.swift in Sources */,
 				54F9C84826FD1A05008FA516 /* TopChoicesView.swift in Sources */,
 				54F9C84E26FD5D6F008FA516 /* PartyView.swift in Sources */,
 				5496D19B276D188E000C732A /* MessageView.swift in Sources */,
@@ -584,10 +571,6 @@
 			isa = PBXTargetDependency;
 			target = 54F9C80426FBB536008FA516 /* drinkd-iOS */;
 			targetProxy = 54562865278A62BF00CA6005 /* PBXContainerItemProxy */;
-		};
-		54EFB0FC2E58F6EB007984D5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 54EFB0FB2E58F6EB007984D5 /* Confidential */;
 		};
 		54F9C81C26FBB538008FA516 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1006,22 +989,6 @@
 				minimumVersion = 2.5.1;
 			};
 		};
-		54EFB0F72E58F69F007984D5 /* XCRemoteSwiftPackageReference "swift-confidential" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/securevale/swift-confidential";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.4.1;
-			};
-		};
-		54EFB0FA2E58F6D5007984D5 /* XCRemoteSwiftPackageReference "swift-confidential-plugin" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/securevale/swift-confidential-plugin";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.4.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1038,16 +1005,6 @@
 		54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = drinkdSharedModels;
-		};
-		54EFB0F82E58F69F007984D5 /* ConfidentialKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 54EFB0F72E58F69F007984D5 /* XCRemoteSwiftPackageReference "swift-confidential" */;
-			productName = ConfidentialKit;
-		};
-		54EFB0FB2E58F6EB007984D5 /* Confidential */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 54EFB0FA2E58F6D5007984D5 /* XCRemoteSwiftPackageReference "swift-confidential-plugin" */;
-			productName = "plugin:Confidential";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
