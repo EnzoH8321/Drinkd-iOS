@@ -27,6 +27,7 @@
 		54562873278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json in Resources */ = {isa = PBXBuildFile; fileRef = 54562872278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json */; };
 		54562886278EAE2D00CA6005 /* MockTopThreeChoices.json in Resources */ = {isa = PBXBuildFile; fileRef = 54562885278EAE2D00CA6005 /* MockTopThreeChoices.json */; };
 		5456288A278F63C600CA6005 /* MockDatabaseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562889278F63C600CA6005 /* MockDatabaseObject.swift */; };
+		5457CCEE2E92C99C00D633D2 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5457CCE72E92C75A00D633D2 /* Info.plist */; };
 		5474A4992E9254A200EFF9AD /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 5474A4982E9254A200EFF9AD /* drinkdSharedModels */; };
 		54806F902E87A30B009F1B29 /* FakeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54806F8F2E87A30B009F1B29 /* FakeData.swift */; };
 		54852CDD2E707788002AF93E /* NetworkClientProtocolMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54852CDC2E707788002AF93E /* NetworkClientProtocolMock.swift */; };
@@ -478,6 +479,7 @@
 			files = (
 				54F9C81026FBB537008FA516 /* Preview Assets.xcassets in Resources */,
 				54F9C80D26FBB537008FA516 /* Assets.xcassets in Resources */,
+				5457CCEE2E92C99C00D633D2 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
