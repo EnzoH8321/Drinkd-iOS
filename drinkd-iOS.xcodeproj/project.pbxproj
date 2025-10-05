@@ -669,6 +669,7 @@
 				DEVELOPMENT_TEAM = 9537WHKZZD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "drinkd-iOS/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Drinkd;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Turning on location services allows us to show you nearby restaurants and eateries. The app only uses this information on startup to query for restaurants and eateries. Location information is not saved or stored on our servers.";
@@ -938,6 +939,7 @@
 				DEVELOPMENT_TEAM = 9537WHKZZD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "drinkd-iOS/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Drinkd;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Turning on location services allows us to show you nearby restaurants and eateries. The app only uses this information on startup to query for restaurants and eateries. Location information is not saved or stored on our servers.";
@@ -979,6 +981,7 @@
 				DEVELOPMENT_TEAM = 9537WHKZZD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "drinkd-iOS/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Drinkd;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Turning on location services allows us to show you nearby restaurants and eateries. The app only uses this information on startup to query for restaurants and eateries. Location information is not saved or stored on our servers.";

@@ -21,8 +21,8 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
 
     override init() {
         super.init()
-
-        guard let supabaseKey = ProcessInfo.processInfo.environment["SUPABASE_PUBLISHABLE_KEY"] else {
+        // The Publishable Key is safe to use as long as RLS is enabled for tables and the correct policies have been set.
+        guard let supabaseKey = Bundle.main.infoDictionary?["SUPABASE_PUBLISHABLE_KEY"] as? String else {
             fatalError("Unable to retrieve the publishable supabase key")
         }
 
