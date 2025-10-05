@@ -8,8 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5407FD72271924D5008BC496 /* PartyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5407FD71271924D4008BC496 /* PartyCardView.swift */; };
-		540971192E91CE32006FF7F0 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 540971182E91CE32006FF7F0 /* drinkdSharedModels */; };
-		5409711C2E91DD0F006FF7F0 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 5409711B2E91DD0F006FF7F0 /* drinkdSharedModels */; };
+		540971382E923578006FF7F0 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 540971372E923578006FF7F0 /* drinkdSharedModels */; };
 		54222D7E2E46546E003E58F3 /* NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54222D7D2E46546E003E58F3 /* NetworkingTests.swift */; };
 		54222D802E4659A6003E58F3 /* PartyVMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54222D7F2E4659A6003E58F3 /* PartyVMTests.swift */; };
 		54222D822E465C09003E58F3 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54222D812E465C09003E58F3 /* Utilities.swift */; };
@@ -35,7 +34,6 @@
 		549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549BFC462728CFBA00F96F48 /* CustomLocationView.swift */; };
 		54B3E537270E140E0004ECC5 /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B3E536270E140C0004ECC5 /* Star.swift */; };
 		54BEE37427593A9300C82880 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BEE37327593A9300C82880 /* Networking.swift */; };
-		54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */; };
 		54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */; };
 		54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* MasterView.swift */; };
 		54F9C80D26FBB537008FA516 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80C26FBB537008FA516 /* Assets.xcassets */; };
@@ -146,11 +144,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */,
-				5409711C2E91DD0F006FF7F0 /* drinkdSharedModels in Frameworks */,
-				540971192E91CE32006FF7F0 /* drinkdSharedModels in Frameworks */,
 				544A78612E43111500497F93 /* Realtime in Frameworks */,
 				544A78642E43177E00497F93 /* Supabase in Frameworks */,
+				540971382E923578006FF7F0 /* drinkdSharedModels in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -452,7 +448,7 @@
 			mainGroup = 54F9C7FC26FBB536008FA516;
 			packageReferences = (
 				544A785F2E43111500497F93 /* XCRemoteSwiftPackageReference "supabase-swift" */,
-				5409711A2E91DD0F006FF7F0 /* XCRemoteSwiftPackageReference "drinkdSharedModels" */,
+				540971362E923578006FF7F0 /* XCRemoteSwiftPackageReference "drinkdSharedModels" */,
 			);
 			productRefGroup = 54F9C80626FBB536008FA516 /* Products */;
 			projectDirPath = "";
@@ -1157,7 +1153,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		5409711A2E91DD0F006FF7F0 /* XCRemoteSwiftPackageReference "drinkdSharedModels" */ = {
+		540971362E923578006FF7F0 /* XCRemoteSwiftPackageReference "drinkdSharedModels" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/EnzoH8321/drinkdSharedModels";
 			requirement = {
@@ -1176,13 +1172,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		540971182E91CE32006FF7F0 /* drinkdSharedModels */ = {
+		540971372E923578006FF7F0 /* drinkdSharedModels */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = drinkdSharedModels;
-		};
-		5409711B2E91DD0F006FF7F0 /* drinkdSharedModels */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5409711A2E91DD0F006FF7F0 /* XCRemoteSwiftPackageReference "drinkdSharedModels" */;
+			package = 540971362E923578006FF7F0 /* XCRemoteSwiftPackageReference "drinkdSharedModels" */;
 			productName = drinkdSharedModels;
 		};
 		544A78602E43111500497F93 /* Realtime */ = {
@@ -1194,10 +1186,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 544A785F2E43111500497F93 /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Supabase;
-		};
-		54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = drinkdSharedModels;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
