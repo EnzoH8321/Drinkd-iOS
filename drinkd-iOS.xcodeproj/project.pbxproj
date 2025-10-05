@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5407FD72271924D5008BC496 /* PartyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5407FD71271924D4008BC496 /* PartyCardView.swift */; };
-		540971382E923578006FF7F0 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 540971372E923578006FF7F0 /* drinkdSharedModels */; };
 		54222D7E2E46546E003E58F3 /* NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54222D7D2E46546E003E58F3 /* NetworkingTests.swift */; };
 		54222D802E4659A6003E58F3 /* PartyVMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54222D7F2E4659A6003E58F3 /* PartyVMTests.swift */; };
 		54222D822E465C09003E58F3 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54222D812E465C09003E58F3 /* Utilities.swift */; };
@@ -100,6 +99,7 @@
 		54562872278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockYelpBusinessSearchProperties.json; sourceTree = "<group>"; };
 		54562885278EAE2D00CA6005 /* MockTopThreeChoices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockTopThreeChoices.json; sourceTree = "<group>"; };
 		54562889278F63C600CA6005 /* MockDatabaseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDatabaseObject.swift; sourceTree = "<group>"; };
+		5457CCE72E92C75A00D633D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		54806F8F2E87A30B009F1B29 /* FakeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeData.swift; sourceTree = "<group>"; };
 		54852CDC2E707788002AF93E /* NetworkClientProtocolMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClientProtocolMock.swift; sourceTree = "<group>"; };
 		5496D19A276D188E000C732A /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
@@ -148,7 +148,6 @@
 				544A78612E43111500497F93 /* Realtime in Frameworks */,
 				5474A4992E9254A200EFF9AD /* drinkdSharedModels in Frameworks */,
 				544A78642E43177E00497F93 /* Supabase in Frameworks */,
-				540971382E923578006FF7F0 /* drinkdSharedModels in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,6 +219,7 @@
 		54F9C80726FBB536008FA516 /* drinkd-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				5457CCE72E92C75A00D633D2 /* Info.plist */,
 				542BE6252E103AE300B13011 /* Utilities */,
 				54F9C85E2703E578008FA516 /* WebServices */,
 				54F9C83D26FBF891008FA516 /* ViewModel */,
@@ -1155,14 +1155,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		540971362E923578006FF7F0 /* XCRemoteSwiftPackageReference "drinkdSharedModels" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/EnzoH8321/drinkdSharedModels";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		544A785F2E43111500497F93 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
@@ -1182,11 +1174,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		540971372E923578006FF7F0 /* drinkdSharedModels */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 540971362E923578006FF7F0 /* XCRemoteSwiftPackageReference "drinkdSharedModels" */;
-			productName = drinkdSharedModels;
-		};
 		544A78602E43111500497F93 /* Realtime */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 544A785F2E43111500497F93 /* XCRemoteSwiftPackageReference "supabase-swift" */;
