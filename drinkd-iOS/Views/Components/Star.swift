@@ -18,18 +18,7 @@ struct Star: View {
 	let starValue: Int
     let restaurantTitle: String
     let restaurantImageURL: String
-
-    private var imageName: String {
-        // If the resturant has already been rated, use that rating
-        if let restaurant = viewModel.ratedRestaurants.first { $0.restaurant_name == restaurantTitle } {
-            let rating = restaurant.rating
-
-            return starValue > rating ? "star" : "star.fill"
-
-        }
-
-        return viewModel.currentScoreOfTopCard < 0 || starValue > viewModel.currentScoreOfTopCard ? "star" : "star.fill"
-    }
+    let imageName: String
 
     var body: some View {
         Image(systemName: imageName)
@@ -104,7 +93,7 @@ struct Star: View {
 }
 
 #Preview {
-    Star(showError: .constant((false, "")), starValue: 5, restaurantTitle: "TestRestaurant", restaurantImageURL: "ImageURL")
+    Star(showError: .constant((false, "")), starValue: 5, restaurantTitle: "TestRestaurant", restaurantImageURL: "ImageURL", imageName: "star")
         .environment(PartyViewModel())
         .environment(Networking())
 }

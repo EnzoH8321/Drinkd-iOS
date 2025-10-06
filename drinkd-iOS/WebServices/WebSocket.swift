@@ -21,8 +21,10 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
 
     override init() {
         super.init()
-
-        let supabaseKey = Constants.supabaseToken
+        // The Publishable Key is safe to use as long as RLS is enabled for tables and the correct policies have been set.
+        guard let supabaseKey = Bundle.main.infoDictionary?["SUPABASE_PUBLISHABLE_KEY"] as? String else {
+            fatalError("Unable to retrieve the publishable supabase key")
+        }
 
         guard let supabaseURL = URL(string: "https://jdkdtahoqpsspesqyojb.supabase.co") else {
             fatalError("Invalid Supabase URL")

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import drinkdSharedModels
 @testable import drinkd_iOS
 
 final class Utilities {

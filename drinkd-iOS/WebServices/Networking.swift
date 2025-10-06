@@ -81,26 +81,14 @@ final class Networking {
     /// - Parameter latitude: The latitude coordinate for the search
     /// - Parameter longitude: The longitude coordinate for the search
     /// - Returns: YelpApiBusinessSearch containing the API response with business data
-     func getRestaurants(latitude: Double, longitude: Double) async throws -> YelpApiBusinessSearch {
+    func getRestaurants(latitude: Double, longitude: Double) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(latitude)&longitude=\(longitude)&limit=10") else {
             Log.error.log("ERROR - INVALID URL")
             throw SharedErrors.general(error: .generalError("Invalid URL"))
         }
 
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(Constants.yelpToken)", forHTTPHeaderField: "Authorization")
-        let (data, response) = try await URLSession.shared.data(for: request)
-
-        if let httpResponse = response as? HTTPURLResponse {
-            let statusCode = httpResponse.statusCode
-
-            // Check for errors
-            if !(200...299).contains(statusCode) {
-                throw YelpErrors.invalidHTTPStatus("Invalid HTTP Status Code - \(statusCode)")
-            }
-        }
-
+        let urlReq = try HTTP.GetReq.yelpRestaurants(yelpURL: url.absoluteString).createReq()
+        let data = try await executeRequest(urlReq: urlReq)
 
         let businessSearch = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: data)
 
@@ -110,26 +98,14 @@ final class Networking {
     /// Fetches restaurant data from the Yelp API using a provided URL string.
     /// - Parameter yelpURL: The complete Yelp API URL string for the request
     /// - Returns: YelpApiBusinessSearch containing the API response with business data
-     func getRestaurants(yelpURL: String) async throws -> YelpApiBusinessSearch {
+    func getRestaurants(yelpURL: String) async throws -> YelpApiBusinessSearch {
         guard let url = URL(string: yelpURL) else {
             Log.error.log("ERROR - INVALID URL")
             throw SharedErrors.general(error: .generalError("Invalid URL"))
         }
 
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(Constants.yelpToken)", forHTTPHeaderField: "Authorization")
-        let (data, response) = try await URLSession.shared.data(for: request)
-
-        if let httpResponse = response as? HTTPURLResponse {
-            let statusCode = httpResponse.statusCode
-
-            // Check for errors
-            if !(200...299).contains(statusCode) {
-                throw YelpErrors.invalidHTTPStatus("Invalid HTTP Status Code - \(statusCode)")
-            }
-        }
-
+        let urlReq = try HTTP.GetReq.yelpRestaurants(yelpURL: url.absoluteString).createReq()
+        let data = try await executeRequest(urlReq: urlReq)
 
         let businessSearch = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: data)
 

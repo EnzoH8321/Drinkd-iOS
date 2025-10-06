@@ -27,21 +27,19 @@
 		54562873278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json in Resources */ = {isa = PBXBuildFile; fileRef = 54562872278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json */; };
 		54562886278EAE2D00CA6005 /* MockTopThreeChoices.json in Resources */ = {isa = PBXBuildFile; fileRef = 54562885278EAE2D00CA6005 /* MockTopThreeChoices.json */; };
 		5456288A278F63C600CA6005 /* MockDatabaseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562889278F63C600CA6005 /* MockDatabaseObject.swift */; };
+		5474A4992E9254A200EFF9AD /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 5474A4982E9254A200EFF9AD /* drinkdSharedModels */; };
+		54806F902E87A30B009F1B29 /* FakeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54806F8F2E87A30B009F1B29 /* FakeData.swift */; };
 		54852CDD2E707788002AF93E /* NetworkClientProtocolMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54852CDC2E707788002AF93E /* NetworkClientProtocolMock.swift */; };
 		5496D19B276D188E000C732A /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5496D19A276D188E000C732A /* MessageView.swift */; };
 		549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549BFC462728CFBA00F96F48 /* CustomLocationView.swift */; };
 		54B3E537270E140E0004ECC5 /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B3E536270E140C0004ECC5 /* Star.swift */; };
 		54BEE37427593A9300C82880 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BEE37327593A9300C82880 /* Networking.swift */; };
-		54C7BD0E2DC1D88D00045D67 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C7BD0D2DC1D88D00045D67 /* Constants.swift */; };
-		54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */; };
-		54EFB0F92E58F69F007984D5 /* ConfidentialKit in Frameworks */ = {isa = PBXBuildFile; productRef = 54EFB0F82E58F69F007984D5 /* ConfidentialKit */; };
 		54F9C80926FBB536008FA516 /* drinkd_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */; };
 		54F9C80B26FBB536008FA516 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C80A26FBB536008FA516 /* MasterView.swift */; };
 		54F9C80D26FBB537008FA516 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80C26FBB537008FA516 /* Assets.xcassets */; };
 		54F9C81026FBB537008FA516 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54F9C80F26FBB537008FA516 /* Preview Assets.xcassets */; };
 		54F9C82926FBB538008FA516 /* drinkd_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C82826FBB538008FA516 /* drinkd_iOSUITests.swift */; };
 		54F9C82B26FBB538008FA516 /* drinkd_iOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C82A26FBB538008FA516 /* drinkd_iOSUITestsLaunchTests.swift */; };
-		54F9C83926FBD986008FA516 /* YelpAPIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C83826FBD986008FA516 /* YelpAPIModels.swift */; };
 		54F9C84026FBF8E8008FA516 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C83F26FBF8E8008FA516 /* CardView.swift */; };
 		54F9C84626FCF403008FA516 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84526FCF403008FA516 /* Styles.swift */; };
 		54F9C84826FD1A05008FA516 /* TopChoicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F9C84726FD1A05008FA516 /* TopChoicesView.swift */; };
@@ -101,12 +99,13 @@
 		54562872278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockYelpBusinessSearchProperties.json; sourceTree = "<group>"; };
 		54562885278EAE2D00CA6005 /* MockTopThreeChoices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockTopThreeChoices.json; sourceTree = "<group>"; };
 		54562889278F63C600CA6005 /* MockDatabaseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDatabaseObject.swift; sourceTree = "<group>"; };
+		5457CCF52E92CE7D00D633D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		54806F8F2E87A30B009F1B29 /* FakeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeData.swift; sourceTree = "<group>"; };
 		54852CDC2E707788002AF93E /* NetworkClientProtocolMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClientProtocolMock.swift; sourceTree = "<group>"; };
 		5496D19A276D188E000C732A /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		549BFC462728CFBA00F96F48 /* CustomLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLocationView.swift; sourceTree = "<group>"; };
 		54B3E536270E140C0004ECC5 /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
 		54BEE37327593A9300C82880 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
-		54C7BD0D2DC1D88D00045D67 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		54F9C80526FBB536008FA516 /* drinkd-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "drinkd-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F9C80826FBB536008FA516 /* drinkd_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSApp.swift; sourceTree = "<group>"; };
 		54F9C80A26FBB536008FA516 /* MasterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterView.swift; sourceTree = "<group>"; };
@@ -116,7 +115,6 @@
 		54F9C82426FBB538008FA516 /* drinkd-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "drinkd-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54F9C82826FBB538008FA516 /* drinkd_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSUITests.swift; sourceTree = "<group>"; };
 		54F9C82A26FBB538008FA516 /* drinkd_iOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drinkd_iOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		54F9C83826FBD986008FA516 /* YelpAPIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpAPIModels.swift; sourceTree = "<group>"; };
 		54F9C83F26FBF8E8008FA516 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		54F9C84526FCF403008FA516 /* Styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
 		54F9C84726FD1A05008FA516 /* TopChoicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopChoicesView.swift; sourceTree = "<group>"; };
@@ -147,10 +145,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54C7BD1F2DC2D69B00045D67 /* drinkdSharedModels in Frameworks */,
 				544A78612E43111500497F93 /* Realtime in Frameworks */,
+				5474A4992E9254A200EFF9AD /* drinkdSharedModels in Frameworks */,
 				544A78642E43177E00497F93 /* Supabase in Frameworks */,
-				54EFB0F92E58F69F007984D5 /* ConfidentialKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +219,7 @@
 		54F9C80726FBB536008FA516 /* drinkd-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				5457CCF52E92CE7D00D633D2 /* Info.plist */,
 				542BE6252E103AE300B13011 /* Utilities */,
 				54F9C85E2703E578008FA516 /* WebServices */,
 				54F9C83D26FBF891008FA516 /* ViewModel */,
@@ -255,6 +253,7 @@
 				5422315D2E502926003E58F3 /* WebSocketTests.swift */,
 				542455CA2E50F50400702EEA /* TestErrors.swift */,
 				54233A5A2E6D07C000EB4273 /* LocationTests.swift */,
+				54806F8F2E87A30B009F1B29 /* FakeData.swift */,
 			);
 			path = "drinkd-iOSTests";
 			sourceTree = "<group>";
@@ -271,7 +270,6 @@
 		54F9C83726FBD95B008FA516 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				54F9C83826FBD986008FA516 /* YelpAPIModels.swift */,
 				54F9C85A27037F2F008FA516 /* Models.swift */,
 			);
 			path = Models;
@@ -322,7 +320,6 @@
 			isa = PBXGroup;
 			children = (
 				54F9C84526FCF403008FA516 /* Styles.swift */,
-				54C7BD0D2DC1D88D00045D67 /* Constants.swift */,
 				542459922E56382100702EEA /* Extensions.swift */,
 			);
 			path = Globals;
@@ -370,7 +367,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				54EFB0FC2E58F6EB007984D5 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				542BE6252E103AE300B13011 /* Utilities */,
@@ -453,10 +449,8 @@
 			);
 			mainGroup = 54F9C7FC26FBB536008FA516;
 			packageReferences = (
-				543196DB2E41D07400EA17BB /* XCRemoteSwiftPackageReference "drinkdSharedModels" */,
 				544A785F2E43111500497F93 /* XCRemoteSwiftPackageReference "supabase-swift" */,
-				54EFB0F72E58F69F007984D5 /* XCRemoteSwiftPackageReference "swift-confidential" */,
-				54EFB0FA2E58F6D5007984D5 /* XCRemoteSwiftPackageReference "swift-confidential-plugin" */,
+				5474A4972E9254A200EFF9AD /* XCRemoteSwiftPackageReference "drinkdSharedModels" */,
 			);
 			productRefGroup = 54F9C80626FBB536008FA516 /* Products */;
 			projectDirPath = "";
@@ -523,7 +517,6 @@
 				54B3E537270E140E0004ECC5 /* Star.swift in Sources */,
 				5430E126276D1D8F00326A52 /* ChatView.swift in Sources */,
 				542459952E56389200702EEA /* StackableWrapper.swift in Sources */,
-				54C7BD0E2DC1D88D00045D67 /* Constants.swift in Sources */,
 				5444B991273EE99800FA6DA2 /* HowToView.swift in Sources */,
 				54F9C84C26FD1ED6008FA516 /* ListCardView.swift in Sources */,
 				54F9C84A26FD1A59008FA516 /* HomeView.swift in Sources */,
@@ -535,7 +528,6 @@
 				54F9C85B27037F2F008FA516 /* Models.swift in Sources */,
 				54F9C859270257E1008FA516 /* SplashScreen.swift in Sources */,
 				543196D82E3E6C2D00EA17BB /* WebSocket.swift in Sources */,
-				54F9C83926FBD986008FA516 /* YelpAPIModels.swift in Sources */,
 				54F9C84826FD1A05008FA516 /* TopChoicesView.swift in Sources */,
 				54F9C84E26FD5D6F008FA516 /* PartyView.swift in Sources */,
 				5496D19B276D188E000C732A /* MessageView.swift in Sources */,
@@ -556,6 +548,7 @@
 				54233A5B2E6D07C000EB4273 /* LocationTests.swift in Sources */,
 				54222D842E465E81003E58F3 /* TestLog.swift in Sources */,
 				54222D802E4659A6003E58F3 /* PartyVMTests.swift in Sources */,
+				54806F902E87A30B009F1B29 /* FakeData.swift in Sources */,
 				542455CB2E50F50400702EEA /* TestErrors.swift in Sources */,
 				5422315E2E502926003E58F3 /* WebSocketTests.swift in Sources */,
 				5456288A278F63C600CA6005 /* MockDatabaseObject.swift in Sources */,
@@ -581,10 +574,6 @@
 			target = 54F9C80426FBB536008FA516 /* drinkd-iOS */;
 			targetProxy = 54562865278A62BF00CA6005 /* PBXContainerItemProxy */;
 		};
-		54EFB0FC2E58F6EB007984D5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 54EFB0FB2E58F6EB007984D5 /* Confidential */;
-		};
 		54F9C81C26FBB538008FA516 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 54F9C80426FBB536008FA516 /* drinkd-iOS */;
@@ -598,6 +587,179 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		540971122E91CCE6006FF7F0 /* STAGING */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = STAGING;
+		};
+		540971132E91CCE6006FF7F0 /* STAGING */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = "drinkd-iOS/drinkd-iOS.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 46;
+				DEVELOPMENT_ASSET_PATHS = "\"drinkd-iOS/Preview Content\"";
+				DEVELOPMENT_TEAM = 9537WHKZZD;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "drinkd-iOS/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Drinkd;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Turning on location services allows us to show you nearby restaurants and eateries. The app only uses this information on startup to query for restaurants and eateries. Location information is not saved or stored on our servers.";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "Turning on location services allows us to show you nearby restaurants and eateries. The app only uses this information on startup to query for restaurants and eateries. Location information is not saved or stored on our servers.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "me.herrera.enzo.drinkd-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = STAGING;
+		};
+		540971142E91CCE6006FF7F0 /* STAGING */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9537WHKZZD;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "me.herrera.enzo.drinkd-iOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/drinkd-iOS.app/drinkd-iOS";
+			};
+			name = STAGING;
+		};
+		540971152E91CCE6006FF7F0 /* STAGING */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9537WHKZZD;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "me.herrera.enzo.drinkd-iOSUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "drinkd-iOS";
+			};
+			name = STAGING;
+		};
+		540971162E91CCE6006FF7F0 /* STAGING */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9537WHKZZD;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.enzoHerrera.drinkd-iOS-NetworkingTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/drinkd-iOS.app/drinkd-iOS";
+			};
+			name = STAGING;
+		};
 		54562868278A62BF00CA6005 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -770,11 +932,12 @@
 				CODE_SIGN_ENTITLEMENTS = "drinkd-iOS/drinkd-iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 46;
 				DEVELOPMENT_ASSET_PATHS = "\"drinkd-iOS/Preview Content\"";
 				DEVELOPMENT_TEAM = 9537WHKZZD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "drinkd-iOS/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Drinkd;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Turning on location services allows us to show you nearby restaurants and eateries. The app only uses this information on startup to query for restaurants and eateries. Location information is not saved or stored on our servers.";
@@ -812,11 +975,12 @@
 				CODE_SIGN_ENTITLEMENTS = "drinkd-iOS/drinkd-iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 46;
 				DEVELOPMENT_ASSET_PATHS = "\"drinkd-iOS/Preview Content\"";
 				DEVELOPMENT_TEAM = 9537WHKZZD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "drinkd-iOS/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Drinkd;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Turning on location services allows us to show you nearby restaurants and eateries. The app only uses this information on startup to query for restaurants and eateries. Location information is not saved or stored on our servers.";
@@ -944,6 +1108,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				54562868278A62BF00CA6005 /* Debug */,
+				540971162E91CCE6006FF7F0 /* STAGING */,
 				54562869278A62BF00CA6005 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -953,6 +1118,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				54F9C82C26FBB538008FA516 /* Debug */,
+				540971122E91CCE6006FF7F0 /* STAGING */,
 				54F9C82D26FBB538008FA516 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -962,6 +1128,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				54F9C82F26FBB538008FA516 /* Debug */,
+				540971132E91CCE6006FF7F0 /* STAGING */,
 				54F9C83026FBB538008FA516 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -971,6 +1138,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				54F9C83226FBB538008FA516 /* Debug */,
+				540971142E91CCE6006FF7F0 /* STAGING */,
 				54F9C83326FBB538008FA516 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -980,6 +1148,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				54F9C83526FBB538008FA516 /* Debug */,
+				540971152E91CCE6006FF7F0 /* STAGING */,
 				54F9C83626FBB538008FA516 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -988,14 +1157,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		543196DB2E41D07400EA17BB /* XCRemoteSwiftPackageReference "drinkdSharedModels" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/EnzoH8321/drinkdSharedModels";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		544A785F2E43111500497F93 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
@@ -1004,20 +1165,12 @@
 				minimumVersion = 2.5.1;
 			};
 		};
-		54EFB0F72E58F69F007984D5 /* XCRemoteSwiftPackageReference "swift-confidential" */ = {
+		5474A4972E9254A200EFF9AD /* XCRemoteSwiftPackageReference "drinkdSharedModels" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/securevale/swift-confidential";
+			repositoryURL = "https://github.com/EnzoH8321/drinkdSharedModels";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.4.1;
-			};
-		};
-		54EFB0FA2E58F6D5007984D5 /* XCRemoteSwiftPackageReference "swift-confidential-plugin" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/securevale/swift-confidential-plugin";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.4.1;
+				branch = main;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1033,19 +1186,10 @@
 			package = 544A785F2E43111500497F93 /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Supabase;
 		};
-		54C7BD1E2DC2D69B00045D67 /* drinkdSharedModels */ = {
+		5474A4982E9254A200EFF9AD /* drinkdSharedModels */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 5474A4972E9254A200EFF9AD /* XCRemoteSwiftPackageReference "drinkdSharedModels" */;
 			productName = drinkdSharedModels;
-		};
-		54EFB0F82E58F69F007984D5 /* ConfidentialKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 54EFB0F72E58F69F007984D5 /* XCRemoteSwiftPackageReference "swift-confidential" */;
-			productName = ConfidentialKit;
-		};
-		54EFB0FB2E58F6EB007984D5 /* Confidential */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 54EFB0FA2E58F6D5007984D5 /* XCRemoteSwiftPackageReference "swift-confidential-plugin" */;
-			productName = "plugin:Confidential";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

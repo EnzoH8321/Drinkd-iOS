@@ -107,5 +107,25 @@ struct NetworkingTests {
 //
 //    }
 
+
+//    @Test("Create a party")
+//    func createParty_Test() async throws {
+//        let networking = Networking()
+//        let vm = PartyViewModel()
+//
+//        do {
+//            try await networking.createParty(viewModel: vm, username: FakePartyLeader.username, partyName: FakeParty.name, restaurantsURL: FakeParty.restaurantURL)
+//
+//            let party = vm.currentParty
+//
+//            #expect(party?.username == FakePartyLeader.username)
+//
+//        } catch {
+//            Issue.record(error)
+//        }
+//
+//
+//
+//    }
 }
 

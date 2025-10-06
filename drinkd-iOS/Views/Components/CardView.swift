@@ -72,7 +72,7 @@ struct CardView: View {
                         .font(.title3)
                     
                     HStack {
-                        ForEach(0..<restaurantScore) { element in
+                        ForEach(0..<restaurantScore, id: \.self) { element in
                             Image(systemName: "star.fill")
                                 .foregroundColor(AppColors.primaryColor)
                         }
@@ -157,9 +157,17 @@ struct CardView: View {
                         HStack {
                             Spacer()
                             Group {
-
-                                ForEach(1...5, id: \.self) { index in
-                                    Star(showError: $showError, starValue: index, restaurantTitle: restaurantTitle, restaurantImageURL: restaurantImageURL)
+                                //TODO: Possible race condition w/ loading the rated restaurants. Seems the view loads into memory before network request to update rated restaurants returns. We need to ensure if there are no rated restaurants, we only use the "star" images.
+                                if !viewModel.ratedRestaurants.isEmpty {
+                                    ForEach(1...5, id: \.self) { index in
+                                        let imageName = setImageName(value: index)
+                                        Star(showError: $showError, starValue: index, restaurantTitle: restaurantTitle, restaurantImageURL: restaurantImageURL, imageName: imageName)
+                                    }
+                                } else {
+                                    ForEach(1...5, id: \.self) { index in
+                                        let imageName = "star"
+                                        Star(showError: $showError, starValue: index, restaurantTitle: restaurantTitle, restaurantImageURL: restaurantImageURL, imageName: imageName)
+                                    }
                                 }
 
                             }
@@ -176,6 +184,23 @@ struct CardView: View {
                 Alert(title: Text("Error"), message: Text("Error - \(showError.message)"))
             })
 
+    }
+
+    /// Determines the appropriate SF Symbol name for a star based on the restaurant's rating.
+    ///
+    /// This function checks if the restaurant has been previously rated by the user. If a rating exists,
+    /// it displays filled stars up to that rating. For unrated restaurants, it uses the current temporary
+    /// score from the top card being evaluated.
+    ///
+    /// - Parameter value: The star position (1-5) to determine if it should be filled or empty
+    /// - Returns: "star.fill" for filled stars or "star" for empty stars
+    func setImageName(value: Int) ->  String {
+        // If the resturant has already been rated, use that rating
+        if let restaurant = viewModel.ratedRestaurants.first(where: { $0.restaurant_name == restaurantTitle }) {
+            return value > restaurant.rating ? "star" : "star.fill"
+        }
+
+        return viewModel.currentScoreOfTopCard < 0 || value > viewModel.currentScoreOfTopCard ? "star" : "star.fill"
     }
 }
 
@@ -206,19 +231,19 @@ extension CardView {
         }
     }
 }
-
-#Preview("Not in a Party") {
-    CardView( in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 5, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "$$", location: YelpApiBusinessDetails_Location(address1: "155 W 51st St", address2: "Suite 1-", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "650-339-0869", display_phone: "test", distance: 6565.56))
-        .environment(PartyViewModel())
-        .environment(Networking())
-}
-
-#Preview("In a Party") {
-    let partyVM = PartyViewModel()
-    let party = Party(username: "USERNAME01" ,partyID: UUID(uuidString: "6f31b771-0027-4407-8c97-07a7609d3e2b")!, partyMaxVotes: 1, partyName: "Party Name", partyCode: 123123 ,yelpURL: "YELP API ")
-    partyVM.currentParty = party
-
-    return CardView( in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 5, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "$$", location: YelpApiBusinessDetails_Location(address1: "155 W 51st St", address2: "Suite 1-", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "650-339-0869", display_phone: "test", distance: 6565.56))
-        .environment(partyVM)
-        .environment(Networking())
-}
+//
+//#Preview("Not in a Party") {
+//    CardView( in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 5, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "$$", location: YelpApiBusinessDetails_Location(address1: "155 W 51st St", address2: "Suite 1-", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "650-339-0869", display_phone: "test", distance: 6565.56))
+//        .environment(PartyViewModel())
+//        .environment(Networking())
+//}
+//
+//#Preview("In a Party") {
+//    let partyVM = PartyViewModel()
+//    let party = Party(username: "USERNAME01" ,partyID: UUID(uuidString: "6f31b771-0027-4407-8c97-07a7609d3e2b")!, partyMaxVotes: 1, partyName: "Party Name", partyCode: 123123 ,yelpURL: "YELP API ")
+//    partyVM.currentParty = party
+//
+//    return CardView( in: YelpApiBusinessSearchProperties(id: "43543", alias: "harvey", name: "Mcdonalds", image_url: "", is_closed: true, url: "", review_count: 7, categories: [YelpApiBusinessDetails_Categories(alias: "test", title: "Bars")], rating: 5, coordinates: YelpApiBusinessDetails_Coordinates(latitude: 565.5, longitude: 45.5), transactions: ["delivery", "pickup"], price: "$$", location: YelpApiBusinessDetails_Location(address1: "155 W 51st St", address2: "Suite 1-", address3: "34343", city: "san carlos", zip_code: "454545", country: "america", state: "cali", display_address: ["test this"], cross_streets: "none"), phone: "650-339-0869", display_phone: "test", distance: 6565.56))
+//        .environment(partyVM)
+//        .environment(Networking())
+//}
