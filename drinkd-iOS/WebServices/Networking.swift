@@ -10,6 +10,7 @@ import drinkdSharedModels
 import SwiftUI
 
 @Observable
+@MainActor
 final class Networking {
 
     init(webSocket: WebSocket = WebSocket()) {
@@ -132,9 +133,9 @@ extension Networking {
 
         let party = Party(username: username ,partyID: response.partyID, partyMaxVotes: 0, partyName: partyName, partyCode: response.partyCode, yelpURL: restaurantsURL)
         await webSocket.rdbSetSubscribeAndListen(partyVM: viewModel, partyID: response.partyID)
-        await MainActor.run {
-            viewModel.currentParty = party
-        }
+
+        viewModel.currentParty = party
+
     }
 
     /// Removes the current user from the specified party and closes the WebSocket connection.
@@ -219,12 +220,12 @@ extension Networking {
 
         await webSocket.rdbSetSubscribeAndListen(partyVM: viewModel, partyID: response.partyID)
 
-        await MainActor.run {
-            viewModel.updateLocalRestaurants(in: businesses)
-            viewModel.currentParty = party
-            viewModel.removeSplashScreen = true
-            self.userDeniedLocationServices = false
-        }
+
+        viewModel.updateLocalRestaurants(in: businesses)
+        viewModel.currentParty = party
+        viewModel.removeSplashScreen = true
+        self.userDeniedLocationServices = false
+
 
     }
 
