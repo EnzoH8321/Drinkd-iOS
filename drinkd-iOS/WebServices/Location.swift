@@ -61,6 +61,7 @@ class LocationFetcher: NSObject, CLLocationManagerDelegate {
     /// - Parameter partyVM: The PartyViewModel containing custom location coordinates
     /// - Returns: A CLLocation object representing the user's position
     /// - Throws: SharedErrors.general if no valid location can be determined
+    @MainActor
     func getLocation(partyVM: PartyViewModel) throws -> CLLocation {
         if let lastKnownLocation {
             return CLLocation(latitude: lastKnownLocation.latitude, longitude: lastKnownLocation.longitude)

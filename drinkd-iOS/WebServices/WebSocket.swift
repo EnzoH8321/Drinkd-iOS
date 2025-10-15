@@ -105,7 +105,7 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
             Log.error.log("rdbCreateChannel error: \(error)")
         }
 
-        Log.general.log("New Channel - \(self.channel)")
+        Log.general.log("New Channel - \(self.channel, default: "Invalid Channel")")
     }
 
     /// Sends a chat message to the party channel via real-time database broadcast
@@ -183,7 +183,11 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
 
 
                 let wsMessage = WSMessage(id: messageID, text: message, username: username, timestamp: Date.now, userID: userID)
-                partyVM.chatMessageList.append(wsMessage)
+
+                await MainActor.run {
+                    partyVM.chatMessageList.append(wsMessage)
+                }
+
                 
             }
 

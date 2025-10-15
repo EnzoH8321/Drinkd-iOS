@@ -8,6 +8,7 @@
 import Foundation
 import drinkdSharedModels
 
+@MainActor
 final class UserDefaultsWrapper {
 
     static private let userID = "userID"

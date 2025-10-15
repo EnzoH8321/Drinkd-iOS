@@ -10,6 +10,7 @@ import SwiftUI
 import drinkdSharedModels
 
 @Observable
+@MainActor
 class PartyViewModel {
 
     var customLat: Double = 0
