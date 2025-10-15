@@ -22,7 +22,13 @@ struct PartyCardView: View {
     private var partyVotes: Int { viewModel.currentParty?.partyMaxVotes ?? 0 }
     private var userName: String { viewModel.currentParty?.username ?? ""}
 
-    private func joinChat()  {
+    private func joinChat() async  {
+        do {
+            try await networking.getMessages(viewModel: viewModel)
+        } catch {
+            Log.error.log("Error getting messages: \(error)")
+        }
+
         path.append("chat")
     }
 
@@ -63,7 +69,10 @@ struct PartyCardView: View {
                 VStack {
 
                     Button {
-                        joinChat()
+                        Task {
+                           await joinChat()
+                        }
+
                     } label: {
                         Text("Join Chat")
                             .bold()
