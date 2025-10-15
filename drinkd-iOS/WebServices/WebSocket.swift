@@ -15,9 +15,9 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
 
     private(set) var client: SupabaseClient!
 
-    var websocketTask:  URLSessionWebSocketTask? = nil
-
     private(set) var channel: RealtimeChannelV2!
+    
+    private var messageListeningTask: Task<Void, Never>?
 
     override init() {
         super.init()
@@ -39,12 +39,10 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
 
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
         print("Web Socket did connect")
-        ping()
     }
 
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
         print("Web Socket did disconnect")
-        ping()
     }
 
     /// Sets up websocket channel for the specified party
@@ -53,40 +51,25 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
         self.channel = client.channel(partyID.uuidString) {
             $0.broadcast.receiveOwnBroadcasts = true
         }
+        Log.general.log("New Channel - \(self.channel, default: "Invalid Channel")")
     }
 
-    /// Cancels the active WebSocket connection if one exists
-    func cancelWebSocketConnection() {
-        // Exit early if no WebSocket connection exists
-        guard websocketTask != nil else {
-            Log.error.log("Websocket is nil")
-            return
-        }
+    /// Disconnects from the current party by unsubscribing from the channel and cancelling message listening
+    func disconnectFromParty() async {
+        // Cancel the message listening task
+        messageListeningTask?.cancel()
+        messageListeningTask = nil
 
-        Log.error.log("Closing websocket connection")
-        let reason = "Closing connection".data(using: .utf8)
-        websocketTask?.cancel(with: .goingAway, reason: reason)
-        websocketTask = nil
-    }
-
-    /// Sends a ping to check WebSocket connection health and schedules the next ping
-    func ping() {
-        // Ensure WebSocket task exists before attempting ping
-        guard let webSocketTask = self.websocketTask else {
-            Log.error.log("Error: No WebSocket task")
-            return
-        }
-        // Send ping and handle response
-        webSocketTask.sendPing { error in
-            if let error = error {
-                Log.error.log("Error when sending PING \(error)")
-            } else {
-                Log.general.log("Web Socket connection is alive")
-                DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
-                    self.ping()
-                }
+        // Unsubscribe from the channel if it exists
+        if let channel = self.channel {
+            do {
+                await channel.unsubscribe()
+                Log.general.log("Successfully unsubscribed from party channel")
             }
         }
+
+        // Clear the channel reference
+        self.channel = nil
     }
 
     /// Subscribes to a channel and listens for messages
@@ -102,10 +85,9 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
             try await self.channel?.subscribeWithError()
             rdbListenForMessages(partyVM: partyVM)
         } catch {
-            Log.error.log("rdbCreateChannel error: \(error)")
+            Log.error.log("rdbSetSubscribeAndListen error: \(error)")
         }
 
-        Log.general.log("New Channel - \(self.channel, default: "Invalid Channel")")
     }
 
     /// Sends a chat message to the party channel via real-time database broadcast
@@ -143,6 +125,9 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
     ///   - partyVM: Party view model
     func rdbListenForMessages(partyVM: PartyViewModel) {
 
+        // Cancel any existing listening task
+        messageListeningTask?.cancel()
+        
         // Get Channel
         guard let channel = self.channel else {
             Log.error.log("Channel not found")
@@ -152,9 +137,16 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
         // Get Broadcast stream
         let stream = channel.broadcastStream(event: "newMessage")
 
-        Task {
+        messageListeningTask = Task {
+            Log.general.log("Starting to listen for messages")
+
             // Get latest Messages
             for await jsonObj in stream {
+                // Check if task was cancelled
+                if Task.isCancelled {
+                    Log.general.log("Message listening task cancelled")
+                    return
+                }
 
                 guard let payload = jsonObj["payload"]?.value as? [String: Any] else {
                     Log.error.log("Unable to parse payload")
@@ -181,17 +173,14 @@ final class WebSocket: NSObject, URLSessionWebSocketDelegate {
                     return
                 }
 
-
                 let wsMessage = WSMessage(id: messageID, text: message, username: username, timestamp: Date.now, userID: userID)
 
                 await MainActor.run {
                     partyVM.chatMessageList.append(wsMessage)
                 }
-
-                
             }
 
-            Log.general.log("TASK DONE")
+            Log.general.log("Message listening task completed")
         }
     }
 

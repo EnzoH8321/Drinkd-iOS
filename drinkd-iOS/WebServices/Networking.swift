@@ -144,7 +144,7 @@ extension Networking {
     func leaveParty(partyVM: PartyViewModel, networking: Networking, partyID: UUID) async throws  {
         let userID = try UserDefaultsWrapper.getUserID
         let urlReq = try HTTP.PostReq.leaveParty(userID: userID).createReq()
-        webSocket.cancelWebSocketConnection()
+        await webSocket.disconnectFromParty()
         let _ = try await executeRequest(urlReq: urlReq)
 
         let location = try networking.locationFetcher.getLocation(partyVM: partyVM).coordinate

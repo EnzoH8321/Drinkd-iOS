@@ -21,6 +21,7 @@ struct drinkd_iOSApp: App {
 		WindowGroup {
 			MasterView()
                 .onAppear {
+                    checkBuildCOnfiguration()
                     // Set user id on startup, if it does not already exist
                     do {
                        let _ = try UserDefaultsWrapper.getUserID
@@ -69,4 +70,14 @@ struct drinkd_iOSApp: App {
 				}
 		}
 	}
+
+    private func checkBuildCOnfiguration() {
+#if STAGING
+        Log.general.log("⚠️ STAGING flag is defined")
+#elseif DEVELOPMENT
+        Log.general.log("⚠️ DEVELOPMENT flag is defined")
+#else
+        Log.general.log("✅ No flags defined - using production")
+#endif
+    }
 }

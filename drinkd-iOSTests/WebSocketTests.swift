@@ -126,17 +126,17 @@ struct WebSocketTests {
 
     }
 
-    @Test("Cancel a websocket connection")
-    func cancelWebSocketConnection_Test() async throws {
-        let ws = WebSocket()
-        let urlSession = URLSession(configuration: .default)
-        let url = URL(string: "ws://example.com")!
-        let webSocketTask = urlSession.webSocketTask(with: url)
-        ws.websocketTask = webSocketTask
-
-        ws.cancelWebSocketConnection()
-        #expect(ws.websocketTask == nil)
-    }
+//    @Test("Cancel a websocket connection")
+//    func cancelWebSocketConnection_Test() async throws {
+//        let ws = WebSocket()
+//        let urlSession = URLSession(configuration: .default)
+//        let url = URL(string: "ws://example.com")!
+//        let webSocketTask = urlSession.webSocketTask(with: url)
+//        ws.websocketTask = webSocketTask
+//
+//        ws.disconnectFromParty()
+//        #expect(ws.websocketTask == nil)
+//    }
 }
 
 extension WebSocket {
