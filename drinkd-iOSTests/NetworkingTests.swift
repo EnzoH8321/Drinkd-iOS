@@ -12,14 +12,8 @@ import Foundation
 @testable import drinkd_iOS
 
 @Suite("Networking Tests")
+@MainActor
 struct NetworkingTests {
-
-    func makeClient(with protocolClass: NetworkClientProtocolMock.Type) -> MockNetworkClient {
-      let configuration = URLSessionConfiguration.default
-      configuration.protocolClasses = [protocolClass]
-      let session = URLSession(configuration: configuration)
-      return MockNetworkClient(urlSession: session)
-    }
 
     // Core Location in Test uses the XCTEST Plan Location of SF (latitude: 37.7873589, longitude: -122.408227)
     private let sfLocation: CLLocationCoordinate2D

@@ -12,6 +12,7 @@ import drinkdSharedModels
 
 
 @Suite("PartyViewModel Tests")
+@MainActor
 struct PartyVMTests {
 
 //    @Test func clearAllRestaurants_Test() async throws {

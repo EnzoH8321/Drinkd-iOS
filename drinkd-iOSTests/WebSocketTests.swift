@@ -11,6 +11,7 @@ import Supabase
 @testable import drinkd_iOS
 
 @Suite("WebSocket Tests")
+@MainActor
 struct WebSocketTests {
 
     @Test("Create a channel")
@@ -111,7 +112,7 @@ struct WebSocketTests {
             await ws.stubSendMessage(partyID: partyID)
             ws.rdbListenForMessages(partyVM: vm)
             // We suspend the task to ensure the broadcast stream has enough time to emit a message
-            try await Task.sleep(for: .seconds(2))
+            try await Task.sleep(for: .seconds(1))
 
             let message = try #require(vm.chatMessageList.first)
             #expect(message.username == "StubUser001")

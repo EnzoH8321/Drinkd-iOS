@@ -26,10 +26,8 @@
 		5456285C278A5FE400CA6005 /* MockJSON.json in Resources */ = {isa = PBXBuildFile; fileRef = 5456285B278A5FE400CA6005 /* MockJSON.json */; };
 		54562873278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json in Resources */ = {isa = PBXBuildFile; fileRef = 54562872278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json */; };
 		54562886278EAE2D00CA6005 /* MockTopThreeChoices.json in Resources */ = {isa = PBXBuildFile; fileRef = 54562885278EAE2D00CA6005 /* MockTopThreeChoices.json */; };
-		5456288A278F63C600CA6005 /* MockDatabaseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54562889278F63C600CA6005 /* MockDatabaseObject.swift */; };
 		5474A4992E9254A200EFF9AD /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 5474A4982E9254A200EFF9AD /* drinkdSharedModels */; };
 		54806F902E87A30B009F1B29 /* FakeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54806F8F2E87A30B009F1B29 /* FakeData.swift */; };
-		54852CDD2E707788002AF93E /* NetworkClientProtocolMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54852CDC2E707788002AF93E /* NetworkClientProtocolMock.swift */; };
 		5496D19B276D188E000C732A /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5496D19A276D188E000C732A /* MessageView.swift */; };
 		549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549BFC462728CFBA00F96F48 /* CustomLocationView.swift */; };
 		54B3E537270E140E0004ECC5 /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B3E536270E140C0004ECC5 /* Star.swift */; };
@@ -98,10 +96,8 @@
 		54562861278A62BF00CA6005 /* drinkd-iOS-NetworkingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "drinkd-iOS-NetworkingTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54562872278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockYelpBusinessSearchProperties.json; sourceTree = "<group>"; };
 		54562885278EAE2D00CA6005 /* MockTopThreeChoices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockTopThreeChoices.json; sourceTree = "<group>"; };
-		54562889278F63C600CA6005 /* MockDatabaseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDatabaseObject.swift; sourceTree = "<group>"; };
 		5457CCF52E92CE7D00D633D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		54806F8F2E87A30B009F1B29 /* FakeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeData.swift; sourceTree = "<group>"; };
-		54852CDC2E707788002AF93E /* NetworkClientProtocolMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClientProtocolMock.swift; sourceTree = "<group>"; };
 		5496D19A276D188E000C732A /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		549BFC462728CFBA00F96F48 /* CustomLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLocationView.swift; sourceTree = "<group>"; };
 		54B3E536270E140C0004ECC5 /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
@@ -175,15 +171,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		5456287C278E3BCF00CA6005 /* MockClasses */ = {
-			isa = PBXGroup;
-			children = (
-				54562889278F63C600CA6005 /* MockDatabaseObject.swift */,
-				54852CDC2E707788002AF93E /* NetworkClientProtocolMock.swift */,
-			);
-			path = MockClasses;
-			sourceTree = "<group>";
-		};
 		54631E6027DA77CF008CE6B8 /* MockFiles */ = {
 			isa = PBXGroup;
 			children = (
@@ -244,7 +231,6 @@
 			isa = PBXGroup;
 			children = (
 				54631E6027DA77CF008CE6B8 /* MockFiles */,
-				5456287C278E3BCF00CA6005 /* MockClasses */,
 				54222D7D2E46546E003E58F3 /* NetworkingTests.swift */,
 				54233A492E6D003800EB4273 /* drinkd-iOS.xctestplan */,
 				54222D7F2E4659A6003E58F3 /* PartyVMTests.swift */,
@@ -544,14 +530,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54852CDD2E707788002AF93E /* NetworkClientProtocolMock.swift in Sources */,
 				54233A5B2E6D07C000EB4273 /* LocationTests.swift in Sources */,
 				54222D842E465E81003E58F3 /* TestLog.swift in Sources */,
 				54222D802E4659A6003E58F3 /* PartyVMTests.swift in Sources */,
 				54806F902E87A30B009F1B29 /* FakeData.swift in Sources */,
 				542455CB2E50F50400702EEA /* TestErrors.swift in Sources */,
 				5422315E2E502926003E58F3 /* WebSocketTests.swift in Sources */,
-				5456288A278F63C600CA6005 /* MockDatabaseObject.swift in Sources */,
 				54222D822E465C09003E58F3 /* Utilities.swift in Sources */,
 				54222D7E2E46546E003E58F3 /* NetworkingTests.swift in Sources */,
 			);
