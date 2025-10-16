@@ -671,6 +671,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.0.3;
+				"OTHER_SWIFT_FLAGS[arch=*]" = "-D STAGING";
 				PRODUCT_BUNDLE_IDENTIFIER = "me.herrera.enzo.drinkd-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
