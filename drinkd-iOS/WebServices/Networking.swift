@@ -20,6 +20,21 @@ final class Networking {
     private var webSocket: WebSocket
 
     private(set) var userDeniedLocationServices = false
+
+
+    private var baseURL: String {
+
+#if STAGING
+        return  "https://drinkdvaporserver-hvpnq.fly.dev/"
+#elseif DEBUG
+        return  "http://localhost:8080/"
+#else
+        return "https://drinkdvaporserver.fly.dev/"
+#endif
+
+    }
+
+
     var locationFetcher = LocationFetcher()
 
     func updateUserDeniedLocationServices() {
@@ -88,7 +103,7 @@ final class Networking {
             throw SharedErrors.general(error: .generalError("Invalid URL"))
         }
 
-        let urlReq = try HTTP.GetReq.yelpRestaurants(yelpURL: url.absoluteString).createReq()
+        let urlReq = try HTTP.GetReq.yelpRestaurants(yelpURL: url.absoluteString).createReq(baseURL: baseURL)
         let data = try await executeRequest(urlReq: urlReq)
 
         let businessSearch = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: data)
@@ -105,7 +120,7 @@ final class Networking {
             throw SharedErrors.general(error: .generalError("Invalid URL"))
         }
 
-        let urlReq = try HTTP.GetReq.yelpRestaurants(yelpURL: url.absoluteString).createReq()
+        let urlReq = try HTTP.GetReq.yelpRestaurants(yelpURL: url.absoluteString).createReq(baseURL: baseURL)
         let data = try await executeRequest(urlReq: urlReq)
 
         let businessSearch = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: data)
@@ -126,7 +141,7 @@ extension Networking {
     /// - Parameter restaurantsURL: The Yelp API URL for restaurant data
     func createParty(viewModel: PartyViewModel, username: String, partyName: String ,restaurantsURL: String) async throws {
         let userID = try UserDefaultsWrapper.getUserID
-        let urlReq = try HTTP.PostReq.createParty(userID: userID, userName: username, restaurantsUrl: restaurantsURL, partyName: partyName).createReq()
+        let urlReq = try HTTP.PostReq.createParty(userID: userID, userName: username, restaurantsUrl: restaurantsURL, partyName: partyName).createReq(baseURL: baseURL)
         let data = try await executeRequest(urlReq: urlReq)
 
         let response = try JSONDecoder().decode(CreatePartyResponse.self, from: data)
@@ -143,7 +158,7 @@ extension Networking {
     /// - Parameter partyID: The unique identifier of the party to leave
     func leaveParty(partyVM: PartyViewModel, networking: Networking, partyID: UUID) async throws  {
         let userID = try UserDefaultsWrapper.getUserID
-        let urlReq = try HTTP.PostReq.leaveParty(userID: userID).createReq()
+        let urlReq = try HTTP.PostReq.leaveParty(userID: userID).createReq(baseURL: baseURL)
         await webSocket.disconnectFromParty()
         let _ = try await executeRequest(urlReq: urlReq)
 
@@ -158,7 +173,7 @@ extension Networking {
     func sendMessage(username: String, message: String, partyID: UUID) async throws {
 
         let userID = try UserDefaultsWrapper.getUserID
-        let urlReq = try HTTP.PostReq.sendMessage(userID: userID, username: username, message: message, partyID: partyID).createReq()
+        let urlReq = try HTTP.PostReq.sendMessage(userID: userID, username: username, message: message, partyID: partyID).createReq(baseURL: baseURL)
         await webSocket.rdbSendMessage(userName: username, userID: userID, message: message, messageID: UUID(), partyID: partyID)
         let _ = try await executeRequest(urlReq: urlReq)
     }
@@ -171,7 +186,7 @@ extension Networking {
     /// - Parameter rating: The numerical rating value for the restaurant
     /// - Parameter imageURL: The URL of the restaurant's image
     func addRating(partyID: UUID, userID: UUID, username: String, restaurantName: String, rating: Int, imageURL: String) async throws  {
-        let urlReq = try HTTP.PostReq.updateRating(partyID: partyID, userName: username, userID: userID, restaurantName: restaurantName, rating: rating, imageuRL: imageURL).createReq()
+        let urlReq = try HTTP.PostReq.updateRating(partyID: partyID, userName: username, userID: userID, restaurantName: restaurantName, rating: rating, imageuRL: imageURL).createReq(baseURL: baseURL)
         let _ = try await executeRequest(urlReq: urlReq)
     }
 
@@ -179,7 +194,7 @@ extension Networking {
     /// - Parameter partyID: The unique identifier of the party
     /// - Returns: Array of RatedRestaurantsTable objects with populated image data
     func getTopRestaurants(partyID: UUID) async throws -> [RatedRestaurantsTable] {
-        let urlReq = try HTTP.GetReq.topRestaurants(partyID: partyID).createReq()
+        let urlReq = try HTTP.GetReq.topRestaurants(partyID: partyID).createReq(baseURL: baseURL)
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(TopRestaurantsGetResponse.self, from: data)
 
@@ -207,7 +222,7 @@ extension Networking {
 
         let userID = try UserDefaultsWrapper.getUserID
 
-        let urlReq = try HTTP.PostReq.joinParty(userID: userID, partyCode: partyCode, userName: userName).createReq()
+        let urlReq = try HTTP.PostReq.joinParty(userID: userID, partyCode: partyCode, userName: userName).createReq(baseURL: baseURL)
 
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(JoinPartyResponse.self, from: data)
@@ -233,7 +248,7 @@ extension Networking {
     /// - Parameter viewModel: The PartyViewModel instance to update with party data
     func rejoinParty(viewModel: PartyViewModel) async throws  {
         let userID = try UserDefaultsWrapper.getUserID
-        let urlReq = try HTTP.GetReq.rejoinParty(userID: userID.uuidString).createReq()
+        let urlReq = try HTTP.GetReq.rejoinParty(userID: userID.uuidString).createReq(baseURL: baseURL)
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(RejoinPartyGetResponse.self, from: data)
 
@@ -259,7 +274,7 @@ extension Networking {
     func getMessages(viewModel: PartyViewModel) async throws {
         guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .missingValue("Missing Party ID"))}
 
-        let urlReq = try HTTP.GetReq.getMessages(partyID: partyID).createReq()
+        let urlReq = try HTTP.GetReq.getMessages(partyID: partyID).createReq(baseURL: baseURL)
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(MessagesGetResponse.self, from: data)
         let messages = try response.messages.map {
@@ -279,7 +294,7 @@ extension Networking {
     func getRatedRestaurants(viewModel: PartyViewModel) async throws {
         guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .missingValue("Missing Party ID"))}
         let userID = try UserDefaultsWrapper.getUserID
-        let urlReq = try HTTP.GetReq.ratedRestaurants(userID: userID, partyID: partyID).createReq()
+        let urlReq = try HTTP.GetReq.ratedRestaurants(userID: userID, partyID: partyID).createReq(baseURL: baseURL)
         let data = try await executeRequest(urlReq: urlReq)
         let response = try JSONDecoder().decode(RatedRestaurantsGetResponse.self, from: data)
 
