@@ -12,6 +12,8 @@ struct CustomLocationView: View {
 
     @Environment(PartyViewModel.self) var viewModel
     @Environment(Networking.self) var networking
+    @Environment(YelpCache.self) var yelpCache
+
     @State private var showAlert: (message: String, state: Bool) = ("", false)
 
 	var body: some View {
@@ -51,7 +53,7 @@ struct CustomLocationView: View {
                             throw SharedErrors.general(error: .missingValue("Invalid Latitude and/or Longitude"))
                         }
 
-                        try await networking.updateRestaurants(viewModel: viewModel, longitude: viewModel.customLong, latitude: viewModel.customLat)
+                        try await networking.updateRestaurants(cache: yelpCache, viewModel: viewModel, longitude: viewModel.customLong, latitude: viewModel.customLat)
                     } catch {
                         showAlert.message = error.localizedDescription
                         showAlert.state.toggle()

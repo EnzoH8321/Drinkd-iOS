@@ -42,7 +42,7 @@ final class Networking {
     }
 
     /// Fetches nearby restaurants based on user location and updates the view model with the results.
-    func updateRestaurants(viewModel: PartyViewModel) async throws {
+    func updateRestaurants(cache: YelpCache ,viewModel: PartyViewModel) async throws {
 
         //If user location was found, continue
         //If defaults are used, then the user location could not be found
@@ -53,17 +53,17 @@ final class Networking {
             throw LocationErrors.invalidLastKnownLocation(msg: "Unable to retrieve last known location")
         }
 
-        let businessSearch = try await getRestaurants(latitude: latitude, longitude: longitude)
+        let key = cache.convertLocationToKey(latitude: latitude, longitude: longitude)
 
-        guard let businesses = businessSearch.businesses else { throw YelpErrors.missingProperty("Missing businesses property")}
+        let businessSearch = cache.useCachedData(forKey: key) ? try cache.getBusinessSearch(locationAsKey: key) : try await getRestaurants(latitude: latitude, longitude: longitude)
+
+        guard let businessSearchProperties: [YelpApiBusinessSearchProperties] = businessSearch.businesses else { throw YelpErrors.missingProperty("Missing businesses property") }
 
         await MainActor.run {
 
             //Checks to see if the function already ran to prevent duplicate calls
             //TODO: We do this because of the 2x networking call made. this prevents doubling up card stack
-            if (viewModel.localRestaurants.count <= 0) {
-                viewModel.updateLocalRestaurants(in: businesses)
-            }
+            if (viewModel.localRestaurants.count <= 0) { viewModel.updateLocalRestaurants(in: businessSearchProperties) }
 
             viewModel.removeSplashScreen = true
             self.userDeniedLocationServices = false
@@ -74,20 +74,20 @@ final class Networking {
     /// - Parameter viewModel: The PartyViewModel instance to update with restaurant data
     /// - Parameter longitude: The longitude coordinate for restaurant search
     /// - Parameter latitude: The latitude coordinate for restaurant search
-    func updateRestaurants(viewModel: PartyViewModel, longitude: Double, latitude: Double) async throws {
+    func updateRestaurants(cache: YelpCache, viewModel: PartyViewModel, longitude: Double, latitude: Double) async throws {
 
         //If user location was found, continue
         //If defaults are used, then the user location could not be found
         if latitude == 0.0 && longitude == 0.0 { throw LocationErrors.invalidLastKnownLocation(msg: "Invalid Latitude and Longitude") }
 
-        let businessSearch = try await getRestaurants(latitude: latitude, longitude: longitude)
+        let key = cache.convertLocationToKey(latitude: latitude, longitude: longitude)
 
-        guard let businesses = businessSearch.businesses else { throw YelpErrors.missingProperty("Missing businesses property")}
+        let businessSearch = cache.useCachedData(forKey: key) ? try cache.getBusinessSearch(locationAsKey: key) : try await getRestaurants(latitude: latitude, longitude: longitude)
+
+        guard let businessSearchProperties: [YelpApiBusinessSearchProperties] = businessSearch.businesses else { throw YelpErrors.missingProperty("Missing businesses property") }
 
         await MainActor.run {
-
-            viewModel.updateLocalRestaurants(in: businesses)
-
+            viewModel.updateLocalRestaurants(in: businessSearchProperties)
             viewModel.removeSplashScreen = true
             self.userDeniedLocationServices = false
         }
@@ -156,14 +156,14 @@ extension Networking {
     /// Removes the current user from the specified party and closes the WebSocket connection.
     /// - Parameter partyVM: The PartyViewModel instance for the party being left
     /// - Parameter partyID: The unique identifier of the party to leave
-    func leaveParty(partyVM: PartyViewModel, networking: Networking, partyID: UUID) async throws  {
+    func leaveParty(cache: YelpCache, partyVM: PartyViewModel, networking: Networking, partyID: UUID) async throws  {
         let userID = try UserDefaultsWrapper.getUserID
         let urlReq = try HTTP.PostReq.leaveParty(userID: userID).createReq(baseURL: baseURL)
         await webSocket.disconnectFromParty()
         let _ = try await executeRequest(urlReq: urlReq)
 
         let location = try networking.locationFetcher.getLocation(partyVM: partyVM).coordinate
-        try await networking.updateRestaurants(viewModel: partyVM, longitude: location.longitude, latitude: location.latitude)
+        try await networking.updateRestaurants(cache: cache, viewModel: partyVM, longitude: location.longitude, latitude: location.latitude)
     }
 
     /// Sends a message to the specified party through both WebSocket and HTTP API.

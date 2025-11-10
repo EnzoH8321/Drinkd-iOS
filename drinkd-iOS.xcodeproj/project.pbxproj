@@ -19,6 +19,7 @@
 		542459952E56389200702EEA /* StackableWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542459942E56389200702EEA /* StackableWrapper.swift */; };
 		5430E126276D1D8F00326A52 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5430E125276D1D8F00326A52 /* ChatView.swift */; };
 		543196D82E3E6C2D00EA17BB /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543196D72E3E6C2D00EA17BB /* WebSocket.swift */; };
+		544466292EBE5EAD0030D615 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544466282EBE5EAD0030D615 /* Cache.swift */; };
 		5444B98F273EE09200FA6DA2 /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5444B98E273EE09100FA6DA2 /* SheetView.swift */; };
 		5444B991273EE99800FA6DA2 /* HowToView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5444B990273EE99800FA6DA2 /* HowToView.swift */; };
 		544A78612E43111500497F93 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 544A78602E43111500497F93 /* Realtime */; };
@@ -90,6 +91,7 @@
 		542459942E56389200702EEA /* StackableWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackableWrapper.swift; sourceTree = "<group>"; };
 		5430E125276D1D8F00326A52 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		543196D72E3E6C2D00EA17BB /* WebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
+		544466282EBE5EAD0030D615 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		5444B98E273EE09100FA6DA2 /* SheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
 		5444B990273EE99800FA6DA2 /* HowToView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToView.swift; sourceTree = "<group>"; };
 		5456285B278A5FE400CA6005 /* MockJSON.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockJSON.json; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 			isa = PBXGroup;
 			children = (
 				54F9C85A27037F2F008FA516 /* Models.swift */,
+				544466282EBE5EAD0030D615 /* Cache.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -523,6 +526,7 @@
 				5444B98F273EE09200FA6DA2 /* SheetView.swift in Sources */,
 				54F9C8522702283B008FA516 /* PartyView-Create.swift in Sources */,
 				542459932E56382100702EEA /* Extensions.swift in Sources */,
+				544466292EBE5EAD0030D615 /* Cache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

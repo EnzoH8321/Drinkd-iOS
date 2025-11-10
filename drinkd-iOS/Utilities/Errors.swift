@@ -48,14 +48,13 @@ enum UserDefaultsErrors: LocalizedError, Codable {
     }
 }
 
-//enum NetworkingErrors: LocalizedError, Codable {
-//    case invalidURL(msg: String, location: CodeLocation = CodeLocation(file: #file, line: #line))
-//
-//    var errorDescription: String? {
-//        switch self {
-//        case .invalidURL(let msg, let location):
-//            Log.error.log(msg, file: location.file, line: location.line)
-//            return "Invalid URL - \(msg)"
-//        }
-//    }
-//}
+enum CachingErrors: LocalizedError, Codable {
+    case unableToFindObjectWithKey(String)
+
+    var errorDescription: String? {
+        switch self {
+        case .unableToFindObjectWithKey(let key):
+            return "Unable to find object with key: \(key)"
+        }
+    }
+}

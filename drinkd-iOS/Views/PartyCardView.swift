@@ -11,6 +11,8 @@ import drinkdSharedModels
 struct PartyCardView: View {
     @Environment(Networking.self) var networking
     @Environment(PartyViewModel.self) var viewModel
+    @Environment(YelpCache.self) var yelpCache
+    
     @State private var showAlert: (state: Bool, message: String) = (false, "")
     @State private var path = NavigationPath()
 
@@ -37,7 +39,7 @@ struct PartyCardView: View {
         Task {
             do {
                 guard let partyID = viewModel.currentParty?.partyID else { throw SharedErrors.general(error: .missingValue("Unable to find party ID"))}
-                try await networking.leaveParty(partyVM: viewModel, networking: networking, partyID: partyID)
+                try await networking.leaveParty(cache: yelpCache, partyVM: viewModel, networking: networking, partyID: partyID)
                 viewModel.leaveParty()
             } catch {
                 // Leave the Party Anyway in case of failure

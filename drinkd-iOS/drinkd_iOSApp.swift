@@ -16,6 +16,7 @@ struct drinkd_iOSApp: App {
 
 	@State var viewModel = PartyViewModel()
     @State var networking = Networking()
+    @State var yelpCache = YelpCache(nsCache: NSCache())
 
 	var body: some Scene {
 		WindowGroup {
@@ -33,6 +34,7 @@ struct drinkd_iOSApp: App {
                 }
 				.environment(viewModel)
                 .environment(networking)
+                .environment(yelpCache)
 				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
 
                     Task {
@@ -58,7 +60,7 @@ struct drinkd_iOSApp: App {
                                 try await networking.rejoinParty(viewModel: viewModel)
                                 try await networking.getRatedRestaurants(viewModel: viewModel)
                             } catch {
-                                try await networking.updateRestaurants(viewModel: viewModel)
+                                try await networking.updateRestaurants(cache: yelpCache, viewModel: viewModel)
                             }
 
                         } catch {

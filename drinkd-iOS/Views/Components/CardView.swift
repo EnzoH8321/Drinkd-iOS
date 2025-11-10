@@ -13,8 +13,8 @@ import drinkdSharedModels
 struct CardView: View {
 
     @Environment(PartyViewModel.self) var viewModel
-    @Environment(\.openURL) var openURL
     @Environment(Networking.self) var networking
+    @Environment(YelpCache.self) var cache
     @State private var showError: (status: Bool, message: String) = (false, "")
 
     private var restaurantTitle: String
@@ -56,6 +56,65 @@ struct CardView: View {
         self.optionsPickup = restaurantDetails.pickUpAvailable ?? false
     }
 
+    private var cachedImage: some View {
+        get throws {
+            let data = try self.cache.getImage(urlAsKey: self.restaurantImageURL as NSString)
+            guard let uiImage = UIImage(data: data) else { throw SharedErrors.general(error: .generalError("Failed to convert cached data to a UIImage"))}
+            return Image(uiImage: uiImage).resizable()
+        }
+    }
+
+    private var requestedImage: some View {
+
+        return AsyncImage(url: URL(string: restaurantImageURL)) { phaseImage in
+
+            switch phaseImage {
+            case .empty:
+                Image(systemName: "photo.artframe")
+                    .resizable()
+            case .success(let image):
+                image.resizable()
+                    .task(priority: .background) {
+
+                        let renderer = ImageRenderer(content: image)
+                        let cgImage = renderer.cgImage!
+                        let data = UIImage(cgImage: cgImage).pngData()!
+
+                        do {
+                            try cache.addObject(data: data, key: restaurantImageURL as NSString)
+                        } catch {
+                            fatalError("Unable to cache requested image")
+                        }
+
+
+                    }
+            case .failure(_):
+                Image(systemName: "multiply")
+                    .resizable()
+
+            @unknown default:
+                Image(systemName: "multiply")
+                    .resizable()
+            }
+
+        }
+        .scaledToFit()
+
+    }
+
+    private var image: some View {
+        do {
+            if cache.useCachedData(forKey: restaurantImageURL as NSString) {
+               return try AnyView(cachedImage)
+            } else {
+                return AnyView(requestedImage)
+            }
+        } catch {
+            return AnyView(requestedImage)
+        }
+
+    }
+
     var body: some View {
 
             ZStack {
@@ -84,7 +143,9 @@ struct CardView: View {
 
                         Button {
                             guard let url = URL(string: "\(restaurantURL)") else { return Log.error.log("Bad Restaurant URL") }
-                            openURL(url)
+                            // As of iOS 18, I have been noticing that creating a dependency to @Environment(\.openURL) causes the view to always redraw when the app is backgrounded
+                            // This can cause performance issues so for now I am opting to use the old way to open external links
+                            UIApplication.shared.open(url)
                         } label: {
                             Image(systemName: "info.square.fill")
                                 .font(.title)
@@ -95,16 +156,7 @@ struct CardView: View {
                     HStack {
                         Spacer()
 
-                        AsyncImage(url: URL(string: restaurantImageURL)) { image in
-
-                            guard let image = image.image else {
-                                return Image(systemName: "multiply.circle")
-                                    .resizable()
-                            }
-
-                            return image.resizable()
-                        }
-                        .scaledToFit()
+                        image
 
                         Spacer()
                     }
