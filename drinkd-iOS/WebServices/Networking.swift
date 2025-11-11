@@ -57,7 +57,7 @@ final class Networking {
 
         var businessSearch: YelpApiBusinessSearch? = nil
 
-        if let cachedData = cache.useCachedData(forKey: key, dataType: .searchProperties) {
+        if let cachedData = cache.useCachedData(key: key, dataType: .searchProperties) {
             let decodedData = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: cachedData)
             businessSearch = decodedData
         } else {
@@ -95,7 +95,7 @@ final class Networking {
 
         var businessSearch: YelpApiBusinessSearch? = nil
 
-        if let cachedData = cache.useCachedData(forKey: key, dataType: .searchProperties) {
+        if let cachedData = cache.useCachedData(key: key, dataType: .searchProperties) {
             let decodedData = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: cachedData)
             businessSearch = decodedData
         } else {

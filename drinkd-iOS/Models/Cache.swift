@@ -49,7 +49,7 @@ final class YelpCache: NSObject, NSCacheDelegate {
             switch self {
             case .image:
                 // When using an image path as the key, the path should already have an extension
-                ""
+                "jpg"
             case .searchProperties:
                 "txt"
             }
@@ -99,9 +99,7 @@ final class YelpCache: NSObject, NSCacheDelegate {
     /// - Parameter ext: The file extension to use for the cached file (e.g., "json", "png")
     /// - Returns: The complete file path as a String where the cached item will be stored
     private func createDiskPath(key: String, ext: String) -> String {
-        let hash = key.md5Hash()
-        let url = diskPath.appending(path: "\(hash).\(ext)")
-        return url.path()
+       return diskPath.appending(path: "\(key).\(ext)").path()
     }
 
 }
@@ -109,15 +107,19 @@ final class YelpCache: NSObject, NSCacheDelegate {
 //MARK: Get Data from Caches
 extension YelpCache {
 
-    // True if we can use in memory cache, false if we cant
+    /// Retrieves cached data from memory cache if it exists and is fresh
+    /// - Parameter key: The unique identifier for the cached item
+    /// - Returns: The cached `Data` if found and fresh (less than 24 hours old), `nil` otherwise
     private func getDataFromMemCache(key: NSString) -> Data? {
-        guard let cacheableValue = nsCache.object(forKey: key) else { return nil }
-
-        guard isFresh(value: cacheableValue) else { return nil }
-
-        return cacheableValue.data
+        guard let cacheableObj = nsCache.object(forKey: key), isFresh(value: cacheableObj) else { return nil }
+        return cacheableObj.data
     }
 
+    /// Retrieves cached data from disk cache if it exists and is fresh
+    /// - Parameter key: The unique identifier for the cached item (will be hashed for the filename)
+    /// - Parameter ext: The file extension of the cached file
+    /// - Returns: The cached `Data` if found and fresh (less than 24 hours old), `nil` otherwise
+    /// - Throws: `DecodingError` if the cached file cannot be decoded into a `CacheableObject`
     private func getDataFromDiskCache(key: String, ext: String) throws -> Data? {
         let path = createDiskPath(key: key, ext: ext)
         guard let data = fileManager.contents(atPath: path) else {  return nil }
@@ -126,17 +128,19 @@ extension YelpCache {
         return cacheableValue.data
     }
 
-    // Use cached data if possible
-    // Determine based on if cached data exists AND the time interval is less than 24 hours
-    // Key determines the value
-    // return Data if we can use cached data
-    func useCachedData(forKey: NSString, dataType: YelpCache.DataType) -> Data? {
+    /// Attempts to retrieve cached data from memory or disk cache
+    /// - Parameter key: The unique identifier for the cached item
+    /// - Parameter dataType: The type of data being cached (determines file extension)
+    /// - Returns: The cached `Data` if found and fresh in either memory or disk cache, `nil` otherwise
+    func useCachedData(key: NSString, dataType: YelpCache.DataType) -> Data? {
+        let hash = key.md5Hash()
+
         // Try to use in memory cache
-        if let inMemoryData = getDataFromMemCache(key: forKey) { return inMemoryData }
+        if let inMemoryData = getDataFromMemCache(key: hash) { return inMemoryData }
 
         do {
             // Try to use on disk cache
-            if let onDiskData = try getDataFromDiskCache(key: forKey as String, ext: dataType.fileExt) { return onDiskData }
+            if let onDiskData = try getDataFromDiskCache(key: hash as String, ext: dataType.fileExt) { return onDiskData }
         } catch {
             Log.error.log("Error using the on disk cache: \(error)")
             return nil
@@ -149,10 +153,18 @@ extension YelpCache {
 // MARK: Add CacheableObject to Caches
 extension YelpCache {
 
+    /// Adds a cacheable object to the in-memory cache
+    /// - Parameter obj: The `CacheableObject` to store in memory (contains data and timestamp)
+    /// - Parameter key: The unique identifier for the cached item (used as the cache lookup key)
     private func addToMemoryCache(obj: CacheableObject, key: NSString) {
         nsCache.setObject(obj, forKey: key)
     }
 
+    /// Saves a cacheable object to disk storage
+    /// - Parameter obj: The `CacheableObject` to cache (contains data and timestamp)
+    /// - Parameter key: The unique identifier for the cached item (will be hashed for the filename)
+    /// - Parameter ext: The file extension to use for the cached file
+    /// - Throws: `EncodingError` if the object cannot be encoded to JSON, or `FileManagerErrors.unableToCreateFile` if the file cannot be written to disk
     private func addToDiskCache(obj: CacheableObject, key: String, ext: String) throws {
         let encodedData = try JSONEncoder().encode(obj)
         let path = createDiskPath(key: key, ext: ext)
@@ -160,10 +172,16 @@ extension YelpCache {
         if !result { throw FileManagerErrors.unableToCreateFile(atPath: path)}
     }
 
+    /// Adds data to both memory and disk caches with a timestamp
+    /// - Parameter data: The raw data to cache
+    /// - Parameter key: The unique identifier for the cached item
+    /// - Parameter type: The type of data being cached (determines file extension)
+    /// - Throws: `EncodingError` if the object cannot be encoded, or `FileManagerErrors.unableToCreateFile` if disk write fails
     func addObjectToCache(data: Data, key: NSString, type: YelpCache.DataType) throws {
+        let hash = key.md5Hash()
         let cacheObj = CacheableObject(timestamp: Date(), data: data)
-        addToMemoryCache(obj: cacheObj, key: key)
-        try addToDiskCache(obj: cacheObj, key: key as String, ext: type.fileExt)
+        addToMemoryCache(obj: cacheObj, key: hash)
+        try addToDiskCache(obj: cacheObj, key: hash as String, ext: type.fileExt)
     }
 
 }

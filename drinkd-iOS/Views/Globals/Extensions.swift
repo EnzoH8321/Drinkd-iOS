@@ -29,10 +29,25 @@ extension [SubviewsCollection.Element] {
     }
 }
 
-extension String {
-    func md5Hash() -> String {
-        let data = Data(self.utf8)
+extension NSString {
+    /// Generates an MD5 hash of the string
+    /// - Returns: The MD5 hash as a hexadecimal string (32 characters)
+    func md5Hash() -> NSString {
+        // Convert NSString to Swift String to access the utf8 property
+        // Then convert the string to UTF-8 encoded data
+        // This ensures consistent hashing regardless of string content
+        let data = Data((self as String).utf8)
+
+        // Compute the MD5 hash of the data using Apple's CryptoKit
+        // Note: MD5 is cryptographically insecure and should only be used for non-security purposes
+        // like cache key generation or checksums
         let hash = Insecure.MD5.hash(data: data)
-        return hash.compactMap { String(format: "%02x", $0) }.joined()
+
+        // Convert the hash bytes to a hexadecimal string representation
+        // compactMap formats each byte as a 2-digit hex value (e.g., 0x0F becomes "0f")
+        // joined() concatenates all hex values into a single string
+        // Result is a 32-character lowercase hex string
+        // Convert back to NSString for the return type
+        return hash.compactMap { String(format: "%02x", $0) }.joined() as NSString
     }
 }
