@@ -20,9 +20,10 @@ Version 2.0 is almost here! 1.0 released way back in 2021, almost a lifetime ago
 ## TODO
 
  * Improve testing suite 
- * iPad styling
- * Improve Card UI
+ * iPad styling & Dark mode
+ * Improve caching of restaurant images
  * Add more party features? (Top Score, customizations etc.)
+ * Many more as time allows
    
 ## Additional
 
