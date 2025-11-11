@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import CryptoKit
 
 extension SubviewsCollection {
     // To push cards behind when its swiped and to make it appear as if its looping, we can rotate the array to achieve that
@@ -25,5 +26,13 @@ extension SubviewsCollection {
 extension [SubviewsCollection.Element] {
     func index(_ item: SubviewsCollection.Element) -> Int {
         firstIndex(where: { $0.id == item.id}) ?? 0
+    }
+}
+
+extension String {
+    func md5Hash() -> String {
+        let data = Data(self.utf8)
+        let hash = Insecure.MD5.hash(data: data)
+        return hash.compactMap { String(format: "%02x", $0) }.joined()
     }
 }

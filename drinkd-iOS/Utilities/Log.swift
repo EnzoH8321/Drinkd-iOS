@@ -33,7 +33,7 @@ enum Log {
             logger.info("[\(fileName):\(line)] - \(msg)")
         case .error:
             let logger = Logger(subsystem: subsystem, category: "Error")
-            logger.fault("[\(fileName):\(line)] - \(msg)")
+            logger.fault("⚠️ [\(fileName):\(line)] - \(msg)")
         }
 
     }

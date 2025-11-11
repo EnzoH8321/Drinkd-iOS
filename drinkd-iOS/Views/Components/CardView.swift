@@ -58,7 +58,7 @@ struct CardView: View {
 
     private var cachedImage: some View {
         get throws {
-            let data = try self.cache.getImage(urlAsKey: self.restaurantImageURL as NSString)
+            guard let data = cache.useCachedData(forKey: self.restaurantImageURL as NSString, dataType: .image) else { throw CachingErrors.unableToUseCachedData(forKey: restaurantImageURL)}
             guard let uiImage = UIImage(data: data) else { throw SharedErrors.general(error: .generalError("Failed to convert cached data to a UIImage"))}
             return Image(uiImage: uiImage).resizable()
         }
@@ -81,11 +81,10 @@ struct CardView: View {
                         let data = UIImage(cgImage: cgImage).pngData()!
 
                         do {
-                            try cache.addObject(data: data, key: restaurantImageURL as NSString)
+                            try cache.addObjectToCache(data: data, key: restaurantImageURL as NSString, type: .image)
                         } catch {
-                            fatalError("Unable to cache requested image")
+                            Log.error.log("Error caching requested image: \(error)")
                         }
-
 
                     }
             case .failure(_):
@@ -99,16 +98,11 @@ struct CardView: View {
 
         }
         .scaledToFit()
-
     }
 
     private var image: some View {
         do {
-            if cache.useCachedData(forKey: restaurantImageURL as NSString) {
-               return try AnyView(cachedImage)
-            } else {
-                return AnyView(requestedImage)
-            }
+            return try AnyView(cachedImage)
         } catch {
             return AnyView(requestedImage)
         }

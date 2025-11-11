@@ -55,9 +55,20 @@ final class Networking {
 
         let key = cache.convertLocationToKey(latitude: latitude, longitude: longitude)
 
-        let businessSearch = cache.useCachedData(forKey: key) ? try cache.getBusinessSearch(locationAsKey: key) : try await getRestaurants(latitude: latitude, longitude: longitude)
+        var businessSearch: YelpApiBusinessSearch? = nil
 
-        guard let businessSearchProperties: [YelpApiBusinessSearchProperties] = businessSearch.businesses else { throw YelpErrors.missingProperty("Missing businesses property") }
+        if let cachedData = cache.useCachedData(forKey: key, dataType: .searchProperties) {
+            let decodedData = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: cachedData)
+            businessSearch = decodedData
+        } else {
+            let restaurants = try await getRestaurants(latitude: latitude, longitude: longitude)
+            businessSearch = restaurants
+            // Update cache
+            let data = try JSONEncoder().encode(restaurants)
+            try cache.addObjectToCache(data: data, key: key, type: .searchProperties)
+        }
+
+        guard let businessSearchProperties: [YelpApiBusinessSearchProperties] = businessSearch?.businesses else { throw YelpErrors.missingProperty("Missing businesses property") }
 
         await MainActor.run {
 
@@ -82,9 +93,20 @@ final class Networking {
 
         let key = cache.convertLocationToKey(latitude: latitude, longitude: longitude)
 
-        let businessSearch = cache.useCachedData(forKey: key) ? try cache.getBusinessSearch(locationAsKey: key) : try await getRestaurants(latitude: latitude, longitude: longitude)
+        var businessSearch: YelpApiBusinessSearch? = nil
 
-        guard let businessSearchProperties: [YelpApiBusinessSearchProperties] = businessSearch.businesses else { throw YelpErrors.missingProperty("Missing businesses property") }
+        if let cachedData = cache.useCachedData(forKey: key, dataType: .searchProperties) {
+            let decodedData = try JSONDecoder().decode(YelpApiBusinessSearch.self, from: cachedData)
+            businessSearch = decodedData
+        } else {
+            let restaurants = try await getRestaurants(latitude: latitude, longitude: longitude)
+            businessSearch = restaurants
+            // Update cache
+            let data = try JSONEncoder().encode(restaurants)
+            try cache.addObjectToCache(data: data, key: key, type: .searchProperties)
+        }
+
+        guard let businessSearchProperties: [YelpApiBusinessSearchProperties] = businessSearch?.businesses else { throw YelpErrors.missingProperty("Missing businesses property") }
 
         await MainActor.run {
             viewModel.updateLocalRestaurants(in: businessSearchProperties)
