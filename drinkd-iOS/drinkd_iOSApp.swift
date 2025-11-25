@@ -22,7 +22,7 @@ struct drinkd_iOSApp: App {
 		WindowGroup {
 			MasterView()
                 .onAppear {
-                    checkBuildCOnfiguration()
+                    checkBuildConfiguration()
                     // Set user id on startup, if it does not already exist
                     do {
                        let _ = try UserDefaultsWrapper.getUserID
@@ -38,21 +38,6 @@ struct drinkd_iOSApp: App {
 				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
 
                     Task {
-
-                            let status = await ATTrackingManager.requestTrackingAuthorization()
-
-                            switch status {
-                            case .notDetermined:
-                                Log.general.log("Not Determined")
-                            case .restricted:
-                                Log.general.log("Restricted Tracking")
-                            case .denied:
-                                Log.general.log("User has Denied Tracking")
-                            case .authorized:
-                                Log.general.log("User has Authorized Tracking")
-                            @unknown default:
-                                fatalError()
-                            }
 
                         do {
 
@@ -73,7 +58,8 @@ struct drinkd_iOSApp: App {
 		}
 	}
 
-    private func checkBuildCOnfiguration() {
+    // Checks Build Config
+    private func checkBuildConfiguration() {
 #if STAGING
         Log.general.log("⚠️ STAGING flag is defined")
 #elseif DEBUG
