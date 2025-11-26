@@ -18,7 +18,7 @@ final class UserDefaultsWrapper {
     private static let defaults = UserDefaults.standard
 
     /// Generates and stores a new user ID in UserDefaults
-    static func setUserIDOnStartup() {
+    static func setUserID() {
         let id = UUID().uuidString
         defaults.set(id, forKey: userID)
     }

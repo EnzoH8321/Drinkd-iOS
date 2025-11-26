@@ -36,16 +36,14 @@ struct drinkd_iOSApp: App {
                     Task {
 
                         do {
-
-                            do {
-                                try await networking.rejoinParty(viewModel: viewModel)
-                                try await networking.getRatedRestaurants(viewModel: viewModel)
-                            } catch {
-                                try await networking.updateRestaurants(cache: yelpCache, viewModel: viewModel, locationManager: locationManager)
-                            }
-
+                            try await networking.rejoinParty(viewModel: viewModel)
+                            try await networking.getRatedRestaurants(viewModel: viewModel)
                         } catch {
-                            Log.error.log("Error: \(error)")
+                            do {
+                                try await networking.updateRestaurants(cache: yelpCache, viewModel: viewModel, locationManager: locationManager)
+                            } catch {
+                                Log.error.log("Error: \(error)")
+                            }
                         }
                     }
 
@@ -57,7 +55,7 @@ struct drinkd_iOSApp: App {
         do {
            let _ = try UserDefaultsWrapper.getUserID
         } catch {
-            UserDefaultsWrapper.setUserIDOnStartup()
+            UserDefaultsWrapper.setUserID()
         }
     }
 
