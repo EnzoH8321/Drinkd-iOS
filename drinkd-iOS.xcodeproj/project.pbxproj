@@ -28,6 +28,7 @@
 		54562873278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json in Resources */ = {isa = PBXBuildFile; fileRef = 54562872278DFF1B00CA6005 /* MockYelpBusinessSearchProperties.json */; };
 		54562886278EAE2D00CA6005 /* MockTopThreeChoices.json in Resources */ = {isa = PBXBuildFile; fileRef = 54562885278EAE2D00CA6005 /* MockTopThreeChoices.json */; };
 		5474A4992E9254A200EFF9AD /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 5474A4982E9254A200EFF9AD /* drinkdSharedModels */; };
+		547BD23F2ED7B5B900AD77B7 /* drinkdSharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 547BD23E2ED7B5B900AD77B7 /* drinkdSharedModels */; };
 		54806F902E87A30B009F1B29 /* FakeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54806F8F2E87A30B009F1B29 /* FakeData.swift */; };
 		5496D19B276D188E000C732A /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5496D19A276D188E000C732A /* MessageView.swift */; };
 		549BFC472728CFBA00F96F48 /* CustomLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549BFC462728CFBA00F96F48 /* CustomLocationView.swift */; };
@@ -144,6 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				544A78612E43111500497F93 /* Realtime in Frameworks */,
+				547BD23F2ED7B5B900AD77B7 /* drinkdSharedModels in Frameworks */,
 				5474A4992E9254A200EFF9AD /* drinkdSharedModels in Frameworks */,
 				544A78642E43177E00497F93 /* Supabase in Frameworks */,
 			);
@@ -439,7 +441,7 @@
 			mainGroup = 54F9C7FC26FBB536008FA516;
 			packageReferences = (
 				544A785F2E43111500497F93 /* XCRemoteSwiftPackageReference "supabase-swift" */,
-				5474A4972E9254A200EFF9AD /* XCRemoteSwiftPackageReference "drinkdSharedModels" */,
+				547BD23D2ED7B5B900AD77B7 /* XCRemoteSwiftPackageReference "drinkdSharedModels" */,
 			);
 			productRefGroup = 54F9C80626FBB536008FA516 /* Products */;
 			projectDirPath = "";
@@ -1165,6 +1167,14 @@
 				kind = branch;
 			};
 		};
+		547BD23D2ED7B5B900AD77B7 /* XCRemoteSwiftPackageReference "drinkdSharedModels" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EnzoH8321/drinkdSharedModels";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1181,6 +1191,11 @@
 		5474A4982E9254A200EFF9AD /* drinkdSharedModels */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5474A4972E9254A200EFF9AD /* XCRemoteSwiftPackageReference "drinkdSharedModels" */;
+			productName = drinkdSharedModels;
+		};
+		547BD23E2ED7B5B900AD77B7 /* drinkdSharedModels */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 547BD23D2ED7B5B900AD77B7 /* XCRemoteSwiftPackageReference "drinkdSharedModels" */;
 			productName = drinkdSharedModels;
 		};
 /* End XCSwiftPackageProductDependency section */
