@@ -30,7 +30,7 @@ enum Log {
         switch self {
         case .general:
             let logger = Logger(subsystem: subsystem, category: "General")
-            logger.info("[\(fileName):\(line)] - \(msg)")
+            logger.info("🧠 [\(fileName):\(line)] - \(msg)")
         case .error:
             let logger = Logger(subsystem: subsystem, category: "Error")
             logger.fault("⚠️ [\(fileName):\(line)] - \(msg)")

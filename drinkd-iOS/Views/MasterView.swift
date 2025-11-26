@@ -10,6 +10,7 @@ import SwiftUI
 struct MasterView: View {
     @Environment(Networking.self) var networking
     @Environment(PartyViewModel.self) var viewModel
+    @Environment(LocationManager.self) var locationManager
 	@State private var selectedTab: Int = 1
 
 	var body: some View {
@@ -19,7 +20,7 @@ struct MasterView: View {
 
                 TabView(selection: $selectedTab) {
                     //
-                    if (!networking.userDeniedLocationServices) {
+                    if (!locationManager.errorWithLocationAuth) {
 
                         HomeView()
                             .padding()

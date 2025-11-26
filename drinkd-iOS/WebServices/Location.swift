@@ -8,8 +8,10 @@
 import CoreLocation
 import drinkdSharedModels
 
-class LocationFetcher: NSObject, CLLocationManagerDelegate {
-	let manager = CLLocationManager()
+@Observable
+class LocationManager: NSObject, CLLocationManagerDelegate {
+
+	private let manager = CLLocationManager()
 	var lastKnownLocation: CLLocationCoordinate2D?
 	private(set) var errorWithLocationAuth = false
 
@@ -18,37 +20,54 @@ class LocationFetcher: NSObject, CLLocationManagerDelegate {
 		manager.delegate = self
 	}
 
-	func start() {
+	func requestWhenInUseAuthorization() {
 		manager.requestWhenInUseAuthorization()
-		manager.startUpdatingLocation()
 	}
 
 	func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
 		lastKnownLocation = locations.first?.coordinate
         self.errorWithLocationAuth = false
-      
 	}
 
 	func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        Log.error.log("Error -> \(error.localizedDescription)")
-		self.errorWithLocationAuth = true
+
+        guard let clError = error as? CLError else {
+            Log.error.log("Error: \(error.localizedDescription)")
+            self.errorWithLocationAuth = true
+            return
+        }
+
+        // According to the CLLocationManagerDelegate docs, error code of `locationUnknown` can be ignored in order to wait for a new event
+        switch clError.code {
+        case .locationUnknown:
+            break
+        case .denied:
+            Log.general.log("User has denied location access: CL Error Code: \(clError.code.rawValue)")
+            self.errorWithLocationAuth = true
+        default:
+            Log.general.log("CL Error Code: \(clError.code.rawValue)")
+            self.errorWithLocationAuth = true
+        }
+
 	}
 
 	func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-		let authorization = manager.authorizationStatus
 
-		switch (authorization) {
-		case .authorized,
-				.authorizedWhenInUse,
-				.authorizedAlways:
+		switch manager.authorizationStatus {
+		case .authorized, .authorizedWhenInUse, .authorizedAlways:
 			self.errorWithLocationAuth = false
-			
-		case .denied,
-				.notDetermined,
-				.restricted:
+            manager.startUpdatingLocation()
+
+        case .notDetermined:
+            self.errorWithLocationAuth = true
+            manager.requestWhenInUseAuthorization()
+
+		case .denied, .restricted:
 			self.errorWithLocationAuth = true
 		@unknown default:
-            Log.general.log("Unknown Default")
+            Log.general.log("locationManagerDidChangeAuthorization: Unknown Default")
+            // We should not even get to here, but in the off chance the default will be an error w/ location authorization
+            self.errorWithLocationAuth = true
 		}
 	}
 

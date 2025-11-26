@@ -14,6 +14,7 @@ import drinkdSharedModels
 @main
 struct drinkd_iOSApp: App {
 
+    @State var locationManager = LocationManager()
 	@State var viewModel = PartyViewModel()
     @State var networking = Networking()
     @State var yelpCache = YelpCache(nsCache: NSCache())
@@ -23,18 +24,13 @@ struct drinkd_iOSApp: App {
 			MasterView()
                 .onAppear {
                     checkBuildConfiguration()
-                    // Set user id on startup, if it does not already exist
-                    do {
-                       let _ = try UserDefaultsWrapper.getUserID
-                    } catch {
-                        UserDefaultsWrapper.setUserIDOnStartup()
-                    }
-
-                    networking.locationFetcher.start()
+                    getUserID()
+                    locationManager.requestWhenInUseAuthorization()
                 }
 				.environment(viewModel)
                 .environment(networking)
                 .environment(yelpCache)
+                .environment(locationManager)
 				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
 
                     Task {
@@ -45,7 +41,7 @@ struct drinkd_iOSApp: App {
                                 try await networking.rejoinParty(viewModel: viewModel)
                                 try await networking.getRatedRestaurants(viewModel: viewModel)
                             } catch {
-                                try await networking.updateRestaurants(cache: yelpCache, viewModel: viewModel)
+                                try await networking.updateRestaurants(cache: yelpCache, viewModel: viewModel, locationManager: locationManager)
                             }
 
                         } catch {
@@ -53,10 +49,17 @@ struct drinkd_iOSApp: App {
                         }
                     }
 
-                    networking.updateUserDeniedLocationServices()
 				}
 		}
 	}
+    /// Get's the user's ID from `UserDefaults` if possible. Otherwise, create a new user ID and set it.
+    private func getUserID() {
+        do {
+           let _ = try UserDefaultsWrapper.getUserID
+        } catch {
+            UserDefaultsWrapper.setUserIDOnStartup()
+        }
+    }
 
     // Checks Build Config
     private func checkBuildConfiguration() {

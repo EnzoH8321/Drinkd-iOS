@@ -19,7 +19,7 @@ final class Networking {
 
     private var webSocket: WebSocket
 
-    private(set) var userDeniedLocationServices = false
+//    private(set) var userDeniedLocationServices = false
 
 
     private var baseURL: String {
@@ -35,19 +35,13 @@ final class Networking {
     }
 
 
-    var locationFetcher = LocationFetcher()
-
-    func updateUserDeniedLocationServices() {
-        self.userDeniedLocationServices = locationFetcher.errorWithLocationAuth
-    }
-
     /// Fetches nearby restaurants based on user location and updates the view model with the results.
-    func updateRestaurants(cache: YelpCache ,viewModel: PartyViewModel) async throws {
+    func updateRestaurants(cache: YelpCache, viewModel: PartyViewModel, locationManager: LocationManager) async throws {
 
         //If user location was found, continue
         //If defaults are used, then the user location could not be found
-        guard let latitude = locationFetcher.lastKnownLocation?.latitude,
-              let longitude = locationFetcher.lastKnownLocation?.longitude,
+        guard let latitude = locationManager.lastKnownLocation?.latitude,
+              let longitude = locationManager.lastKnownLocation?.longitude,
               latitude != 0.0 && longitude != 0.0 else
         {
             throw LocationErrors.invalidLastKnownLocation(msg: "Unable to retrieve last known location")
@@ -77,7 +71,6 @@ final class Networking {
             if (viewModel.localRestaurants.count <= 0) { viewModel.updateLocalRestaurants(in: businessSearchProperties) }
 
             viewModel.removeSplashScreen = true
-            self.userDeniedLocationServices = false
         }
     }
 
@@ -111,7 +104,6 @@ final class Networking {
         await MainActor.run {
             viewModel.updateLocalRestaurants(in: businessSearchProperties)
             viewModel.removeSplashScreen = true
-            self.userDeniedLocationServices = false
         }
     }
 
@@ -178,13 +170,13 @@ extension Networking {
     /// Removes the current user from the specified party and closes the WebSocket connection.
     /// - Parameter partyVM: The PartyViewModel instance for the party being left
     /// - Parameter partyID: The unique identifier of the party to leave
-    func leaveParty(cache: YelpCache, partyVM: PartyViewModel, networking: Networking, partyID: UUID) async throws  {
+    func leaveParty(cache: YelpCache, partyVM: PartyViewModel, locationManager: LocationManager, networking: Networking, partyID: UUID) async throws  {
         let userID = try UserDefaultsWrapper.getUserID
         let urlReq = try HTTP.PostReq.leaveParty(userID: userID).createReq(baseURL: baseURL)
         await webSocket.disconnectFromParty()
         let _ = try await executeRequest(urlReq: urlReq)
 
-        let location = try networking.locationFetcher.getLocation(partyVM: partyVM).coordinate
+        let location = try locationManager.getLocation(partyVM: partyVM).coordinate
         try await networking.updateRestaurants(cache: cache, viewModel: partyVM, longitude: location.longitude, latitude: location.latitude)
     }
 
@@ -261,9 +253,6 @@ extension Networking {
         viewModel.updateLocalRestaurants(in: businesses)
         viewModel.currentParty = party
         viewModel.removeSplashScreen = true
-        self.userDeniedLocationServices = false
-
-
     }
 
     /// Rejoins a previously joined party using stored user credentials and restores party state.
@@ -284,7 +273,6 @@ extension Networking {
             viewModel.updateLocalRestaurants(in: businesses)
             viewModel.currentParty = party
             viewModel.removeSplashScreen = true
-            self.userDeniedLocationServices = false
         }
         await webSocket.rdbSetSubscribeAndListen(partyVM: viewModel, partyID: party.partyID)
         try await getMessages(viewModel: viewModel)

@@ -16,7 +16,7 @@ struct LocationTests {
     func getLocation_UseLastKnownLocation_Test() async throws {
         let vm = await PartyViewModel()
         let coordinates = CLLocationCoordinate2D(latitude: 37.507160, longitude: -122.260521)
-        let fetcher = LocationFetcher()
+        let fetcher = LocationManager()
         fetcher.lastKnownLocation = coordinates
 
         let location = try await fetcher.getLocation(partyVM: vm)
@@ -31,7 +31,7 @@ struct LocationTests {
         vm.customLat = 37.507160
         vm.customLong = -122.260521
 
-        let fetcher = LocationFetcher()
+        let fetcher = LocationManager()
 
         let location = try fetcher.getLocation(partyVM: vm)
         #expect(location.coordinate.latitude == 37.507160)
@@ -42,7 +42,7 @@ struct LocationTests {
     @MainActor
     func getLocation_Fail_Test() async throws {
         let vm = PartyViewModel()
-        let fetcher = LocationFetcher()
+        let fetcher = LocationManager()
 
         #expect(throws: SharedErrors.self, performing: {
             try fetcher.getLocation(partyVM: vm)

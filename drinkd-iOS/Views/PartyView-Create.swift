@@ -16,6 +16,7 @@ struct PartyView_Create: View {
     @State private var showAlert: (state: Bool, message: String) = (false, "")
     @Environment(PartyViewModel.self) var viewModel
     @Environment(Networking.self) var networking
+    @Environment(LocationManager.self) var locationManager
 
     var body: some View {
         @Bindable var partyVM = viewModel
@@ -65,7 +66,7 @@ struct PartyView_Create: View {
 
                 Task {
                     do {
-                        let location = try networking.locationFetcher.getLocation(partyVM: partyVM).coordinate
+                        let location = try locationManager.getLocation(partyVM: partyVM).coordinate
                         let urlString = "https://api.yelp.com/v3/businesses/search?categories=bars&latitude=\(location.latitude)&longitude=\(location.longitude)&limit=10"
                         try await networking.createParty(viewModel: viewModel, username: userName, partyName: partyName ,restaurantsURL: urlString)
 
