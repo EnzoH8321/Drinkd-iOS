@@ -44,7 +44,7 @@ final class Networking {
               let longitude = locationManager.lastKnownLocation?.longitude,
               latitude != 0.0 && longitude != 0.0 else
         {
-            throw LocationErrors.invalidLastKnownLocation(msg: "Unable to retrieve last known location")
+            throw LocationErrors.invalidLastKnownLocation("Unable to retrieve last known location")
         }
 
         let key = cache.convertLocationToKey(latitude: latitude, longitude: longitude)
@@ -82,7 +82,7 @@ final class Networking {
 
         //If user location was found, continue
         //If defaults are used, then the user location could not be found
-        if latitude == 0.0 && longitude == 0.0 { throw LocationErrors.invalidLastKnownLocation(msg: "Invalid Latitude and Longitude") }
+        if latitude == 0.0 && longitude == 0.0 { throw LocationErrors.invalidLastKnownLocation("Invalid Latitude and Longitude") }
 
         let key = cache.convertLocationToKey(latitude: latitude, longitude: longitude)
 

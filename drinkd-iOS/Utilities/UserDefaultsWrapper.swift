@@ -30,7 +30,7 @@ final class UserDefaultsWrapper {
         get throws {
             // Extract UUID string from UserDefaults and convert to UUID
             guard let uuidString = defaults.object(forKey: userID) as? String,
-                  let uuid = UUID(uuidString: uuidString) else { throw UserDefaultsErrors.noUserID(msg: "Unable to find user ID") }
+                  let uuid = UUID(uuidString: uuidString) else { throw UserDefaultsErrors.noUserID("Unable to find user ID") }
 
             return uuid
         }
