@@ -61,7 +61,7 @@ struct drinkd_iOSApp: App {
         }
     }
 
-    // Checks Build Config
+    /// Checks the build configuration.
     private func checkBuildConfiguration() {
 #if STAGING
         Log.general.log("⚠️ STAGING flag is defined")

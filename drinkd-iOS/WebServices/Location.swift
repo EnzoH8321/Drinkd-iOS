@@ -18,6 +18,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
 	override init() {
 		super.init()
 		manager.delegate = self
+        // power-saving optimizations
+        manager.distanceFilter = 4
 	}
 
 	func requestWhenInUseAuthorization() {
